@@ -1,0 +1,39 @@
+/build
+# ── Local secrets — NEVER commit these ──────────────
+local.properties
+*.keystore
+*.jks
+
+# ── Android build outputs ────────────────────────────
+.gradle/
+build/
+app/build/
+captures/
+*.apk
+*.aab
+*.dex
+
+# ── Android Studio IDE files ─────────────────────────
+.idea/
+*.iml
+.DS_Store
+*.hprof
+
+# ── Kotlin/Java compiled output ──────────────────────
+out/
+*.class
+
+# ── Supabase / environment ────────────────────────────
+.env
+.env.*
+supabase/.temp/
+
+# ── Vosk model — too large for git ───────────────────
+app/src/main/assets/vosk-model/
+
+# ── Room schema export (optional — keep if you want) ─
+# app/schemas/     ← comment this out to track schema history
+
+# ── OS files ─────────────────────────────────────────
+Thumbs.db
+*.swp
