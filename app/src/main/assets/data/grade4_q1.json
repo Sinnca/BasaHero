@@ -1,0 +1,899 @@
+{
+  "quarter": {
+    "id": "q-gr4-q1",
+    "gradeLevelId": 4,
+    "quarterNumber": 1,
+    "title": "Quarter 1",
+    "isActive": true
+  },
+  "lessons": [
+    {
+      "id": "l-gr4-q1-01",
+      "orderIndex": 1,
+      "competency": "Inferring",
+      "title": "Reading Between the Lines",
+      "imagePath": "img/gr4_q1_inferring.webp",
+      "passageText": "Maria woke up early and looked out her window. The sky was gray and heavy with clouds. She could hear the wind blowing through the trees outside. Her mother was already in the kitchen, and the smell of hot chocolate drifted up the stairs. Maria smiled and reached for her thickest sweater.\n\nAt school, their teacher Mrs. Santos canceled their outdoor reading session. Instead, she brought out a box of board games and told the class to push their desks together. Everyone cheered. By lunchtime, the first drops began to fall against the classroom windows, making a soft tapping sound.\n\nOn the way home, Maria and her classmate Jun shared an umbrella. Their shoes got wet anyway, splashing through the puddles along the path. When Maria finally got home, her lola had already prepared a big pot of arroz caldo.\n\n\"I knew you'd need something warm,\" her lola said with a smile.\n\nMaria changed into dry clothes and sat at the kitchen table. Outside, the rain fell steadily. She wrapped both hands around her bowl and took a slow sip. It tasted like comfort.",
+      "questions": [
+        {
+          "id": "q-gr4-q1-01-01",
+          "orderIndex": 1,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "What is the weather most likely like in the story?",
+          "choices": [
+            { "id": "c-gr4-q1-01-01-a", "choiceText": "Hot and sunny", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-01-01-b", "choiceText": "Cold and rainy", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-01-01-c", "choiceText": "Windy but clear", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-01-01-d", "choiceText": "Cool and sunny", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-01-02",
+          "orderIndex": 2,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "How do you know it is cold without the story saying so directly?",
+          "choices": [
+            { "id": "c-gr4-q1-01-02-a", "choiceText": "Maria was eating ice cream", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-01-02-b", "choiceText": "Maria wore a thick sweater and drank hot chocolate", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-01-02-c", "choiceText": "The class went swimming", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-01-02-d", "choiceText": "Mrs. Santos opened the windows", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-01-03",
+          "orderIndex": 3,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Why did Mrs. Santos cancel the outdoor reading session?",
+          "choices": [
+            { "id": "c-gr4-q1-01-03-a", "choiceText": "The students misbehaved", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-01-03-b", "choiceText": "It was going to rain", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-01-03-c", "choiceText": "She forgot the books", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-01-03-d", "choiceText": "The field was being cleaned", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-01-04",
+          "orderIndex": 4,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "What does the arroz caldo tell you about Maria's lola?",
+          "choices": [
+            { "id": "c-gr4-q1-01-04-a", "choiceText": "She likes to cook new recipes", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-01-04-b", "choiceText": "She is caring and thoughtful", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-01-04-c", "choiceText": "She was hungry herself", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-01-04-d", "choiceText": "She did not know it was raining", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-01-05",
+          "orderIndex": 5,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "The last line says the arroz caldo 'tasted like comfort.' What does this mean?",
+          "choices": [
+            { "id": "c-gr4-q1-01-05-a", "choiceText": "It was a new flavor Maria had never tried", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-01-05-b", "choiceText": "It made Maria feel warm and safe", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-01-05-c", "choiceText": "It was very spicy", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-01-05-d", "choiceText": "Maria did not enjoy it", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-01-06",
+          "orderIndex": 6,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "What can you infer about Jun from the story?",
+          "choices": [
+            { "id": "c-gr4-q1-01-06-a", "choiceText": "Jun lives far from Maria", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-01-06-b", "choiceText": "Jun is a classmate who walks the same way home", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-01-06-c", "choiceText": "Jun forgot to bring an umbrella", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-01-06-d", "choiceText": "Jun does not like the rain", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-01-07",
+          "orderIndex": 7,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Maria reached for her thickest ________ when she saw the gray sky.",
+          "choices": [
+            { "id": "c-gr4-q1-01-07-a", "choiceText": "sweater", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-01-08",
+          "orderIndex": 8,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Mrs. Santos brought out ________ for the class to play indoors.",
+          "choices": [
+            { "id": "c-gr4-q1-01-08-a", "choiceText": "board games", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-01-09",
+          "orderIndex": 9,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Maria and Jun shared an ________ on the way home.",
+          "choices": [
+            { "id": "c-gr4-q1-01-09-a", "choiceText": "umbrella", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-01-10",
+          "orderIndex": 10,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Maria's lola prepared a big pot of ________ for her when she got home.",
+          "choices": [
+            { "id": "c-gr4-q1-01-10-a", "choiceText": "arroz caldo", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-01-11",
+          "orderIndex": 11,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "The rain made a soft ________ sound against the classroom windows.",
+          "choices": [
+            { "id": "c-gr4-q1-01-11-a", "choiceText": "tapping", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-01-12",
+          "orderIndex": 12,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Reading clues in a story to figure out something that is not directly stated is called ________.",
+          "choices": [
+            { "id": "c-gr4-q1-01-12-a", "choiceText": "inferring", "isCorrect": true, "orderIndex": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q1-02",
+      "orderIndex": 2,
+      "competency": "Verbs and Adjectives",
+      "title": "Words That Describe and Do",
+      "imagePath": "img/gr4_q1_verbs_adj.webp",
+      "passageText": "Every Saturday morning, Lando and his older sister Ate Bea walk to the wet market near their house. The market is loud and crowded, filled with the smell of fresh fish and ripe mangoes. Vendors shout out their prices, and shoppers squeeze past each other carrying heavy baskets.\n\nAte Bea writes a long list before they leave. She moves quickly through the stalls, picking up smooth purple eggplants, crisp green beans, and a bunch of small sweet bananas. Lando helps by carrying the lighter bags.\n\nAt the fish section, a vendor holds up a shiny silver milkfish. \"Fresh bangus!\" he calls out in a loud, cheerful voice. Ate Bea examines it carefully, pressing the flesh gently.\n\n\"Perfect,\" she says, and nods.\n\nThey pay and move on. By the time they finish, their bags are bulging and heavy. Lando's arms ache, but he feels proud.\n\n\"Good job today,\" Ate Bea says, ruffling his hair.\n\nLando grins. Even though his arms are tired, he always looks forward to their Saturday market trips.",
+      "questions": [
+        {
+          "id": "q-gr4-q1-02-01",
+          "orderIndex": 1,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Which word in the passage is an adjective that describes the eggplants?",
+          "choices": [
+            { "id": "c-gr4-q1-02-01-a", "choiceText": "smooth", "isCorrect": true, "orderIndex": 1 },
+            { "id": "c-gr4-q1-02-01-b", "choiceText": "picks", "isCorrect": false, "orderIndex": 2 },
+            { "id": "c-gr4-q1-02-01-c", "choiceText": "quickly", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-02-01-d", "choiceText": "market", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-02-02",
+          "orderIndex": 2,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Which of the following is a verb from the passage?",
+          "choices": [
+            { "id": "c-gr4-q1-02-02-a", "choiceText": "heavy", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-02-02-b", "choiceText": "examines", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-02-02-c", "choiceText": "silver", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-02-02-d", "choiceText": "cheerful", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-02-03",
+          "orderIndex": 3,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "In the sentence 'The market is loud and crowded,' what are 'loud' and 'crowded'?",
+          "choices": [
+            { "id": "c-gr4-q1-02-03-a", "choiceText": "Verbs", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-02-03-b", "choiceText": "Nouns", "isCorrect": false, "orderIndex": 2 },
+            { "id": "c-gr4-q1-02-03-c", "choiceText": "Adjectives", "isCorrect": true, "orderIndex": 3 },
+            { "id": "c-gr4-q1-02-03-d", "choiceText": "Adverbs", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-02-04",
+          "orderIndex": 4,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Which sentence uses a verb correctly?",
+          "choices": [
+            { "id": "c-gr4-q1-02-04-a", "choiceText": "The bangus is shiny silver.", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-02-04-b", "choiceText": "Lando carries the lighter bags.", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-02-04-c", "choiceText": "Fresh and ripe the mangoes.", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-02-04-d", "choiceText": "Crisp green proud basket.", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-02-05",
+          "orderIndex": 5,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "What does the adjective 'crisp' tell you about the green beans?",
+          "choices": [
+            { "id": "c-gr4-q1-02-05-a", "choiceText": "Their color", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-02-05-b", "choiceText": "Their texture", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-02-05-c", "choiceText": "Their size", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-02-05-d", "choiceText": "Their price", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-02-06",
+          "orderIndex": 6,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Adjectives are words that describe ________.",
+          "choices": [
+            { "id": "c-gr4-q1-02-06-a", "choiceText": "actions", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-02-06-b", "choiceText": "places only", "isCorrect": false, "orderIndex": 2 },
+            { "id": "c-gr4-q1-02-06-c", "choiceText": "nouns or pronouns", "isCorrect": true, "orderIndex": 3 },
+            { "id": "c-gr4-q1-02-06-d", "choiceText": "other adjectives", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-02-07",
+          "orderIndex": 7,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Ate Bea moves ________ through the stalls at the market.",
+          "choices": [
+            { "id": "c-gr4-q1-02-07-a", "choiceText": "quickly", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-02-08",
+          "orderIndex": 8,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "The vendor holds up a ________ silver milkfish.",
+          "choices": [
+            { "id": "c-gr4-q1-02-08-a", "choiceText": "shiny", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-02-09",
+          "orderIndex": 9,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "A word that describes a noun is called an ________.",
+          "choices": [
+            { "id": "c-gr4-q1-02-09-a", "choiceText": "adjective", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-02-10",
+          "orderIndex": 10,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "A word that shows an action or state of being is called a ________.",
+          "choices": [
+            { "id": "c-gr4-q1-02-10-a", "choiceText": "verb", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-02-11",
+          "orderIndex": 11,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Ate Bea ________ the fish carefully by pressing the flesh.",
+          "choices": [
+            { "id": "c-gr4-q1-02-11-a", "choiceText": "examines", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-02-12",
+          "orderIndex": 12,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Even though his arms are tired, Lando always ________ forward to their Saturday trips.",
+          "choices": [
+            { "id": "c-gr4-q1-02-12-a", "choiceText": "looks", "isCorrect": true, "orderIndex": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q1-03",
+      "orderIndex": 3,
+      "competency": "Sequencing",
+      "title": "Step by Step",
+      "imagePath": "img/gr4_q1_sequencing.webp",
+      "passageText": "Every Sunday, Nanay makes her famous puto for the whole family. It is a tradition that has been passed down from her own mother, and the whole house smells wonderful when she is done.\n\nFirst, Nanay measures out two cups of rice flour and mixes it with sugar and a pinch of salt in a large bowl. Then she slowly pours in coconut milk, stirring all the while to make sure there are no lumps. Next, she adds baking powder and mixes again until the batter is smooth and a little thick.\n\nAfter mixing, she greases the small puto molds with a little butter so the puto will slide out easily when cooked. She fills each mold about three-quarters full, because the puto will rise as it steams. On top of each one, she places a small square of cheese or a slice of salted egg.\n\nFinally, Nanay arranges the filled molds inside the steamer. She covers the pot and lets the puto steam for about fifteen to twenty minutes. When the tops spring back lightly when touched, they are done.\n\nShe lets them cool for a few minutes before popping each puto out of its mold. By that time, the whole family is already gathered in the kitchen, ready and waiting.",
+      "questions": [
+        {
+          "id": "q-gr4-q1-03-01",
+          "orderIndex": 1,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "What does Nanay do FIRST when making puto?",
+          "choices": [
+            { "id": "c-gr4-q1-03-01-a", "choiceText": "She greases the molds with butter", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-03-01-b", "choiceText": "She measures rice flour and mixes it with sugar and salt", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-03-01-c", "choiceText": "She puts the molds in the steamer", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-03-01-d", "choiceText": "She adds baking powder", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-03-02",
+          "orderIndex": 2,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "What happens AFTER Nanay adds baking powder?",
+          "choices": [
+            { "id": "c-gr4-q1-03-02-a", "choiceText": "She pours in coconut milk", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-03-02-b", "choiceText": "She greases the molds", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-03-02-c", "choiceText": "She places cheese on top", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-03-02-d", "choiceText": "She turns off the stove", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-03-03",
+          "orderIndex": 3,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Why does Nanay only fill each mold three-quarters full?",
+          "choices": [
+            { "id": "c-gr4-q1-03-03-a", "choiceText": "She doesn't have enough batter", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-03-03-b", "choiceText": "The puto will rise while steaming", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-03-03-c", "choiceText": "The cheese needs space on top", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-03-03-d", "choiceText": "The molds are too large", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-03-04",
+          "orderIndex": 4,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "What is the LAST thing Nanay does before the family eats the puto?",
+          "choices": [
+            { "id": "c-gr4-q1-03-04-a", "choiceText": "She steams the puto for 15–20 minutes", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-03-04-b", "choiceText": "She lets the puto cool and pops them out of the molds", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-03-04-c", "choiceText": "She adds cheese on top", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-03-04-d", "choiceText": "She measures the rice flour", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-03-05",
+          "orderIndex": 5,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Which signal word tells you what Nanay does at the beginning?",
+          "choices": [
+            { "id": "c-gr4-q1-03-05-a", "choiceText": "Finally", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-03-05-b", "choiceText": "After", "isCorrect": false, "orderIndex": 2 },
+            { "id": "c-gr4-q1-03-05-c", "choiceText": "First", "isCorrect": true, "orderIndex": 3 },
+            { "id": "c-gr4-q1-03-05-d", "choiceText": "Next", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-03-06",
+          "orderIndex": 6,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Sequencing means arranging events in ________.",
+          "choices": [
+            { "id": "c-gr4-q1-03-06-a", "choiceText": "alphabetical order", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-03-06-b", "choiceText": "the order they happened", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-03-06-c", "choiceText": "order of importance", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-03-06-d", "choiceText": "random order", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-03-07",
+          "orderIndex": 7,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Nanay mixes rice flour with sugar and a pinch of ________.",
+          "choices": [
+            { "id": "c-gr4-q1-03-07-a", "choiceText": "salt", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-03-08",
+          "orderIndex": 8,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Nanay greases the molds with a little ________ so the puto slides out easily.",
+          "choices": [
+            { "id": "c-gr4-q1-03-08-a", "choiceText": "butter", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-03-09",
+          "orderIndex": 9,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "The puto is cooked by ________ for fifteen to twenty minutes.",
+          "choices": [
+            { "id": "c-gr4-q1-03-09-a", "choiceText": "steaming", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-03-10",
+          "orderIndex": 10,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Words like 'first,' 'next,' 'then,' and 'finally' are called ________ words.",
+          "choices": [
+            { "id": "c-gr4-q1-03-10-a", "choiceText": "sequence", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-03-11",
+          "orderIndex": 11,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Nanay adds ________ milk to the batter while stirring.",
+          "choices": [
+            { "id": "c-gr4-q1-03-11-a", "choiceText": "coconut", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-03-12",
+          "orderIndex": 12,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "The puto is done when the tops ________ back lightly when touched.",
+          "choices": [
+            { "id": "c-gr4-q1-03-12-a", "choiceText": "spring", "isCorrect": true, "orderIndex": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q1-04",
+      "orderIndex": 4,
+      "competency": "Synonyms and Antonyms",
+      "title": "Same and Opposite",
+      "imagePath": "img/gr4_q1_synonyms.webp",
+      "passageText": "Words are like tools. Just as a carpenter chooses the right tool for each job, a good writer chooses the right word for each sentence. Two types of words that help writers do this are synonyms and antonyms.\n\nSynonyms are words that have the same or nearly the same meaning. For example, 'happy' and 'joyful' are synonyms. So are 'big' and 'large,' 'begin' and 'start,' and 'fast' and 'quick.' Using synonyms makes writing more interesting because it helps a writer avoid repeating the same word over and over.\n\nAntonyms are words that have opposite meanings. 'Hot' and 'cold' are antonyms. So are 'loud' and 'quiet,' 'day' and 'night,' and 'brave' and 'cowardly.' Understanding antonyms helps readers understand contrast — the difference between two very different ideas or things.\n\nHere is a short story that uses both: Carlos was a timid boy who was afraid of dogs. One afternoon, he met a gentle puppy named Kiko. Slowly, Carlos grew bold. By the end of the week, the formerly fearful boy was now brave and confident.\n\nIn that story, 'timid' and 'bold' are antonyms. 'Fearful' and 'timid' are synonyms. Noticing these kinds of word relationships helps readers better understand what they read.",
+      "questions": [
+        {
+          "id": "q-gr4-q1-04-01",
+          "orderIndex": 1,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Which pair of words are SYNONYMS?",
+          "choices": [
+            { "id": "c-gr4-q1-04-01-a", "choiceText": "hot and cold", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-04-01-b", "choiceText": "begin and start", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-04-01-c", "choiceText": "day and night", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-04-01-d", "choiceText": "loud and quiet", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-04-02",
+          "orderIndex": 2,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Which pair of words are ANTONYMS?",
+          "choices": [
+            { "id": "c-gr4-q1-04-02-a", "choiceText": "fast and quick", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-04-02-b", "choiceText": "big and large", "isCorrect": false, "orderIndex": 2 },
+            { "id": "c-gr4-q1-04-02-c", "choiceText": "brave and cowardly", "isCorrect": true, "orderIndex": 3 },
+            { "id": "c-gr4-q1-04-02-d", "choiceText": "happy and joyful", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-04-03",
+          "orderIndex": 3,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "In the story about Carlos, 'timid' and 'bold' are ________.",
+          "choices": [
+            { "id": "c-gr4-q1-04-03-a", "choiceText": "synonyms", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-04-03-b", "choiceText": "antonyms", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-04-03-c", "choiceText": "homophones", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-04-03-d", "choiceText": "compound words", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-04-04",
+          "orderIndex": 4,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Why do writers use synonyms?",
+          "choices": [
+            { "id": "c-gr4-q1-04-04-a", "choiceText": "To confuse the reader", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-04-04-b", "choiceText": "To avoid repeating the same word", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-04-04-c", "choiceText": "To add opposite meanings", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-04-04-d", "choiceText": "To shorten their writing", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-04-05",
+          "orderIndex": 5,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "In the story, 'fearful' and 'timid' are ________.",
+          "choices": [
+            { "id": "c-gr4-q1-04-05-a", "choiceText": "antonyms", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-04-05-b", "choiceText": "synonyms", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-04-05-c", "choiceText": "unrelated words", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-04-05-d", "choiceText": "adjectives and nouns", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-04-06",
+          "orderIndex": 6,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Which is a synonym for 'quick'?",
+          "choices": [
+            { "id": "c-gr4-q1-04-06-a", "choiceText": "slow", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-04-06-b", "choiceText": "fast", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-04-06-c", "choiceText": "heavy", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-04-06-d", "choiceText": "tall", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-04-07",
+          "orderIndex": 7,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Words that have the same or nearly the same meaning are called ________.",
+          "choices": [
+            { "id": "c-gr4-q1-04-07-a", "choiceText": "synonyms", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-04-08",
+          "orderIndex": 8,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Words that have opposite meanings are called ________.",
+          "choices": [
+            { "id": "c-gr4-q1-04-08-a", "choiceText": "antonyms", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-04-09",
+          "orderIndex": 9,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "The antonym of 'brave' is ________.",
+          "choices": [
+            { "id": "c-gr4-q1-04-09-a", "choiceText": "cowardly", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-04-10",
+          "orderIndex": 10,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "A synonym for 'happy' is ________.",
+          "choices": [
+            { "id": "c-gr4-q1-04-10-a", "choiceText": "joyful", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-04-11",
+          "orderIndex": 11,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Carlos grew ________ after spending time with the gentle puppy Kiko.",
+          "choices": [
+            { "id": "c-gr4-q1-04-11-a", "choiceText": "bold", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-04-12",
+          "orderIndex": 12,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Understanding antonyms helps readers understand ________ between two different ideas.",
+          "choices": [
+            { "id": "c-gr4-q1-04-12-a", "choiceText": "contrast", "isCorrect": true, "orderIndex": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q1-05",
+      "orderIndex": 5,
+      "competency": "Drawing Conclusions",
+      "title": "Putting the Clues Together",
+      "imagePath": "img/gr4_q1_conclusions.webp",
+      "passageText": "The school library was quiet except for the soft sound of pages turning. Nena sat at a corner table surrounded by books about volcanoes. She had three pages of notes already filled and was still taking more. Her pencil moved quickly across the paper.\n\nOn the cover of one book was a photograph of a volcano erupting at night, its bright orange lava lighting up the sky. Nena had circled several paragraphs and written small notes in the margins. She had borrowed four books from the shelf, and two of them were now marked with small sticky notes.\n\nHer teacher had given the class a research project two weeks ago. Most of her classmates had barely started. Nena, however, was almost done.\n\nWhen the bell rang, Nena carefully placed her notes inside a folder labeled 'Volcano Project.' She returned the books to the librarian's desk and thanked her.\n\n\"See you tomorrow,\" Nena said.\n\nThe librarian smiled. \"I thought you might say that.\"\n\nNena walked out with her folder tucked under her arm, already thinking about what she needed to add.",
+      "questions": [
+        {
+          "id": "q-gr4-q1-05-01",
+          "orderIndex": 1,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "What conclusion can you draw about Nena?",
+          "choices": [
+            { "id": "c-gr4-q1-05-01-a", "choiceText": "She dislikes going to the library", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-05-01-b", "choiceText": "She is hardworking and dedicated to her studies", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-05-01-c", "choiceText": "She is writing a story about lava", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-05-01-d", "choiceText": "She forgot about the project", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-05-02",
+          "orderIndex": 2,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "What does the librarian's comment 'I thought you might say that' tell you?",
+          "choices": [
+            { "id": "c-gr4-q1-05-02-a", "choiceText": "The librarian is surprised to see Nena", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-05-02-b", "choiceText": "Nena visits the library often and is well known there", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-05-02-c", "choiceText": "The librarian does not want Nena to return", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-05-02-d", "choiceText": "Nena rarely says goodbye", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-05-03",
+          "orderIndex": 3,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Which clue best supports the conclusion that Nena is ahead of her classmates?",
+          "choices": [
+            { "id": "c-gr4-q1-05-03-a", "choiceText": "She thanked the librarian", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-05-03-b", "choiceText": "She had already filled three pages of notes while most classmates had barely started", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-05-03-c", "choiceText": "She borrowed four books", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-05-03-d", "choiceText": "She labeled her folder", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-05-04",
+          "orderIndex": 4,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "When drawing a conclusion, a reader uses ________.",
+          "choices": [
+            { "id": "c-gr4-q1-05-04-a", "choiceText": "only their feelings", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-05-04-b", "choiceText": "clues from the text and their own thinking", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-05-04-c", "choiceText": "information from another book", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-05-04-d", "choiceText": "only what the author directly states", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-05-05",
+          "orderIndex": 5,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "What is the topic of Nena's research project?",
+          "choices": [
+            { "id": "c-gr4-q1-05-05-a", "choiceText": "The school library", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-05-05-b", "choiceText": "Volcanoes", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-05-05-c", "choiceText": "Earthquakes", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-05-05-d", "choiceText": "Lava rocks", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-05-06",
+          "orderIndex": 6,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Drawing a conclusion is different from summarizing because it requires ________.",
+          "choices": [
+            { "id": "c-gr4-q1-05-06-a", "choiceText": "copying the text word for word", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-05-06-b", "choiceText": "going beyond what is stated and figuring something out", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-05-06-c", "choiceText": "finding the main idea", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-05-06-d", "choiceText": "listing events in order", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-05-07",
+          "orderIndex": 7,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Nena sat at a corner table surrounded by books about ________.",
+          "choices": [
+            { "id": "c-gr4-q1-05-07-a", "choiceText": "volcanoes", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-05-08",
+          "orderIndex": 8,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Nena placed her notes inside a folder labeled '________ Project.'",
+          "choices": [
+            { "id": "c-gr4-q1-05-08-a", "choiceText": "Volcano", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-05-09",
+          "orderIndex": 9,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Using clues from the text to figure out something not directly stated is called ________.",
+          "choices": [
+            { "id": "c-gr4-q1-05-09-a", "choiceText": "drawing conclusions", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-05-10",
+          "orderIndex": 10,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Nena had circled several paragraphs and written small notes in the ________.",
+          "choices": [
+            { "id": "c-gr4-q1-05-10-a", "choiceText": "margins", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-05-11",
+          "orderIndex": 11,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "The cover of one book showed a photograph of a volcano ________ at night.",
+          "choices": [
+            { "id": "c-gr4-q1-05-11-a", "choiceText": "erupting", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-05-12",
+          "orderIndex": 12,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Nena walked out with her ________ tucked under her arm.",
+          "choices": [
+            { "id": "c-gr4-q1-05-12-a", "choiceText": "folder", "isCorrect": true, "orderIndex": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q1-06",
+      "orderIndex": 6,
+      "competency": "Identifying Visual Elements",
+      "title": "What Pictures Tell Us",
+      "imagePath": "img/gr4_q1_visual_elements.webp",
+      "passageText": "When we read, we do not only look at words. We also look at pictures, diagrams, charts, and other visual elements. These visuals are not just decorations — they give us important information that helps us better understand what we are reading.\n\nA line drawing in a science book might show the parts of a flower. A map in a social studies book helps us understand where places are. A timeline shows us when events happened in history. A bar graph in a math book shows us how numbers compare.\n\nGood readers pay close attention to visual elements. They read the labels and captions. They look at colors and shapes to understand what they mean. They ask: What is this image showing me? How does it connect to the text?\n\nVisual elements also include things like bold or italic text, headings, and numbered lists. These help organize information and guide the reader's eye to what is important.\n\nFor example, imagine a passage about planting a garden. Next to the text is a diagram of a seed being planted in soil. Arrows show the direction of root growth downward and stem growth upward. Even without reading the full text, the diagram tells you a great deal about how a seed grows.\n\nLearning to read visual elements is a skill that helps you in all subjects — not just reading.",
+      "questions": [
+        {
+          "id": "q-gr4-q1-06-01",
+          "orderIndex": 1,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "What is the main purpose of visual elements in a text?",
+          "choices": [
+            { "id": "c-gr4-q1-06-01-a", "choiceText": "To make the book look colorful", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-06-01-b", "choiceText": "To give important information and help readers understand", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-06-01-c", "choiceText": "To replace all the words in the text", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-06-01-d", "choiceText": "To confuse the reader", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-06-02",
+          "orderIndex": 2,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Which visual element would best show when events happened in history?",
+          "choices": [
+            { "id": "c-gr4-q1-06-02-a", "choiceText": "A bar graph", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-06-02-b", "choiceText": "A timeline", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-06-02-c", "choiceText": "A numbered list", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-06-02-d", "choiceText": "Bold text", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-06-03",
+          "orderIndex": 3,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "In the garden diagram, what do arrows pointing downward show?",
+          "choices": [
+            { "id": "c-gr4-q1-06-03-a", "choiceText": "Where to water the plant", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-06-03-b", "choiceText": "The direction of root growth", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-06-03-c", "choiceText": "The stem growing upward", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-06-03-d", "choiceText": "The type of seed used", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-06-04",
+          "orderIndex": 4,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Which of the following is an example of a visual element?",
+          "choices": [
+            { "id": "c-gr4-q1-06-04-a", "choiceText": "A paragraph of text", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-06-04-b", "choiceText": "A map", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-06-04-c", "choiceText": "A sentence", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-06-04-d", "choiceText": "A comma", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-06-05",
+          "orderIndex": 5,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "What question should a good reader ask when looking at a visual?",
+          "choices": [
+            { "id": "c-gr4-q1-06-05-a", "choiceText": "How many pages does the book have?", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-06-05-b", "choiceText": "What is this image showing and how does it connect to the text?", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-06-05-c", "choiceText": "Who drew the picture?", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-06-05-d", "choiceText": "Is the picture in color?", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-06-06",
+          "orderIndex": 6,
+          "questionType": "MCQ",
+          "pointsValue": 1,
+          "questionText": "Bold or italic text, headings, and numbered lists are examples of visual elements that ________.",
+          "choices": [
+            { "id": "c-gr4-q1-06-06-a", "choiceText": "replace diagrams and maps", "isCorrect": false, "orderIndex": 1 },
+            { "id": "c-gr4-q1-06-06-b", "choiceText": "help organize information and guide the reader", "isCorrect": true, "orderIndex": 2 },
+            { "id": "c-gr4-q1-06-06-c", "choiceText": "are only used in math books", "isCorrect": false, "orderIndex": 3 },
+            { "id": "c-gr4-q1-06-06-d", "choiceText": "are not important to read", "isCorrect": false, "orderIndex": 4 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-06-07",
+          "orderIndex": 7,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "A ________ in a social studies book helps us understand where places are.",
+          "choices": [
+            { "id": "c-gr4-q1-06-07-a", "choiceText": "map", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-06-08",
+          "orderIndex": 8,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "A ________ graph shows how numbers compare to each other.",
+          "choices": [
+            { "id": "c-gr4-q1-06-08-a", "choiceText": "bar", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-06-09",
+          "orderIndex": 9,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Visuals are not just decorations — they give us ________ information.",
+          "choices": [
+            { "id": "c-gr4-q1-06-09-a", "choiceText": "important", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-06-10",
+          "orderIndex": 10,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Good readers read the ________ and captions found near images.",
+          "choices": [
+            { "id": "c-gr4-q1-06-10-a", "choiceText": "labels", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-06-11",
+          "orderIndex": 11,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "A line drawing in a science book might show the parts of a ________.",
+          "choices": [
+            { "id": "c-gr4-q1-06-11-a", "choiceText": "flower", "isCorrect": true, "orderIndex": 1 }
+          ]
+        },
+        {
+          "id": "q-gr4-q1-06-12",
+          "orderIndex": 12,
+          "questionType": "FILL_IN",
+          "pointsValue": 1,
+          "questionText": "Learning to read visual elements is a skill that helps you in all ________.",
+          "choices": [
+            { "id": "c-gr4-q1-06-12-a", "choiceText": "subjects", "isCorrect": true, "orderIndex": 1 }
+          ]
+        }
+      ]
+    }
+  ]
+}
