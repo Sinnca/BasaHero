@@ -185,6 +185,8 @@ dependencies {
     androidTestImplementation(composeBom)
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    implementation(libs.androidx.core.splashscreen)
 }
 // ADD THIS AT THE BOTTOM OF THE FILE
 kotlin {
