@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.* // Added for mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -21,12 +21,20 @@ import androidx.navigation.compose.rememberNavController
 
 import com.basahero.elearning.data.local.AppDatabase
 import com.basahero.elearning.data.local.DatabaseSeeder
-import com.basahero.elearning.data.repository.LessonRepository // Added
+import com.basahero.elearning.data.repository.LessonRepository
 import com.basahero.elearning.data.repository.StudentRepository
 import com.basahero.elearning.ui.student.login.StudentLoginScreen
 import com.basahero.elearning.ui.student.login.StudentLoginViewModel
-import com.basahero.elearning.ui.student.home.StudentHomeScreen // Added
-import com.basahero.elearning.ui.student.home.StudentHomeViewModel // Added
+import com.basahero.elearning.ui.student.home.StudentHomeScreen
+import com.basahero.elearning.ui.student.home.StudentHomeViewModel
+
+// 👇 NEW IMPORTS FOR LESSON LIST
+import com.basahero.elearning.ui.student.lessons.LessonListScreen
+import com.basahero.elearning.ui.student.lessons.LessonListViewModel
+import com.basahero.elearning.ui.student.lessons.ReadingScreen
+import com.basahero.elearning.ui.student.lessons.ReadingViewModel
+import com.basahero.elearning.ui.student.quiz.QuizScreen
+import com.basahero.elearning.ui.student.quiz.QuizViewModel
 import com.basahero.elearning.ui.theme.BasaHeroTheme
 
 class MainActivity : ComponentActivity() {
@@ -74,9 +82,11 @@ fun PhilIRIApp() {
 
     val database = remember { AppDatabase.getInstance(context, DatabaseSeeder(context)) }
     val studentRepository = remember { StudentRepository(database) }
-    val lessonRepository = remember { LessonRepository(database) } // Added
+    val lessonRepository = remember { LessonRepository(database) }
 
-    // This state remembers which student is currently logged in
+    val quizRepository = remember { com.basahero.elearning.data.repository.QuizRepository(database) }
+    val progressRepository = remember { com.basahero.elearning.data.repository.ProgressRepository(database) }
+
     var loggedInStudentId by remember { mutableStateOf<String?>(null) }
 
     NavHost(
@@ -103,7 +113,7 @@ fun PhilIRIApp() {
             StudentLoginScreen(
                 viewModel = viewModel,
                 onLoginSuccess = { student ->
-                    loggedInStudentId = student.id // Store the ID here
+                    loggedInStudentId = student.id
                     navController.navigate(Routes.STUDENT_HOME) {
                         popUpTo(Routes.ROLE_SELECT) { inclusive = false }
                     }
@@ -112,7 +122,6 @@ fun PhilIRIApp() {
             )
         }
 
-        // 🚀 UPDATED: Now points to your actual Home Dashboard!
         composable(Routes.STUDENT_HOME) {
             val currentStudentId = loggedInStudentId ?: ""
             val viewModel: StudentHomeViewModel = viewModel(
@@ -128,7 +137,6 @@ fun PhilIRIApp() {
                 studentId = currentStudentId,
                 viewModel = viewModel,
                 onQuarterClick = { quarterId, _ ->
-                    // Go to lesson list for that quarter
                     navController.navigate("lesson_list/$quarterId")
                 },
                 onLogout = {
@@ -140,12 +148,131 @@ fun PhilIRIApp() {
             )
         }
 
+        // 🚀 WE REPLACED THE PLACEHOLDER WITH OUR REAL SCREEN!
+        composable(Routes.LESSON_LIST) { backStackEntry ->
+            val quarterId = backStackEntry.arguments?.getString("quarterId") ?: ""
+            val currentStudentId = loggedInStudentId ?: ""
+
+            val viewModel: LessonListViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        return LessonListViewModel(lessonRepository) as T
+                    }
+                }
+            )
+
+            LessonListScreen(
+                quarterId = quarterId,
+                studentId = currentStudentId,
+                quarterTitle = "Lessons",
+                viewModel = viewModel,
+                onLessonClick = { lessonId ->
+                    navController.navigate("reading/$lessonId")
+                },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        // 🚀 The Reading Screen
+        composable(Routes.READING) { backStackEntry ->
+            val lessonId = backStackEntry.arguments?.getString("lessonId") ?: ""
+
+            val viewModel: ReadingViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        return ReadingViewModel(lessonRepository) as T
+                    }
+                }
+            )
+
+            ReadingScreen(
+                lessonId = lessonId,
+                viewModel = viewModel,
+                onStartQuiz = { id ->
+                    navController.navigate("quiz/$id")
+                },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        // 🚀 The Quiz Screen
+        composable(Routes.QUIZ) { backStackEntry ->
+            val lessonId = backStackEntry.arguments?.getString("lessonId") ?: ""
+
+            val scoringUseCase = remember { com.basahero.elearning.domain.QuizScoringUseCase() }
+
+            val viewModel: QuizViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        // 👇 PASSING YOUR QUIZ REPOSITORY HERE
+                        return QuizViewModel(quizRepository, scoringUseCase) as T
+                    }
+                }
+            )
+
+            QuizScreen(
+                lessonId = lessonId,
+                lessonTitle = "Lesson Quiz",
+                viewModel = viewModel,
+                onQuizComplete = { result ->
+                    // Change this line inside your onQuizComplete block:
+                    navController.navigate("quiz_result/$lessonId/${result.score}/${result.total}") {
+                        popUpTo(Routes.LESSON_LIST) { inclusive = false }
+                    }
+                },
+                onBack = { navController.popBackStack() }
+            )
+        }
+        // 🚀 The Quiz Result Screen
+        composable(Routes.QUIZ_RESULT) { backStackEntry ->
+            val lessonId = backStackEntry.arguments?.getString("lessonId") ?: ""
+            val score = backStackEntry.arguments?.getString("score")?.toIntOrNull() ?: 0
+            val total = backStackEntry.arguments?.getString("total")?.toIntOrNull() ?: 0
+            val currentStudentId = loggedInStudentId ?: ""
+
+            // 👇 Using the clean 'quiz' package path!
+            val viewModel: com.basahero.elearning.ui.student.quiz.QuizResultViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        return com.basahero.elearning.ui.student.quiz.QuizResultViewModel(
+                            progressRepository,
+                            lessonRepository
+                        ) as T
+                    }
+                }
+            )
+
+            com.basahero.elearning.ui.student.quiz.QuizResultScreen(
+                studentId = currentStudentId,
+                lessonId = lessonId,
+                score = score,
+                total = total,
+                viewModel = viewModel,
+                onGoHome = {
+                    navController.popBackStack(Routes.LESSON_LIST, inclusive = false)
+                },
+                onNextLesson = { nextId ->
+                    navController.navigate("reading/$nextId") {
+                        popUpTo(Routes.LESSON_LIST) { inclusive = false }
+                    }
+                },
+                onRetry = {
+                    navController.navigate("quiz/$lessonId") {
+                        popUpTo(Routes.LESSON_LIST) { inclusive = false }
+                    }
+                }
+            )
+        }
+
         // Placeholders for remaining screens
         composable(Routes.QUARTER_MENU) { PlaceholderScreen("Quarter Menu") }
-        composable(Routes.LESSON_LIST) { PlaceholderScreen("Lesson List") }
-        composable(Routes.READING) { PlaceholderScreen("Reading Activity") }
-        composable(Routes.QUIZ) { PlaceholderScreen("Quiz") }
-        composable(Routes.QUIZ_RESULT) { PlaceholderScreen("Quiz Result") }
+//        composable(Routes.READING) { PlaceholderScreen("Reading Activity") }
+//        composable(Routes.QUIZ) { PlaceholderScreen("Quiz") }
+//        composable(Routes.QUIZ_RESULT) { PlaceholderScreen("Quiz Result") }
         composable(Routes.PRONUNCIATION) { PlaceholderScreen("Pronunciation Checker") }
         composable(Routes.GAME_JOIN) { PlaceholderScreen("Join Game") }
         composable(Routes.GAME_PLAY) { PlaceholderScreen("Game Play") }
