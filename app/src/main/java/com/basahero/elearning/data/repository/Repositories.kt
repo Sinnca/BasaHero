@@ -61,26 +61,61 @@ class LessonRepository(private val db: AppDatabase) {
         }
     }
 
-    fun getLessonsWithStatus(quarterId: String, studentId: String): Flow<List<Lesson>> {
-        // FIXED: Matched DAO's observeByQuarter()
-        return db.lessonDao().observeByQuarter(quarterId).map { lessons ->
-            lessons.mapIndexed { index, lesson ->
-                val progress = db.progressDao().getProgress(studentId, lesson.id)
-                val status = progress?.status ?: if (index == 0) LessonStatus.IN_PROGRESS else LessonStatus.LOCKED
+//    fun getLessonsWithStatus(quarterId: String, studentId: String): Flow<List<Lesson>> {
+//        // FIXED: Matched DAO's observeByQuarter()
+//        return db.lessonDao().observeByQuarter(quarterId).map { lessons ->
+//            lessons.mapIndexed { index, lesson ->
+//                val progress = db.progressDao().getProgress(studentId, lesson.id)
+//                val status = progress?.status ?: if (index == 0) LessonStatus.IN_PROGRESS else LessonStatus.LOCKED
+//
+//                Lesson(
+//                    id = lesson.id,
+//                    quarterId = lesson.quarterId,
+//                    orderIndex = lesson.orderIndex,
+//                    competency = lesson.competency,
+//                    title = lesson.title,
+//                    passageText = lesson.passageText,
+//                    imagePath = lesson.imagePath,
+//                    status = status
+//                )
+//            }
+//        }
+//    }
+fun getLessonsWithStatus(quarterId: String, studentId: String): Flow<List<Lesson>> {
+    return db.lessonDao().observeByQuarter(quarterId).map { lessons ->
+        // This keeps track of the previous lesson's status as we loop
+        var previousLessonDone = true
 
-                Lesson(
-                    id = lesson.id,
-                    quarterId = lesson.quarterId,
-                    orderIndex = lesson.orderIndex,
-                    competency = lesson.competency,
-                    title = lesson.title,
-                    passageText = lesson.passageText,
-                    imagePath = lesson.imagePath,
-                    status = status
-                )
+        lessons.map { lesson ->
+            val progress = db.progressDao().getProgress(studentId, lesson.id)
+
+            val status = when {
+                // 1. If the student has already interacted with THIS lesson, use its actual status
+                progress != null -> progress.status
+
+                // 2. If no record exists, but the lesson BEFORE this one is DONE, unlock this one
+                previousLessonDone -> LessonStatus.IN_PROGRESS
+
+                // 3. Otherwise, it's still locked
+                else -> LessonStatus.LOCKED
             }
+
+            // Update our tracker for the next iteration of the loop
+            previousLessonDone = (progress?.status == LessonStatus.DONE)
+
+            Lesson(
+                id = lesson.id,
+                quarterId = lesson.quarterId,
+                orderIndex = lesson.orderIndex,
+                competency = lesson.competency,
+                title = lesson.title,
+                passageText = lesson.passageText,
+                imagePath = lesson.imagePath,
+                status = status
+            )
         }
     }
+}
 
     suspend fun getLessonById(lessonId: String): Lesson? {
         // FIXED: Matched DAO's getById()
