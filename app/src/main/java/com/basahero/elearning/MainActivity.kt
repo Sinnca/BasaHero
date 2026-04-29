@@ -6,30 +6,35 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.* // Added for mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+
+import com.basahero.elearning.data.local.AppDatabase
+import com.basahero.elearning.data.local.DatabaseSeeder
+import com.basahero.elearning.data.repository.LessonRepository // Added
+import com.basahero.elearning.data.repository.StudentRepository
+import com.basahero.elearning.ui.student.login.StudentLoginScreen
+import com.basahero.elearning.ui.student.login.StudentLoginViewModel
+import com.basahero.elearning.ui.student.home.StudentHomeScreen // Added
+import com.basahero.elearning.ui.student.home.StudentHomeViewModel // Added
 import com.basahero.elearning.ui.theme.BasaHeroTheme
 
-// ─────────────────────────────────────────────────────────────────────────────
-// MainActivity — single activity, hosts the entire app navigation
-// ─────────────────────────────────────────────────────────────────────────────
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Show splash screen while app loads
         installSplashScreen()
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         setContent {
-            // Notice: The Greeting("Android") is gone, replaced by our App!
             BasaHeroTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -42,9 +47,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Root navigation
-// ─────────────────────────────────────────────────────────────────────────────
 object Routes {
     const val ROLE_SELECT = "role_select"
     const val STUDENT_LOGIN = "student_login"
@@ -68,6 +70,14 @@ object Routes {
 @Composable
 fun PhilIRIApp() {
     val navController = rememberNavController()
+    val context = LocalContext.current
+
+    val database = remember { AppDatabase.getInstance(context, DatabaseSeeder(context)) }
+    val studentRepository = remember { StudentRepository(database) }
+    val lessonRepository = remember { LessonRepository(database) } // Added
+
+    // This state remembers which student is currently logged in
+    var loggedInStudentId by remember { mutableStateOf<String?>(null) }
 
     NavHost(
         navController = navController,
@@ -79,8 +89,58 @@ fun PhilIRIApp() {
                 onTeacherClick = { navController.navigate(Routes.TEACHER_LOGIN) }
             )
         }
-        composable(Routes.STUDENT_LOGIN) { PlaceholderScreen("Student Login") }
-        composable(Routes.STUDENT_HOME) { PlaceholderScreen("Student Home") }
+
+        composable(Routes.STUDENT_LOGIN) {
+            val viewModel: StudentLoginViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        return StudentLoginViewModel(studentRepository) as T
+                    }
+                }
+            )
+
+            StudentLoginScreen(
+                viewModel = viewModel,
+                onLoginSuccess = { student ->
+                    loggedInStudentId = student.id // Store the ID here
+                    navController.navigate(Routes.STUDENT_HOME) {
+                        popUpTo(Routes.ROLE_SELECT) { inclusive = false }
+                    }
+                },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        // 🚀 UPDATED: Now points to your actual Home Dashboard!
+        composable(Routes.STUDENT_HOME) {
+            val currentStudentId = loggedInStudentId ?: ""
+            val viewModel: StudentHomeViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        return StudentHomeViewModel(studentRepository, lessonRepository) as T
+                    }
+                }
+            )
+
+            StudentHomeScreen(
+                studentId = currentStudentId,
+                viewModel = viewModel,
+                onQuarterClick = { quarterId, _ ->
+                    // Go to lesson list for that quarter
+                    navController.navigate("lesson_list/$quarterId")
+                },
+                onLogout = {
+                    loggedInStudentId = null
+                    navController.navigate(Routes.ROLE_SELECT) {
+                        popUpTo(0)
+                    }
+                }
+            )
+        }
+
+        // Placeholders for remaining screens
         composable(Routes.QUARTER_MENU) { PlaceholderScreen("Quarter Menu") }
         composable(Routes.LESSON_LIST) { PlaceholderScreen("Lesson List") }
         composable(Routes.READING) { PlaceholderScreen("Reading Activity") }
@@ -97,10 +157,6 @@ fun PhilIRIApp() {
         composable(Routes.GAME_HOST) { PlaceholderScreen("Game Host") }
     }
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// TEMPORARY SCREENS
-// ─────────────────────────────────────────────────────────────────────────────
 
 @Composable
 fun RoleSelectScreen(onStudentClick: () -> Unit, onTeacherClick: () -> Unit) {
