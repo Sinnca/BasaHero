@@ -32,6 +32,7 @@
 [versions]
 # -- Core Android & Compose --
 agp = "9.1.1"
+coreSplashscreen = "1.2.0"
 kotlin = "2.0.21"
 ksp = "2.0.21-1.0.27"
 coreKtx = "1.13.1"
@@ -40,8 +41,9 @@ activityCompose = "1.9.3"
 composeBom = "2024.10.01"
 navigationCompose = "2.8.4"
 
+
 # -- Capstone Dependencies --
-room = "2.6.1"
+room = "2.8.4"
 workManager = "2.9.1"
 dataStore = "1.1.1"
 supabase = "3.0.2"
@@ -59,8 +61,10 @@ espresso = "3.6.1"
 [libraries]
 # AndroidX Core
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+
 
 # Compose BOM & UI
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
