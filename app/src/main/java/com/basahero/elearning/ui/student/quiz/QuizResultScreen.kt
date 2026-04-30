@@ -15,61 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.basahero.elearning.data.repository.LessonRepository
-import com.basahero.elearning.data.repository.ProgressRepository
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-
-// ─────────────────────────────────────────────────────────────────────────────
-// QuizResultViewModel
-// ─────────────────────────────────────────────────────────────────────────────
-class QuizResultViewModel(
-    private val progressRepository: ProgressRepository,
-    private val lessonRepository: LessonRepository
-) : ViewModel() {
-
-    data class ResultUiState(
-        val isSaved: Boolean = false,
-        val nextLessonId: String? = null
-    )
-
-    private val _uiState = MutableStateFlow(ResultUiState())
-    val uiState: StateFlow<ResultUiState> = _uiState.asStateFlow()
-
-    fun saveResult(studentId: String, lessonId: String, score: Int, total: Int) {
-        viewModelScope.launch {
-            // 1. Save quiz result to Room
-            progressRepository.saveQuizResult(
-                studentId = studentId,
-                lessonId = lessonId,
-                score = score,
-                total = total
-            )
-
-            // 2. Find next lesson to unlock
-            val currentLesson = lessonRepository.getLessonById(lessonId)
-            if (currentLesson != null) {
-                val lessons = lessonRepository
-                    .getLessonsWithStatus(currentLesson.quarterId, studentId)
-                    .first()
-
-                val currentIndex = lessons.indexOfFirst { it.id == lessonId }
-                val nextLesson = lessons.getOrNull(currentIndex + 1)
-
-                _uiState.value = ResultUiState(
-                    isSaved = true,
-                    nextLessonId = nextLesson?.id
-                )
-            }
-        }
-    }
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // QuizResultScreen
@@ -88,13 +38,16 @@ fun QuizResultScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
+    // 👇 Grab the context to pass to the WorkManager sync
+    val context = LocalContext.current
+
     // Calculate pass/fail
     val percentage = if (total > 0) (score.toFloat() / total) * 100 else 0f
     val passed = percentage >= 60f
 
-    // Save result once on screen entry
+    // Save result once on screen entry, and trigger cloud sync!
     LaunchedEffect(lessonId) {
-        viewModel.saveResult(studentId, lessonId, score, total)
+        viewModel.saveResult(context, studentId, lessonId, score, total)
     }
 
     Scaffold(
@@ -118,7 +71,7 @@ fun QuizResultScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // Static Trophy Icon (Replaces Lottie to prevent crashes)
+            // Static Trophy Icon
             Box(
                 modifier = Modifier
                     .size(150.dp)
