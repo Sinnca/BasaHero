@@ -34,7 +34,8 @@ data class Lesson(
     val title: String,
     val passageText: String,
     val imagePath: String?,
-    val status: String = LessonStatus.LOCKED
+    val status: String = LessonStatus.LOCKED,
+    val highlightedWords: String = "[]" // 👈 Add this line to match the Entity
 ) {
     val isLocked get() = status == LessonStatus.LOCKED
     val isDone get() = status == LessonStatus.DONE
