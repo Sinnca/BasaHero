@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 // ─────────────────────────────────────────────
 // GradeLevelDao
 // ─────────────────────────────────────────────
-
 @Dao
 interface GradeLevelDao {
     @Query("SELECT * FROM grade_level ORDER BY id ASC")
@@ -23,7 +22,6 @@ interface GradeLevelDao {
 // ─────────────────────────────────────────────
 // QuarterDao
 // ─────────────────────────────────────────────
-
 @Dao
 interface QuarterDao {
     @Query("SELECT * FROM quarter WHERE grade_level_id = :gradeId ORDER BY quarter_number ASC")
@@ -42,7 +40,6 @@ interface QuarterDao {
 // ─────────────────────────────────────────────
 // LessonDao
 // ─────────────────────────────────────────────
-
 @Dao
 interface LessonDao {
     @Query("SELECT * FROM lesson WHERE quarter_id = :quarterId ORDER BY order_index ASC")
@@ -58,7 +55,6 @@ interface LessonDao {
 // ─────────────────────────────────────────────
 // QuizDao
 // ─────────────────────────────────────────────
-
 @Dao
 interface QuizDao {
     @Query("SELECT * FROM quiz_question WHERE lesson_id = :lessonId ORDER BY order_index ASC")
@@ -67,11 +63,9 @@ interface QuizDao {
     @Query("SELECT * FROM quiz_choice WHERE question_id = :questionId ORDER BY order_index ASC")
     suspend fun getChoicesForQuestion(questionId: String): List<QuizChoiceEntity>
 
-    // Fetch all choices for a list of question IDs in one query (avoids N+1)
     @Query("SELECT * FROM quiz_choice WHERE question_id IN (:questionIds)")
     suspend fun getChoicesForQuestions(questionIds: List<String>): List<QuizChoiceEntity>
 
-    // Sum of all points_value for a lesson — used to calculate quiz_total
     @Query("SELECT COALESCE(SUM(points_value), 0) FROM quiz_question WHERE lesson_id = :lessonId")
     suspend fun getTotalPointsForLesson(lessonId: String): Int
 
@@ -85,10 +79,8 @@ interface QuizDao {
 // ─────────────────────────────────────────────
 // StudentDao
 // ─────────────────────────────────────────────
-
 @Dao
 interface StudentDao {
-    // Login lookup — name + section must match exactly
     @Query("""
         SELECT * FROM student
         WHERE LOWER(full_name) = LOWER(:name)
@@ -103,7 +95,6 @@ interface StudentDao {
     @Query("SELECT * FROM student WHERE class_id = :classId ORDER BY full_name ASC")
     fun observeByClass(classId: String): Flow<List<StudentEntity>>
 
-    // Unsynced students that need to be pulled down from cloud
     @Query("SELECT * FROM student WHERE synced = 0")
     suspend fun getUnsynced(): List<StudentEntity>
 
@@ -123,10 +114,8 @@ interface StudentDao {
 // ─────────────────────────────────────────────
 // ProgressDao
 // ─────────────────────────────────────────────
-
 @Dao
 interface ProgressDao {
-    // Get progress for all lessons in a quarter for one student
     @Query("""
         SELECT sp.* FROM student_progress sp
         INNER JOIN lesson l ON sp.lesson_id = l.id
@@ -138,7 +127,6 @@ interface ProgressDao {
     @Query("SELECT * FROM student_progress WHERE student_id = :studentId AND lesson_id = :lessonId")
     suspend fun getProgress(studentId: String, lessonId: String): StudentProgressEntity?
 
-    // Count DONE lessons in a quarter for a student — used for progress ring
     @Query("""
         SELECT COUNT(*) FROM student_progress sp
         INNER JOIN lesson l ON sp.lesson_id = l.id
@@ -148,24 +136,26 @@ interface ProgressDao {
     """)
     fun observeDoneCount(studentId: String, quarterId: String): Flow<Int>
 
-    // Total lessons in a quarter — denominator for the progress ring
     @Query("SELECT COUNT(*) FROM lesson WHERE quarter_id = :quarterId")
     fun observeTotalCount(quarterId: String): Flow<Int>
 
-    // All unsynced progress rows — consumed by SyncProgressWorker
     @Query("SELECT * FROM student_progress WHERE synced = 0")
     suspend fun getUnsynced(): List<StudentProgressEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(progress: StudentProgressEntity)
 
-    // Retake: update score + status + retake_count but keep same row (unique constraint enforced)
+    // NEW: We add a standard update method so our repository can handle the first_score/best_score logic easily
+    @Update
+    suspend fun update(progress: StudentProgressEntity)
+
+    // FIXED: Changed retake_count to attempt_count to match Phase 3B Entity
     @Query("""
         UPDATE student_progress
         SET quiz_score    = :score,
             quiz_total    = :total,
             status        = :status,
-            retake_count  = retake_count + 1,
+            attempt_count = attempt_count + 1,
             completed_at  = :completedAt,
             synced        = 0
         WHERE student_id = :studentId AND lesson_id = :lessonId
@@ -182,7 +172,6 @@ interface ProgressDao {
     @Query("UPDATE student_progress SET synced = 1 WHERE id = :id")
     suspend fun markSynced(id: String)
 
-    // Bulk mark synced after WorkManager batch upload
     @Query("UPDATE student_progress SET synced = 1 WHERE id IN (:ids)")
     suspend fun markSyncedBatch(ids: List<String>)
 }
@@ -190,7 +179,6 @@ interface ProgressDao {
 // ─────────────────────────────────────────────
 // PronunciationDao
 // ─────────────────────────────────────────────
-
 @Dao
 interface PronunciationDao {
     @Query("""
@@ -200,7 +188,6 @@ interface PronunciationDao {
     """)
     fun observeAttempts(studentId: String, lessonId: String): Flow<List<PronunciationAttemptEntity>>
 
-    // Best attempt per lesson — shown on teacher dashboard
     @Query("""
         SELECT * FROM pronunciation_attempt
         WHERE student_id = :studentId AND lesson_id = :lessonId AND is_best = 1
@@ -208,7 +195,6 @@ interface PronunciationDao {
     """)
     suspend fun getBestAttempt(studentId: String, lessonId: String): PronunciationAttemptEntity?
 
-    // Next attempt number for this student + lesson
     @Query("""
         SELECT COALESCE(MAX(attempt_number), 0) + 1
         FROM pronunciation_attempt
@@ -216,7 +202,6 @@ interface PronunciationDao {
     """)
     suspend fun nextAttemptNumber(studentId: String, lessonId: String): Int
 
-    // Clear is_best flag before setting new best
     @Query("""
         UPDATE pronunciation_attempt SET is_best = 0
         WHERE student_id = :studentId AND lesson_id = :lessonId
@@ -226,12 +211,45 @@ interface PronunciationDao {
     @Query("UPDATE pronunciation_attempt SET is_best = 1 WHERE id = :id")
     suspend fun setAsBest(id: String)
 
-    @Query("SELECT * FROM pronunciation_attempt WHERE synced = 0")
-    suspend fun getUnsynced(): List<PronunciationAttemptEntity>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(attempt: PronunciationAttemptEntity)
 
-    @Query("UPDATE pronunciation_attempt SET synced = 1 WHERE id IN (:ids)")
-    suspend fun markSyncedBatch(ids: List<String>)
+    // FIXED: Removed the two "synced = 0" queries from here because we deleted that column!
+}
+
+// ─────────────────────────────────────────────
+// PrePostDao (NEW FROM CLAUDE)
+// ─────────────────────────────────────────────
+@Dao
+interface PrePostDao {
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertQuestions(questions: List<PrePostQuestionEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertChoices(choices: List<PrePostChoiceEntity>)
+
+    @Query("SELECT * FROM pre_post_question WHERE quarter_id = :quarterId AND test_type = :testType ORDER BY order_index ASC")
+    suspend fun getQuestions(quarterId: String, testType: String): List<PrePostQuestionEntity>
+
+    @Query("SELECT * FROM pre_post_choice WHERE question_id IN (SELECT id FROM pre_post_question WHERE quarter_id = :quarterId AND test_type = :testType)")
+    suspend fun getChoicesForQuarter(quarterId: String, testType: String): List<PrePostChoiceEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveTestResult(result: PrePostTestEntity)
+
+    @Query("SELECT * FROM pre_post_test WHERE student_id = :studentId AND quarter_id = :quarterId AND test_type = :testType LIMIT 1")
+    suspend fun getTestResult(studentId: String, quarterId: String, testType: String): PrePostTestEntity?
+
+    @Query("SELECT * FROM pre_post_test WHERE student_id = :studentId ORDER BY quarter_id ASC")
+    fun getAllResultsForStudent(studentId: String): Flow<List<PrePostTestEntity>>
+
+    @Query("SELECT * FROM pre_post_test WHERE synced = 0")
+    suspend fun getUnsyncedResults(): List<PrePostTestEntity>
+
+    @Query("UPDATE pre_post_test SET synced = 1 WHERE id = :id")
+    suspend fun markSynced(id: String)
+
+    @Query("SELECT COUNT(*) FROM pre_post_question WHERE quarter_id = :quarterId AND test_type = :testType")
+    suspend fun countQuestions(quarterId: String, testType: String): Int
 }

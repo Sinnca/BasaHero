@@ -8,6 +8,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.UUID
 
+// Define an alias so Android Studio knows EXACTLY which LessonStatus to use
+import com.basahero.elearning.data.local.entity.LessonStatus as DbLessonStatus
+import com.basahero.elearning.data.local.entity.AppConstants
+
 // ─────────────────────────────────────────────────────────────────────────────
 // StudentRepository
 // ─────────────────────────────────────────────────────────────────────────────
@@ -19,7 +23,6 @@ class StudentRepository(private val db: AppDatabase) {
     }
 
     suspend fun getStudentById(studentId: String): Student? {
-        // FIXED: Matched DAO's getById()
         return db.studentDao().getById(studentId)?.toDomain()
     }
 
@@ -43,7 +46,6 @@ class StudentRepository(private val db: AppDatabase) {
 class LessonRepository(private val db: AppDatabase) {
 
     fun getQuartersWithProgress(gradeLevel: Int, studentId: String): Flow<List<Quarter>> {
-        // FIXED: Matched DAO's observeByGrade() and used first() to safely read counts
         return db.quarterDao().observeByGrade(gradeLevel).map { quarters ->
             quarters.map { q ->
                 val total = db.lessonDao().observeByQuarter(q.id).first().size
@@ -61,64 +63,37 @@ class LessonRepository(private val db: AppDatabase) {
         }
     }
 
-//    fun getLessonsWithStatus(quarterId: String, studentId: String): Flow<List<Lesson>> {
-//        // FIXED: Matched DAO's observeByQuarter()
-//        return db.lessonDao().observeByQuarter(quarterId).map { lessons ->
-//            lessons.mapIndexed { index, lesson ->
-//                val progress = db.progressDao().getProgress(studentId, lesson.id)
-//                val status = progress?.status ?: if (index == 0) LessonStatus.IN_PROGRESS else LessonStatus.LOCKED
-//
-//                Lesson(
-//                    id = lesson.id,
-//                    quarterId = lesson.quarterId,
-//                    orderIndex = lesson.orderIndex,
-//                    competency = lesson.competency,
-//                    title = lesson.title,
-//                    passageText = lesson.passageText,
-//                    imagePath = lesson.imagePath,
-//                    status = status
-//                )
-//            }
-//        }
-//    }
-fun getLessonsWithStatus(quarterId: String, studentId: String): Flow<List<Lesson>> {
-    return db.lessonDao().observeByQuarter(quarterId).map { lessons ->
-        // This keeps track of the previous lesson's status as we loop
-        var previousLessonDone = true
+    fun getLessonsWithStatus(quarterId: String, studentId: String): Flow<List<Lesson>> {
+        return db.lessonDao().observeByQuarter(quarterId).map { lessons ->
+            var previousLessonDone = true
 
-        lessons.map { lesson ->
-            val progress = db.progressDao().getProgress(studentId, lesson.id)
+            lessons.map { lesson ->
+                val progress = db.progressDao().getProgress(studentId, lesson.id)
 
-            val status = when {
-                // 1. If the student has already interacted with THIS lesson, use its actual status
-                progress != null -> progress.status
+                val status = when {
+                    // Use explicitly imported DbLessonStatus to avoid ambiguity
+                    progress != null -> progress.status
+                    previousLessonDone -> DbLessonStatus.IN_PROGRESS
+                    else -> DbLessonStatus.LOCKED
+                }
 
-                // 2. If no record exists, but the lesson BEFORE this one is DONE, unlock this one
-                previousLessonDone -> LessonStatus.IN_PROGRESS
+                previousLessonDone = (progress?.status == DbLessonStatus.DONE)
 
-                // 3. Otherwise, it's still locked
-                else -> LessonStatus.LOCKED
+                Lesson(
+                    id = lesson.id,
+                    quarterId = lesson.quarterId,
+                    orderIndex = lesson.orderIndex,
+                    competency = lesson.competency,
+                    title = lesson.title,
+                    passageText = lesson.passageText,
+                    imagePath = lesson.imagePath,
+                    status = status
+                )
             }
-
-            // Update our tracker for the next iteration of the loop
-            previousLessonDone = (progress?.status == LessonStatus.DONE)
-
-            Lesson(
-                id = lesson.id,
-                quarterId = lesson.quarterId,
-                orderIndex = lesson.orderIndex,
-                competency = lesson.competency,
-                title = lesson.title,
-                passageText = lesson.passageText,
-                imagePath = lesson.imagePath,
-                status = status
-            )
         }
     }
-}
 
     suspend fun getLessonById(lessonId: String): Lesson? {
-        // FIXED: Matched DAO's getById()
         return db.lessonDao().getById(lessonId)?.let { lesson ->
             Lesson(
                 id = lesson.id,
@@ -133,7 +108,6 @@ fun getLessonsWithStatus(quarterId: String, studentId: String): Flow<List<Lesson
     }
 
     suspend fun unlockQuarter(quarterId: String) {
-        // FIXED: Matched DAO's unlock()
         db.quarterDao().unlock(quarterId)
     }
 }
@@ -144,7 +118,6 @@ fun getLessonsWithStatus(quarterId: String, studentId: String): Flow<List<Lesson
 class QuizRepository(private val db: AppDatabase) {
 
     suspend fun getQuizForLesson(lessonId: String): List<QuizQuestion> {
-        // FIXED: Matched DAO's getQuestionsForLesson() and getChoicesForQuestions()
         val questions = db.quizDao().getQuestionsForLesson(lessonId)
 
         val questionIds = questions.map { it.id }
@@ -175,7 +148,7 @@ class QuizRepository(private val db: AppDatabase) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ProgressRepository
+// ProgressRepository (PHASE 3B UPGRADED)
 // ─────────────────────────────────────────────────────────────────────────────
 class ProgressRepository(private val db: AppDatabase) {
 
@@ -190,27 +163,37 @@ class ProgressRepository(private val db: AppDatabase) {
         total: Int
     ) {
         val existing = db.progressDao().getProgress(studentId, lessonId)
+
+        // Phase 3B: The 60% Pass Threshold Logic
+        val isPassed = (score.toFloat() / total.toFloat()) >= AppConstants.PASS_THRESHOLD
+        val newStatus = if (isPassed) DbLessonStatus.DONE else DbLessonStatus.IN_PROGRESS
+
         if (existing != null) {
-            // FIXED: Used DAO's specialized updateOnRetake() function
-            db.progressDao().updateOnRetake(
-                studentId = studentId,
-                lessonId = lessonId,
-                score = score,
-                total = total,
-                status = LessonStatus.DONE,
-                completedAt = System.currentTimeMillis()
+            // Phase 3B: First Score & Best Score tracking
+            val updatedProgress = existing.copy(
+                quizScore = score,
+                quizTotal = total,
+                status = newStatus,
+                bestScore = maxOf(existing.bestScore, score), // Keeps the highest score
+                attemptCount = existing.attemptCount + 1,     // Increments attempts
+                completedAt = System.currentTimeMillis(),
+                synced = false
             )
+            // Use the standard @Update DAO method we added!
+            db.progressDao().update(updatedProgress)
         } else {
-            // FIXED: Used standard insert
+            // First time taking the quiz
             db.progressDao().insert(
                 StudentProgressEntity(
                     id = UUID.randomUUID().toString(),
                     studentId = studentId,
                     lessonId = lessonId,
-                    status = LessonStatus.DONE,
+                    status = newStatus,
                     quizScore = score,
                     quizTotal = total,
-                    retakeCount = 1,
+                    firstScore = score, // Written once!
+                    bestScore = score,
+                    attemptCount = 1,
                     completedAt = System.currentTimeMillis(),
                     synced = false
                 )
@@ -226,10 +209,12 @@ class ProgressRepository(private val db: AppDatabase) {
                     id = UUID.randomUUID().toString(),
                     studentId = studentId,
                     lessonId = lessonId,
-                    status = LessonStatus.IN_PROGRESS,
+                    status = DbLessonStatus.IN_PROGRESS,
                     quizScore = 0,
                     quizTotal = 0,
-                    retakeCount = 0,
+                    firstScore = null,
+                    bestScore = 0,
+                    attemptCount = 0,
                     completedAt = null,
                     synced = false
                 )
@@ -238,7 +223,6 @@ class ProgressRepository(private val db: AppDatabase) {
     }
 
     suspend fun getUnsyncedProgress(): List<StudentProgressEntity> {
-        // FIXED: Matched DAO's getUnsynced()
         return db.progressDao().getUnsynced()
     }
 
@@ -253,7 +237,8 @@ class ProgressRepository(private val db: AppDatabase) {
         status = status,
         quizScore = quizScore,
         quizTotal = quizTotal,
-        retakeCount = retakeCount,
+        // Map Phase 3B attemptCount to your domain model
+        retakeCount = attemptCount,
         completedAt = completedAt,
         synced = synced
     )
