@@ -35,9 +35,21 @@ fun ReadingScreen(
     }
 
     // Detect when scrolled near bottom (within 200px)
-    LaunchedEffect(scrollState.value) {
-        if (scrollState.value > 0 &&
-            scrollState.value >= scrollState.maxValue - 200) {
+//    LaunchedEffect(scrollState.value) {
+//        if (scrollState.value > 0 &&
+//            scrollState.value >= scrollState.maxValue - 200) {
+//            viewModel.onScrolledToBottom()
+//        }
+//    }
+    // ✅ FIXED: Calculates the bottom threshold WITHOUT recomposing the UI on every pixel!
+    val isAtBottom by remember {
+        derivedStateOf {
+            scrollState.maxValue > 0 && scrollState.value >= scrollState.maxValue - 200
+        }
+    }
+
+    LaunchedEffect(isAtBottom) {
+        if (isAtBottom && !uiState.readingComplete) {
             viewModel.onScrolledToBottom()
         }
     }
@@ -182,12 +194,11 @@ fun ReadingScreen(
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
 
             // Passage text (Changed from passageText to content)
-            Text(
-                text = lesson.passageText, // <--- This is the magic word!
-                fontSize = 16.sp,
-                lineHeight = 26.sp,
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Justify
+            // 🚀 NEW INTERACTIVE TEXT
+            HighlightedPassageText(
+                passageText = lesson.passageText,
+                highlightedWords = uiState.highlightedWords,
+                modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(32.dp))

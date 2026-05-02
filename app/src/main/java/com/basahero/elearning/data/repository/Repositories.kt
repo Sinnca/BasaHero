@@ -65,12 +65,48 @@ class LessonRepository(private val db: AppDatabase) {
         }
     }
 
+//    fun getLessonsWithStatus(quarterId: String, studentId: String): Flow<List<Lesson>> {
+//        return db.lessonDao().observeByQuarter(quarterId).map { lessons ->
+//            var previousLessonDone = true
+//
+//            lessons.map { lesson ->
+//                val progress = db.progressDao().getProgress(studentId, lesson.id)
+//
+//                val status = when {
+//                    progress != null -> progress.status
+//                    previousLessonDone -> DbLessonStatus.IN_PROGRESS
+//                    else -> DbLessonStatus.LOCKED
+//                }
+//
+//                previousLessonDone = (progress?.status == DbLessonStatus.DONE)
+//
+//                Lesson(
+//                    id = lesson.id,
+//                    quarterId = lesson.quarterId,
+//                    orderIndex = lesson.orderIndex,
+//                    competency = lesson.competency,
+//                    title = lesson.title,
+//                    passageText = lesson.passageText,
+//                    imagePath = lesson.imagePath,
+//                    status = status,
+//                    highlightedWords = lesson.highlightedWords // 👈 Pass it here
+//                )
+//            }
+//        }
+//    }
+
+    // ✅ FIXED: Completely eliminates the "N+1" database query problem
     fun getLessonsWithStatus(quarterId: String, studentId: String): Flow<List<Lesson>> {
-        return db.lessonDao().observeByQuarter(quarterId).map { lessons ->
+        // We grab the lessons and ALL progress at the same time
+        return kotlinx.coroutines.flow.combine(
+            db.lessonDao().observeByQuarter(quarterId),
+            db.progressDao().getAllProgressForStudent(studentId)
+        ) { lessons, allProgress ->
             var previousLessonDone = true
 
             lessons.map { lesson ->
-                val progress = db.progressDao().getProgress(studentId, lesson.id)
+                // Now we look it up in memory instead of hitting the database inside a loop!
+                val progress = allProgress.find { it.lessonId == lesson.id }
 
                 val status = when {
                     progress != null -> progress.status
@@ -88,7 +124,8 @@ class LessonRepository(private val db: AppDatabase) {
                     title = lesson.title,
                     passageText = lesson.passageText,
                     imagePath = lesson.imagePath,
-                    status = status
+                    status = status,
+                    highlightedWords = lesson.highlightedWords
                 )
             }
         }
@@ -103,7 +140,8 @@ class LessonRepository(private val db: AppDatabase) {
                 competency = lesson.competency,
                 title = lesson.title,
                 passageText = lesson.passageText,
-                imagePath = lesson.imagePath
+                imagePath = lesson.imagePath,
+                highlightedWords = lesson.highlightedWords // 👈 Pass it here
             )
         }
     }
