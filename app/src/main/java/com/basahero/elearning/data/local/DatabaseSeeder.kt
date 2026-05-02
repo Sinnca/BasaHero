@@ -160,9 +160,6 @@ import kotlinx.serialization.json.Json
  *
  * Reads grade4_q1.json, grade5_q1.json, grade6_q1.json from assets/data/
  * and inserts all content into Room on the very first app launch.
- *
- * Called once from AppDatabase.Callback.onCreate().
- * Never runs again because the database already exists on subsequent launches.
  */
 class DatabaseSeeder(private val context: Context) {
 
@@ -182,13 +179,12 @@ class DatabaseSeeder(private val context: Context) {
         )
 
         // ── 2. Seed a default student for testing ─────────────────────────────
-        // This ensures you can always login on a fresh install!
         db.studentDao().insertOrUpdate(
             StudentEntity(
                 id         = "student-001",
                 classId    = "dev-class-2026",
-                fullName   = "Juan Dela Cruz", // <--- Use this to login
-                section    = "Mabini",          // <--- Use this to login
+                fullName   = "Juan Dela Cruz",
+                section    = "Mabini",
                 gradeLevel = 4,
                 lastActive = System.currentTimeMillis(),
                 synced     = false,
@@ -197,7 +193,6 @@ class DatabaseSeeder(private val context: Context) {
         )
 
         // ── 3. Seed content from JSON files ───────────────────────────────────
-        // Note: For now, make sure you actually put "grade4_q1.json" in the assets/data folder!
         val files = listOf("grade4_q1.json", "grade5_q1.json", "grade6_q1.json")
 
         files.forEach { filename ->
@@ -206,7 +201,6 @@ class DatabaseSeeder(private val context: Context) {
                 val seed = json.decodeFromString<SeedFile>(raw)
                 insertSeedFile(db, seed)
             } catch (e: Exception) {
-                // If a file is missing (like grade5 or grade6), it will just skip it safely
                 e.printStackTrace()
             }
         }
@@ -228,6 +222,17 @@ class DatabaseSeeder(private val context: Context) {
             }
             db.quizDao().insertChoices(choices)
         }
+
+        // 🚀 PHASE 3B STEP 5: Insert Pre/Post Test Questions
+        if (seed.pre_post_questions.isNotEmpty()) {
+            val ppQuestions = seed.pre_post_questions.map { it.toEntity(seed.quarter.id) }
+            db.prePostDao().insertQuestions(ppQuestions)
+
+            val ppChoices = seed.pre_post_questions.flatMap { q ->
+                q.choices.map { it.toPrePostEntity(q.id) }
+            }
+            db.prePostDao().insertChoices(ppChoices)
+        }
     }
 }
 
@@ -238,7 +243,8 @@ class DatabaseSeeder(private val context: Context) {
 @Serializable
 data class SeedFile(
     val quarter: SeedQuarter,
-    val lessons: List<SeedLesson>
+    val lessons: List<SeedLesson>,
+    val pre_post_questions: List<SeedPrePostQuestion> = emptyList() // 👈 NEW
 )
 
 @Serializable
@@ -247,7 +253,7 @@ data class SeedQuarter(
     val gradeLevelId:  Int,
     val quarterNumber: Int,
     val title:         String,
-    val isActive:      Boolean = true   // Q1 defaults to active
+    val isActive:      Boolean = true
 ) {
     fun toEntity() = QuarterEntity(
         id            = id,
@@ -266,6 +272,7 @@ data class SeedLesson(
     val title:       String,
     val passageText: String,
     val imagePath:   String? = null,
+    val highlighted_words: List<String> = emptyList(), // 👈 NEW (Ready for Step 6)
     val questions:   List<SeedQuestion>
 ) {
     fun toEntity(quarterId: String) = LessonEntity(
@@ -275,7 +282,8 @@ data class SeedLesson(
         competency  = competency,
         title       = title,
         passageText = passageText,
-        imagePath = imagePath ?: ""
+        imagePath   = imagePath ?: "",
+        highlightedWords = highlighted_words.joinToString(",") // 👈 Converts List to String for Room
     )
 }
 
@@ -283,10 +291,10 @@ data class SeedLesson(
 data class SeedQuestion(
     val id:           String,
     val questionText: String,
-    val questionType: String,       // MCQ / FILL_IN / SEQUENCING / MATCHING
+    val questionType: String,
     val orderIndex:   Int,
     val pointsValue:  Int = 1,
-    val choices:      List<SeedChoice>
+    val choices:      List<SeedChoice> = emptyList()
 ) {
     fun toEntity(lessonId: String) = QuizQuestionEntity(
         id           = id,
@@ -305,11 +313,43 @@ data class SeedChoice(
     val isCorrect:  Boolean,
     val orderIndex: Int
 ) {
+    // Normal Lesson Choice mapping
     fun toEntity(questionId: String) = QuizChoiceEntity(
         id         = id,
         questionId = questionId,
         choiceText = choiceText,
         isCorrect  = isCorrect,
         orderIndex = orderIndex
+    )
+
+    // 🚀 NEW: Pre/Post Choice mapping
+    fun toPrePostEntity(questionId: String) = PrePostChoiceEntity(
+        id         = id,
+        questionId = questionId,
+        choiceText = choiceText,
+        isCorrect  = isCorrect,
+        orderIndex = orderIndex
+    )
+}
+
+// 🚀 NEW: Pre/Post Question mapping
+@Serializable
+data class SeedPrePostQuestion(
+    val id:           String,
+    val testType:     String,
+    val questionText: String,
+    val questionType: String,
+    val orderIndex:   Int,
+    val pointsValue:  Int = 1,
+    val choices:      List<SeedChoice> = emptyList()
+) {
+    fun toEntity(quarterId: String) = PrePostQuestionEntity(
+        id           = id,
+        quarterId    = quarterId,
+        testType     = testType,
+        questionText = questionText,
+        questionType = questionType,
+        orderIndex   = orderIndex,
+        pointsValue  = pointsValue
     )
 }

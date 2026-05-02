@@ -37,15 +37,12 @@ fun QuizResultScreen(
     onRetry: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
-
-    // 👇 Grab the context to pass to the WorkManager sync
     val context = LocalContext.current
 
-    // Calculate pass/fail
+    // Phase 3B Logic: 60% threshold Check
     val percentage = if (total > 0) (score.toFloat() / total) * 100 else 0f
     val passed = percentage >= 60f
 
-    // Save result once on screen entry, and trigger cloud sync!
     LaunchedEffect(lessonId) {
         viewModel.saveResult(context, studentId, lessonId, score, total)
     }
@@ -71,7 +68,6 @@ fun QuizResultScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // Static Trophy Icon
             Box(
                 modifier = Modifier
                     .size(150.dp)
@@ -91,19 +87,27 @@ fun QuizResultScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // Pass/Fail indicator
             Text(
                 text = if (passed) "Great job! 🎉" else "Keep trying! 💪",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (passed) MaterialTheme.colorScheme.tertiary
-                else MaterialTheme.colorScheme.primary,
+                color = if (passed) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center
             )
 
+            // Show a specific prompt if they failed
+            if (!passed) {
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = "You need at least 60% to unlock the next lesson.",
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                )
+            }
+
             Spacer(Modifier.height(32.dp))
 
-            // Score circle
             ScoreCircle(
                 score = score,
                 total = total,
@@ -112,13 +116,12 @@ fun QuizResultScreen(
 
             Spacer(Modifier.height(48.dp))
 
-            // Action buttons
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Next lesson button
-                if (uiState.nextLessonId != null) {
+                // 🚀 PHASE 3B UPDATE: Only show Next Lesson button IF they passed!
+                if (passed && uiState.nextLessonId != null) {
                     Button(
                         onClick = { onNextLesson(uiState.nextLessonId!!) },
                         enabled = uiState.isSaved,
@@ -133,20 +136,34 @@ fun QuizResultScreen(
                     }
                 }
 
-                // Retry button
-                OutlinedButton(
-                    onClick = onRetry,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(20.dp))
-                    Spacer(Modifier.width(8.dp))
-                    Text("Try Again", fontSize = 16.sp)
+                // If they failed, highlight the Retry button by making it filled instead of outlined
+                if (!passed) {
+                    Button(
+                        onClick = onRetry,
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(20.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text("Try Again", fontSize = 16.sp)
+                    }
+                } else {
+                    OutlinedButton(
+                        onClick = onRetry,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(20.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text("Take Quiz Again", fontSize = 16.sp)
+                    }
                 }
 
-                // Go home
                 TextButton(
                     onClick = onGoHome,
                     modifier = Modifier.fillMaxWidth().height(56.dp)
@@ -158,7 +175,6 @@ fun QuizResultScreen(
     }
 }
 
-// ── Score Circle ──────────────────────────────────────────────────────────────
 @Composable
 fun ScoreCircle(score: Int, total: Int, passed: Boolean) {
     val percent = if (total == 0) 0 else (score * 100) / total

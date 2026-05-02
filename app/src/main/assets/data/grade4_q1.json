@@ -895,5 +895,85 @@
         }
       ]
     }
+  ],
+  "pre_post_questions": [
+    {
+      "id": "ppq-gr4-q1-pre-01",
+      "testType": "PRE",
+      "orderIndex": 1,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Which word is a SYNONYM for 'large'?",
+      "choices": [
+        { "id": "ppc-gr4-q1-pre-01-a", "choiceText": "Small", "isCorrect": false, "orderIndex": 1 },
+        { "id": "ppc-gr4-q1-pre-01-b", "choiceText": "Big", "isCorrect": true, "orderIndex": 2 },
+        { "id": "ppc-gr4-q1-pre-01-c", "choiceText": "Tiny", "isCorrect": false, "orderIndex": 3 },
+        { "id": "ppc-gr4-q1-pre-01-d", "choiceText": "Fast", "isCorrect": false, "orderIndex": 4 }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-02",
+      "testType": "PRE",
+      "orderIndex": 2,
+      "questionType": "FILL_IN",
+      "pointsValue": 1,
+      "questionText": "An action word is called a ________.",
+      "choices": [
+        { "id": "ppc-gr4-q1-pre-02-a", "choiceText": "verb", "isCorrect": true, "orderIndex": 1 }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-03",
+      "testType": "PRE",
+      "orderIndex": 3,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "What does sequencing mean?",
+      "choices": [
+        { "id": "ppc-gr4-q1-pre-03-a", "choiceText": "Putting events in alphabetical order", "isCorrect": false, "orderIndex": 1 },
+        { "id": "ppc-gr4-q1-pre-03-b", "choiceText": "Putting events in the order they happened", "isCorrect": true, "orderIndex": 2 },
+        { "id": "ppc-gr4-q1-pre-03-c", "choiceText": "Mixing up the events", "isCorrect": false, "orderIndex": 3 },
+        { "id": "ppc-gr4-q1-pre-03-d", "choiceText": "Deleting the last event", "isCorrect": false, "orderIndex": 4 }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-01",
+      "testType": "POST",
+      "orderIndex": 1,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Which word is an ANTONYM for 'brave'?",
+      "choices": [
+        { "id": "ppc-gr4-q1-post-01-a", "choiceText": "Strong", "isCorrect": false, "orderIndex": 1 },
+        { "id": "ppc-gr4-q1-post-01-b", "choiceText": "Cowardly", "isCorrect": true, "orderIndex": 2 },
+        { "id": "ppc-gr4-q1-post-01-c", "choiceText": "Fearless", "isCorrect": false, "orderIndex": 3 },
+        { "id": "ppc-gr4-q1-post-01-d", "choiceText": "Smart", "isCorrect": false, "orderIndex": 4 }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-02",
+      "testType": "POST",
+      "orderIndex": 2,
+      "questionType": "FILL_IN",
+      "pointsValue": 1,
+      "questionText": "A word that describes a noun is called an ________.",
+      "choices": [
+        { "id": "ppc-gr4-q1-post-02-a", "choiceText": "adjective", "isCorrect": true, "orderIndex": 1 }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-03",
+      "testType": "POST",
+      "orderIndex": 3,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Why are visual elements like graphs and diagrams important?",
+      "choices": [
+        { "id": "ppc-gr4-q1-post-03-a", "choiceText": "They make the page look pretty", "isCorrect": false, "orderIndex": 1 },
+        { "id": "ppc-gr4-q1-post-03-b", "choiceText": "They give important information to help you understand", "isCorrect": true, "orderIndex": 2 },
+        { "id": "ppc-gr4-q1-post-03-c", "choiceText": "They replace the text", "isCorrect": false, "orderIndex": 3 },
+        { "id": "ppc-gr4-q1-post-03-d", "choiceText": "They tell you when to stop reading", "isCorrect": false, "orderIndex": 4 }
+      ]
+    }
   ]
 }
