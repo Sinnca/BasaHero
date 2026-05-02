@@ -74,7 +74,7 @@ class SyncProgressWorker(
         Log.d(tag, "Starting progress sync...")
 
         return@withContext try {
-            val unsyncedRows = db.progressDao().getUnsynced()
+            val unsyncedRows = db.progressDao().getUnsyncedProgress()
 
             if (unsyncedRows.isEmpty()) {
                 Log.d(tag, "Nothing to sync — all progress already uploaded.")

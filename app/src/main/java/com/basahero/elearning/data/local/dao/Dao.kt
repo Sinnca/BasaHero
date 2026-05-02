@@ -112,7 +112,7 @@ interface StudentDao {
 }
 
 // ─────────────────────────────────────────────
-// ProgressDao
+// ProgressDao (🚀 PHASE 3B UPDATES INJECTED HERE)
 // ─────────────────────────────────────────────
 @Dao
 interface ProgressDao {
@@ -127,6 +127,10 @@ interface ProgressDao {
     @Query("SELECT * FROM student_progress WHERE student_id = :studentId AND lesson_id = :lessonId")
     suspend fun getProgress(studentId: String, lessonId: String): StudentProgressEntity?
 
+    // 🚀 NEW: Needed for Phase 3B ProgressRepository
+    @Query("SELECT * FROM student_progress WHERE student_id = :studentId")
+    fun getAllProgressForStudent(studentId: String): Flow<List<StudentProgressEntity>>
+
     @Query("""
         SELECT COUNT(*) FROM student_progress sp
         INNER JOIN lesson l ON sp.lesson_id = l.id
@@ -136,20 +140,33 @@ interface ProgressDao {
     """)
     fun observeDoneCount(studentId: String, quarterId: String): Flow<Int>
 
+    // 🚀 NEW: Needed for Phase 3B ProgressRepository (Suspend version)
+    @Query("""
+        SELECT COUNT(*) FROM student_progress sp
+        INNER JOIN lesson l ON sp.lesson_id = l.id
+        WHERE sp.student_id = :studentId
+          AND l.quarter_id  = :quarterId
+          AND sp.status      = 'DONE'
+    """)
+    suspend fun countCompletedLessonsInQuarter(studentId: String, quarterId: String): Int
+
     @Query("SELECT COUNT(*) FROM lesson WHERE quarter_id = :quarterId")
     fun observeTotalCount(quarterId: String): Flow<Int>
 
+    // 🚀 RENAMED: Changed from getUnsynced() to getUnsyncedProgress() to match Repo
     @Query("SELECT * FROM student_progress WHERE synced = 0")
-    suspend fun getUnsynced(): List<StudentProgressEntity>
+    suspend fun getUnsyncedProgress(): List<StudentProgressEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(progress: StudentProgressEntity)
 
-    // NEW: We add a standard update method so our repository can handle the first_score/best_score logic easily
     @Update
     suspend fun update(progress: StudentProgressEntity)
 
-    // FIXED: Changed retake_count to attempt_count to match Phase 3B Entity
+    // 🚀 NEW: Needed for Phase 3B ProgressRepository
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertOrUpdateProgress(progress: StudentProgressEntity)
+
     @Query("""
         UPDATE student_progress
         SET quiz_score    = :score,
@@ -213,12 +230,10 @@ interface PronunciationDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(attempt: PronunciationAttemptEntity)
-
-    // FIXED: Removed the two "synced = 0" queries from here because we deleted that column!
 }
 
 // ─────────────────────────────────────────────
-// PrePostDao (NEW FROM CLAUDE)
+// PrePostDao
 // ─────────────────────────────────────────────
 @Dao
 interface PrePostDao {

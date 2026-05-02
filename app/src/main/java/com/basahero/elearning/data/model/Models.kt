@@ -2,7 +2,6 @@ package com.basahero.elearning.data.model
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Domain models — plain data classes, no Room or Supabase annotations
-// These are what ViewModels and UI work with, NOT the raw Entity classes
 // ─────────────────────────────────────────────────────────────────────────────
 
 data class Student(
@@ -20,7 +19,6 @@ data class Quarter(
     val quarterNumber: Int,
     val title: String,
     val isActive: Boolean,
-    // Computed fields added by repository
     val totalLessons: Int = 0,
     val completedLessons: Int = 0
 ) {
@@ -35,8 +33,7 @@ data class Lesson(
     val competency: String,
     val title: String,
     val passageText: String,
-    val imagePath: String?, // <--- FIXED: Added the ? so the app won't crash if an image is missing!
-    // Status added by repository after checking STUDENT_PROGRESS
+    val imagePath: String?,
     val status: String = LessonStatus.LOCKED
 ) {
     val isLocked get() = status == LessonStatus.LOCKED
@@ -69,7 +66,9 @@ data class StudentProgress(
     val status: String,
     val quizScore: Int,
     val quizTotal: Int,
-    val retakeCount: Int = 0, // <--- Added this to match your database schema
+    val firstScore: Int?, // 👈 PHASE 3B: Added
+    val bestScore: Int,   // 👈 PHASE 3B: Added
+    val attemptCount: Int, // 👈 PHASE 3B: Replaces retakeCount
     val completedAt: Long?,
     val synced: Boolean
 ) {
@@ -79,7 +78,6 @@ data class StudentProgress(
         get() = scorePercent >= 0.6f   // 60% passing threshold
 }
 
-// Quiz result passed between Quiz screen and Result screen
 data class QuizResult(
     val lessonId: String,
     val lessonTitle: String,
@@ -99,7 +97,6 @@ data class AnsweredQuestion(
     val pointsValue: Int
 )
 
-// Lesson status constants
 object LessonStatus {
     const val LOCKED = "LOCKED"
     const val IN_PROGRESS = "IN_PROGRESS"

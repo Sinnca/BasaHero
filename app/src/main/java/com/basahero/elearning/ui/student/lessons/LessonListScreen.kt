@@ -13,11 +13,23 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.basahero.elearning.data.model.Lesson
 import com.basahero.elearning.data.model.LessonStatus
+import com.basahero.elearning.data.repository.LessonRepository
+import com.basahero.elearning.data.repository.PrePostRepository
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import androidx.compose.foundation.background
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LessonListViewModel
+// ─────────────────────────────────────────────────────────────────────────────
 
 // ─────────────────────────────────────────────────────────────────────────────
 // LessonListScreen
@@ -30,6 +42,8 @@ fun LessonListScreen(
     quarterTitle: String,
     viewModel: LessonListViewModel,
     onLessonClick: (lessonId: String) -> Unit,
+    onPreTestClick: () -> Unit, // 👈 NEW Action
+    onPostTestClick: () -> Unit, // 👈 NEW Action
     onBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -52,9 +66,7 @@ fun LessonListScreen(
     ) { padding ->
         if (uiState.isLoading) {
             Box(
-                Modifier
-                    .fillMaxSize()
-                    .padding(padding),
+                Modifier.fillMaxSize().padding(padding),
                 contentAlignment = Alignment.Center
             ) { CircularProgressIndicator() }
             return@Scaffold
@@ -69,6 +81,21 @@ fun LessonListScreen(
         ) {
             item { Spacer(modifier = Modifier.height(8.dp)) }
 
+            // 🚀 PHASE 3B: Pre-Test Card (Top)
+            if (uiState.hasPrePostContent) {
+                item {
+                    PrePostCard(
+                        title = "Quarter Pre-Test",
+                        subtitle = if (uiState.isPreTestDone) "Completed" else "Required to unlock lessons",
+                        isDone = uiState.isPreTestDone,
+                        isLocked = false, // Pre-test is never locked!
+                        icon = Icons.Default.Assignment,
+                        onClick = onPreTestClick
+                    )
+                }
+            }
+
+            // Normal Lessons
             itemsIndexed(uiState.lessons) { index, lesson ->
                 LessonCard(
                     lesson = lesson,
@@ -79,7 +106,93 @@ fun LessonListScreen(
                 )
             }
 
+            // 🚀 PHASE 3B: Post-Test Card (Bottom)
+            if (uiState.hasPrePostContent) {
+                item {
+                    PrePostCard(
+                        title = "Quarter Post-Test",
+                        subtitle = if (uiState.isPostTestDone) "Completed" else "Unlock by finishing all lessons",
+                        isDone = uiState.isPostTestDone,
+                        isLocked = !uiState.allLessonsDone, // Locked until all lessons are done!
+                        icon = Icons.Default.EmojiEvents,
+                        onClick = { if (uiState.allLessonsDone) onPostTestClick() }
+                    )
+                }
+            }
+
             item { Spacer(modifier = Modifier.height(16.dp)) }
+        }
+    }
+}
+
+// ── Shared Pre/Post Card ──────────────────────────────────────────────────────
+@Composable
+fun PrePostCard(
+    title: String,
+    subtitle: String,
+    isDone: Boolean,
+    isLocked: Boolean,
+    icon: ImageVector,
+    onClick: () -> Unit
+) {
+    val containerColor = when {
+        isDone -> MaterialTheme.colorScheme.tertiaryContainer
+        isLocked -> MaterialTheme.colorScheme.surfaceVariant
+        else -> MaterialTheme.colorScheme.secondaryContainer
+    }
+
+    val borderColor = when {
+        isDone -> MaterialTheme.colorScheme.tertiary
+        isLocked -> MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+        else -> MaterialTheme.colorScheme.secondary
+    }
+
+    Card(
+        onClick = onClick,
+        enabled = !isLocked,
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(14.dp),
+        colors = CardDefaults.cardColors(containerColor = containerColor),
+        border = BorderStroke(1.dp, borderColor)
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(CircleShape)
+                    .background(
+                        if (isLocked) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.1f)
+                        else MaterialTheme.colorScheme.background.copy(alpha = 0.5f)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = if (isDone) Icons.Default.Check else if (isLocked) Icons.Default.Lock else icon,
+                    contentDescription = null,
+                    tint = if (isDone) MaterialTheme.colorScheme.tertiary else if (isLocked) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f) else MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.width(14.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = subtitle,
+                    fontSize = 11.sp,
+                    color = if (isLocked) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.secondary,
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    text = title,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (isLocked) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface
+                )
+            }
         }
     }
 }
@@ -91,7 +204,6 @@ fun LessonCard(
     lessonNumber: Int,
     onClick: () -> Unit
 ) {
-    // 👇 FIXED: We map our LessonStatus string to booleans here so the UI doesn't crash!
     val isDone = lesson.status == LessonStatus.DONE
     val isInProgress = lesson.status == LessonStatus.IN_PROGRESS
     val isLocked = lesson.status == LessonStatus.LOCKED
