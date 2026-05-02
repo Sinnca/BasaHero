@@ -1,3 +1,14 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BASAHERO E-LEARNING — ROOM ENTITIES (Version 2)
+// Phase 3B changes:
+//   • LESSON         — + highlighted_words column
+//   • STUDENT_PROGRESS — + first_score, best_score, attempt_count columns
+//   • NEW: PRE_POST_QUESTION — pre-test and post-test questions (Room only)
+//   • NEW: PRE_POST_TEST     — pre/post test results (Room + Supabase sync)
+//   • PRONUNCIATION_ATTEMPT  — kept in Room, removed from Supabase sync
+// Package: com.basahero.elearning.data.local.entity
+// ─────────────────────────────────────────────────────────────────────────────
+
 package com.basahero.elearning.data.local.entity
 
 import androidx.room.ColumnInfo
@@ -6,388 +17,361 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-// ─────────────────────────────────────────────
-// CONTENT TABLES — seeded from JSON, read-only
-// ─────────────────────────────────────────────
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 1. GRADE_LEVEL — unchanged
+// ─────────────────────────────────────────────────────────────────────────────
 @Entity(tableName = "grade_level")
 data class GradeLevelEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
-    val id: Int,                    // 4, 5, or 6 — grade number IS the PK
+    val id: Int,
 
     @ColumnInfo(name = "label")
-    val label: String               // "Grade 4", "Grade 5", "Grade 6"
+    val label: String
 )
 
-// ─────────────────────────────────────────────
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 2. QUARTER — unchanged
+// ─────────────────────────────────────────────────────────────────────────────
 @Entity(
     tableName = "quarter",
     foreignKeys = [
         ForeignKey(
-            entity        = GradeLevelEntity::class,
+            entity = GradeLevelEntity::class,
             parentColumns = ["id"],
-            childColumns  = ["grade_level_id"],
-            onDelete      = ForeignKey.CASCADE
+            childColumns = ["grade_level_id"],
+            onDelete = ForeignKey.CASCADE
         )
     ],
     indices = [Index("grade_level_id")]
 )
 data class QuarterEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    val id: String,                 // UUID
-
-    @ColumnInfo(name = "grade_level_id")
-    val gradeLevelId: Int,          // FK → GRADE_LEVEL.id
-
-    @ColumnInfo(name = "quarter_number")
-    val quarterNumber: Int,         // 1, 2, 3, or 4
-
-    @ColumnInfo(name = "title")
-    val title: String,              // "Quarter 1", "Quarter 2"…
-
-    @ColumnInfo(name = "is_active")
-    val isActive: Boolean           // Q1 = true on seed, Q2–Q4 = false (locked)
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
+    @ColumnInfo(name = "grade_level_id") val gradeLevelId: Int,
+    @ColumnInfo(name = "quarter_number") val quarterNumber: Int,
+    @ColumnInfo(name = "title") val title: String,
+    @ColumnInfo(name = "is_active") val isActive: Boolean
 )
 
-// ─────────────────────────────────────────────
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 3. LESSON — UPDATED: + highlighted_words
+// highlighted_words is a JSON array of vocabulary words to highlight in passage.
+// Format: [{"word":"cheerful","start":45,"end":53}]
+// start/end = character positions in passage_text for AnnotatedString spans.
+// ─────────────────────────────────────────────────────────────────────────────
 @Entity(
     tableName = "lesson",
     foreignKeys = [
         ForeignKey(
-            entity        = QuarterEntity::class,
+            entity = QuarterEntity::class,
             parentColumns = ["id"],
-            childColumns  = ["quarter_id"],
-            onDelete      = ForeignKey.CASCADE
+            childColumns = ["quarter_id"],
+            onDelete = ForeignKey.CASCADE
         )
     ],
     indices = [Index("quarter_id")]
 )
 data class LessonEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    val id: String,                 // UUID
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
+    @ColumnInfo(name = "quarter_id") val quarterId: String,
+    @ColumnInfo(name = "order_index") val orderIndex: Int,
+    @ColumnInfo(name = "competency") val competency: String,
+    @ColumnInfo(name = "title") val title: String,
+    @ColumnInfo(name = "passage_text") val passageText: String,
+    @ColumnInfo(name = "image_path") val imagePath: String,
 
-    @ColumnInfo(name = "quarter_id")
-    val quarterId: String,          // FK → QUARTER.id
-
-    @ColumnInfo(name = "order_index")
-    val orderIndex: Int,            // Display order within quarter: 1, 2, 3…
-
-    @ColumnInfo(name = "competency")
-    val competency: String,         // MATATAG competency name e.g. "Inferring"
-
-    @ColumnInfo(name = "title")
-    val title: String,              // Lesson display title shown to student
-
-    @ColumnInfo(name = "passage_text")
-    val passageText: String,        // Full reading passage 400–600 words
-
-    @ColumnInfo(name = "image_path")
-    val imagePath: String?          // e.g. "assets/img/gr4_q1_inferring.webp" — nullable
+    // NEW — Phase 3B Step 6
+    // JSON array of highlighted vocabulary words with character positions
+    // Empty string "[]" if no highlights defined for this lesson
+    @ColumnInfo(name = "highlighted_words")
+    val highlightedWords: String = "[]"
 )
 
-// ─────────────────────────────────────────────
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 4. QUIZ_QUESTION — unchanged
+// ─────────────────────────────────────────────────────────────────────────────
 @Entity(
     tableName = "quiz_question",
     foreignKeys = [
         ForeignKey(
-            entity        = LessonEntity::class,
+            entity = LessonEntity::class,
             parentColumns = ["id"],
-            childColumns  = ["lesson_id"],
-            onDelete      = ForeignKey.CASCADE
+            childColumns = ["lesson_id"],
+            onDelete = ForeignKey.CASCADE
         )
     ],
     indices = [Index("lesson_id")]
 )
 data class QuizQuestionEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    val id: String,                 // UUID
-
-    @ColumnInfo(name = "lesson_id")
-    val lessonId: String,           // FK → LESSON.id
-
-    @ColumnInfo(name = "question_text")
-    val questionText: String,       // The question prompt shown to student
-
-    @ColumnInfo(name = "question_type")
-    val questionType: String,       // MCQ / FILL_IN / SEQUENCING / MATCHING
-
-    @ColumnInfo(name = "order_index")
-    val orderIndex: Int,            // Question order within lesson
-
-    @ColumnInfo(name = "points_value")
-    val pointsValue: Int = 1        // Default 1; matching/sequencing can be 2–3
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
+    @ColumnInfo(name = "lesson_id") val lessonId: String,
+    @ColumnInfo(name = "question_text") val questionText: String,
+    @ColumnInfo(name = "question_type") val questionType: String,
+    @ColumnInfo(name = "order_index") val orderIndex: Int,
+    @ColumnInfo(name = "points_value") val pointsValue: Int = 1
 )
 
-// ─────────────────────────────────────────────
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 5. QUIZ_CHOICE — unchanged
+// ─────────────────────────────────────────────────────────────────────────────
 @Entity(
     tableName = "quiz_choice",
     foreignKeys = [
         ForeignKey(
-            entity        = QuizQuestionEntity::class,
+            entity = QuizQuestionEntity::class,
             parentColumns = ["id"],
-            childColumns  = ["question_id"],
-            onDelete      = ForeignKey.CASCADE
+            childColumns = ["question_id"],
+            onDelete = ForeignKey.CASCADE
         )
     ],
     indices = [Index("question_id")]
 )
 data class QuizChoiceEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    val id: String,                 // UUID
-
-    @ColumnInfo(name = "question_id")
-    val questionId: String,         // FK → QUIZ_QUESTION.id
-
-    @ColumnInfo(name = "choice_text")
-    val choiceText: String,         // Answer option text
-
-    @ColumnInfo(name = "is_correct")
-    val isCorrect: Boolean,         // 1 true per MCQ; multiple for matching/sequencing
-
-    @ColumnInfo(name = "order_index")
-    val orderIndex: Int             // Display order — shuffled on render in UI
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
+    @ColumnInfo(name = "question_id") val questionId: String,
+    @ColumnInfo(name = "choice_text") val choiceText: String,
+    @ColumnInfo(name = "is_correct") val isCorrect: Boolean,
+    @ColumnInfo(name = "order_index") val orderIndex: Int
 )
 
-// ─────────────────────────────────────────────
-// STUDENT TABLE — on-device + synced to cloud
-// ─────────────────────────────────────────────
 
-@Entity(tableName = "student")
+// ─────────────────────────────────────────────────────────────────────────────
+// 6. STUDENT — unchanged
+// ─────────────────────────────────────────────────────────────────────────────
+@Entity(
+    tableName = "student",
+    indices = [Index("class_id")]
+)
 data class StudentEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    val id: String,                 // UUID — same on device and cloud
-
-    @ColumnInfo(name = "class_id")
-    val classId: String,            // References CLASS.id (cloud) — stored locally for context
-
-    @ColumnInfo(name = "full_name")
-    val fullName: String,           // Used for name-based login on student side
-
-    @ColumnInfo(name = "section")
-    val section: String,            // Used alongside name for login verification
-
-    @ColumnInfo(name = "grade_level")
-    val gradeLevel: Int,            // 4, 5, or 6 — determines lesson set shown
-
-    @ColumnInfo(name = "last_active")
-    val lastActive: Long?,          // epoch millis — updated on every app open
-
-    @ColumnInfo(name = "synced")
-    val synced: Boolean = false,    // false = not yet pulled from cloud to device
-
-    @ColumnInfo(name = "created_at")
-    val createdAt: Long             // epoch millis — used by WorkManager to detect new students
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
+    @ColumnInfo(name = "class_id") val classId: String,
+    @ColumnInfo(name = "full_name") val fullName: String,
+    @ColumnInfo(name = "section") val section: String,
+    @ColumnInfo(name = "grade_level") val gradeLevel: Int,
+    @ColumnInfo(name = "last_active") val lastActive: Long?,
+    @ColumnInfo(name = "synced") val synced: Boolean = false,
+    @ColumnInfo(name = "created_at") val createdAt: Long
 )
 
-// ─────────────────────────────────────────────
-// ACTIVITY TABLES — written on device, synced to cloud
-// ─────────────────────────────────────────────
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 7. STUDENT_PROGRESS — UPDATED: + first_score, best_score, attempt_count
+//
+// Three-score system:
+//   first_score  — written ONCE on first attempt. NEVER overwritten.
+//   best_score   — updated only when new score > current best.
+//   quiz_score   — always the LATEST attempt score (existing column, renamed purpose).
+//
+// 60% pass rule:
+//   status = DONE only when quiz_score / quiz_total >= 0.60
+//   status = IN_PROGRESS when below 60% — student must retake
+//
+// attempt_count — increments on every quiz submission, including retakes.
+// ─────────────────────────────────────────────────────────────────────────────
 @Entity(
     tableName = "student_progress",
     foreignKeys = [
         ForeignKey(
-            entity        = StudentEntity::class,
+            entity = StudentEntity::class,
             parentColumns = ["id"],
-            childColumns  = ["student_id"],
-            onDelete      = ForeignKey.CASCADE
+            childColumns = ["student_id"],
+            onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity        = LessonEntity::class,
+            entity = LessonEntity::class,
             parentColumns = ["id"],
-            childColumns  = ["lesson_id"],
-            onDelete      = ForeignKey.CASCADE
+            childColumns = ["lesson_id"],
+            onDelete = ForeignKey.CASCADE
         )
     ],
     indices = [
         Index("student_id"),
         Index("lesson_id"),
-        Index(value = ["student_id", "lesson_id"], unique = true) // prevents duplicate rows on retake
+        Index(value = ["student_id", "lesson_id"], unique = true)
     ]
 )
 data class StudentProgressEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    val id: String,                 // UUID
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
+    @ColumnInfo(name = "student_id") val studentId: String,
+    @ColumnInfo(name = "lesson_id") val lessonId: String,
+    @ColumnInfo(name = "status") val status: String,
+    @ColumnInfo(name = "quiz_score") val quizScore: Int = 0,
+    @ColumnInfo(name = "quiz_total") val quizTotal: Int = 0,
 
-    @ColumnInfo(name = "student_id")
-    val studentId: String,          // FK → STUDENT.id
+    // FIXED: Changed to Int? = null so we can detect true first attempts!
+    @ColumnInfo(name = "first_score") val firstScore: Int? = null,
+    @ColumnInfo(name = "best_score") val bestScore: Int = 0,
+    @ColumnInfo(name = "attempt_count") val attemptCount: Int = 1,
 
-    @ColumnInfo(name = "lesson_id")
-    val lessonId: String,           // FK → LESSON.id
-
-    @ColumnInfo(name = "status")
-    val status: String,             // LOCKED / IN_PROGRESS / DONE
-
-    @ColumnInfo(name = "quiz_score")
-    val quizScore: Int = 0,         // Points earned e.g. 8
-
-    @ColumnInfo(name = "quiz_total")
-    val quizTotal: Int = 0,         // Max possible points e.g. 10
-
-    @ColumnInfo(name = "retake_count")
-    val retakeCount: Int = 0,       // How many times student has attempted this lesson
-
-    @ColumnInfo(name = "completed_at")
-    val completedAt: Long?,         // epoch millis — null if IN_PROGRESS
-
-    @ColumnInfo(name = "synced")
-    val synced: Boolean = false     // false = pending upload to cloud
+    @ColumnInfo(name = "completed_at") val completedAt: Long? = null,
+    @ColumnInfo(name = "synced") val synced: Boolean = false
 )
 
-// ─────────────────────────────────────────────
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 8. PRONUNCIATION_ATTEMPT — unchanged, Room only (NOT synced to Supabase)
+// Removed from SyncPronunciationWorker to save Supabase free tier storage.
+// 690 students × 63 lessons × avg 3 attempts × ~2KB = ~260MB — too large.
+// ─────────────────────────────────────────────────────────────────────────────
 @Entity(
     tableName = "pronunciation_attempt",
     foreignKeys = [
         ForeignKey(
-            entity        = StudentEntity::class,
+            entity = StudentEntity::class,
             parentColumns = ["id"],
-            childColumns  = ["student_id"],
-            onDelete      = ForeignKey.CASCADE
+            childColumns = ["student_id"],
+            onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity        = LessonEntity::class,
+            entity = LessonEntity::class,
             parentColumns = ["id"],
-            childColumns  = ["lesson_id"],
-            onDelete      = ForeignKey.CASCADE
+            childColumns = ["lesson_id"],
+            onDelete = ForeignKey.CASCADE
         )
     ],
     indices = [Index("student_id"), Index("lesson_id")]
 )
 data class PronunciationAttemptEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    val id: String,                 // UUID
-
-    @ColumnInfo(name = "student_id")
-    val studentId: String,          // FK → STUDENT.id
-
-    @ColumnInfo(name = "lesson_id")
-    val lessonId: String,           // FK → LESSON.id
-
-    @ColumnInfo(name = "attempt_number")
-    val attemptNumber: Int,         // 1, 2, 3… increments per student per lesson
-
-    @ColumnInfo(name = "score")
-    val score: Int,                 // 0–100 from weighted Levenshtein algorithm
-
-    @ColumnInfo(name = "is_best")
-    val isBest: Boolean = false,    // true on highest scoring attempt — updated on each new attempt
-
-    @ColumnInfo(name = "transcript")
-    val transcript: String,         // Raw text Vosk heard from the student
-
-    @ColumnInfo(name = "feedback_json")
-    val feedbackJson: String,       // JSON: [{word:"cat", correct:true, confidence:0.92}, …]
-
-    @ColumnInfo(name = "attempted_at")
-    val attemptedAt: Long,          // epoch millis
-
-    @ColumnInfo(name = "synced")
-    val synced: Boolean = false     // false = pending upload to cloud
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
+    @ColumnInfo(name = "student_id") val studentId: String,
+    @ColumnInfo(name = "lesson_id") val lessonId: String,
+    @ColumnInfo(name = "attempt_number") val attemptNumber: Int,
+    @ColumnInfo(name = "score") val score: Int,
+    @ColumnInfo(name = "is_best") val isBest: Boolean = false,
+    @ColumnInfo(name = "transcript") val transcript: String,
+    @ColumnInfo(name = "feedback_json") val feedbackJson: String,
+    @ColumnInfo(name = "attempted_at") val attemptedAt: Long
+    // NOTE: synced column removed — this table never syncs to Supabase
 )
 
-// ─────────────────────────────────────────────
-// GAME TABLES — LAN during game, synced after
-// ─────────────────────────────────────────────
 
-@Entity(tableName = "game_session")
-data class GameSessionEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    val id: String,                 // UUID — shared with students over LAN as session identifier
-
-    @ColumnInfo(name = "class_id")
-    val classId: String,            // References CLASS.id (cloud)
-
-    @ColumnInfo(name = "lesson_id")
-    val lessonId: String,           // FK → LESSON.id — determines quiz questions used
-
-    @ColumnInfo(name = "status")
-    val status: String,             // WAITING / ACTIVE / DONE
-
-    @ColumnInfo(name = "join_code")
-    val joinCode: String,           // 4-digit code students enter to confirm session
-
-    @ColumnInfo(name = "udp_port")
-    val udpPort: Int = 8888,        // Teacher broadcasts IP on this port
-
-    @ColumnInfo(name = "tcp_port")
-    val tcpPort: Int = 8889,        // Students connect to teacher's TCP server on this port
-
-    @ColumnInfo(name = "question_order")
-    val questionOrder: String,      // JSON array of question UUIDs in shuffled order
-
-    @ColumnInfo(name = "started_at")
-    val startedAt: Long?,           // epoch millis — null before game starts
-
-    @ColumnInfo(name = "ended_at")
-    val endedAt: Long?,             // epoch millis — null while game is active
-
-    @ColumnInfo(name = "synced")
-    val synced: Boolean = false     // false = pending upload after game ends
-)
-
-// ─────────────────────────────────────────────
-
+// ─────────────────────────────────────────────────────────────────────────────
+// 9. PRE_POST_QUESTION — NEW (Room only, seeded from JSON)
+// Stores pre-test and post-test questions per quarter.
+// Different questions from lesson quizzes — MCQ and FILL_IN only.
+// test_type: "PRE" = pre-test, "POST" = post-test
+// ─────────────────────────────────────────────────────────────────────────────
 @Entity(
-    tableName = "game_answer",
+    tableName = "pre_post_question",
     foreignKeys = [
         ForeignKey(
-            entity        = GameSessionEntity::class,
+            entity = QuarterEntity::class,
             parentColumns = ["id"],
-            childColumns  = ["session_id"],
-            onDelete      = ForeignKey.CASCADE
-        ),
-        ForeignKey(
-            entity        = StudentEntity::class,
-            parentColumns = ["id"],
-            childColumns  = ["student_id"],
-            onDelete      = ForeignKey.CASCADE
-        ),
-        ForeignKey(
-            entity        = QuizQuestionEntity::class,
-            parentColumns = ["id"],
-            childColumns  = ["question_id"],
-            onDelete      = ForeignKey.CASCADE
+            childColumns = ["quarter_id"],
+            onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("session_id"), Index("student_id"), Index("question_id")]
+    indices = [Index("quarter_id")]
 )
-data class GameAnswerEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    val id: String,                 // UUID
+data class PrePostQuestionEntity(
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
 
-    @ColumnInfo(name = "session_id")
-    val sessionId: String,          // FK → GAME_SESSION.id
+    // Links to QUARTER — e.g. "q-gr4-q1"
+    @ColumnInfo(name = "quarter_id") val quarterId: String,
 
-    @ColumnInfo(name = "student_id")
-    val studentId: String,          // FK → STUDENT.id
+    // "PRE" or "POST"
+    @ColumnInfo(name = "test_type") val testType: String,
 
-    @ColumnInfo(name = "question_id")
-    val questionId: String,         // FK → QUIZ_QUESTION.id
+    @ColumnInfo(name = "question_text") val questionText: String,
 
-    @ColumnInfo(name = "answer_given")
-    val answerGiven: String,        // Student's answer text or choice UUID
+    // MCQ or FILL_IN only — no SEQUENCING or MATCHING for pre/post tests
+    @ColumnInfo(name = "question_type") val questionType: String,
 
-    @ColumnInfo(name = "is_correct")
-    val isCorrect: Boolean,         // Evaluated against QUIZ_CHOICE.is_correct
-
-    @ColumnInfo(name = "response_time_ms")
-    val responseTimeMs: Int,        // ms from question shown to answer submitted (tiebreaker)
-
-    @ColumnInfo(name = "synced")
-    val synced: Boolean = false     // false = pending upload after game ends
+    @ColumnInfo(name = "order_index") val orderIndex: Int,
+    @ColumnInfo(name = "points_value") val pointsValue: Int = 1
 )
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 10. PRE_POST_CHOICE — NEW (Room only, seeded from JSON)
+// Answer choices for PRE_POST_QUESTION (same structure as QUIZ_CHOICE)
+// ─────────────────────────────────────────────────────────────────────────────
+@Entity(
+    tableName = "pre_post_choice",
+    foreignKeys = [
+        ForeignKey(
+            entity = PrePostQuestionEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["question_id"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [Index("question_id")]
+)
+data class PrePostChoiceEntity(
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
+    @ColumnInfo(name = "question_id") val questionId: String,
+    @ColumnInfo(name = "choice_text") val choiceText: String,
+    @ColumnInfo(name = "is_correct") val isCorrect: Boolean,
+    @ColumnInfo(name = "order_index") val orderIndex: Int
+)
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 11. PRE_POST_TEST — NEW (Room + Supabase sync)
+// Stores the completed pre-test or post-test result per student per quarter.
+// UNIQUE(student_id, quarter_id, test_type) — one result per test per student.
+// Synced to Supabase so teacher dashboard can compare PRE vs POST scores.
+// ─────────────────────────────────────────────────────────────────────────────
+@Entity(
+    tableName = "pre_post_test",
+    foreignKeys = [
+        ForeignKey(
+            entity = StudentEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["student_id"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [
+        Index("student_id"),
+        Index(value = ["student_id", "quarter_id", "test_type"], unique = true)
+    ]
+)
+data class PrePostTestEntity(
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
+    @ColumnInfo(name = "student_id") val studentId: String,
+    @ColumnInfo(name = "quarter_id") val quarterId: String,
+    @ColumnInfo(name = "test_type") val testType: String,
+    @ColumnInfo(name = "score") val score: Int,
+    @ColumnInfo(name = "total") val total: Int,
+
+    // FIXED: Keep Room consistent by using Long. We will convert it to a String in the SyncWorker!
+    @ColumnInfo(name = "completed_at") val completedAt: Long,
+    @ColumnInfo(name = "synced") val synced: Boolean = false
+)
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONSTANTS — use everywhere instead of raw strings
+// ─────────────────────────────────────────────────────────────────────────────
+object LessonStatus {
+    const val LOCKED = "LOCKED"
+    const val IN_PROGRESS = "IN_PROGRESS"
+    const val DONE = "DONE"
+}
+
+object QuestionType {
+    const val MCQ = "MCQ"
+    const val FILL_IN = "FILL_IN"
+    const val SEQUENCING = "SEQUENCING"
+    const val MATCHING = "MATCHING"
+}
+
+object TestType {
+    const val PRE = "PRE"
+    const val POST = "POST"
+}
+
+object AppConstants {
+    // 60% minimum score to pass a lesson and unlock the next one
+    const val PASS_THRESHOLD = 0.60f
+
+    // Supabase free tier protection — pronunciation never syncs to cloud
+    const val PRONUNCIATION_SYNC_ENABLED = false
+}

@@ -275,7 +275,7 @@ data class SeedLesson(
         competency  = competency,
         title       = title,
         passageText = passageText,
-        imagePath   = imagePath
+        imagePath = imagePath ?: ""
     )
 }
 
