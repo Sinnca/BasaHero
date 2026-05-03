@@ -7,6 +7,9 @@ import com.basahero.elearning.data.repository.LessonRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
+import com.basahero.elearning.data.local.SessionManager
+import com.basahero.elearning.data.repository.PronunciationRepository
+
 // 🚀 NEW DATA CLASS for Step 6
 data class HighlightedWord(
     val word: String,
@@ -15,7 +18,9 @@ data class HighlightedWord(
 )
 
 class ReadingViewModel(
-    private val lessonRepository: LessonRepository
+    private val lessonRepository: LessonRepository,
+    private val pronunciationRepository: PronunciationRepository,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
     data class ReadingUiState(
@@ -62,5 +67,22 @@ class ReadingViewModel(
 
     fun onScrolledToBottom() {
         _uiState.update { it.copy(readingComplete = true) }
+    }
+
+    fun savePronunciationAttempt(word: String, heard: String, isCorrect: Boolean, score: Int) {
+        val lessonId = _uiState.value.lesson?.id ?: return
+        
+        viewModelScope.launch {
+            val studentId = sessionManager.studentSession.first()?.studentId ?: return@launch
+            
+            pronunciationRepository.savePronunciationAttempt(
+                studentId = studentId,
+                lessonId = lessonId,
+                word = word,
+                heard = heard,
+                isCorrect = isCorrect,
+                score = score
+            )
+        }
     }
 }

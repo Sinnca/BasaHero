@@ -81,12 +81,12 @@ data class LessonEntity(
     @ColumnInfo(name = "competency") val competency: String,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "passage_text") val passageText: String,
-    @ColumnInfo(name = "image_path") val imagePath: String,
+    @ColumnInfo(name = "image_path") val imagePath: String?,
 
     // NEW — Phase 3B Step 6
     // JSON array of highlighted vocabulary words with character positions
     // Empty string "[]" if no highlights defined for this lesson
-    @ColumnInfo(name = "highlighted_words")
+    @ColumnInfo(name = "highlighted_words", defaultValue = "[]")
     val highlightedWords: String = "[]"
 )
 
@@ -205,8 +205,9 @@ data class StudentProgressEntity(
 
     // FIXED: Changed to Int? = null so we can detect true first attempts!
     @ColumnInfo(name = "first_score") val firstScore: Int? = null,
-    @ColumnInfo(name = "best_score") val bestScore: Int = 0,
-    @ColumnInfo(name = "attempt_count") val attemptCount: Int = 1,
+    @ColumnInfo(name = "best_score", defaultValue = "0") val bestScore: Int = 0,
+    @ColumnInfo(name = "attempt_count", defaultValue = "1") val attemptCount: Int = 1,
+    @ColumnInfo(name = "retake_count") val retakeCount: Int = 0, // Restored to match v1 schema
 
     @ColumnInfo(name = "completed_at") val completedAt: Long? = null,
     @ColumnInfo(name = "synced") val synced: Boolean = false
@@ -234,7 +235,10 @@ data class StudentProgressEntity(
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("student_id"), Index("lesson_id")]
+    indices = [
+        Index("student_id", name = "idx_pa_student"),
+        Index("lesson_id", name = "idx_pa_lesson")
+    ]
 )
 data class PronunciationAttemptEntity(
     @PrimaryKey @ColumnInfo(name = "id") val id: String,
@@ -242,7 +246,7 @@ data class PronunciationAttemptEntity(
     @ColumnInfo(name = "lesson_id") val lessonId: String,
     @ColumnInfo(name = "attempt_number") val attemptNumber: Int,
     @ColumnInfo(name = "score") val score: Int,
-    @ColumnInfo(name = "is_best") val isBest: Boolean = false,
+    @ColumnInfo(name = "is_best", defaultValue = "0") val isBest: Boolean = false,
     @ColumnInfo(name = "transcript") val transcript: String,
     @ColumnInfo(name = "feedback_json") val feedbackJson: String,
     @ColumnInfo(name = "attempted_at") val attemptedAt: Long
@@ -266,7 +270,7 @@ data class PronunciationAttemptEntity(
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("quarter_id")]
+    indices = [Index("quarter_id", name = "idx_ppq_quarter")]
 )
 data class PrePostQuestionEntity(
     @PrimaryKey @ColumnInfo(name = "id") val id: String,
@@ -283,7 +287,7 @@ data class PrePostQuestionEntity(
     @ColumnInfo(name = "question_type") val questionType: String,
 
     @ColumnInfo(name = "order_index") val orderIndex: Int,
-    @ColumnInfo(name = "points_value") val pointsValue: Int = 1
+    @ColumnInfo(name = "points_value", defaultValue = "1") val pointsValue: Int = 1
 )
 
 
@@ -301,7 +305,7 @@ data class PrePostQuestionEntity(
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("question_id")]
+    indices = [Index("question_id", name = "idx_ppc_question")]
 )
 data class PrePostChoiceEntity(
     @PrimaryKey @ColumnInfo(name = "id") val id: String,
@@ -329,8 +333,8 @@ data class PrePostChoiceEntity(
         )
     ],
     indices = [
-        Index("student_id"),
-        Index(value = ["student_id", "quarter_id", "test_type"], unique = true)
+        Index("student_id", name = "idx_ppt_student"),
+        Index(value = ["student_id", "quarter_id", "test_type"], unique = true, name = "idx_ppt_unique")
     ]
 )
 data class PrePostTestEntity(
@@ -343,7 +347,7 @@ data class PrePostTestEntity(
 
     // FIXED: Keep Room consistent by using Long. We will convert it to a String in the SyncWorker!
     @ColumnInfo(name = "completed_at") val completedAt: Long,
-    @ColumnInfo(name = "synced") val synced: Boolean = false
+    @ColumnInfo(name = "synced", defaultValue = "0") val synced: Boolean = false
 )
 
 

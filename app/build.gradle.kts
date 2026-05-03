@@ -127,6 +127,9 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"  // added — prevents duplicate file errors at build
         }
+        jniLibs {
+            useLegacyPackaging = true // Fixes Android 14+ 16KB page size crashes for Vosk native libs
+        }
     }
 }
 
@@ -171,6 +174,12 @@ dependencies {
 
     // ── Lottie animations (added) ─────────────────────────────────────────
     implementation(libs.lottie.compose)
+
+    // ── Vosk Offline Speech Recognition (added) ───────────────────────────
+    implementation("net.java.dev.jna:jna:5.13.0@aar")
+    implementation("com.alphacephei:vosk-android:0.3.38") {
+        exclude(group = "net.java.dev.jna", module = "jna")
+    }
 
     // ── CSV parsing — teacher roster import (added) ───────────────────────
     implementation(libs.opencsv)

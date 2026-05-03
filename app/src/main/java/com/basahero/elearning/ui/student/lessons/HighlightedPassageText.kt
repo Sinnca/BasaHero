@@ -146,6 +146,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import com.basahero.elearning.util.VoskManager
+import org.json.JSONObject
+import org.vosk.Recognizer
+import org.vosk.android.RecognitionListener
+import org.vosk.android.SpeechService
 import java.util.Locale
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -156,7 +166,8 @@ fun HighlightedPassageText(
     passageText: String,
     highlightedWords: List<HighlightedWord>,
     highlightColor: Color = MaterialTheme.colorScheme.primary,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onPronunciationAttempt: (word: String, heard: String, isCorrect: Boolean, attemptNumber: Int) -> Unit = { _, _, _, _ -> }
 ) {
     var selectedWord by remember { mutableStateOf<String?>(null) }
     var showSheet by remember { mutableStateOf(false) }
@@ -174,6 +185,9 @@ fun HighlightedPassageText(
                 isTtsReady = true
             }
         }
+        
+        // 🚀 THE FIX: Always ensure Vosk is warming up when entering this screen!
+        VoskManager.initModel(context)
     }
 
     // Shut it down ONLY when the student leaves the lesson entirely
@@ -223,7 +237,8 @@ fun HighlightedPassageText(
             word = selectedWord!!,
             tts = tts,               // 👈 Pass the warm engine down to the sheet
             isTtsReady = isTtsReady, // 👈 Pass the ready status down
-            onDismiss = { showSheet = false }
+            onDismiss = { showSheet = false },
+            onPronunciationAttempt = onPronunciationAttempt
         )
     }
 }
@@ -237,11 +252,128 @@ fun WordPronunciationSheet(
     word: String,
     tts: TextToSpeech?,      // 👈 Received from above
     isTtsReady: Boolean,     // 👈 Received from above
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onPronunciationAttempt: (word: String, heard: String, isCorrect: Boolean, attemptNumber: Int) -> Unit = { _, _, _, _ -> }
 ) {
+    val context = LocalContext.current
     var isListening by remember { mutableStateOf(false) }
     var feedbackResult by remember { mutableStateOf<WordFeedback?>(null) }
     var attemptCount by remember { mutableStateOf(0) }
+    
+    // Vosk specific states
+    val isVoskReady by VoskManager.isReady.collectAsState()
+    var speechService by remember { mutableStateOf<SpeechService?>(null) }
+
+    // Clean up recognizer when sheet closes
+    DisposableEffect(Unit) {
+        onDispose {
+            speechService?.stop()
+            speechService?.shutdown()
+        }
+    }
+
+    // Permission handling
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            if (!isGranted) {
+                feedbackResult = WordFeedback(word, "Permission denied", false, 0f)
+            }
+        }
+    )
+
+    fun stopListening() {
+        try {
+            speechService?.stop()
+        } catch (e: Exception) {}
+        speechService = null
+        isListening = false
+    }
+
+    fun extractVoskText(jsonStr: String?): String {
+        if (jsonStr == null) return ""
+        return try {
+            JSONObject(jsonStr).getString("text")
+        } catch (e: Exception) {
+            ""
+        }
+    }
+
+    fun handleRecognizedText(heard: String) {
+        stopListening()
+        
+        if (heard.isEmpty()) {
+            feedbackResult = WordFeedback(word, "I didn't hear anything clearly, try again!", false, 0f)
+            return
+        }
+        
+        attemptCount++
+        
+        // Basic match logic for kids: strip punctuation and compare
+        val cleanWord = word.lowercase().replace(Regex("[^a-z]"), "")
+        val cleanHeard = heard.lowercase().replace(Regex("[^a-z]"), "")
+        
+        val isCorrect = cleanWord == cleanHeard || cleanHeard.contains(cleanWord)
+        feedbackResult = WordFeedback(word, heard, isCorrect, 1f)
+        
+        // Save the attempt to the database!
+        val score = if (isCorrect) 100 else 0
+        onPronunciationAttempt(word, heard, isCorrect, attemptCount)
+    }
+
+    fun startListening() {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+            return
+        }
+
+        if (!isVoskReady || VoskManager.model == null) {
+            feedbackResult = WordFeedback(word, "Model is still loading, please wait...", false, 0f)
+            return
+        }
+
+        try {
+            val recognizer = Recognizer(VoskManager.model, 16000.0f)
+            speechService = SpeechService(recognizer, 16000.0f)
+            
+            speechService?.startListening(object : RecognitionListener {
+                override fun onPartialResult(hypothesis: String?) {
+                    // Could update UI with partial results here if needed
+                }
+                
+                override fun onResult(hypothesis: String?) {
+                    val text = extractVoskText(hypothesis)
+                    if (text.isNotEmpty()) {
+                        handleRecognizedText(text)
+                    }
+                }
+                
+                override fun onFinalResult(hypothesis: String?) {
+                    val text = extractVoskText(hypothesis)
+                    // Even if we stopped listening manually, we want to process the final chunk of audio
+                    if (text.isNotEmpty() || isListening) {
+                        handleRecognizedText(text)
+                    }
+                }
+                
+                override fun onError(e: Exception?) {
+                    stopListening()
+                    feedbackResult = WordFeedback(word, "Mic Error: ${e?.message}", false, 0f)
+                }
+                
+                override fun onTimeout() {
+                    stopListening()
+                    feedbackResult = WordFeedback(word, "Timed out, try again", false, 0f)
+                }
+            })
+            
+            isListening = true
+            feedbackResult = null
+            
+        } catch (e: Exception) {
+            feedbackResult = WordFeedback(word, "Failed to start engine", false, 0f)
+        }
+    }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -278,6 +410,7 @@ fun WordPronunciationSheet(
                 // Hear button
                 Button(
                     onClick = {
+                        if (isListening) stopListening()
                         feedbackResult = null
                         // Force the audio to play immediately without queuing
                         tts?.speak(word, TextToSpeech.QUEUE_FLUSH, null, "tts_$word")
@@ -298,15 +431,10 @@ fun WordPronunciationSheet(
                 // Record button
                 Button(
                     onClick = {
-                        isListening = !isListening
-                        if (!isListening) {
-                            attemptCount++
-                            feedbackResult = WordFeedback(
-                                word = word,
-                                heard = word,
-                                isCorrect = true,
-                                confidence = 0.9f
-                            )
+                        if (isListening) {
+                            stopListening()
+                        } else {
+                            startListening()
                         }
                     },
                     modifier = Modifier.weight(1f).height(52.dp),
@@ -375,7 +503,14 @@ fun WordPronunciationSheet(
                                 )
                                 Spacer(Modifier.height(8.dp))
                                 Text(
-                                    if (feedback.isCorrect) "Great pronunciation! ✓" else "Keep trying! Say: \"${feedback.word}\"",
+                                    text = when {
+                                        feedback.isCorrect -> "Great pronunciation! ✓"
+                                        feedback.heard == "Model is still loading, please wait..." -> feedback.heard
+                                        feedback.heard.contains("Failed to start") -> feedback.heard
+                                        feedback.heard.contains("Mic Error") -> feedback.heard
+                                        feedback.heard.contains("didn't hear") -> feedback.heard
+                                        else -> "Keep trying! You said: \"${feedback.heard}\""
+                                    },
                                     fontSize = 14.sp,
                                     fontWeight = FontWeight.Medium,
                                     color = if (feedback.isCorrect) MaterialTheme.colorScheme.onTertiaryContainer else MaterialTheme.colorScheme.onErrorContainer
