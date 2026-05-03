@@ -1,7 +1,11 @@
 package com.basahero.elearning.ui.student.prepost
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -10,6 +14,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -23,11 +30,12 @@ import com.basahero.elearning.domain.QuizScoringUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-// 👇 REUSING YOUR EXISTING QUIZ COMPONENTS!
-import com.basahero.elearning.ui.student.quiz.McqQuestion
-import com.basahero.elearning.ui.student.quiz.FillInQuestion
-import com.basahero.elearning.ui.student.quiz.SequencingQuestion
-import com.basahero.elearning.ui.student.quiz.MatchingQuestion
+// Reusing the animated interactive quiz components
+import com.basahero.elearning.ui.student.quiz.AnimatedMcqQuestion
+import com.basahero.elearning.ui.student.quiz.AnimatedFillInQuestion
+import com.basahero.elearning.ui.student.quiz.DragDropSequencingQuestion
+import com.basahero.elearning.ui.student.quiz.CanvasMatchingQuestion
+import com.basahero.elearning.ui.student.quiz.PassageQuestion
 
 object TestType {
     const val PRE = "PRE"
@@ -223,7 +231,9 @@ fun PostTestScreen(
     }
 }
 
-// ── Shared test content composable ────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// Shared test-question composable — phone + tablet adaptive, kid-friendly
+// ─────────────────────────────────────────────────────────────────────────────
 @Composable
 fun PrePostTestContent(
     state: PrePostViewModel.PrePostUiState.Ready,
@@ -236,82 +246,211 @@ fun PrePostTestContent(
 ) {
     val question = state.currentQuestion ?: return
     val currentAnswer = state.answers[question.id]
+    val isTablet = LocalConfiguration.current.screenWidthDp >= 600
+    val hPad = if (isTablet) 32.dp else 16.dp
+
+    // Animate question transitions
+    val alpha by animateFloatAsState(
+        targetValue = 1f,
+        animationSpec = tween(300),
+        label = "q_alpha"
+    )
 
     Column(modifier = modifier.fillMaxSize()) {
-        Surface(color = MaterialTheme.colorScheme.primaryContainer) {
-            Row(modifier = Modifier.fillMaxWidth().padding(12.dp, 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.Info, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(16.dp))
-                Spacer(Modifier.width(8.dp))
+
+        // ── Colourful info banner ─────────────────────────────────────────────
+        Surface(
+            color = MaterialTheme.colorScheme.primaryContainer,
+            tonalElevation = 2.dp
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = hPad, vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
-                    text = if (testType == TestType.PRE) "Answer all questions to unlock lessons. Your score won't affect access."
-                    else "This post-test measures how much you've learned. Do your best!",
-                    fontSize = 11.sp,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    text = if (testType == TestType.PRE) "📝" else "🏆",
+                    fontSize = 18.sp
+                )
+                Spacer(Modifier.width(10.dp))
+                Text(
+                    text = if (testType == TestType.PRE)
+                        "Answer every question to unlock lessons!"
+                    else
+                        "Show what you've learned — do your best!",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    lineHeight = 17.sp
                 )
             }
         }
 
+        // ── Chunky progress bar ───────────────────────────────────────────────
         LinearProgressIndicator(
             progress = { state.progressFraction },
-            modifier = Modifier.fillMaxWidth().height(5.dp),
+            modifier = Modifier.fillMaxWidth().height(7.dp),
+            color = MaterialTheme.colorScheme.primary,
             trackColor = MaterialTheme.colorScheme.surfaceVariant
         )
 
+        // ── Scrollable question body ──────────────────────────────────────────
         Column(
             modifier = Modifier
                 .weight(1f)
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp)
+                .padding(horizontal = hPad, vertical = 20.dp)
         ) {
-            Text(
-                text = "Question ${state.currentIndex + 1} of ${state.questions.size}",
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Spacer(Modifier.height(12.dp))
-            Text(text = question.questionText, fontSize = 17.sp, fontWeight = FontWeight.Medium, lineHeight = 26.sp)
-            Spacer(Modifier.height(24.dp))
-
-            // 👇 ALL 4 QUESTION TYPES RESTORED!
-            when (question.questionType) {
-                QuestionType.MCQ -> McqQuestion(
-                    question = question,
-                    selectedChoiceId = currentAnswer?.answer,
-                    onChoiceSelected = { choiceId -> onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, choiceId)) }
-                )
-                QuestionType.FILL_IN -> FillInQuestion(
-                    question = question,
-                    currentText = currentAnswer?.answer ?: "",
-                    onTextChanged = { text -> onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, text)) }
-                )
-                QuestionType.SEQUENCING -> SequencingQuestion(
-                    question = question,
-                    currentOrder = currentAnswer?.selectedChoiceIds ?: question.choices.map { it.id }.shuffled(),
-                    onOrderChanged = { newOrder -> onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, "", newOrder)) }
-                )
-                QuestionType.MATCHING -> MatchingQuestion(
-                    question = question,
-                    selectedIds = currentAnswer?.selectedChoiceIds ?: emptyList(),
-                    onSelectionChanged = { ids -> onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, "", ids)) }
+            // Question number badge
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary)
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = "Q ${state.currentIndex + 1} / ${state.questions.size}",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+                Spacer(Modifier.width(10.dp))
+                Text(
+                    text = question.questionType.lowercase().replace("_", " ").replaceFirstChar { it.uppercase() },
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+
+            Spacer(Modifier.height(16.dp))
+
+            // Question text — large for kids
+            Text(
+                text = question.questionText,
+                fontSize = if (isTablet) 20.sp else 18.sp,
+                fontWeight = FontWeight.SemiBold,
+                lineHeight = if (isTablet) 30.sp else 27.sp,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+            Spacer(Modifier.height(28.dp))
+
+            // ── Question component router ─────────────────────────────────────
+            when (question.questionType) {
+                QuestionType.MCQ -> AnimatedMcqQuestion(
+                    question = question,
+                    selectedChoiceId = currentAnswer?.answer,
+                    isSubmitted = state.isSubmitted,
+                    onChoiceSelected = { choiceId ->
+                        onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, choiceId))
+                    }
+                )
+                QuestionType.FILL_IN -> AnimatedFillInQuestion(
+                    question = question,
+                    currentText = currentAnswer?.answer ?: "",
+                    isSubmitted = false,
+                    onTextChanged = { text ->
+                        onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, text))
+                    }
+                )
+                QuestionType.SEQUENCING -> DragDropSequencingQuestion(
+                    question = question,
+                    currentOrder = currentAnswer?.selectedChoiceIds
+                        ?: remember(question.id) { question.choices.map { it.id }.shuffled() },
+                    isSubmitted = state.isSubmitted,
+                    onOrderChanged = { newOrder ->
+                        onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, "", newOrder))
+                    }
+                )
+                QuestionType.MATCHING -> CanvasMatchingQuestion(
+                    question = question,
+                    connections = currentAnswer?.selectedChoiceIds ?: emptyList(),
+                    isSubmitted = state.isSubmitted,
+                    onConnectionMade = { ids ->
+                        onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, "", ids))
+                    }
+                )
+                QuestionType.PASSAGE -> PassageQuestion(
+                    question = question,
+                    selectedWordIds = currentAnswer?.selectedChoiceIds ?: emptyList(),
+                    isSubmitted = state.isSubmitted,
+                    onSelectionChanged = { ids ->
+                        onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, "", ids))
+                    }
+                )
+            }
+
+            Spacer(Modifier.height(16.dp))
         }
 
-        Surface(shadowElevation = 4.dp) {
-            Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-                OutlinedButton(onClick = onPrevious, enabled = state.currentIndex > 0) {
-                    Icon(Icons.Default.ArrowBack, null, modifier = Modifier.size(16.dp))
-                    Spacer(Modifier.width(4.dp)); Text("Back")
+        // ── Navigation bar ────────────────────────────────────────────────────
+        Surface(
+            shadowElevation = 6.dp,
+            color = MaterialTheme.colorScheme.surface
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = hPad, vertical = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                OutlinedButton(
+                    onClick = onPrevious,
+                    enabled = state.currentIndex > 0,
+                    modifier = Modifier.height(52.dp),
+                    shape = RoundedCornerShape(14.dp)
+                ) {
+                    Icon(Icons.Default.ArrowBack, null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text("Back", fontWeight = FontWeight.Medium)
                 }
+
+                // Step dots — phone only (too wide for many questions on tablet)
+                if (!isTablet && state.questions.size <= 8) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                        repeat(state.questions.size) { i ->
+                            Box(
+                                modifier = Modifier
+                                    .size(if (i == state.currentIndex) 10.dp else 7.dp)
+                                    .clip(CircleShape)
+                                    .background(
+                                        if (i == state.currentIndex) MaterialTheme.colorScheme.primary
+                                        else if (state.answers.containsKey(state.questions[i].id))
+                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
+                                        else MaterialTheme.colorScheme.surfaceVariant
+                                    )
+                            )
+                        }
+                    }
+                }
+
                 if (state.isLastQuestion) {
-                    Button(onClick = onSubmit, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)) {
-                        Icon(Icons.Default.Check, null, modifier = Modifier.size(16.dp))
-                        Spacer(Modifier.width(4.dp)); Text("Submit")
+                    Button(
+                        onClick = onSubmit,
+                        modifier = Modifier.height(52.dp),
+                        shape = RoundedCornerShape(14.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiary
+                        )
+                    ) {
+                        Icon(Icons.Default.Check, null, modifier = Modifier.size(18.dp))
+                        Spacer(Modifier.width(6.dp))
+                        Text("Submit ✓", fontWeight = FontWeight.Bold)
                     }
                 } else {
-                    Button(onClick = onNext, enabled = state.answers.containsKey(question.id)) {
-                        Text("Next"); Spacer(Modifier.width(4.dp))
-                        Icon(Icons.Default.ArrowForward, null, modifier = Modifier.size(16.dp))
+                    Button(
+                        onClick = onNext,
+                        enabled = state.answers.containsKey(question.id),
+                        modifier = Modifier.height(52.dp),
+                        shape = RoundedCornerShape(14.dp)
+                    ) {
+                        Text("Next", fontWeight = FontWeight.Bold)
+                        Spacer(Modifier.width(6.dp))
+                        Icon(Icons.Default.ArrowForward, null, modifier = Modifier.size(18.dp))
                     }
                 }
             }
@@ -319,7 +458,9 @@ fun PrePostTestContent(
     }
 }
 
-// ── Post-test result screen ───────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// Post-test result — celebration screen for kids
+// ─────────────────────────────────────────────────────────────────────────────
 @Composable
 fun PostTestResultContent(
     state: PrePostViewModel.PrePostUiState.Ready,
@@ -327,23 +468,95 @@ fun PostTestResultContent(
     onContinue: () -> Unit
 ) {
     val percent = if (state.total == 0) 0 else (state.score * 100) / state.total
-    Column(
-        modifier = modifier.fillMaxSize().padding(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    val animPercent by animateIntAsState(
+        targetValue = percent,
+        animationSpec = tween(1200, easing = EaseOutCubic),
+        label = "score_count"
+    )
+    val isTablet = LocalConfiguration.current.screenWidthDp >= 600
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(
+                Brush.verticalGradient(
+                    listOf(
+                        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+                        MaterialTheme.colorScheme.background
+                    )
+                )
+            ),
+        contentAlignment = Alignment.Center
     ) {
-        Text("Post-Test Complete! 🎉", fontSize = 24.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
-        Spacer(Modifier.height(16.dp))
-        Text("$percent%", fontSize = 48.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-        Text("${state.score} / ${state.total} points", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Spacer(Modifier.height(12.dp))
-        Text(
-            "Your teacher will compare this with your pre-test score to see how much you've grown!",
-            fontSize = 13.sp, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Spacer(Modifier.height(32.dp))
-        Button(onClick = onContinue, modifier = Modifier.fillMaxWidth().height(52.dp), shape = RoundedCornerShape(12.dp)) {
-            Text("Back to Home", fontWeight = FontWeight.SemiBold)
+        val contentMod = if (isTablet)
+            Modifier.width(480.dp)
+        else
+            Modifier.fillMaxWidth().padding(horizontal = 28.dp)
+
+        Column(
+            modifier = contentMod,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("Post-Test\nComplete!", fontSize = if (isTablet) 32.sp else 28.sp,
+                fontWeight = FontWeight.ExtraBold,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.primary,
+                lineHeight = 38.sp)
+
+            Spacer(Modifier.height(24.dp))
+
+            // Animated score bubble
+            Box(
+                modifier = Modifier
+                    .size(140.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primaryContainer),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("$animPercent%", fontSize = 40.sp, fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.primary)
+                    Text("${state.score}/${state.total} pts", fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f))
+                }
+            }
+
+            Spacer(Modifier.height(20.dp))
+
+            // Star rating
+            Row {
+                val stars = when { percent >= 80 -> 3; percent >= 60 -> 2; else -> 1 }
+                repeat(3) { i -> Text(if (i < stars) "⭐" else "☆", fontSize = 28.sp) }
+            }
+
+            Spacer(Modifier.height(20.dp))
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer
+                )
+            ) {
+                Text(
+                    text = "Your teacher will compare this with your pre-test score to see how much you've grown! 🌱",
+                    fontSize = 13.sp,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    lineHeight = 19.sp,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+
+            Spacer(Modifier.height(28.dp))
+
+            Button(
+                onClick = onContinue,
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                shape = RoundedCornerShape(18.dp)
+            ) {
+                Text("🏠  Back to Home", fontSize = 17.sp, fontWeight = FontWeight.Bold)
+            }
         }
     }
 }

@@ -26,6 +26,8 @@ import com.basahero.elearning.data.repository.PrePostRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.background
+import com.basahero.elearning.ui.common.TwoPaneLayout
+import com.basahero.elearning.ui.common.rememberIsTablet
 
 // ─────────────────────────────────────────────────────────────────────────────
 // LessonListViewModel
@@ -47,6 +49,8 @@ fun LessonListScreen(
     onBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val isTablet = rememberIsTablet()
+    var selectedLessonId by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(quarterId) {
         viewModel.loadLessons(quarterId, studentId, quarterTitle)
@@ -64,64 +68,102 @@ fun LessonListScreen(
             )
         }
     ) { padding ->
-        if (uiState.isLoading) {
-            Box(
-                Modifier.fillMaxSize().padding(padding),
-                contentAlignment = Alignment.Center
-            ) { CircularProgressIndicator() }
-            return@Scaffold
-        }
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            item { Spacer(modifier = Modifier.height(8.dp)) }
-
-            // 🚀 PHASE 3B: Pre-Test Card (Top)
-            if (uiState.hasPrePostContent) {
-                item {
-                    PrePostCard(
-                        title = "Quarter Pre-Test",
-                        subtitle = if (uiState.isPreTestDone) "Completed" else "Required to unlock lessons",
-                        isDone = uiState.isPreTestDone,
-                        isLocked = false, // Pre-test is never locked!
-                        icon = Icons.Default.Assignment,
-                        onClick = onPreTestClick
-                    )
+        TwoPaneLayout(
+            isTablet = isTablet,
+            showDetail = selectedLessonId != null,
+            listPane = {
+                // ── Lesson list pane ─────────────────────────────────────────────
+                if (uiState.isLoading) {
+                    Box(
+                        Modifier.fillMaxSize().padding(padding),
+                        contentAlignment = Alignment.Center
+                    ) { CircularProgressIndicator() }
+                    return@TwoPaneLayout
                 }
-            }
 
-            // Normal Lessons
-            itemsIndexed(uiState.lessons) { index, lesson ->
-                LessonCard(
-                    lesson = lesson,
-                    lessonNumber = index + 1,
-                    onClick = {
-                        if (lesson.status != LessonStatus.LOCKED) onLessonClick(lesson.id)
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                        .padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    item { Spacer(modifier = Modifier.height(8.dp)) }
+
+                    // 🚀 PHASE 3B: Pre-Test Card (Top)
+                    if (uiState.hasPrePostContent) {
+                        item {
+                            PrePostCard(
+                                title = "Quarter Pre-Test",
+                                subtitle = if (uiState.isPreTestDone) "Completed" else "Required to unlock lessons",
+                                isDone = uiState.isPreTestDone,
+                                isLocked = false, // Pre-test is never locked!
+                                icon = Icons.Default.Assignment,
+                                onClick = onPreTestClick
+                            )
+                        }
                     }
-                )
-            }
 
-            // 🚀 PHASE 3B: Post-Test Card (Bottom)
-            if (uiState.hasPrePostContent) {
-                item {
-                    PrePostCard(
-                        title = "Quarter Post-Test",
-                        subtitle = if (uiState.isPostTestDone) "Completed" else "Unlock by finishing all lessons",
-                        isDone = uiState.isPostTestDone,
-                        isLocked = !uiState.allLessonsDone, // Locked until all lessons are done!
-                        icon = Icons.Default.EmojiEvents,
-                        onClick = { if (uiState.allLessonsDone) onPostTestClick() }
-                    )
+                    // Normal Lessons
+                    itemsIndexed(uiState.lessons) { index, lesson ->
+                        LessonCard(
+                            lesson = lesson,
+                            lessonNumber = index + 1,
+                            onClick = {
+                                if (lesson.status != LessonStatus.LOCKED) {
+                                    selectedLessonId = lesson.id
+                                    if (!isTablet) onLessonClick(lesson.id)
+                                }
+                            }
+                        )
+                    }
+
+                    // 🚀 PHASE 3B: Post-Test Card (Bottom)
+                    if (uiState.hasPrePostContent) {
+                        item {
+                            PrePostCard(
+                                title = "Quarter Post-Test",
+                                subtitle = if (uiState.isPostTestDone) "Completed" else "Unlock by finishing all lessons",
+                                isDone = uiState.isPostTestDone,
+                                isLocked = !uiState.allLessonsDone, // Locked until all lessons are done!
+                                icon = Icons.Default.EmojiEvents,
+                                onClick = { if (uiState.allLessonsDone) onPostTestClick() }
+                            )
+                        }
+                    }
+
+                    item { Spacer(modifier = Modifier.height(16.dp)) }
+                }
+            },
+            detailPane = {
+                // ── Detail pane (tablet only) ─────────────────────────────────
+                val lessonId = selectedLessonId
+                if (lessonId != null) {
+                    // Navigate to the reading screen in the right pane
+                    LaunchedEffect(lessonId) { onLessonClick(lessonId) }
+                } else {
+                    // Empty state — shown before any lesson is selected
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Icon(
+                                Icons.Default.MenuBook,
+                                contentDescription = null,
+                                modifier = Modifier.size(64.dp),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+                            )
+                            Text(
+                                text = "Select a lesson to start reading",
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+                    }
                 }
             }
-
-            item { Spacer(modifier = Modifier.height(16.dp)) }
-        }
+        )
     }
 }
 

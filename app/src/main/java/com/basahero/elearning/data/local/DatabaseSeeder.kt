@@ -178,7 +178,10 @@ class DatabaseSeeder(private val context: Context) {
             )
         )
 
-        // ── 2. Seed a default student for testing ─────────────────────────────
+        // ── 2. Seed default students for testing (one per grade) ─────────────
+        val now = System.currentTimeMillis()
+
+        // Grade 4 — Blue theme
         db.studentDao().insertOrUpdate(
             StudentEntity(
                 id         = "student-001",
@@ -186,9 +189,37 @@ class DatabaseSeeder(private val context: Context) {
                 fullName   = "Juan Dela Cruz",
                 section    = "Mabini",
                 gradeLevel = 4,
-                lastActive = System.currentTimeMillis(),
+                lastActive = now,
                 synced     = false,
-                createdAt  = System.currentTimeMillis()
+                createdAt  = now
+            )
+        )
+
+        // Grade 5 — Green theme
+        db.studentDao().insertOrUpdate(
+            StudentEntity(
+                id         = "student-002",
+                classId    = "dev-class-2026",
+                fullName   = "Maria Santos",
+                section    = "Rizal",
+                gradeLevel = 5,
+                lastActive = now,
+                synced     = false,
+                createdAt  = now
+            )
+        )
+
+        // Grade 6 — Orange theme
+        db.studentDao().insertOrUpdate(
+            StudentEntity(
+                id         = "student-003",
+                classId    = "dev-class-2026",
+                fullName   = "Pedro Reyes",
+                section    = "Bonifacio",
+                gradeLevel = 6,
+                lastActive = now,
+                synced     = false,
+                createdAt  = now
             )
         )
 

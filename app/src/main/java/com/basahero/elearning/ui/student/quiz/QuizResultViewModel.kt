@@ -21,7 +21,12 @@ class QuizResultViewModel(
     data class ResultUiState(
         val isSaved: Boolean = false,
         val nextLessonId: String? = null,
-        val isSyncing: Boolean = false
+        val isSyncing: Boolean = false,
+        // Quarter-complete celebration fields
+        val isQuarterComplete: Boolean = false,
+        val quarterTitle: String = "",
+        val quarterLessonsCompleted: Int = 0,
+        val quarterAverageScore: Float = 0f
     )
 
     private val _uiState = MutableStateFlow(ResultUiState())
@@ -47,7 +52,7 @@ class QuizResultViewModel(
             SyncProgressUseCase().execute(context)
             _uiState.update { it.copy(isSyncing = true) }
 
-            // ── Step 3: Find next lesson to show "Next Lesson" button ─────────
+            // ── Step 3: Find next lesson + check quarter completion ────────────
             val currentLesson = lessonRepository.getLessonById(lessonId)
             if (currentLesson != null) {
                 val lessons = lessonRepository
@@ -57,10 +62,19 @@ class QuizResultViewModel(
                 val currentIndex = lessons.indexOfFirst { it.id == lessonId }
                 val nextLesson = lessons.getOrNull(currentIndex + 1)
 
+                // Check whether all lessons in this quarter are now complete
+                val allDone = lessons.all { it.isDone }
+                val completedCount = lessons.count { it.isDone }
+                val averageScore = if (completedCount > 0) score.toFloat() / total else 0f
+
                 _uiState.update {
                     it.copy(
                         isSaved = true,
-                        nextLessonId = nextLesson?.id
+                        nextLessonId = nextLesson?.id,
+                        isQuarterComplete = allDone,
+                        quarterTitle = "Quarter ${currentLesson.quarterId}",
+                        quarterLessonsCompleted = completedCount,
+                        quarterAverageScore = averageScore
                     )
                 }
             } else {

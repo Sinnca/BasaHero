@@ -49,7 +49,8 @@ data class QuizQuestion(
     val questionType: String,
     val orderIndex: Int,
     val pointsValue: Int,
-    val choices: List<QuizChoice> = emptyList()
+    val choices: List<QuizChoice> = emptyList(),
+    val correctAnswerIds: List<String> = emptyList()
 )
 
 data class QuizChoice(
@@ -109,4 +110,5 @@ object QuestionType {
     const val FILL_IN = "FILL_IN"
     const val SEQUENCING = "SEQUENCING"
     const val MATCHING = "MATCHING"
+    const val PASSAGE = "PASSAGE"   // Clickable highlighted-word span question
 }

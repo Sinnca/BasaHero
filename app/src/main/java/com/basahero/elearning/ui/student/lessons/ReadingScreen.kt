@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.basahero.elearning.ui.common.AnimatedScrollIndicator
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ReadingScreen
@@ -63,21 +64,33 @@ fun ReadingScreen(
 
     val lesson = uiState.lesson!!
 
+    // Compute scroll fraction for the animated indicator (avoid divide-by-zero)
+    val scrollFraction = if (scrollState.maxValue > 0)
+        scrollState.value.toFloat() / scrollState.maxValue
+    else 0f
+
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Column {
-                        Text(lesson.competency, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
-                        Text(lesson.title, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
+            Column {
+                TopAppBar(
+                    title = {
+                        Column {
+                            Text(lesson.competency, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
+                            Text(lesson.title, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
+                        }
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = onBack) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        }
                     }
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
+                )
+                // Animated reading-progress bar + bouncing scroll hint
+                AnimatedScrollIndicator(
+                    scrollFraction = scrollFraction,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         },
         bottomBar = {
             // Quiz button appears once student scrolls through the passage
