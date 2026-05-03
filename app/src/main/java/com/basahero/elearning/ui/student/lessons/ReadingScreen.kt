@@ -211,7 +211,11 @@ fun ReadingScreen(
             HighlightedPassageText(
                 passageText = lesson.passageText,
                 highlightedWords = uiState.highlightedWords,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onPronunciationAttempt = { word, heard, isCorrect, _ ->
+                    val score = if (isCorrect) 100 else 0
+                    viewModel.savePronunciationAttempt(word, heard, isCorrect, score)
+                }
             )
 
             Spacer(modifier = Modifier.height(32.dp))

@@ -3,6 +3,7 @@ package com.basahero.elearning
 import android.app.Application
 import android.util.Log
 import com.basahero.elearning.util.NetworkMonitor
+import com.basahero.elearning.util.VoskManager
 
 // ─────────────────────────────────────────────────────────────────────────────
 // PhilIRIApplication
@@ -28,7 +29,10 @@ class PhilIRIApplication : Application() {
         networkMonitor = NetworkMonitor(this)
         networkMonitor.startWatching()
 
-        Log.d("PhilIRIApplication", "NetworkMonitor started")
+        // Unpack Vosk offline model asynchronously
+        VoskManager.initModel(this)
+
+        Log.d("PhilIRIApplication", "NetworkMonitor and VoskManager started")
     }
 
     override fun onTerminate() {

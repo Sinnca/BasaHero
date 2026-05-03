@@ -799,6 +799,7 @@ fun PhilIRIApp() {
     val lessonRepository = remember { LessonRepository(database) }
     val quizRepository = remember { com.basahero.elearning.data.repository.QuizRepository(database) }
     val progressRepository = remember { com.basahero.elearning.data.repository.ProgressRepository(database) }
+    val pronunciationRepository = remember { com.basahero.elearning.data.repository.PronunciationRepository(database) }
 
     // Shared repositories
     val prePostRepository = remember { PrePostRepository(database) }
@@ -964,7 +965,7 @@ fun PhilIRIApp() {
                 factory = object : ViewModelProvider.Factory {
                     @Suppress("UNCHECKED_CAST")
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return ReadingViewModel(lessonRepository) as T
+                        return ReadingViewModel(lessonRepository, pronunciationRepository, sessionManager) as T
                     }
                 }
             )

@@ -154,6 +154,18 @@ import android.content.Context
 import com.basahero.elearning.data.local.entity.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import java.util.UUID
+
+/**
+ * IdMapper — dynamically converts readable JSON IDs ("lesson-1") into true UUIDs ("550e8400...")
+ * This allows us to keep our JSON files readable while satisfying Supabase's strict UUID requirement.
+ */
+object IdMapper {
+    private val idMap = mutableMapOf<String, String>()
+    fun map(oldId: String): String {
+        return idMap.getOrPut(oldId) { UUID.randomUUID().toString() }
+    }
+}
 
 /**
  * DatabaseSeeder
@@ -180,12 +192,13 @@ class DatabaseSeeder(private val context: Context) {
 
         // ── 2. Seed default students for testing (one per grade) ─────────────
         val now = System.currentTimeMillis()
+        val classId = IdMapper.map("dev-class-2026")
 
         // Grade 4 — Blue theme
         db.studentDao().insertOrUpdate(
             StudentEntity(
-                id         = "student-001",
-                classId    = "dev-class-2026",
+                id         = IdMapper.map("student-001"),
+                classId    = classId,
                 fullName   = "Juan Dela Cruz",
                 section    = "Mabini",
                 gradeLevel = 4,
@@ -198,8 +211,8 @@ class DatabaseSeeder(private val context: Context) {
         // Grade 5 — Green theme
         db.studentDao().insertOrUpdate(
             StudentEntity(
-                id         = "student-002",
-                classId    = "dev-class-2026",
+                id         = IdMapper.map("student-002"),
+                classId    = classId,
                 fullName   = "Maria Santos",
                 section    = "Rizal",
                 gradeLevel = 5,
@@ -212,8 +225,8 @@ class DatabaseSeeder(private val context: Context) {
         // Grade 6 — Orange theme
         db.studentDao().insertOrUpdate(
             StudentEntity(
-                id         = "student-003",
-                classId    = "dev-class-2026",
+                id         = IdMapper.map("student-003"),
+                classId    = classId,
                 fullName   = "Pedro Reyes",
                 section    = "Bonifacio",
                 gradeLevel = 6,
@@ -287,7 +300,7 @@ data class SeedQuarter(
     val isActive:      Boolean = true
 ) {
     fun toEntity() = QuarterEntity(
-        id            = id,
+        id            = IdMapper.map(id),
         gradeLevelId  = gradeLevelId,
         quarterNumber = quarterNumber,
         title         = title,
@@ -307,8 +320,8 @@ data class SeedLesson(
     val questions:   List<SeedQuestion>
 ) {
     fun toEntity(quarterId: String) = LessonEntity(
-        id          = id,
-        quarterId   = quarterId,
+        id          = IdMapper.map(id),
+        quarterId   = IdMapper.map(quarterId),
         orderIndex  = orderIndex,
         competency  = competency,
         title       = title,
@@ -328,8 +341,8 @@ data class SeedQuestion(
     val choices:      List<SeedChoice> = emptyList()
 ) {
     fun toEntity(lessonId: String) = QuizQuestionEntity(
-        id           = id,
-        lessonId     = lessonId,
+        id           = IdMapper.map(id),
+        lessonId     = IdMapper.map(lessonId),
         questionText = questionText,
         questionType = questionType,
         orderIndex   = orderIndex,
@@ -346,8 +359,8 @@ data class SeedChoice(
 ) {
     // Normal Lesson Choice mapping
     fun toEntity(questionId: String) = QuizChoiceEntity(
-        id         = id,
-        questionId = questionId,
+        id         = IdMapper.map(id),
+        questionId = IdMapper.map(questionId),
         choiceText = choiceText,
         isCorrect  = isCorrect,
         orderIndex = orderIndex
@@ -355,8 +368,8 @@ data class SeedChoice(
 
     // 🚀 NEW: Pre/Post Choice mapping
     fun toPrePostEntity(questionId: String) = PrePostChoiceEntity(
-        id         = id,
-        questionId = questionId,
+        id         = IdMapper.map(id),
+        questionId = IdMapper.map(questionId),
         choiceText = choiceText,
         isCorrect  = isCorrect,
         orderIndex = orderIndex
@@ -375,8 +388,8 @@ data class SeedPrePostQuestion(
     val choices:      List<SeedChoice> = emptyList()
 ) {
     fun toEntity(quarterId: String) = PrePostQuestionEntity(
-        id           = id,
-        quarterId    = quarterId,
+        id           = IdMapper.map(id),
+        quarterId    = IdMapper.map(quarterId),
         testType     = testType,
         questionText = questionText,
         questionType = questionType,

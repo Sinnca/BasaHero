@@ -98,6 +98,9 @@ abstract class AppDatabase : RoomDatabase() {
                     FOREIGN KEY(student_id) REFERENCES student(id) ON DELETE CASCADE)""")
                 db.execSQL("CREATE INDEX IF NOT EXISTS idx_ppt_student ON pre_post_test(student_id)")
                 db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS idx_ppt_unique ON pre_post_test(student_id,quarter_id,test_type)")
+
+                // Fix missing index on student table that was added in v2
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_student_class_id ON student(class_id)")
             }
         }
 

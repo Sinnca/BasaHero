@@ -344,3 +344,47 @@ class PrePostRepository(private val db: AppDatabase) {
     fun getAllResultsForStudent(studentId: String) =
         db.prePostDao().getAllResultsForStudent(studentId)
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PronunciationRepository
+// ─────────────────────────────────────────────────────────────────────────────
+class PronunciationRepository(private val db: AppDatabase) {
+
+    suspend fun savePronunciationAttempt(
+        studentId: String,
+        lessonId: String,
+        word: String,
+        heard: String,
+        isCorrect: Boolean,
+        score: Int
+    ) {
+        // Calculate the next attempt number
+        val attemptNumber = db.pronunciationDao().nextAttemptNumber(studentId, lessonId)
+
+        // Create feedback JSON
+        val feedbackJson = """{"word": "$word", "heard": "$heard", "isCorrect": $isCorrect}"""
+
+        // We only mark this as 'isBest' if they got it right, or if it's their first attempt
+        val currentBest = db.pronunciationDao().getBestAttempt(studentId, lessonId)
+        
+        val isNewBest = currentBest == null || (score > currentBest.score)
+
+        if (isNewBest) {
+            db.pronunciationDao().clearBestFlag(studentId, lessonId)
+        }
+
+        val attempt = PronunciationAttemptEntity(
+            id = UUID.randomUUID().toString(),
+            studentId = studentId,
+            lessonId = lessonId,
+            attemptNumber = attemptNumber,
+            score = score,
+            isBest = isNewBest,
+            transcript = word,
+            feedbackJson = feedbackJson,
+            attemptedAt = System.currentTimeMillis()
+        )
+
+        db.pronunciationDao().insert(attempt)
+    }
+}
