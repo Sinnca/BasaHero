@@ -703,13 +703,22 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.School
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -733,9 +742,9 @@ import com.basahero.elearning.ui.student.lessons.ReadingScreen
 import com.basahero.elearning.ui.student.lessons.ReadingViewModel
 import com.basahero.elearning.ui.student.quiz.QuizScreen
 import com.basahero.elearning.ui.student.quiz.QuizViewModel
-import com.basahero.elearning.ui.theme.BasaHeroTheme
-
+import com.basahero.elearning.ui.theme.PhilIRITheme
 import com.basahero.elearning.data.local.SessionManager
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 // 👇 PHASE 3B REPOSITORY & SCREEN IMPORTS
@@ -751,14 +760,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            BasaHeroTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    PhilIRIApp()
-                }
-            }
+            // PhilIRITheme is applied inside PhilIRIApp where gradeLevel is available
+            PhilIRIApp()
         }
     }
 }
@@ -797,12 +800,15 @@ fun PhilIRIApp() {
     val quizRepository = remember { com.basahero.elearning.data.repository.QuizRepository(database) }
     val progressRepository = remember { com.basahero.elearning.data.repository.ProgressRepository(database) }
 
-    // 👇 SHARED REPOSITORIES
+    // Shared repositories
     val prePostRepository = remember { PrePostRepository(database) }
     val scoringUseCase = remember { QuizScoringUseCase() }
 
     val sessionManager = remember { SessionManager(context) }
     val currentSession by sessionManager.studentSession.collectAsState(initial = null)
+
+    // Derive grade level from active session (default 4 = blue before login)
+    val gradeLevel = currentSession?.gradeLevel ?: 4
 
     LaunchedEffect(currentSession) {
         if (currentSession != null) {
@@ -811,6 +817,13 @@ fun PhilIRIApp() {
             }
         }
     }
+
+    // ── Apply the grade-level colour scheme to the entire app ─────────────
+    PhilIRITheme(gradeLevel = gradeLevel) {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
 
     NavHost(
         navController = navController,
@@ -998,19 +1011,182 @@ fun PhilIRIApp() {
         composable(Routes.CLASS_ROSTER) { PlaceholderScreen("Class Roster") }
         composable(Routes.STUDENT_PROGRESS) { PlaceholderScreen("Student Progress") }
         composable(Routes.GAME_HOST) { PlaceholderScreen("Game Host") }
-    }
+    }           // end NavHost
+    }           // end Surface
+    }           // end PhilIRITheme
 }
 
 @Composable
 fun RoleSelectScreen(onStudentClick: () -> Unit, onTeacherClick: () -> Unit) {
-    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Welcome to BasaHero!", style = MaterialTheme.typography.headlineMedium)
-        Spacer(modifier = Modifier.height(32.dp))
-        Button(onClick = onStudentClick) { Text("I am a Student") }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onTeacherClick) { Text("I am a Teacher") }
+    // ── Animated entrance ───────────────────────────────────────────────────
+    val alpha = remember { androidx.compose.animation.core.Animatable(0f) }
+    val slideY = remember { androidx.compose.animation.core.Animatable(40f) }
+    LaunchedEffect(Unit) {
+        kotlinx.coroutines.coroutineScope {
+            launch { alpha.animateTo(1f, androidx.compose.animation.core.tween(700)) }
+            launch { slideY.animateTo(0f, androidx.compose.animation.core.tween(700, easing = androidx.compose.animation.core.EaseOutCubic)) }
+        }
+    }
+
+    // ── Deep-blue gradient background ───────────────────────────────────────
+    Box(
+        modifier = androidx.compose.ui.Modifier
+            .fillMaxSize()
+            .background(
+                androidx.compose.ui.graphics.Brush.verticalGradient(
+                    listOf(
+                        androidx.compose.ui.graphics.Color(0xFF1A56C4),
+                        androidx.compose.ui.graphics.Color(0xFF1340A0),
+                        androidx.compose.ui.graphics.Color(0xFF0D2F82)
+                    )
+                )
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = androidx.compose.ui.Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp)
+                .graphicsLayer {
+                    this.alpha = alpha.value
+                    translationY = slideY.value
+                },
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            // ── Stacked-books logo (drawn with Canvas) ──────────────────────
+            androidx.compose.foundation.Canvas(
+                modifier = androidx.compose.ui.Modifier.size(80.dp)
+            ) {
+                val w = size.width
+                val h = size.height
+                val bookH = h * 0.28f
+                val bookW = w * 0.72f
+                val gap = h * 0.06f
+                val cornerR = 10f
+
+                // Back book — blue
+                drawRoundRect(
+                    color = androidx.compose.ui.graphics.Color(0xFF1565C0),
+                    topLeft = androidx.compose.ui.geometry.Offset((w - bookW) / 2f + 12f, h * 0.12f),
+                    size = androidx.compose.ui.geometry.Size(bookW, bookH),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(cornerR)
+                )
+                // Middle book — red
+                drawRoundRect(
+                    color = androidx.compose.ui.graphics.Color(0xFFE53935),
+                    topLeft = androidx.compose.ui.geometry.Offset((w - bookW) / 2f + 4f, h * 0.12f + bookH + gap),
+                    size = androidx.compose.ui.geometry.Size(bookW, bookH),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(cornerR)
+                )
+                // Front book — green
+                drawRoundRect(
+                    color = androidx.compose.ui.graphics.Color(0xFF43A047),
+                    topLeft = androidx.compose.ui.geometry.Offset((w - bookW) / 2f, h * 0.12f + (bookH + gap) * 2f),
+                    size = androidx.compose.ui.geometry.Size(bookW, bookH),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(cornerR)
+                )
+            }
+
+            Spacer(androidx.compose.ui.Modifier.height(20.dp))
+
+            // ── App title ───────────────────────────────────────────────────
+            Text(
+                text = "BASAhero",
+                fontSize = 38.sp,
+                fontWeight = FontWeight.Bold,
+                color = androidx.compose.ui.graphics.Color.White,
+                letterSpacing = 0.5.sp
+            )
+
+            Spacer(androidx.compose.ui.Modifier.height(6.dp))
+
+            Text(
+                text = "MATATAG English · Grade 4–6",
+                fontSize = 14.sp,
+                color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.75f),
+                letterSpacing = 0.3.sp
+            )
+
+            Spacer(androidx.compose.ui.Modifier.height(56.dp))
+
+            // ── "Who are you?" prompt ───────────────────────────────────────
+            Text(
+                text = "Who are you?",
+                fontSize = 14.sp,
+                color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.65f)
+            )
+
+            Spacer(androidx.compose.ui.Modifier.height(16.dp))
+
+            // ── Student button ──────────────────────────────────────────────
+            Button(
+                onClick = onStudentClick,
+                modifier = androidx.compose.ui.Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(28.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = androidx.compose.ui.graphics.Color.White,
+                    contentColor = androidx.compose.ui.graphics.Color(0xFF1340A0)
+                ),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Person,
+                    contentDescription = null,
+                    modifier = androidx.compose.ui.Modifier.size(20.dp)
+                )
+                Spacer(androidx.compose.ui.Modifier.width(10.dp))
+                Text(
+                    text = "I am a Student",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+
+            Spacer(androidx.compose.ui.Modifier.height(12.dp))
+
+            // ── Teacher button ──────────────────────────────────────────────
+            Button(
+                onClick = onTeacherClick,
+                modifier = androidx.compose.ui.Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(28.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.15f),
+                    contentColor = androidx.compose.ui.graphics.Color.White
+                ),
+                border = BorderStroke(1.5.dp, androidx.compose.ui.graphics.Color.White.copy(alpha = 0.4f)),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.School,
+                    contentDescription = null,
+                    modifier = androidx.compose.ui.Modifier.size(20.dp)
+                )
+                Spacer(androidx.compose.ui.Modifier.width(10.dp))
+                Text(
+                    text = "I am a Teacher",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+
+            Spacer(androidx.compose.ui.Modifier.height(40.dp))
+
+            // ── Grade footer ────────────────────────────────────────────────
+            Text(
+                text = "Grade 4  ·  Grade 5  ·  Grade 6",
+                fontSize = 12.sp,
+                color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.45f),
+                letterSpacing = 0.5.sp
+            )
+        }
     }
 }
+
 
 @Composable
 fun PlaceholderScreen(title: String) {
