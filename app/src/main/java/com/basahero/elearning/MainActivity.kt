@@ -754,6 +754,13 @@ import com.basahero.elearning.ui.student.prepost.PostTestScreen
 import com.basahero.elearning.ui.student.prepost.PrePostViewModel
 import com.basahero.elearning.domain.QuizScoringUseCase
 
+import com.basahero.elearning.ui.teacher.auth.TeacherLoginScreen
+import com.basahero.elearning.ui.teacher.auth.TeacherLoginViewModel
+import com.basahero.elearning.ui.teacher.dashboard.TeacherDashboardScreen
+import com.basahero.elearning.ui.teacher.dashboard.TeacherDashboardViewModel
+import com.basahero.elearning.ui.teacher.roster.ClassRosterScreen
+import com.basahero.elearning.ui.teacher.roster.ClassRosterViewModel
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -800,6 +807,8 @@ fun PhilIRIApp() {
     val quizRepository = remember { com.basahero.elearning.data.repository.QuizRepository(database) }
     val progressRepository = remember { com.basahero.elearning.data.repository.ProgressRepository(database) }
     val pronunciationRepository = remember { com.basahero.elearning.data.repository.PronunciationRepository(database) }
+    val teacherAuthRepository = remember { com.basahero.elearning.data.repository.TeacherAuthRepository() }
+    val classRepository = remember { com.basahero.elearning.data.repository.ClassRepository() }
 
     // Shared repositories
     val prePostRepository = remember { PrePostRepository(database) }
@@ -811,9 +820,15 @@ fun PhilIRIApp() {
     // Derive grade level from active session (default 4 = blue before login)
     val gradeLevel = currentSession?.gradeLevel ?: 4
 
-    LaunchedEffect(currentSession) {
+    val isTeacherLoggedIn by sessionManager.isTeacherLoggedIn.collectAsState(initial = false)
+
+    LaunchedEffect(currentSession, isTeacherLoggedIn) {
         if (currentSession != null) {
             navController.navigate(Routes.STUDENT_HOME) {
+                popUpTo(Routes.ROLE_SELECT) { inclusive = true }
+            }
+        } else if (isTeacherLoggedIn) {
+            navController.navigate(Routes.TEACHER_DASHBOARD) {
                 popUpTo(Routes.ROLE_SELECT) { inclusive = true }
             }
         }
@@ -1007,9 +1022,69 @@ fun PhilIRIApp() {
         composable(Routes.GAME_JOIN) { PlaceholderScreen("Join Game") }
         composable(Routes.GAME_PLAY) { PlaceholderScreen("Game Play") }
         composable(Routes.GAME_RESULT) { PlaceholderScreen("Game Result") }
-        composable(Routes.TEACHER_LOGIN) { PlaceholderScreen("Teacher Login") }
-        composable(Routes.TEACHER_DASHBOARD) { PlaceholderScreen("Teacher Dashboard") }
-        composable(Routes.CLASS_ROSTER) { PlaceholderScreen("Class Roster") }
+        composable(Routes.TEACHER_LOGIN) {
+            val viewModel: TeacherLoginViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        return TeacherLoginViewModel(teacherAuthRepository, sessionManager) as T
+                    }
+                }
+            )
+            TeacherLoginScreen(
+                viewModel = viewModel,
+                onLoginSuccess = { navController.navigate(Routes.TEACHER_DASHBOARD) { popUpTo(Routes.ROLE_SELECT) { inclusive = true } } },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.TEACHER_DASHBOARD) {
+            val viewModel: TeacherDashboardViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        return TeacherDashboardViewModel(teacherAuthRepository, classRepository) as T
+                    }
+                }
+            )
+            TeacherDashboardScreen(
+                viewModel = viewModel,
+                onClassClick = { classId, className, gradeLevel ->
+                    navController.navigate("class_roster/$classId/$className/$gradeLevel")
+                },
+                onLogout = {
+                    coroutineScope.launch { sessionManager.setTeacherLoggedIn(false) }
+                    navController.navigate(Routes.ROLE_SELECT) { popUpTo(0) }
+                }
+            )
+        }
+
+        composable("class_roster/{classId}/{className}/{gradeLevel}") { backStackEntry ->
+            val classId = backStackEntry.arguments?.getString("classId") ?: ""
+            val className = backStackEntry.arguments?.getString("className") ?: ""
+            val gradeLevel = backStackEntry.arguments?.getString("gradeLevel")?.toIntOrNull() ?: 4
+            
+            val viewModel: ClassRosterViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        return ClassRosterViewModel(classRepository) as T
+                    }
+                }
+            )
+            ClassRosterScreen(
+                classId = classId,
+                className = className,
+                gradeLevel = gradeLevel,
+                viewModel = viewModel,
+                onStudentClick = { studentId, studentName ->
+                    // Go to student progress
+                    navController.navigate("student_progress/$studentId")
+                },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
         composable(Routes.STUDENT_PROGRESS) { PlaceholderScreen("Student Progress") }
         composable(Routes.GAME_HOST) { PlaceholderScreen("Game Host") }
     }           // end NavHost
