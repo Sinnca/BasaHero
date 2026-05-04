@@ -81,9 +81,20 @@ class SyncProgressWorker(
                 return@withContext Result.success()
             }
 
-            Log.d(tag, "Uploading ${unsyncedRows.size} progress records...")
+            // Filter out progress for dummy students (synced = false)
+            val validRows = unsyncedRows.filter { row ->
+                db.studentDao().getById(row.studentId)?.synced == true
+            }
 
-            val chunks = unsyncedRows.chunked(50)
+            if (validRows.isEmpty()) {
+                Log.d(tag, "No valid progress to sync (only local dummy data). Marking as synced to stop retries.")
+                db.progressDao().markSyncedBatch(unsyncedRows.map { it.id })
+                return@withContext Result.success()
+            }
+
+            Log.d(tag, "Uploading ${validRows.size} progress records...")
+
+            val chunks = validRows.chunked(50)
             var successCount = 0
             var failCount = 0
 
@@ -195,7 +206,18 @@ class SyncPrePostWorker(
             val unsyncedRows = db.prePostDao().getUnsyncedResults()
             if (unsyncedRows.isEmpty()) return@withContext Result.success()
 
-            val rows = unsyncedRows.map { entity ->
+            // Filter out dummy students
+            val validRows = unsyncedRows.filter { row ->
+                db.studentDao().getById(row.studentId)?.synced == true
+            }
+
+            if (validRows.isEmpty()) {
+                Log.d(tag, "No valid pre-post to sync (only local dummy data). Marking as synced.")
+                unsyncedRows.forEach { db.prePostDao().markSynced(it.id) }
+                return@withContext Result.success()
+            }
+
+            val rows = validRows.map { entity ->
                 PrePostRow(
                     id = entity.id,
                     student_id = entity.studentId,
