@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.time.Instant
 import java.util.UUID
+import com.basahero.elearning.data.remote.SupabaseClient
+import io.github.jan.supabase.postgrest.from
+import android.util.Log
 
 // Define an alias so Android Studio knows EXACTLY which LessonStatus to use
 import com.basahero.elearning.data.local.entity.LessonStatus as DbLessonStatus
@@ -19,8 +22,49 @@ import com.basahero.elearning.data.local.entity.LessonStatus as DbLessonStatus
 class StudentRepository(private val db: AppDatabase) {
 
     suspend fun loginStudent(fullName: String, section: String): Student? {
-        val entity = db.studentDao().findByNameAndSection(fullName, section)
-        return entity?.toDomain()
+        // 1. Try local check first (for offline/speed)
+        val localEntity = db.studentDao().findByNameAndSection(fullName, section)
+        if (localEntity != null) return localEntity.toDomain()
+
+        // 2. Fallback to Supabase if not found locally (handles newly created students)
+        return try {
+            val remoteStudent = SupabaseClient.client
+                .from("student")
+                .select {
+                    filter {
+                        // Use ilike for case-insensitive matching
+                        ilike("full_name", fullName)
+                        ilike("section", section)
+                    }
+                }
+                .decodeList<StudentRow>()
+                .firstOrNull()
+
+            if (remoteStudent != null) {
+                // Save to Room for future offline access
+                val entity = StudentEntity(
+                    id = remoteStudent.id,
+                    classId = remoteStudent.class_id ?: "",
+                    fullName = remoteStudent.full_name,
+                    section = remoteStudent.section,
+                    gradeLevel = remoteStudent.grade_level,
+                    lastActive = remoteStudent.last_active?.let { 
+                        try { java.time.Instant.parse(it).toEpochMilli() } catch(e:Exception) { null } 
+                    },
+                    synced = true,
+                    createdAt = remoteStudent.created_at?.let { 
+                        try { java.time.Instant.parse(it).toEpochMilli() } catch(e:Exception) { System.currentTimeMillis() }
+                    } ?: System.currentTimeMillis()
+                )
+                db.studentDao().insertOrUpdate(entity)
+                entity.toDomain()
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("StudentRepository", "Supabase login failed: ${e.message}", e)
+            null
+        }
     }
 
     suspend fun getStudentById(studentId: String): Student? {
@@ -329,7 +373,7 @@ class PrePostRepository(private val db: AppDatabase) {
         total: Int
     ) {
         val result = PrePostTestEntity(
-            id           = UUID.randomUUID().toString(),
+            id           = "${studentId}_${quarterId}_${testType}",
             studentId    = studentId,
             quarterId    = quarterId,
             testType     = testType,

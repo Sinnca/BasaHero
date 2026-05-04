@@ -8,6 +8,7 @@ import android.net.NetworkRequest
 import android.util.Log
 import com.basahero.elearning.worker.SyncProgressWorker
 import com.basahero.elearning.worker.SyncStudentWorker
+import com.basahero.elearning.worker.SyncPrePostWorker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,6 +35,7 @@ class NetworkMonitor(private val context: Context) {
             // Trigger syncs when Wi-Fi connects!
             SyncProgressWorker.enqueue(context)
             SyncStudentWorker.enqueue(context)
+            SyncPrePostWorker.enqueue(context)
 
             // Note: When you finish Phase 5 (Speech), uncomment the line below:
             // SyncPronunciationWorker.enqueue(context)

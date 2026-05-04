@@ -761,6 +761,9 @@ import com.basahero.elearning.ui.teacher.dashboard.TeacherDashboardViewModel
 import com.basahero.elearning.ui.teacher.roster.ClassRosterScreen
 import com.basahero.elearning.ui.teacher.roster.ClassRosterViewModel
 
+import com.basahero.elearning.ui.teacher.progress.StudentProgressScreen
+import com.basahero.elearning.ui.teacher.progress.StudentProgressViewModel
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -791,7 +794,7 @@ object Routes {
     const val TEACHER_LOGIN = "teacher_login"
     const val TEACHER_DASHBOARD = "teacher_dashboard"
     const val CLASS_ROSTER = "class_roster/{classId}"
-    const val STUDENT_PROGRESS = "student_progress/{studentId}"
+    const val STUDENT_PROGRESS = "student_progress/{studentId}/{studentName}"
     const val GAME_HOST = "game_host/{classId}"
 }
 
@@ -1079,13 +1082,34 @@ fun PhilIRIApp() {
                 viewModel = viewModel,
                 onStudentClick = { studentId, studentName ->
                     // Go to student progress
-                    navController.navigate("student_progress/$studentId")
+                    navController.navigate("student_progress/$studentId/$studentName")
                 },
                 onBack = { navController.popBackStack() }
             )
         }
 
-        composable(Routes.STUDENT_PROGRESS) { PlaceholderScreen("Student Progress") }
+        composable(Routes.STUDENT_PROGRESS) { backStackEntry ->
+            val studentId = backStackEntry.arguments?.getString("studentId") ?: ""
+            val studentName = backStackEntry.arguments?.getString("studentName") ?: ""
+            
+            val viewModel: StudentProgressViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        val repo = com.basahero.elearning.data.repository.ProgressMonitorRepository()
+                        return StudentProgressViewModel(repo) as T
+                    }
+                }
+            )
+
+            StudentProgressScreen(
+                studentId = studentId,
+                studentName = studentName,
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
         composable(Routes.GAME_HOST) { PlaceholderScreen("Game Host") }
     }           // end NavHost
     }           // end Surface

@@ -34,7 +34,7 @@ data class ClassRow(
 @Serializable
 data class StudentRow(
     val id: String,
-    val class_id: String,
+    val class_id: String? = null,
     val full_name: String,
     val section: String,
     val grade_level: Int,
@@ -293,7 +293,7 @@ class ClassRepository {
                     (p.best_score.toFloat() / p.quiz_total) < 0.6f
                 }
 
-                StudentInfo(s.id, s.class_id, s.full_name, s.section, s.grade_level, s.last_active, isAtRisk)
+                StudentInfo(s.id, s.class_id ?: "", s.full_name, s.section, s.grade_level, s.last_active, isAtRisk)
             }
         } catch (e: Exception) {
             Log.e(tag, "Get students failed: ${e.message}")
@@ -308,8 +308,8 @@ class ClassRepository {
             val row = StudentRow(
                 id = id,
                 class_id = classId,
-                full_name = fullName,
-                section = section,
+                full_name = fullName.trim(),
+                section = section.trim(),
                 grade_level = gradeLevel,
                 created_at = java.time.Instant.ofEpochMilli(now).toString()
             )
@@ -502,7 +502,7 @@ class ProgressMonitorRepository {
                     ((p.best_score ?: p.quiz_score).toFloat() / p.quiz_total) < 0.6f
                 }
             }.map { s ->
-                StudentInfo(s.id, s.class_id, s.full_name, s.section, s.grade_level, s.last_active, isAtRisk = true)
+                StudentInfo(s.id, s.class_id ?: "", s.full_name, s.section, s.grade_level, s.last_active, isAtRisk = true)
             }
         } catch (e: Exception) {
             Log.e(tag, "Get at-risk students failed: ${e.message}")

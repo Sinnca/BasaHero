@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import com.basahero.elearning.domain.SyncPrePostUseCase
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -99,7 +101,7 @@ class PrePostViewModel(
         if (current.currentIndex > 0) _uiState.value = current.copy(currentIndex = current.currentIndex - 1)
     }
 
-    fun submit(studentId: String, quarterId: String, testType: String) {
+    fun submit(context: android.content.Context, studentId: String, quarterId: String, testType: String) {
         val current = _uiState.value as? PrePostUiState.Ready ?: return
         viewModelScope.launch {
             val result = scoringUseCase.calculate(
@@ -109,6 +111,10 @@ class PrePostViewModel(
                 studentAnswers = current.answers
             )
             prePostRepository.saveTestResult(studentId, quarterId, testType, result.score, result.total)
+            
+            // Trigger sync immediately!
+            SyncPrePostUseCase().execute(context)
+
             _uiState.value = current.copy(isSubmitted = true, score = result.score, total = result.total)
         }
     }
@@ -128,6 +134,7 @@ fun PreTestGateScreen(
     onBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(quarterId) {
         viewModel.load(studentId, quarterId, TestType.PRE)
@@ -166,7 +173,7 @@ fun PreTestGateScreen(
                     onAnswer = { qId, answer -> viewModel.answer(qId, answer) },
                     onNext = { viewModel.next() },
                     onPrevious = { viewModel.previous() },
-                    onSubmit = { viewModel.submit(studentId, quarterId, TestType.PRE) }
+                    onSubmit = { viewModel.submit(context, studentId, quarterId, TestType.PRE) }
                 )
             }
             else -> Unit
@@ -188,6 +195,7 @@ fun PostTestScreen(
     onBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(quarterId) {
         viewModel.load(studentId, quarterId, TestType.POST)
@@ -222,7 +230,7 @@ fun PostTestScreen(
                         onAnswer = { qId, answer -> viewModel.answer(qId, answer) },
                         onNext = { viewModel.next() },
                         onPrevious = { viewModel.previous() },
-                        onSubmit = { viewModel.submit(studentId, quarterId, TestType.POST) }
+                        onSubmit = { viewModel.submit(context, studentId, quarterId, TestType.POST) }
                     )
                 }
             }
