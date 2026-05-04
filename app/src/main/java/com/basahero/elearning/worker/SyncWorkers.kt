@@ -219,7 +219,7 @@ class SyncPrePostWorker(
 
             val rows = validRows.map { entity ->
                 PrePostRow(
-                    id = entity.id,
+                    id = "${entity.studentId}_${entity.quarterId}_${entity.testType}",
                     student_id = entity.studentId,
                     quarter_id = entity.quarterId,
                     test_type = entity.testType,
