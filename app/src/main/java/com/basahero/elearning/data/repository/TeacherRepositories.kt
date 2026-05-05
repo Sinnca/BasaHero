@@ -390,7 +390,37 @@ class ProgressMonitorRepository {
         }
     }
 
-    // Pre vs Post comparison for all students in a class per quarter
+    // Get pre/post test results for a SINGLE student across all quarters
+    suspend fun getStudentPrePostTests(studentId: String): List<PrePostComparison> {
+        return try {
+            val tests = SupabaseClient.client
+                .from("pre_post_test")
+                .select { filter { eq("student_id", studentId) } }
+                .decodeList<PrePostTestRow>()
+
+            // Group by quarter_id
+            val byQuarter = tests.groupBy { it.quarter_id }
+
+            byQuarter.map { (quarterId, quarterTests) ->
+                val pre  = quarterTests.firstOrNull { it.test_type == "PRE" }
+                val post = quarterTests.firstOrNull { it.test_type == "POST" }
+                PrePostComparison(
+                    studentId  = studentId,
+                    studentName = "",
+                    quarterId  = quarterId,
+                    preScore   = pre?.score,
+                    preTotal   = pre?.total,
+                    postScore  = post?.score,
+                    postTotal  = post?.total
+                )
+            }.sortedBy { it.quarterId }
+        } catch (e: Exception) {
+            Log.e(tag, "Get student pre/post tests failed: ${e.message}")
+            emptyList()
+        }
+    }
+
+
     suspend fun getPrePostComparison(classId: String, quarterId: String): List<PrePostComparison> {
         return try {
             // Get all students in class
