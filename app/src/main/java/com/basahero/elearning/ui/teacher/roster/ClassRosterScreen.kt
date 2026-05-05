@@ -28,6 +28,7 @@ fun ClassRosterScreen(
     gradeLevel: Int,
     viewModel: ClassRosterViewModel,
     onStudentClick: (studentId: String, studentName: String) -> Unit,
+    onAnalyticsClick: () -> Unit,
     onBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -69,6 +70,10 @@ fun ClassRosterScreen(
                     }
                 },
                 actions = {
+                    // Analytics button
+                    IconButton(onClick = onAnalyticsClick) {
+                        Icon(Icons.Default.BarChart, "Class Analytics")
+                    }
                     // Import CSV
                     IconButton(onClick = { csvLauncher.launch("text/csv") }) {
                         Icon(Icons.Default.Upload, "Import CSV")

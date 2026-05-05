@@ -763,6 +763,8 @@ import com.basahero.elearning.ui.teacher.roster.ClassRosterViewModel
 
 import com.basahero.elearning.ui.teacher.progress.StudentProgressScreen
 import com.basahero.elearning.ui.teacher.progress.StudentProgressViewModel
+import com.basahero.elearning.ui.teacher.analytics.ClassAnalyticsScreen
+import com.basahero.elearning.ui.teacher.analytics.ClassAnalyticsViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -795,6 +797,7 @@ object Routes {
     const val TEACHER_DASHBOARD = "teacher_dashboard"
     const val CLASS_ROSTER = "class_roster/{classId}"
     const val STUDENT_PROGRESS = "student_progress/{studentId}/{studentName}"
+    const val CLASS_ANALYTICS   = "class_analytics/{classId}/{className}"
     const val GAME_HOST = "game_host/{classId}"
 }
 
@@ -1081,8 +1084,10 @@ fun PhilIRIApp() {
                 gradeLevel = gradeLevel,
                 viewModel = viewModel,
                 onStudentClick = { studentId, studentName ->
-                    // Go to student progress
                     navController.navigate("student_progress/$studentId/$studentName")
+                },
+                onAnalyticsClick = {
+                    navController.navigate("class_analytics/$classId/$className")
                 },
                 onBack = { navController.popBackStack() }
             )
@@ -1106,6 +1111,31 @@ fun PhilIRIApp() {
                 studentId = studentId,
                 studentName = studentName,
                 viewModel = viewModel,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.CLASS_ANALYTICS) { backStackEntry ->
+            val classId   = backStackEntry.arguments?.getString("classId")   ?: ""
+            val className = backStackEntry.arguments?.getString("className")  ?: ""
+
+            val viewModel: ClassAnalyticsViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        val repo = com.basahero.elearning.data.repository.ProgressMonitorRepository()
+                        return ClassAnalyticsViewModel(repo) as T
+                    }
+                }
+            )
+
+            ClassAnalyticsScreen(
+                classId   = classId,
+                className = className,
+                viewModel = viewModel,
+                onStudentClick = { studentId, studentName ->
+                    navController.navigate("student_progress/$studentId/$studentName")
+                },
                 onBack = { navController.popBackStack() }
             )
         }
