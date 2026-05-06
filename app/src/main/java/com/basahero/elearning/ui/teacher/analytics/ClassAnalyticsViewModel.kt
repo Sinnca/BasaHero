@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.basahero.elearning.data.repository.LessonPerformance
 import com.basahero.elearning.data.repository.ProgressMonitorRepository
 import com.basahero.elearning.data.repository.StudentInfo
+import com.basahero.elearning.data.repository.LessonRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +25,8 @@ data class ClassAnalyticsUiState(
 )
 
 class ClassAnalyticsViewModel(
-    private val repo: ProgressMonitorRepository
+    private val repo: ProgressMonitorRepository,
+    private val lessonRepo: LessonRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ClassAnalyticsUiState())
@@ -39,11 +41,17 @@ class ClassAnalyticsViewModel(
 
                 val lessons  = lessonsDeferred.await()
                 val atRisk   = atRiskDeferred.await()
+                
+                // Map lessonId to actual lesson title using LessonRepository
+                val resolvedLessons = lessons.map { lesson ->
+                    val actualLesson = lessonRepo.getLessonById(lesson.lessonId)
+                    lesson.copy(lessonTitle = actualLesson?.title ?: lesson.lessonId)
+                }
 
                 _uiState.update {
                     it.copy(
                         isLoading        = false,
-                        lessonPerformance = lessons,
+                        lessonPerformance = resolvedLessons,
                         atRiskStudents    = atRisk
                     )
                 }

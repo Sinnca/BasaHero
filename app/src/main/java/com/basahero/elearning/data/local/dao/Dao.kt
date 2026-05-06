@@ -92,6 +92,9 @@ interface StudentDao {
     @Query("SELECT * FROM student WHERE id = :id")
     suspend fun getById(id: String): StudentEntity?
 
+    @Query("SELECT * FROM student WHERE grade_level = :gradeLevel ORDER BY full_name ASC")
+    suspend fun getByGradeLevel(gradeLevel: Int): List<StudentEntity>
+
     @Query("SELECT * FROM student WHERE class_id = :classId ORDER BY full_name ASC")
     fun observeByClass(classId: String): Flow<List<StudentEntity>>
 
