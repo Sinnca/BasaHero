@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
@@ -496,15 +498,48 @@ fun PhilIRIApp() {
     }           // end PhilIRITheme
 }
 
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 fun RoleSelectScreen(onStudentClick: () -> Unit, onTeacherClick: () -> Unit) {
     // ── Animated entrance ───────────────────────────────────────────────────
     val alpha = remember { androidx.compose.animation.core.Animatable(0f) }
-    val slideY = remember { androidx.compose.animation.core.Animatable(40f) }
+    val scale = remember { androidx.compose.animation.core.Animatable(0.8f) }
+    
+    // Floating animation for logo
+    val infiniteTransition = androidx.compose.animation.core.rememberInfiniteTransition(label = "float")
+    val offsetY by infiniteTransition.animateFloat(
+        initialValue = -12f,
+        targetValue = 12f,
+        animationSpec = androidx.compose.animation.core.infiniteRepeatable(
+            animation = androidx.compose.animation.core.tween(2500, easing = androidx.compose.animation.core.EaseInOutSine),
+            repeatMode = androidx.compose.animation.core.RepeatMode.Reverse
+        ),
+        label = "floatAnim"
+    )
+
+    // Background sparkle animation
+    val sparkleAlpha by infiniteTransition.animateFloat(
+        initialValue = 0.2f,
+        targetValue = 0.8f,
+        animationSpec = androidx.compose.animation.core.infiniteRepeatable(
+            animation = androidx.compose.animation.core.tween(1500, easing = androidx.compose.animation.core.FastOutSlowInEasing),
+            repeatMode = androidx.compose.animation.core.RepeatMode.Reverse
+        ),
+        label = "sparkle"
+    )
+
     LaunchedEffect(Unit) {
         kotlinx.coroutines.coroutineScope {
-            launch { alpha.animateTo(1f, androidx.compose.animation.core.tween(700)) }
-            launch { slideY.animateTo(0f, androidx.compose.animation.core.tween(700, easing = androidx.compose.animation.core.EaseOutCubic)) }
+            launch { alpha.animateTo(1f, androidx.compose.animation.core.tween(800)) }
+            launch { 
+                scale.animateTo(
+                    1f, 
+                    androidx.compose.animation.core.spring(
+                        dampingRatio = 0.6f, 
+                        stiffness = 150f
+                    )
+                ) 
+            }
         }
     }
 
@@ -515,154 +550,212 @@ fun RoleSelectScreen(onStudentClick: () -> Unit, onTeacherClick: () -> Unit) {
             .background(
                 androidx.compose.ui.graphics.Brush.verticalGradient(
                     listOf(
-                        androidx.compose.ui.graphics.Color(0xFF1A56C4),
+                        androidx.compose.ui.graphics.Color(0xFF327CF7),
                         androidx.compose.ui.graphics.Color(0xFF1340A0),
-                        androidx.compose.ui.graphics.Color(0xFF0D2F82)
+                        androidx.compose.ui.graphics.Color(0xFF07153A)
                     )
                 )
             ),
         contentAlignment = Alignment.Center
     ) {
+        // Fun background floating elements
+        androidx.compose.foundation.Canvas(modifier = androidx.compose.ui.Modifier.fillMaxSize()) {
+            // Draw floating soft circles
+            drawCircle(
+                color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.04f),
+                radius = 240f,
+                center = androidx.compose.ui.geometry.Offset(size.width * 0.15f, size.height * 0.2f + offsetY)
+            )
+            drawCircle(
+                color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.06f),
+                radius = 400f,
+                center = androidx.compose.ui.geometry.Offset(size.width * 0.85f, size.height * 0.8f - offsetY)
+            )
+
+            // Draw "sparkles" (small stars)
+            val starColor = androidx.compose.ui.graphics.Color.White.copy(alpha = sparkleAlpha)
+            val stars = listOf(
+                androidx.compose.ui.geometry.Offset(size.width * 0.2f, size.height * 0.3f),
+                androidx.compose.ui.geometry.Offset(size.width * 0.7f, size.height * 0.15f),
+                androidx.compose.ui.geometry.Offset(size.width * 0.4f, size.height * 0.8f),
+                androidx.compose.ui.geometry.Offset(size.width * 0.9f, size.height * 0.4f),
+                androidx.compose.ui.geometry.Offset(size.width * 0.1f, size.height * 0.65f)
+            )
+            stars.forEach { pos ->
+                drawCircle(color = starColor, radius = 4f, center = pos)
+                drawLine(color = starColor, start = pos.copy(x = pos.x - 8f), end = pos.copy(x = pos.x + 8f), strokeWidth = 1f)
+                drawLine(color = starColor, start = pos.copy(y = pos.y - 8f), end = pos.copy(y = pos.y + 8f), strokeWidth = 1f)
+            }
+        }
+
         Column(
             modifier = androidx.compose.ui.Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp)
                 .graphicsLayer {
                     this.alpha = alpha.value
-                    translationY = slideY.value
+                    this.scaleX = scale.value
+                    this.scaleY = scale.value
                 },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // ── Stacked-books logo (drawn with Canvas) ──────────────────────
+            // ── Custom Superhero Shield Logo (No Emoji) ──────────────────────
             androidx.compose.foundation.Canvas(
-                modifier = androidx.compose.ui.Modifier.size(80.dp)
+                modifier = androidx.compose.ui.Modifier
+                    .size(100.dp)
+                    .graphicsLayer { translationY = offsetY }
             ) {
                 val w = size.width
                 val h = size.height
-                val bookH = h * 0.28f
-                val bookW = w * 0.72f
-                val gap = h * 0.06f
-                val cornerR = 10f
-
-                // Back book — blue
-                drawRoundRect(
-                    color = androidx.compose.ui.graphics.Color(0xFF1565C0),
-                    topLeft = androidx.compose.ui.geometry.Offset((w - bookW) / 2f + 12f, h * 0.12f),
-                    size = androidx.compose.ui.geometry.Size(bookW, bookH),
-                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(cornerR)
+                val path = androidx.compose.ui.graphics.Path().apply {
+                    moveTo(w * 0.5f, 0f)
+                    cubicTo(w * 0.8f, 0f, w, h * 0.2f, w, h * 0.5f)
+                    cubicTo(w, h * 0.9f, w * 0.5f, h, w * 0.5f, h)
+                    cubicTo(w * 0.5f, h, 0f, h * 0.9f, 0f, h * 0.5f)
+                    cubicTo(0f, h * 0.2f, w * 0.2f, 0f, w * 0.5f, 0f)
+                }
+                drawPath(path, color = androidx.compose.ui.graphics.Color(0xFFE53935))
+                
+                // Draw a "B" (for BasaHero) inside the shield
+                drawCircle(
+                    color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.2f),
+                    radius = w * 0.35f,
+                    center = androidx.compose.ui.geometry.Offset(w * 0.5f, h * 0.45f)
                 )
-                // Middle book — red
+                
+                // Book-like shape inside
                 drawRoundRect(
+                    color = androidx.compose.ui.graphics.Color.White,
+                    topLeft = androidx.compose.ui.geometry.Offset(w * 0.3f, h * 0.35f),
+                    size = androidx.compose.ui.geometry.Size(w * 0.4f, h * 0.25f),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(8f)
+                )
+                drawLine(
                     color = androidx.compose.ui.graphics.Color(0xFFE53935),
-                    topLeft = androidx.compose.ui.geometry.Offset((w - bookW) / 2f + 4f, h * 0.12f + bookH + gap),
-                    size = androidx.compose.ui.geometry.Size(bookW, bookH),
-                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(cornerR)
-                )
-                // Front book — green
-                drawRoundRect(
-                    color = androidx.compose.ui.graphics.Color(0xFF43A047),
-                    topLeft = androidx.compose.ui.geometry.Offset((w - bookW) / 2f, h * 0.12f + (bookH + gap) * 2f),
-                    size = androidx.compose.ui.geometry.Size(bookW, bookH),
-                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(cornerR)
+                    start = androidx.compose.ui.geometry.Offset(w * 0.5f, h * 0.35f),
+                    end = androidx.compose.ui.geometry.Offset(w * 0.5f, h * 0.6f),
+                    strokeWidth = 3f
                 )
             }
 
-            Spacer(androidx.compose.ui.Modifier.height(20.dp))
+            Spacer(androidx.compose.ui.Modifier.height(24.dp))
 
             // ── App title ───────────────────────────────────────────────────
             Text(
                 text = "BASAhero",
-                fontSize = 38.sp,
-                fontWeight = FontWeight.Bold,
+                fontSize = 52.sp,
+                fontWeight = FontWeight.Black,
                 color = androidx.compose.ui.graphics.Color.White,
-                letterSpacing = 0.5.sp
+                letterSpacing = 3.sp,
+                style = androidx.compose.ui.text.TextStyle(
+                    shadow = androidx.compose.ui.graphics.Shadow(
+                        color = androidx.compose.ui.graphics.Color(0x88000000),
+                        offset = androidx.compose.ui.geometry.Offset(0f, 8f),
+                        blurRadius = 16f
+                    )
+                )
             )
 
-            Spacer(androidx.compose.ui.Modifier.height(6.dp))
+            Spacer(androidx.compose.ui.Modifier.height(4.dp))
 
             Text(
                 text = "MATATAG English · Grade 4–6",
-                fontSize = 14.sp,
-                color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.75f),
-                letterSpacing = 0.3.sp
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold,
+                color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.85f),
+                letterSpacing = 1.sp
             )
 
-            Spacer(androidx.compose.ui.Modifier.height(56.dp))
+            Spacer(androidx.compose.ui.Modifier.height(60.dp))
 
-            // ── "Who are you?" prompt ───────────────────────────────────────
+            // ── "Select Account Type" ───────────────────────────────────────
             Text(
-                text = "Who are you?",
+                text = "GET STARTED",
                 fontSize = 14.sp,
-                color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.65f)
+                fontWeight = FontWeight.ExtraBold,
+                color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.6f),
+                letterSpacing = 2.sp
             )
 
             Spacer(androidx.compose.ui.Modifier.height(16.dp))
 
-            // ── Student button ──────────────────────────────────────────────
-            Button(
+            // ── Student card ────────────────────────────────────────────────
+            Card(
                 onClick = onStudentClick,
                 modifier = androidx.compose.ui.Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
+                    .height(96.dp),
                 shape = RoundedCornerShape(28.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = androidx.compose.ui.graphics.Color.White,
-                    contentColor = androidx.compose.ui.graphics.Color(0xFF1340A0)
-                ),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+                colors = CardDefaults.cardColors(containerColor = androidx.compose.ui.graphics.Color.White),
+                elevation = CardDefaults.cardElevation(defaultElevation = 12.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = null,
-                    modifier = androidx.compose.ui.Modifier.size(20.dp)
-                )
-                Spacer(androidx.compose.ui.Modifier.width(10.dp))
-                Text(
-                    text = "I am a Student",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
+                Row(
+                    modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier.size(56.dp).background(androidx.compose.ui.graphics.Color(0xFF1340A0).copy(alpha = 0.1f), CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(Icons.Default.Person, contentDescription = null, tint = androidx.compose.ui.graphics.Color(0xFF1340A0), modifier = Modifier.size(32.dp))
+                    }
+                    Spacer(Modifier.width(20.dp))
+                    Column {
+                        Text(
+                            text = "Student",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Black,
+                            color = androidx.compose.ui.graphics.Color(0xFF1340A0)
+                        )
+                        Text(
+                            text = "Start your learning journey",
+                            fontSize = 13.sp,
+                            color = androidx.compose.ui.graphics.Color(0xFF1340A0).copy(alpha = 0.6f)
+                        )
+                    }
+                }
             }
 
-            Spacer(androidx.compose.ui.Modifier.height(12.dp))
+            Spacer(androidx.compose.ui.Modifier.height(16.dp))
 
-            // ── Teacher button ──────────────────────────────────────────────
-            Button(
+            // ── Teacher card ────────────────────────────────────────────────
+            Card(
                 onClick = onTeacherClick,
                 modifier = androidx.compose.ui.Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
+                    .height(96.dp),
                 shape = RoundedCornerShape(28.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.15f),
-                    contentColor = androidx.compose.ui.graphics.Color.White
-                ),
-                border = BorderStroke(1.5.dp, androidx.compose.ui.graphics.Color.White.copy(alpha = 0.4f)),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+                colors = CardDefaults.cardColors(containerColor = androidx.compose.ui.graphics.Color(0xFF1340A0).copy(alpha = 0.9f)),
+                border = BorderStroke(2.dp, androidx.compose.ui.graphics.Color.White.copy(alpha = 0.3f)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.School,
-                    contentDescription = null,
-                    modifier = androidx.compose.ui.Modifier.size(20.dp)
-                )
-                Spacer(androidx.compose.ui.Modifier.width(10.dp))
-                Text(
-                    text = "I am a Teacher",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
+                Row(
+                    modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier.size(56.dp).background(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.15f), CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(Icons.Default.School, contentDescription = null, tint = androidx.compose.ui.graphics.Color.White, modifier = Modifier.size(32.dp))
+                    }
+                    Spacer(Modifier.width(20.dp))
+                    Column {
+                        Text(
+                            text = "Teacher",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Black,
+                            color = androidx.compose.ui.graphics.Color.White
+                        )
+                        Text(
+                            text = "Manage classes & analytics",
+                            fontSize = 13.sp,
+                            color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.6f)
+                        )
+                    }
+                }
             }
-
-            Spacer(androidx.compose.ui.Modifier.height(40.dp))
-
-            // ── Grade footer ────────────────────────────────────────────────
-            Text(
-                text = "Grade 4  ·  Grade 5  ·  Grade 6",
-                fontSize = 12.sp,
-                color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.45f),
-                letterSpacing = 0.5.sp
-            )
         }
     }
 }
