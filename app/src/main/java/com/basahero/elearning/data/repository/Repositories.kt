@@ -71,6 +71,36 @@ class StudentRepository(private val db: AppDatabase) {
         return db.studentDao().getById(studentId)?.toDomain()
     }
 
+    suspend fun getStudentsByGrade(gradeLevel: Int): List<Student> {
+        try {
+            val remoteStudents = SupabaseClient.client
+                .from("student")
+                .select { filter { eq("grade_level", gradeLevel) } }
+                .decodeList<StudentRow>()
+                
+            val entities = remoteStudents.map { remoteStudent ->
+                StudentEntity(
+                    id = remoteStudent.id,
+                    classId = remoteStudent.class_id ?: "",
+                    fullName = remoteStudent.full_name,
+                    section = remoteStudent.section,
+                    gradeLevel = remoteStudent.grade_level,
+                    lastActive = remoteStudent.last_active?.let { 
+                        try { java.time.Instant.parse(it).toEpochMilli() } catch(e:Exception) { null } 
+                    },
+                    synced = true,
+                    createdAt = remoteStudent.created_at?.let { 
+                        try { java.time.Instant.parse(it).toEpochMilli() } catch(e:Exception) { System.currentTimeMillis() }
+                    } ?: System.currentTimeMillis()
+                )
+            }
+            db.studentDao().insertOrUpdateAll(entities)
+        } catch (e: Exception) {
+            Log.e("StudentRepository", "Supabase getStudentsByGrade failed: ${e.message}", e)
+        }
+        return db.studentDao().getByGradeLevel(gradeLevel).map { it.toDomain() }
+    }
+
     suspend fun updateLastActive(studentId: String) {
         db.studentDao().updateLastActive(studentId, System.currentTimeMillis())
     }
