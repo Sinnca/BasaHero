@@ -86,6 +86,34 @@ class TeacherLoginViewModel(
         }
     }
 
+    // ── Google Sign-In handlers ──────────────────────────────────────────────
+
+    /** Called after Google native sign-in succeeds (Supabase session is already active) */
+    fun handleGoogleSignInSuccess() {
+        viewModelScope.launch {
+            _authState.value = AuthState.Loading
+            val result = authRepository.getOrCreateTeacherProfile()
+            result.fold(
+                onSuccess = { teacher ->
+                    sessionManager.setTeacherLoggedIn(true)
+                    _authState.value = AuthState.Success(teacher)
+                },
+                onFailure = { e ->
+                    _authState.value = AuthState.Error(
+                        "Google sign-in failed: ${e.localizedMessage ?: e.message}"
+                    )
+                }
+            )
+        }
+    }
+
+    /** Called when Google sign-in fails or is cancelled */
+    fun handleGoogleSignInError(message: String) {
+        _authState.value = AuthState.Error(message)
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+
     private fun validateInputs(email: String, password: String): Boolean {
         return when {
             email.isBlank() -> {

@@ -22,6 +22,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.basahero.elearning.data.repository.TeacherProfile
+import com.basahero.elearning.data.remote.SupabaseClient
+import io.github.jan.supabase.compose.auth.composeAuth
+import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
+import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +40,33 @@ fun TeacherLoginScreen(
     var fullName by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
+
+    // ── Google Sign-In action ────────────────────────────────────────────────
+    val googleSignInAction = SupabaseClient.client.composeAuth.rememberSignInWithGoogle(
+        onResult = { result ->
+            when (result) {
+                is NativeSignInResult.Success -> {
+                    viewModel.handleGoogleSignInSuccess()
+                }
+                is NativeSignInResult.Error -> {
+                    viewModel.handleGoogleSignInError(
+                        result.message ?: "Google sign-in failed. Please try again."
+                    )
+                }
+                is NativeSignInResult.ClosedByUser -> {
+                    // User cancelled — do nothing
+                }
+                is NativeSignInResult.NetworkError -> {
+                    viewModel.handleGoogleSignInError(
+                        "No internet connection. Please check your Wi-Fi."
+                    )
+                }
+                else -> {
+                    viewModel.handleGoogleSignInError("Sign-in was interrupted.")
+                }
+            }
+        }
+    )
 
     LaunchedEffect(authState) {
         if (authState is TeacherLoginViewModel.AuthState.Success) {
@@ -133,7 +164,107 @@ fun TeacherLoginScreen(
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(Modifier.height(32.dp))
+                    Spacer(Modifier.height(24.dp))
+
+                    // ── Google Sign-In Button ────────────────────────────────
+                    OutlinedButton(
+                        onClick = { googleSignInAction.startFlow() },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp),
+                        shape = RoundedCornerShape(14.dp),
+                        border = androidx.compose.foundation.BorderStroke(
+                            1.5.dp, Color(0xFFE2E8F0)
+                        ),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = Color.White
+                        ),
+                        enabled = authState !is TeacherLoginViewModel.AuthState.Loading
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            // Google "G" logo drawn with Canvas
+                            Canvas(modifier = Modifier.size(20.dp)) {
+                                // Red arc (top-right)
+                                drawArc(
+                                    color = Color(0xFFEA4335),
+                                    startAngle = -10f, sweepAngle = -110f,
+                                    useCenter = true,
+                                    size = size
+                                )
+                                // Yellow arc (bottom-right)
+                                drawArc(
+                                    color = Color(0xFFFBBC05),
+                                    startAngle = -120f, sweepAngle = -80f,
+                                    useCenter = true,
+                                    size = size
+                                )
+                                // Green arc (bottom-left)
+                                drawArc(
+                                    color = Color(0xFF34A853),
+                                    startAngle = -200f, sweepAngle = -80f,
+                                    useCenter = true,
+                                    size = size
+                                )
+                                // Blue arc (top-left + bar)
+                                drawArc(
+                                    color = Color(0xFF4285F4),
+                                    startAngle = -280f, sweepAngle = -90f,
+                                    useCenter = true,
+                                    size = size
+                                )
+                                // White center to make it look like a "G"
+                                drawCircle(
+                                    color = Color.White,
+                                    radius = size.minDimension * 0.32f
+                                )
+                                // Blue horizontal bar
+                                drawRect(
+                                    color = Color(0xFF4285F4),
+                                    topLeft = androidx.compose.ui.geometry.Offset(
+                                        size.width * 0.48f, size.height * 0.38f
+                                    ),
+                                    size = androidx.compose.ui.geometry.Size(
+                                        size.width * 0.52f, size.height * 0.24f
+                                    )
+                                )
+                            }
+                            Spacer(Modifier.width(12.dp))
+                            Text(
+                                text = "Continue with Google",
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color(0xFF1E293B)
+                            )
+                        }
+                    }
+
+                    Spacer(Modifier.height(20.dp))
+
+                    // ── Divider ──────────────────────────────────────────────
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        HorizontalDivider(
+                            modifier = Modifier.weight(1f),
+                            color = Color(0xFFE2E8F0)
+                        )
+                        Text(
+                            text = "  or sign in with email  ",
+                            fontSize = 12.sp,
+                            color = Color(0xFF94A3B8),
+                            fontWeight = FontWeight.Medium
+                        )
+                        HorizontalDivider(
+                            modifier = Modifier.weight(1f),
+                            color = Color(0xFFE2E8F0)
+                        )
+                    }
+
+                    Spacer(Modifier.height(20.dp))
 
                     // Fields
                     AnimatedVisibility(visible = viewModel.isSignUpMode) {

@@ -5,6 +5,8 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.realtime.Realtime
+import io.github.jan.supabase.compose.auth.ComposeAuth
+import io.github.jan.supabase.compose.auth.googleNativeLogin
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SupabaseClient
@@ -20,5 +22,8 @@ object SupabaseClient {
         install(Postgrest)          // Database queries (student_progress)
         install(Auth)               // Teacher login / signup
         install(Realtime)           // Live updates
+        install(ComposeAuth) {      // Google Sign-In via Credential Manager
+            googleNativeLogin(serverClientId = BuildConfig.GOOGLE_WEB_CLIENT_ID)
+        }
     }
 }
