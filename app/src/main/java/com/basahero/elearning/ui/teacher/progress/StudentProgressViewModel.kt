@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.basahero.elearning.data.repository.PrePostComparison
 import com.basahero.elearning.data.repository.ProgressMonitorRepository
 import com.basahero.elearning.data.repository.StudentProgressSummary
+import com.basahero.elearning.data.repository.LessonRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +22,8 @@ data class StudentProgressUiState(
 )
 
 class StudentProgressViewModel(
-    private val progressMonitorRepository: ProgressMonitorRepository
+    private val progressMonitorRepository: ProgressMonitorRepository,
+    private val lessonRepository: LessonRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(StudentProgressUiState())
@@ -38,11 +40,24 @@ class StudentProgressViewModel(
                 val progress = progressDeferred.await()
                 val prePost  = prePostDeferred.await()
 
+                val resolvedProgress = progress.map { p ->
+                    val actualLesson = lessonRepository.getLessonById(p.lessonId)
+                    p.copy(
+                        lessonTitle = actualLesson?.title ?: p.lessonId,
+                        competency = actualLesson?.competency ?: ""
+                    )
+                }
+
+                val resolvedPrePost = prePost.map { p ->
+                    val actualQuarter = lessonRepository.getQuarterById(p.quarterId)
+                    p.copy(quarterTitle = actualQuarter?.title ?: p.quarterId)
+                }
+
                 _uiState.update {
                     it.copy(
                         isLoading    = false,
-                        progressList = progress,
-                        prePostList  = prePost
+                        progressList = resolvedProgress,
+                        prePostList  = resolvedPrePost
                     )
                 }
             } catch (e: Exception) {

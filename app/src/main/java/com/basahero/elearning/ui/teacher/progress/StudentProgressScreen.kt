@@ -336,10 +336,7 @@ fun PrePostComparisonCard(comparison: PrePostComparison) {
     val animatedPre  by animateFloatAsState(targetValue = prePct,  animationSpec = tween(600), label = "pre")
     val animatedPost by animateFloatAsState(targetValue = postPct, animationSpec = tween(700), label = "post")
 
-    val quarterLabel = comparison.quarterId
-        .replace("q-gr", "Grade ")
-        .replace("-q", " · Quarter ")
-        .replaceFirstChar { it.uppercase() }
+    val quarterLabel = comparison.quarterTitle
 
     Card(
         modifier = Modifier.fillMaxWidth(),

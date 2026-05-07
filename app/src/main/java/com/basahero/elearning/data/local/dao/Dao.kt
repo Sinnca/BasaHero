@@ -101,11 +101,24 @@ interface StudentDao {
     @Query("SELECT * FROM student WHERE synced = 0")
     suspend fun getUnsynced(): List<StudentEntity>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOrUpdate(student: StudentEntity)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertIgnore(student: StudentEntity): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOrUpdateAll(students: List<StudentEntity>)
+    @Update
+    suspend fun update(student: StudentEntity)
+
+    @Transaction
+    suspend fun insertOrUpdate(student: StudentEntity) {
+        val id = insertIgnore(student)
+        if (id == -1L) {
+            update(student)
+        }
+    }
+
+    @Transaction
+    suspend fun insertOrUpdateAll(students: List<StudentEntity>) {
+        students.forEach { insertOrUpdate(it) }
+    }
 
     @Query("UPDATE student SET last_active = :timestamp WHERE id = :studentId")
     suspend fun updateLastActive(studentId: String, timestamp: Long)
