@@ -224,6 +224,35 @@ class TeacherAuthRepository {
     fun isLoggedIn(): Boolean {
         return SupabaseClient.client.auth.currentUserOrNull() != null
     }
+
+    // Called after Google Sign-In to ensure teacher profile exists in public.teacher table
+    suspend fun getOrCreateTeacherProfile(): Result<TeacherProfile> {
+        return try {
+            val user = SupabaseClient.client.auth.currentUserOrNull()
+                ?: return Result.failure(Exception("No authenticated user"))
+
+            val teacher = SupabaseClient.client
+                .from("teacher")
+                .select { filter { eq("id", user.id) } }
+                .decodeSingleOrNull<TeacherRow>()
+
+            if (teacher != null) {
+                Result.success(TeacherProfile(teacher.id, teacher.email, teacher.full_name))
+            } else {
+                // First Google sign-in — create teacher profile from Google account info
+                val email = user.email ?: ""
+                val fullName = user.userMetadata?.get("full_name")?.toString()?.trim('"')
+                    ?: user.userMetadata?.get("name")?.toString()?.trim('"')
+                    ?: email.substringBefore("@")
+                val newTeacher = TeacherRow(id = user.id, email = email, full_name = fullName)
+                SupabaseClient.client.from("teacher").insert(newTeacher)
+                Result.success(TeacherProfile(user.id, email, fullName))
+            }
+        } catch (e: Exception) {
+            Log.e(tag, "Get/create teacher profile failed: ${e.message}")
+            Result.failure(e)
+        }
+    }
 }
 
 

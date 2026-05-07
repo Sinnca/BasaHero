@@ -93,6 +93,9 @@ android {
         buildConfigField("String", "SUPABASE_URL",      "\"$supabaseUrl\"")
         buildConfigField("String", "SUPABASE_ANON_KEY", "\"$supabaseKey\"")
 
+        val googleWebClientId = properties.getProperty("GOOGLE_WEB_CLIENT_ID") ?: ""
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"$googleWebClientId\"")
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
     }
@@ -166,8 +169,14 @@ dependencies {
     // ── Supabase (added) ──────────────────────────────────────────────────
     implementation(libs.supabase.postgrest)
     implementation(libs.supabase.auth)
+    implementation(libs.supabase.compose.auth)
     implementation(libs.supabase.realtime)
     implementation(libs.ktor.client.android)
+
+    // ── Google Sign-In (Credential Manager) ───────────────────────────────
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services)
+    implementation(libs.google.googleid)
 
     // ── Image loading (added) ─────────────────────────────────────────────
     implementation(libs.coil.compose)
