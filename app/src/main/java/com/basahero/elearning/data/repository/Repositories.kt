@@ -131,17 +131,21 @@ class StudentRepository(private val db: AppDatabase) {
                 .decodeList<PrePostTestRow>()
 
             remotePrePost.forEach { row ->
-                val entity = PrePostTestEntity(
-                    id = row.id,
-                    studentId = row.student_id,
-                    quarterId = row.quarter_id,
-                    testType = row.test_type,
-                    score = row.score,
-                    total = row.total,
-                    completedAt = safeParseDate(row.completed_at),
-                    synced = true
-                )
-                db.prePostDao().saveTestResult(entity)
+                try {
+                    val entity = PrePostTestEntity(
+                        id = row.id,
+                        studentId = row.student_id,
+                        quarterId = row.quarter_id,
+                        testType = row.test_type,
+                        score = row.score,
+                        total = row.total,
+                        completedAt = safeParseDate(row.completed_at),
+                        synced = true
+                    )
+                    db.prePostDao().saveTestResult(entity)
+                } catch (e: Exception) {
+                    Log.w("StudentRepository", "Skipping orphaned pre-post record: ${row.id}")
+                }
             }
 
             // 2. Fetch student_progress
@@ -151,20 +155,24 @@ class StudentRepository(private val db: AppDatabase) {
                 .decodeList<ProgressRow>()
 
             remoteProgress.forEach { row ->
-                val entity = StudentProgressEntity(
-                    id = row.id,
-                    studentId = row.student_id,
-                    lessonId = row.lesson_id,
-                    status = row.status,
-                    quizScore = row.quiz_score,
-                    quizTotal = row.quiz_total,
-                    firstScore = row.first_score,
-                    bestScore = row.best_score ?: 0,
-                    attemptCount = row.attempt_count ?: 1,
-                    completedAt = row.completed_at?.let { safeParseDate(it) },
-                    synced = true
-                )
-                db.progressDao().insertOrUpdateProgress(entity)
+                try {
+                    val entity = StudentProgressEntity(
+                        id = row.id,
+                        studentId = row.student_id,
+                        lessonId = row.lesson_id,
+                        status = row.status,
+                        quizScore = row.quiz_score,
+                        quizTotal = row.quiz_total,
+                        firstScore = row.first_score,
+                        bestScore = row.best_score ?: 0,
+                        attemptCount = row.attempt_count ?: 1,
+                        completedAt = row.completed_at?.let { safeParseDate(it) },
+                        synced = true
+                    )
+                    db.progressDao().insertOrUpdateProgress(entity)
+                } catch (e: Exception) {
+                    Log.w("StudentRepository", "Skipping orphaned progress record: ${row.id}")
+                }
             }
         } catch (e: Exception) {
             Log.e("StudentRepository", "Failed to sync student data down: ${e.message}")
