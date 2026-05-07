@@ -136,6 +136,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
@@ -151,11 +152,8 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import com.basahero.elearning.audio.SpeechRecognitionEngine
 import com.basahero.elearning.util.VoskManager
-import org.json.JSONObject
-import org.vosk.Recognizer
-import org.vosk.android.RecognitionListener
-import org.vosk.android.SpeechService
 import java.util.Locale
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -259,17 +257,16 @@ fun WordPronunciationSheet(
     var isListening by remember { mutableStateOf(false) }
     var feedbackResult by remember { mutableStateOf<WordFeedback?>(null) }
     var attemptCount by remember { mutableStateOf(0) }
-    
-    // Vosk specific states
-    val isVoskReady by VoskManager.isReady.collectAsState()
-    var speechService by remember { mutableStateOf<SpeechService?>(null) }
+    var partialText by remember { mutableStateOf("") }
+    var hasHandledResult by remember { mutableStateOf(false) }
 
-    // Clean up recognizer when sheet closes
+    // ── Speech engine (our custom AudioRecord + DSP pipeline) ─────────────────
+    val isVoskReady by VoskManager.isReady.collectAsState()
+    val engine = remember { SpeechRecognitionEngine() }
+    val rmsLevel by engine.rmsLevel.collectAsState()
+
     DisposableEffect(Unit) {
-        onDispose {
-            speechService?.stop()
-            speechService?.shutdown()
-        }
+        onDispose { engine.release() }
     }
 
     // Permission handling
@@ -282,25 +279,11 @@ fun WordPronunciationSheet(
         }
     )
 
-    fun stopListening() {
-        try {
-            speechService?.stop()
-        } catch (e: Exception) {}
-        speechService = null
-        isListening = false
-    }
-
-    fun extractVoskText(jsonStr: String?): String {
-        if (jsonStr == null) return ""
-        return try {
-            JSONObject(jsonStr).getString("text")
-        } catch (e: Exception) {
-            ""
-        }
-    }
-
     fun handleRecognizedText(heard: String) {
-        stopListening()
+        if (hasHandledResult) return  // guard against duplicate callbacks
+        hasHandledResult = true
+        isListening = false
+        partialText = ""
         
         if (heard.isEmpty()) {
             feedbackResult = WordFeedback(word, "I didn't hear anything clearly, try again!", false, 0f)
@@ -310,19 +293,35 @@ fun WordPronunciationSheet(
         attemptCount++
         
         // Basic match logic for kids: strip punctuation and compare
-        val cleanWord = word.lowercase().replace(Regex("[^a-z]"), "")
+        val cleanWord  = word.lowercase().replace(Regex("[^a-z]"), "")
         val cleanHeard = heard.lowercase().replace(Regex("[^a-z]"), "")
         
         val isCorrect = cleanWord == cleanHeard || cleanHeard.contains(cleanWord)
         feedbackResult = WordFeedback(word, heard, isCorrect, 1f)
-        
-        // Save the attempt to the database!
-        val score = if (isCorrect) 100 else 0
         onPronunciationAttempt(word, heard, isCorrect, attemptCount)
     }
 
+    fun stopListening() {
+        isListening = false
+        partialText = ""
+        engine.stopListening { finalText ->
+            if (finalText.isNotEmpty()) handleRecognizedText(finalText)
+        }
+    }
+
+    fun extractVoskText(jsonStr: String?): String {
+        if (jsonStr == null) return ""
+        return try {
+            org.json.JSONObject(jsonStr).getString("text")
+        } catch (e: Exception) {
+            ""
+        }
+    }
+
     fun startListening() {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
             permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
             return
         }
@@ -332,47 +331,20 @@ fun WordPronunciationSheet(
             return
         }
 
-        try {
-            val recognizer = Recognizer(VoskManager.model, 16000.0f)
-            speechService = SpeechService(recognizer, 16000.0f)
-            
-            speechService?.startListening(object : RecognitionListener {
-                override fun onPartialResult(hypothesis: String?) {
-                    // Could update UI with partial results here if needed
-                }
-                
-                override fun onResult(hypothesis: String?) {
-                    val text = extractVoskText(hypothesis)
-                    if (text.isNotEmpty()) {
-                        handleRecognizedText(text)
-                    }
-                }
-                
-                override fun onFinalResult(hypothesis: String?) {
-                    val text = extractVoskText(hypothesis)
-                    // Even if we stopped listening manually, we want to process the final chunk of audio
-                    if (text.isNotEmpty() || isListening) {
-                        handleRecognizedText(text)
-                    }
-                }
-                
-                override fun onError(e: Exception?) {
-                    stopListening()
-                    feedbackResult = WordFeedback(word, "Mic Error: ${e?.message}", false, 0f)
-                }
-                
-                override fun onTimeout() {
-                    stopListening()
-                    feedbackResult = WordFeedback(word, "Timed out, try again", false, 0f)
-                }
-            })
-            
-            isListening = true
-            feedbackResult = null
-            
-        } catch (e: Exception) {
-            feedbackResult = WordFeedback(word, "Failed to start engine", false, 0f)
-        }
+        feedbackResult = null
+        partialText    = ""
+        isListening    = true
+        hasHandledResult = false
+
+        engine.startListening(
+            targetWords = listOf(word),
+            onPartial = { partial -> partialText = partial },
+            onResult  = { text   -> handleRecognizedText(text) },
+            onError   = { msg    ->
+                isListening = false
+                feedbackResult = WordFeedback(word, "Mic Error: $msg", false, 0f)
+            }
+        )
     }
 
     ModalBottomSheet(
@@ -461,19 +433,36 @@ fun WordPronunciationSheet(
                         shape = RoundedCornerShape(20.dp),
                         color = MaterialTheme.colorScheme.errorContainer
                     ) {
-                        Row(
-                            Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        Column(
+                            Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Icon(
-                                Icons.Default.FiberManualRecord, null,
-                                tint = MaterialTheme.colorScheme.error,
-                                modifier = Modifier.size(10.dp)
-                            )
-                            Spacer(Modifier.width(8.dp))
-                            Text(
-                                "Listening... say the word", fontSize = 13.sp,
-                                color = MaterialTheme.colorScheme.error
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    Icons.Default.FiberManualRecord, null,
+                                    tint = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.size(10.dp)
+                                )
+                                Spacer(Modifier.width(8.dp))
+                                Text(
+                                    text = if (partialText.isNotEmpty()) "\"$partialText\""
+                                           else "Listening... say the word",
+                                    fontSize = 13.sp,
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
+                            // Real-time RMS level meter
+                            Spacer(Modifier.height(6.dp))
+                            androidx.compose.material3.LinearProgressIndicator(
+                                progress = { rmsLevel },
+                                modifier = Modifier
+                                    .fillMaxWidth(0.8f)
+                                    .height(4.dp)
+                                    .clip(RoundedCornerShape(2.dp)),
+                                color = MaterialTheme.colorScheme.error,
+                                trackColor = MaterialTheme.colorScheme.error.copy(alpha = 0.2f)
                             )
                         }
                     }

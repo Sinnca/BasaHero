@@ -250,17 +250,6 @@ fun StudentNameSelectScreen(
     var selectedSection by remember { mutableStateOf<String?>(null) }
     
     // Floating background animation
-    val infiniteTransition = androidx.compose.animation.core.rememberInfiniteTransition(label = "float")
-    val offsetY by infiniteTransition.animateFloat(
-        initialValue = -10f,
-        targetValue = 10f,
-        animationSpec = androidx.compose.animation.core.infiniteRepeatable(
-            animation = androidx.compose.animation.core.tween(2500, easing = androidx.compose.animation.core.EaseInOutSine),
-            repeatMode = androidx.compose.animation.core.RepeatMode.Reverse
-        ),
-        label = "floatAnim"
-    )
-
     BackHandler(enabled = selectedSection != null) {
         selectedSection = null
     }
@@ -281,58 +270,30 @@ fun StudentNameSelectScreen(
             .fillMaxSize()
             .background(
                 androidx.compose.ui.graphics.Brush.verticalGradient(
-                    listOf(
-                        themeColor.copy(alpha = 0.9f),
-                        themeColor,
-                        themeColor.copy(alpha = 0.8f)
-                    )
+                    listOf(Color(0xFF2563EB), Color(0xFF1E40AF), Color(0xFF1E3A8A))
                 )
             )
     ) {
-        // Background elements
+        // Magical Floating Blobs
         androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
+            val cw = size.width
+            val ch = size.height
             drawCircle(
-                color = Color.White.copy(alpha = 0.05f),
-                radius = 150f,
-                center = androidx.compose.ui.geometry.Offset(size.width * 0.1f, size.height * 0.15f + offsetY)
+                color = Color.White.copy(alpha = 0.06f),
+                radius = cw * 0.45f,
+                center = androidx.compose.ui.geometry.Offset(cw * 0.85f, ch * 0.08f)
             )
             drawCircle(
-                color = Color.White.copy(alpha = 0.05f),
-                radius = 250f,
-                center = androidx.compose.ui.geometry.Offset(size.width * 0.9f, size.height * 0.85f - offsetY)
+                color = Color.White.copy(alpha = 0.04f),
+                radius = cw * 0.55f,
+                center = androidx.compose.ui.geometry.Offset(cw * 0.15f, ch * 0.92f)
             )
         }
 
         Scaffold(
             containerColor = Color.Transparent
         ) { padding ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        androidx.compose.ui.graphics.Brush.verticalGradient(
-                            listOf(Color(0xFF2563EB), Color(0xFF1E40AF), Color(0xFF1E3A8A))
-                        )
-                    )
-            ) {
-                // Magical Floating Blobs
-                androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
-                    val canvasWidth = size.width
-                    val canvasHeight = size.height
-                    
-                    drawCircle(
-                        color = Color.White.copy(alpha = 0.05f),
-                        radius = canvasWidth * 0.4f,
-                        center = androidx.compose.ui.geometry.Offset(canvasWidth * 0.8f, canvasHeight * 0.1f)
-                    )
-                    drawCircle(
-                        color = Color.White.copy(alpha = 0.03f),
-                        radius = canvasWidth * 0.6f,
-                        center = androidx.compose.ui.geometry.Offset(canvasWidth * 0.2f, canvasHeight * 0.9f)
-                    )
-                }
-
-                Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.fillMaxSize()) {
                     // Header Section
                     Column(
                         modifier = Modifier
@@ -427,7 +388,6 @@ fun StudentNameSelectScreen(
                         }
                     }
                 }
-            }
         }
     }
 }

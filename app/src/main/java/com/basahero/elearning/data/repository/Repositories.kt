@@ -24,7 +24,11 @@ class StudentRepository(private val db: AppDatabase) {
     suspend fun loginStudent(fullName: String, section: String): Student? {
         // 1. Try local check first (for offline/speed)
         val localEntity = db.studentDao().findByNameAndSection(fullName, section)
-        if (localEntity != null) return localEntity.toDomain()
+        if (localEntity != null) {
+            // Sync progress down in case they wiped data but remained logged in
+            try { syncStudentDataDown(localEntity.id) } catch (e: Exception) {}
+            return localEntity.toDomain()
+        }
 
         // 2. Fallback to Supabase if not found locally (handles newly created students)
         return try {
@@ -57,6 +61,10 @@ class StudentRepository(private val db: AppDatabase) {
                     } ?: System.currentTimeMillis()
                 )
                 db.studentDao().insertOrUpdate(entity)
+                
+                // Sync progress down for newly downloaded students
+                syncStudentDataDown(entity.id)
+                
                 entity.toDomain()
             } else {
                 null
@@ -113,6 +121,65 @@ class StudentRepository(private val db: AppDatabase) {
         gradeLevel = gradeLevel,
         lastActive = lastActive
     )
+
+    suspend fun syncStudentDataDown(studentId: String) {
+        try {
+            // 1. Fetch pre_post_test
+            val remotePrePost = SupabaseClient.client
+                .from("pre_post_test")
+                .select { filter { eq("student_id", studentId) } }
+                .decodeList<PrePostTestRow>()
+
+            remotePrePost.forEach { row ->
+                val entity = PrePostTestEntity(
+                    id = row.id,
+                    studentId = row.student_id,
+                    quarterId = row.quarter_id,
+                    testType = row.test_type,
+                    score = row.score,
+                    total = row.total,
+                    completedAt = safeParseDate(row.completed_at),
+                    synced = true
+                )
+                db.prePostDao().saveTestResult(entity)
+            }
+
+            // 2. Fetch student_progress
+            val remoteProgress = SupabaseClient.client
+                .from("student_progress")
+                .select { filter { eq("student_id", studentId) } }
+                .decodeList<ProgressRow>()
+
+            remoteProgress.forEach { row ->
+                val entity = StudentProgressEntity(
+                    id = row.id,
+                    studentId = row.student_id,
+                    lessonId = row.lesson_id,
+                    status = row.status,
+                    quizScore = row.quiz_score,
+                    quizTotal = row.quiz_total,
+                    firstScore = row.first_score,
+                    bestScore = row.best_score ?: 0,
+                    attemptCount = row.attempt_count ?: 1,
+                    completedAt = row.completed_at?.let { safeParseDate(it) },
+                    synced = true
+                )
+                db.progressDao().insertOrUpdateProgress(entity)
+            }
+        } catch (e: Exception) {
+            Log.e("StudentRepository", "Failed to sync student data down: ${e.message}")
+        }
+    }
+
+    private fun safeParseDate(dateStr: String?): Long {
+        if (dateStr.isNullOrBlank()) return System.currentTimeMillis()
+        return try {
+            val cleanStr = dateStr.replace("+00:00", "Z")
+            java.time.Instant.parse(cleanStr).toEpochMilli()
+        } catch (e: Exception) {
+            System.currentTimeMillis()
+        }
+    }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -215,7 +282,21 @@ class LessonRepository(private val db: AppDatabase) {
                 title = lesson.title,
                 passageText = lesson.passageText,
                 imagePath = lesson.imagePath,
-                highlightedWords = lesson.highlightedWords // 👈 Pass it here
+                highlightedWords = lesson.highlightedWords
+            )
+        }
+    }
+
+    suspend fun getQuarterById(quarterId: String): Quarter? {
+        return db.quarterDao().getById(quarterId)?.let { q ->
+            Quarter(
+                id = q.id,
+                gradeLevelId = q.gradeLevelId,
+                quarterNumber = q.quarterNumber,
+                title = q.title,
+                isActive = q.isActive,
+                totalLessons = 0,
+                completedLessons = 0
             )
         }
     }

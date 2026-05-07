@@ -454,7 +454,7 @@ fun PhilIRIApp() {
                     @Suppress("UNCHECKED_CAST")
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
                         val repo = com.basahero.elearning.data.repository.ProgressMonitorRepository()
-                        return StudentProgressViewModel(repo) as T
+                        return StudentProgressViewModel(repo, lessonRepository) as T
                     }
                 }
             )

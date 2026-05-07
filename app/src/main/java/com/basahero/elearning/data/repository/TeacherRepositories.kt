@@ -116,6 +116,7 @@ data class PrePostComparison(
     val studentId: String,
     val studentName: String,
     val quarterId: String,
+    val quarterTitle: String = quarterId,
     val preScore: Int?,
     val preTotal: Int?,
     val postScore: Int?,

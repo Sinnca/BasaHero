@@ -163,7 +163,10 @@ import java.util.UUID
 object IdMapper {
     private val idMap = mutableMapOf<String, String>()
     fun map(oldId: String): String {
-        return idMap.getOrPut(oldId) { UUID.randomUUID().toString() }
+        // Ensure UUIDs are exactly identical across all devices and reinstalls
+        return idMap.getOrPut(oldId) { 
+            UUID.nameUUIDFromBytes(oldId.toByteArray()).toString() 
+        }
     }
 }
 

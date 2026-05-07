@@ -29,6 +29,11 @@ class StudentHomeViewModel(
             val student = studentRepository.getStudentById(studentId) ?: return@launch
             studentRepository.updateLastActive(studentId)
 
+            // Silently sync progress down from cloud to restore any lost data
+            launch {
+                studentRepository.syncStudentDataDown(studentId)
+            }
+
             lessonRepository
                 .getQuartersWithProgress(student.gradeLevel, studentId)
                 .collect { quarters ->
