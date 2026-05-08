@@ -157,9 +157,22 @@ class GameHostViewModel(
         _uiState.update { it.copy(phase = GamePhase.REVEAL) }
     }
 
+    private var isSessionHandled = false
+
     fun endGame() {
+        if (isSessionHandled) return
+        isSessionHandled = true
         viewModelScope.launch {
-            _uiState.value.session?.id?.let { withContext(Dispatchers.IO) { gameRepo.endSession(it) } }
+            val state = _uiState.value
+            state.session?.id?.let { sessionId ->
+                withContext(Dispatchers.IO) {
+                    if (state.phase == GamePhase.LOBBY) {
+                        gameRepo.deleteSession(sessionId)
+                    } else {
+                        gameRepo.endSession(sessionId)
+                    }
+                }
+            }
             _uiState.update { it.copy(phase = GamePhase.DONE) }
         }
     }
@@ -168,10 +181,19 @@ class GameHostViewModel(
         super.onCleared()
         sessionJob?.cancel()
         answersJob?.cancel()
-        // End the session even if the ViewModel is destroyed (e.g. app closed)
-        _uiState.value.session?.id?.let { sessionId ->
+        
+        if (isSessionHandled) return
+        isSessionHandled = true
+        
+        // Clean up the session even if the ViewModel is destroyed (e.g. app closed)
+        val state = _uiState.value
+        state.session?.id?.let { sessionId ->
             kotlinx.coroutines.GlobalScope.launch(Dispatchers.IO) {
-                gameRepo.endSession(sessionId)
+                if (state.phase == GamePhase.LOBBY) {
+                    gameRepo.deleteSession(sessionId)
+                } else {
+                    gameRepo.endSession(sessionId)
+                }
             }
         }
     }

@@ -168,6 +168,15 @@ class GameRepository {
         } catch (e: Exception) { Log.e(tag, "endSession error: ${e.message}") }
     }
 
+    suspend fun deleteSession(sessionId: String) {
+        try {
+            SupabaseClient.client.from("game_session").delete {
+                filter { eq("id", sessionId) }
+            }
+            Log.d(tag, "Deleted unused session $sessionId")
+        } catch (e: Exception) { Log.e(tag, "deleteSession error: ${e.message}") }
+    }
+
     suspend fun submitAnswer(sessionId: String, studentId: String, questionId: String, answerGiven: String, isCorrect: Boolean, responseTimeMs: Int) {
         try {
             val row = GameAnswerRow(
