@@ -99,14 +99,14 @@ object Routes {
     const val QUIZ_RESULT = "quiz_result/{lessonId}/{score}/{total}"
     const val PRONUNCIATION = "pronunciation/{lessonId}"
     const val GAME_JOIN = "game_join"
-    const val GAME_PLAY = "game_play/{sessionId}"
-    const val GAME_RESULT = "game_result/{sessionId}"
+    const val GAME_PLAY = "game_play/{sessionId}/{studentId}"
+    const val GAME_RESULT = "game_result/{sessionId}/{studentId}"
     const val TEACHER_LOGIN = "teacher_login"
     const val TEACHER_DASHBOARD = "teacher_dashboard"
     const val CLASS_ROSTER = "class_roster/{classId}"
     const val STUDENT_PROGRESS = "student_progress/{studentId}/{studentName}"
     const val CLASS_ANALYTICS   = "class_analytics/{classId}/{className}"
-    const val GAME_HOST = "game_host/{classId}"
+    const val GAME_HOST = "game_host/{classId}/{lessonId}"
 }
 
 @Composable
@@ -246,6 +246,7 @@ fun PhilIRIApp() {
                     // ✅ FIXED: Now goes straight to the Lesson List instead of popping up the pre-test!
                     navController.navigate("lesson_list/$quarterId")
                 },
+                onJoinGameClick = { navController.navigate(Routes.GAME_JOIN) },
                 onLogout = {
                     coroutineScope.launch { sessionManager.clearStudentSession() }
                     navController.navigate(Routes.ROLE_SELECT) { popUpTo(0) }
@@ -377,9 +378,7 @@ fun PhilIRIApp() {
         // Placeholders
         composable(Routes.QUARTER_MENU) { PlaceholderScreen("Quarter Menu") }
         composable(Routes.PRONUNCIATION) { PlaceholderScreen("Pronunciation Checker") }
-        composable(Routes.GAME_JOIN) { PlaceholderScreen("Join Game") }
-        composable(Routes.GAME_PLAY) { PlaceholderScreen("Game Play") }
-        composable(Routes.GAME_RESULT) { PlaceholderScreen("Game Result") }
+
         composable(Routes.TEACHER_LOGIN) {
             val viewModel: TeacherLoginViewModel = viewModel(
                 factory = object : ViewModelProvider.Factory {
@@ -441,6 +440,10 @@ fun PhilIRIApp() {
                 onAnalyticsClick = {
                     navController.navigate("class_analytics/$classId/$className")
                 },
+                onHostGameClick = {
+                    val defaultLessonId = java.util.UUID.randomUUID().toString()
+                    navController.navigate("game_host/$classId/$defaultLessonId")
+                },
                 onBack = { navController.popBackStack() }
             )
         }
@@ -492,7 +495,105 @@ fun PhilIRIApp() {
             )
         }
 
-        composable(Routes.GAME_HOST) { PlaceholderScreen("Game Host") }
+        composable("game_host/{classId}/{lessonId}") { backStackEntry ->
+            val classId = backStackEntry.arguments?.getString("classId") ?: ""
+            val lessonId = backStackEntry.arguments?.getString("lessonId") ?: ""
+            val viewModel: com.basahero.elearning.ui.teacher.game.GameHostViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+                factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                        return com.basahero.elearning.ui.teacher.game.GameHostViewModel(
+                            com.basahero.elearning.data.repository.GameRepository(),
+                            com.basahero.elearning.data.repository.ClassRepository(),
+                            com.basahero.elearning.data.repository.QuizRepository(database)
+                        ) as T
+                    }
+                }
+            )
+            com.basahero.elearning.ui.teacher.game.GameHostScreen(
+                classId = classId,
+                lessonId = lessonId,
+                viewModel = viewModel,
+                onBack = { 
+                    viewModel.endGame()
+                    navController.popBackStack() 
+                }
+            )
+        }
+
+        composable(Routes.GAME_JOIN) {
+            val viewModel: com.basahero.elearning.ui.student.game.GameJoinViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+                factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                        return com.basahero.elearning.ui.student.game.GameJoinViewModel(
+                            com.basahero.elearning.data.repository.GameRepository(),
+                            sessionManager
+                        ) as T
+                    }
+                }
+            )
+            com.basahero.elearning.ui.student.game.GameJoinScreen(
+                viewModel = viewModel,
+                onJoined = { sessionId, studentId ->
+                    navController.navigate("game_play/$sessionId/$studentId") {
+                        popUpTo(Routes.GAME_JOIN) { inclusive = true }
+                    }
+                },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.GAME_PLAY) { backStackEntry ->
+            val sessionId = backStackEntry.arguments?.getString("sessionId") ?: ""
+            val studentId = backStackEntry.arguments?.getString("studentId") ?: ""
+            val viewModel: com.basahero.elearning.ui.student.game.GamePlayViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+                factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                        return com.basahero.elearning.ui.student.game.GamePlayViewModel(
+                            com.basahero.elearning.data.repository.GameRepository(),
+                            com.basahero.elearning.data.repository.QuizRepository(database)
+                        ) as T
+                    }
+                }
+            )
+            com.basahero.elearning.ui.student.game.GamePlayScreen(
+                sessionId = sessionId,
+                studentId = studentId,
+                viewModel = viewModel,
+                onGameEnded = {
+                    navController.navigate("game_result/$sessionId/$studentId") {
+                        popUpTo("game_play/$sessionId/$studentId") { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        composable(Routes.GAME_RESULT) { backStackEntry ->
+            val sessionId = backStackEntry.arguments?.getString("sessionId") ?: ""
+            val studentId = backStackEntry.arguments?.getString("studentId") ?: ""
+            val viewModel: com.basahero.elearning.ui.student.game.GameResultViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+                factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                        return com.basahero.elearning.ui.student.game.GameResultViewModel(
+                            com.basahero.elearning.data.repository.GameRepository()
+                        ) as T
+                    }
+                }
+            )
+            com.basahero.elearning.ui.student.game.GameResultScreen(
+                sessionId = sessionId,
+                studentId = studentId,
+                viewModel = viewModel,
+                onBackToHome = {
+                    navController.navigate(Routes.STUDENT_HOME) {
+                        popUpTo(0)
+                    }
+                }
+            )
+        }
     }           // end NavHost
     }           // end Surface
     }           // end PhilIRITheme

@@ -41,6 +41,7 @@ fun StudentHomeScreen(
     studentId: String,
     viewModel: StudentHomeViewModel,
     onQuarterClick: (quarterId: String, gradeLevel: Int) -> Unit,
+    onJoinGameClick: () -> Unit,
     onLogout: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -98,6 +99,10 @@ fun StudentHomeScreen(
                     }
                 },
                 actions = {
+                    IconButton(onClick = onJoinGameClick) {
+                        Icon(Icons.Default.VideogameAsset, contentDescription = "Join Game",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
                     IconButton(onClick = onLogout) {
                         Icon(Icons.Default.Logout, contentDescription = "Logout",
                             tint = MaterialTheme.colorScheme.onSurfaceVariant)
