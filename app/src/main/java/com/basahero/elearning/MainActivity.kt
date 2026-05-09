@@ -439,6 +439,10 @@ fun PhilIRIApp() {
                 onClassClick = { classId, className, gradeLevel ->
                     navController.navigate("class_roster/$classId/$className/$gradeLevel")
                 },
+                onHostGameClick = { classId ->
+                    val defaultLessonId = java.util.UUID.randomUUID().toString()
+                    navController.navigate("game_host/$classId/$defaultLessonId")
+                },
                 onLogout = {
                     coroutineScope.launch { sessionManager.setTeacherLoggedIn(false) }
                     navController.navigate(Routes.ROLE_SELECT) { popUpTo(0) }

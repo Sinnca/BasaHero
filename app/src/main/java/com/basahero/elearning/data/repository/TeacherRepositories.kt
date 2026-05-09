@@ -298,6 +298,52 @@ class ClassRepository {
         }
     }
 
+    // Get all students for a teacher filtered by grade (across all their classes)
+    suspend fun getStudentsForTeacherByGrade(teacherId: String, gradeLevel: Int): List<StudentInfo> {
+        return try {
+            // First get all classes for this teacher in this grade
+            val classes = SupabaseClient.client
+                .from("class")
+                .select { 
+                    filter { 
+                        eq("teacher_id", teacherId)
+                        eq("grade_level", gradeLevel)
+                    } 
+                }
+                .decodeList<ClassRow>()
+                
+            if (classes.isEmpty()) return emptyList()
+            
+            val classIds = classes.map { it.id }
+            
+            // Then get all students in these classes
+            val students = SupabaseClient.client
+                .from("student")
+                .select {
+                    filter { isIn("class_id", classIds) }
+                    order("full_name", Order.ASCENDING)
+                }
+                .decodeList<StudentRow>()
+                
+            students.map { s ->
+                val progressRows = SupabaseClient.client
+                    .from("student_progress")
+                    .select { filter { eq("student_id", s.id) } }
+                    .decodeList<ProgressRow>()
+
+                val isAtRisk = progressRows.any { p ->
+                    p.status == "DONE" && p.best_score != null && p.quiz_total > 0 &&
+                    (p.best_score.toFloat() / p.quiz_total) < 0.6f
+                }
+
+                StudentInfo(s.id, s.class_id ?: "", s.full_name, s.section, s.grade_level, s.last_active, isAtRisk)
+            }
+        } catch (e: Exception) {
+            Log.e(tag, "Get students by grade failed: ${e.message}")
+            emptyList()
+        }
+    }
+
     // Get students paginated — 20 per page
     suspend fun getStudentsForClass(classId: String, page: Int = 0): List<StudentInfo> {
         return try {
