@@ -17,7 +17,12 @@ class TeacherDashboardViewModel(
         val selectedSchoolYear: String = "2025-2026",
         val isLoading: Boolean = true,
         val showCreateClassDialog: Boolean = false,
-        val errorMessage: String? = null
+        val errorMessage: String? = null,
+        
+        // Student Directory State
+        val directoryStudents: List<StudentInfo> = emptyList(),
+        val directoryGradeFilter: Int = 4, // Default to Grade 4
+        val isDirectoryLoading: Boolean = false
     )
 
     val schoolYears = listOf("2025-2026", "2026-2027", "2027-2028")
@@ -31,13 +36,36 @@ class TeacherDashboardViewModel(
             val teacher = authRepository.getCurrentTeacher()
             if (teacher != null) {
                 val classes = classRepository.getClassesForTeacher(teacher.id)
-                _uiState.value = DashboardUiState(
-                    teacher = teacher,
-                    classes = classes,
-                    isLoading = false
-                )
+                _uiState.update { 
+                    it.copy(
+                        teacher = teacher,
+                        classes = classes,
+                        isLoading = false
+                    ) 
+                }
+                // Automatically load students for the default directory grade
+                loadDirectoryStudents(teacher.id, _uiState.value.directoryGradeFilter)
             } else {
                 _uiState.value = DashboardUiState(isLoading = false, errorMessage = "Session expired. Please log in again.")
+            }
+        }
+    }
+
+    fun setDirectoryGradeFilter(gradeLevel: Int) {
+        val teacherId = _uiState.value.teacher?.id ?: return
+        _uiState.update { it.copy(directoryGradeFilter = gradeLevel) }
+        loadDirectoryStudents(teacherId, gradeLevel)
+    }
+
+    private fun loadDirectoryStudents(teacherId: String, gradeLevel: Int) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isDirectoryLoading = true) }
+            val students = classRepository.getStudentsForTeacherByGrade(teacherId, gradeLevel)
+            _uiState.update { 
+                it.copy(
+                    directoryStudents = students,
+                    isDirectoryLoading = false
+                ) 
             }
         }
     }

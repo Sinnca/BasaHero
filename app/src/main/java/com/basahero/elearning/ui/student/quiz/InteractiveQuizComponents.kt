@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material3.*
@@ -49,8 +50,15 @@ fun AnimatedMcqQuestion(
 ) {
     // Shuffle once per question id so order is stable across recompositions
     val shuffledChoices = remember(question.id) { question.choices.shuffled() }
+    val isTablet = LocalConfiguration.current.screenWidthDp >= 600
 
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    @OptIn(ExperimentalLayoutApi::class)
+    FlowRow(
+        maxItemsInEachRow = if (isTablet) 2 else 1,
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
         shuffledChoices.forEach { choice ->
             val isSelected = selectedChoiceId == choice.id
             val isCorrectChoice = question.correctAnswerIds.contains(choice.id)
@@ -58,10 +66,17 @@ fun AnimatedMcqQuestion(
             // On submit, reveal the selected card AND the correct card
             val showReveal = isSubmitted && (isSelected || isCorrectChoice)
 
+            // Calculate width fraction. If tablet and 2 columns, each takes roughly half space minus spacing
+            val modifier = if (isTablet) {
+                Modifier.weight(1f).fillMaxWidth()
+            } else {
+                Modifier.fillMaxWidth()
+            }
+
             AnimatedAnswerCard(
                 isRevealed = showReveal,
                 isCorrect = isCorrectChoice,
-                modifier = Modifier.fillMaxWidth()
+                modifier = modifier
             ) {
                 Card(
                     onClick = { if (!isSubmitted) onChoiceSelected(choice.id) },

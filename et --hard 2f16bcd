@@ -1,0 +1,76 @@
+[33m5fb7c77[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32mmain[m[33m)[m HEAD@{0}: checkout: moving from main to develop
+[33m5fb7c77[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32mmain[m[33m)[m HEAD@{1}: reset: moving to 5fb7c7768c99605c0125ce11d6b7d1666a1a2e10
+[33mfe52173[m HEAD@{2}: checkout: moving from develop to main
+[33m5fb7c77[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32mmain[m[33m)[m HEAD@{3}: reset: moving to 5fb7c7768c99605c0125ce11d6b7d1666a1a2e10
+[33md2ac9cc[m HEAD@{4}: pull origin main: Fast-forward
+[33m2f16bcd[m HEAD@{5}: checkout: moving from develop to develop
+[33m2f16bcd[m HEAD@{6}: commit: Enhanced some Ui and Design Structure
+[33m5fb7c77[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32mmain[m[33m)[m HEAD@{7}: commit: added multilingual feature, TO FIX: Some still dont have tagalog translation
+[33mc779dab[m HEAD@{8}: commit: Fixed Teacher session bug
+[33m86e465b[m HEAD@{9}: pull origin main: Fast-forward
+[33md604f40[m HEAD@{10}: checkout: moving from develop to develop
+[33md604f40[m HEAD@{11}: commit: Fixes the waiting game session in game mode
+[33mc039b6c[m HEAD@{12}: pull origin main: Fast-forward
+[33m513c946[m HEAD@{13}: checkout: moving from develop to develop
+[33m513c946[m HEAD@{14}: commit: Added the game mode, TO FIX: The session is still waiting on the supabase even though i already close it on app
+[33mf2cf6e4[m HEAD@{15}: pull origin main: Fast-forward
+[33m4ce69f5[m HEAD@{16}: checkout: moving from develop to develop
+[33m4ce69f5[m HEAD@{17}: commit: Added the continue as google feature
+[33m08255c1[m HEAD@{18}: checkout: moving from develop to develop
+[33m08255c1[m HEAD@{19}: pull origin main: Fast-forward
+[33m124ffc8[m HEAD@{20}: commit: noting
+[33mec83a7f[m HEAD@{21}: pull origin main: Fast-forward
+[33mc1350fb[m HEAD@{22}: checkout: moving from develop to develop
+[33mc1350fb[m HEAD@{23}: commit: added Week 11 — AudioRecord + DSP preprocessing, FIXED: Student progress fetch on database, TO FIX: Voice Detection
+[33mbb4f3ea[m HEAD@{24}: pull origin main: Fast-forward
+[33m65a4e2b[m HEAD@{25}: checkout: moving from develop to develop
+[33m65a4e2b[m HEAD@{26}: commit: enhance student and teacher ui
+[33m3162a47[m HEAD@{27}: pull origin main: Fast-forward
+[33mfd55af9[m HEAD@{28}: checkout: moving from develop to develop
+[33mfd55af9[m HEAD@{29}: commit: feat: switching the student login to choosing their name, fix the lesson name in teacher class analytics
+[33m3451c80[m HEAD@{30}: pull origin main: Fast-forward
+[33m4165b1f[m HEAD@{31}: checkout: moving from develop to develop
+[33m4165b1f[m HEAD@{32}: commit: feat: week 9 pre/post test c omparison and Week 10 Quiz results per competency
+[33m5f5c73b[m HEAD@{33}: checkout: moving from develop to develop
+[33m5f5c73b[m HEAD@{34}: pull origin main: Fast-forward
+[33mabf8223[m HEAD@{35}: checkout: moving from develop to develop
+[33mabf8223[m HEAD@{36}: commit: feat: fix the student_progress and pre_post_test sync. Also fix the student login right after creation.
+[33me06c1b2[m HEAD@{37}: pull origin main: Fast-forward
+[33m55a2078[m HEAD@{38}: checkout: moving from develop to develop
+[33m55a2078[m HEAD@{39}: commit: phase 4 teacher class and dashboard. to fix the student progress
+[33mbe1e225[m HEAD@{40}: pull origin main: Fast-forward
+[33mb162a52[m HEAD@{41}: checkout: moving from develop to develop
+[33mb162a52[m HEAD@{42}: commit: revising the database seeder to match the database in supabase, ADDED VOSK in TEXT PASSAGE WITH TEXT FEEDBACK
+[33mb999e54[m HEAD@{43}: pull origin main: Fast-forward
+[33m01f9b16[m HEAD@{44}: checkout: moving from develop to develop
+[33m01f9b16[m HEAD@{45}: commit: feat: step 7-9, TO FIX: DATABASE SEEDER
+[33medf2c63[m HEAD@{46}: reset: moving to HEAD
+[33medf2c63[m HEAD@{47}: pull origin main: Fast-forward
+[33mf920dda[m HEAD@{48}: checkout: moving from develop to develop
+[33mf920dda[m HEAD@{49}: commit: doen with Step 6
+[33m729fc8a[m HEAD@{50}: pull origin main: Fast-forward
+[33m24d08be[m HEAD@{51}: checkout: moving from develop to develop
+[33m24d08be[m HEAD@{52}: commit: Phase 3B: Completed Steps 4 and 5 (60% pass threshold + first/best score tracking and
+[33m5b090b3[m HEAD@{53}: pull origin main: Fast-forward
+[33m3664486[m HEAD@{54}: checkout: moving from develop to develop
+[33m3664486[m HEAD@{55}: commit: Phase 3B: Completed Steps 1 to 3 (Schema updates, Sync fixes, SessionManager)
+[33mbea3371[m HEAD@{56}: checkout: moving from develop to develop
+[33mbea3371[m HEAD@{57}: pull origin main: Fast-forward
+[33m9fb9392[m HEAD@{58}: checkout: moving from develop to develop
+[33m9fb9392[m HEAD@{59}: commit: completed workers for phase 3. THERES 2 Bug
+[33m1782dbb[m HEAD@{60}: pull origin main: Fast-forward
+[33m3e4cdf0[m HEAD@{61}: checkout: moving from develop to develop
+[33m3e4cdf0[m HEAD@{62}: checkout: moving from develop to develop
+[33m3e4cdf0[m HEAD@{63}: commit: phase 3 almost done, working app. Todo: workers
+[33m1b73d60[m HEAD@{64}: pull origin main: Fast-forward
+[33med8cc50[m HEAD@{65}: commit: Phase 3: Completed Student Login and Home Dashboard with animated progress rings
+[33m8ca3bb0[m HEAD@{66}: commit: make it worked
+[33m9506471[m HEAD@{67}: commit: Added the kts and asset for the phase 1
+[33mda4492e[m HEAD@{68}: pull origin develop: Fast-forward
+[33mfe52173[m HEAD@{69}: checkout: moving from feature/setup-dependencies to develop
+[33mde776e1[m[33m ([m[1;31morigin/feature/setup-dependencies[m[33m, [m[1;32mfeature/setup-dependencies[m[33m)[m HEAD@{70}: commit: Add all dependencies to build.gradle
+[33mfe52173[m HEAD@{71}: checkout: moving from develop to feature/setup-dependencies
+[33mfe52173[m HEAD@{72}: checkout: moving from develop to develop
+[33mfe52173[m HEAD@{73}: checkout: moving from main to develop
+[33mfe52173[m HEAD@{74}: Branch: renamed refs/heads/master to refs/heads/main
+[33mfe52173[m HEAD@{76}: commit (initial): chore: add gitattributes for consistent line endings

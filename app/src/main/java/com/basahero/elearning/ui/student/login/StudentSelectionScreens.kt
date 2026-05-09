@@ -3,14 +3,13 @@ package com.basahero.elearning.ui.student.login
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 
-import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -21,15 +20,24 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import com.basahero.elearning.data.model.Student
+import com.basahero.elearning.ui.common.LocalAppStrings
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 1. StudentGradeSelectScreen
+//    Shows ALL grade levels with their sections grouped underneath.
+//    "Select your grade level and section"
+//    Matches tablet wireframe: Grade header → grid of section cards
+// ─────────────────────────────────────────────────────────────────────────────
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudentGradeSelectScreen(
@@ -37,205 +45,232 @@ fun StudentGradeSelectScreen(
     onManualLoginClick: () -> Unit,
     onBack: () -> Unit
 ) {
-    val alpha = remember { androidx.compose.animation.core.Animatable(0f) }
-    val scale = remember { androidx.compose.animation.core.Animatable(0.9f) }
-    
-    // Floating animation for background
-    val infiniteTransition = androidx.compose.animation.core.rememberInfiniteTransition(label = "float")
-    val offsetY by infiniteTransition.animateFloat(
-        initialValue = -10f,
-        targetValue = 10f,
-        animationSpec = androidx.compose.animation.core.infiniteRepeatable(
-            animation = androidx.compose.animation.core.tween(2000, easing = androidx.compose.animation.core.EaseInOutSine),
-            repeatMode = androidx.compose.animation.core.RepeatMode.Reverse
-        ),
-        label = "floatAnim"
+    val strings = LocalAppStrings.current
+    val screenWidth = LocalConfiguration.current.screenWidthDp
+    val isTablet = screenWidth >= 600
+
+    // We show grades 4, 5, 6 with their sections
+    val grades = listOf(
+        GradeInfo(4, Color(0xFF2177DA), "The Beginning!"),
+        GradeInfo(5, Color(0xFF379F3B), "Getting Stronger!"),
+        GradeInfo(6, Color(0xFFE65100), "The Masters!")
     )
 
-    LaunchedEffect(Unit) {
-        kotlinx.coroutines.coroutineScope {
-            launch { alpha.animateTo(1f, androidx.compose.animation.core.tween(600)) }
-            launch { 
-                scale.animateTo(
-                    1f, 
-                    androidx.compose.animation.core.spring(
-                        dampingRatio = 0.6f, 
-                        stiffness = 150f
-                    )
-                ) 
-            }
-        }
-    }
+    // Blue gradient background colors
+    val bgTop = Color(0xFF2563EB)
+    val bgBottom = Color(0xFF1E3A8A)
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                androidx.compose.ui.graphics.Brush.verticalGradient(
-                    listOf(
-                        Color(0xFF2C74F3),
-                        Color(0xFF1340A0),
-                        Color(0xFF091C4E)
-                    )
-                )
+                Brush.verticalGradient(listOf(bgTop, bgBottom))
             )
     ) {
-        // Magical Background (same as landing page)
-        androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
-            drawCircle(
-                color = Color.White.copy(alpha = 0.05f),
-                radius = 200f,
-                center = androidx.compose.ui.geometry.Offset(size.width * 0.1f, size.height * 0.2f + offsetY)
-            )
-            drawCircle(
-                color = Color.White.copy(alpha = 0.08f),
-                radius = 300f,
-                center = androidx.compose.ui.geometry.Offset(size.width * 0.9f, size.height * 0.7f - offsetY)
-            )
-        }
-
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { },
-                    navigationIcon = {
-                        IconButton(onClick = onBack) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
-                )
-            },
-            containerColor = Color.Transparent
-        ) { padding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .padding(horizontal = 24.dp)
-                    .graphicsLayer {
-                        this.alpha = alpha.value
-                        this.scaleX = scale.value
-                        this.scaleY = scale.value
-                    },
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "Pick Your Grade",
-                    fontSize = 36.sp,
-                    fontWeight = FontWeight.Black,
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    style = androidx.compose.ui.text.TextStyle(
-                        shadow = androidx.compose.ui.graphics.Shadow(
-                            color = Color(0x66000000),
-                            offset = androidx.compose.ui.geometry.Offset(0f, 4f),
-                            blurRadius = 8f
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.White
                         )
-                    )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent
                 )
-                
-                Spacer(modifier = Modifier.height(48.dp))
+            )
+        },
+        containerColor = Color.Transparent
+    ) { padding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(1),
+                modifier = Modifier
+                    .then(
+                        if (isTablet) Modifier.widthIn(max = 800.dp) else Modifier.fillMaxWidth()
+                    )
+                    .padding(horizontal = if (isTablet) 32.dp else 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "\uD83C\uDF1F", // star emoji
+                            fontSize = 40.sp
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            text = strings.selectYourGrade,
+                            modifier = Modifier.padding(horizontal = 20.dp),
+                            fontSize = if (isTablet) 26.sp else 22.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.White,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            text = if (strings == com.basahero.elearning.ui.common.getStrings("fil"))
+                                "Pumili ng iyong baitang para magsimula"
+                            else
+                                "Choose your grade level to get started",
+                            fontSize = if (isTablet) 15.sp else 13.sp,
+                            color = Color.White.copy(alpha = 0.7f),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
 
-                GradeCard(
-                    grade = 4,
-                    color = Color(0xFF2177DA),
-                    subtitle = "The Beginning!",
-                    onClick = { onGradeSelected(4) }
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                GradeCard(
-                    grade = 5,
-                    color = Color(0xFF379F3B),
-                    subtitle = "Getting Stronger!",
-                    onClick = { onGradeSelected(5) }
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                GradeCard(
-                    grade = 6,
-                    color = Color(0xFFE65100),
-                    subtitle = "The Masters!",
-                    onClick = { onGradeSelected(6) }
-                )
-                
-                Spacer(modifier = Modifier.height(48.dp))
-                
-                TextButton(onClick = onManualLoginClick) {
-                    Text(
-                        text = "I have a different name/section",
-                        color = Color.White.copy(alpha = 0.6f),
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                // Each grade with its card
+                grades.forEach { grade ->
+                    item {
+                        Spacer(Modifier.height(8.dp))
+                    }
+
+                    // Grade header label
+                    item {
+                        Text(
+                            text = strings.grade(grade.level),
+                            modifier = Modifier.padding(
+                                horizontal = 4.dp,
+                                vertical = 4.dp
+                            ),
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White.copy(alpha = 0.8f)
+                        )
+                    }
+
+                    item {
+                        Spacer(Modifier.height(4.dp))
+                    }
+
+                    // Grade card — tappable
+                    item {
+                        GradeSelectionCard(
+                            grade = grade.level,
+                            subtitle = grade.subtitle,
+                            color = grade.color,
+                            isTablet = isTablet,
+                            onClick = { onGradeSelected(grade.level) }
+                        )
+                    }
+                }
+
+                // Manual login link
+                item {
+                    Spacer(Modifier.height(24.dp))
+                    TextButton(
+                        onClick = onManualLoginClick,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = strings.alreadyHaveAccount + " " + strings.loginHere,
+                            fontSize = 14.sp,
+                            color = Color.White.copy(alpha = 0.8f),
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                    Spacer(Modifier.height(16.dp))
                 }
             }
         }
     }
+    } // end outer Box
 }
+
+private data class GradeInfo(val level: Int, val color: Color, val subtitle: String)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GradeCard(grade: Int, color: Color, subtitle: String, onClick: () -> Unit) {
+private fun GradeSelectionCard(
+    grade: Int,
+    subtitle: String,
+    color: Color,
+    isTablet: Boolean,
+    onClick: () -> Unit
+) {
     Card(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .height(110.dp),
-        shape = RoundedCornerShape(28.dp),
-        colors = CardDefaults.cardColors(containerColor = color),
-        elevation = CardDefaults.cardElevation(defaultElevation = 12.dp)
+            .height(if (isTablet) 110.dp else 96.dp),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = color
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Custom Grade Badge (No Emoji)
+            // Number badge
             Box(
                 modifier = Modifier
-                    .size(64.dp)
-                    .background(Color.White.copy(alpha = 0.2f), CircleShape),
+                    .size(if (isTablet) 64.dp else 56.dp)
+                    .clip(CircleShape)
+                    .background(Color.White.copy(alpha = 0.25f)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = grade.toString(),
-                    fontSize = 32.sp,
+                    fontSize = if (isTablet) 30.sp else 24.sp,
                     fontWeight = FontWeight.Black,
                     color = Color.White
                 )
             }
-            
-            Spacer(modifier = Modifier.width(20.dp))
-            
-            Column(verticalArrangement = Arrangement.Center) {
+
+            Spacer(Modifier.width(16.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+                val strings = LocalAppStrings.current
                 Text(
-                    text = "Grade $grade",
-                    fontSize = 26.sp,
-                    fontWeight = FontWeight.Black,
+                    text = strings.grade(grade),
+                    fontSize = if (isTablet) 22.sp else 18.sp,
+                    fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
                 Text(
                     text = subtitle,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Medium,
+                    fontSize = if (isTablet) 14.sp else 12.sp,
                     color = Color.White.copy(alpha = 0.8f)
                 )
             }
-            
-            Spacer(modifier = Modifier.weight(1f))
-            
+
             Icon(
                 Icons.Default.ChevronRight,
                 contentDescription = null,
-                tint = Color.White.copy(alpha = 0.5f),
-                modifier = Modifier.size(32.dp)
+                tint = Color.White.copy(alpha = 0.7f),
+                modifier = Modifier.size(28.dp)
             )
         }
     }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 2. StudentNameSelectScreen
+//    Two-stage:
+//      Stage 1 — Pick section (grid of section cards)
+//      Stage 2 — "Who are you?" (grid of name cards + search)
+//    Matches tablet wireframe: clean white cards in a responsive grid
+// ─────────────────────────────────────────────────────────────────────────────
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun StudentNameSelectScreen(
@@ -245,158 +280,213 @@ fun StudentNameSelectScreen(
     onBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val strings = LocalAppStrings.current
     var searchQuery by remember { mutableStateOf("") }
-    
     var selectedSection by remember { mutableStateOf<String?>(null) }
-    
-    // Floating background animation
+
+    val screenWidth = LocalConfiguration.current.screenWidthDp
+    val isTablet = screenWidth >= 600
+    // How many columns for the grid
+    val gridColumns = when {
+        screenWidth >= 900 -> 4
+        screenWidth >= 600 -> 3
+        else -> 2
+    }
+
     BackHandler(enabled = selectedSection != null) {
         selectedSection = null
+        searchQuery = ""
     }
-    
+
     LaunchedEffect(gradeLevel) {
         viewModel.loadStudents(gradeLevel)
     }
-    
-    val themeColor = when (gradeLevel) {
+
+    val gradeColor = when (gradeLevel) {
         4 -> Color(0xFF2177DA)
         5 -> Color(0xFF379F3B)
         6 -> Color(0xFFE65100)
         else -> Color(0xFF1340A0)
+    }
+    val gradeDark = when (gradeLevel) {
+        4 -> Color(0xFF1E3A8A)
+        5 -> Color(0xFF1B5E20)
+        6 -> Color(0xFFBF360C)
+        else -> Color(0xFF07153A)
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                androidx.compose.ui.graphics.Brush.verticalGradient(
-                    listOf(Color(0xFF2563EB), Color(0xFF1E40AF), Color(0xFF1E3A8A))
-                )
+                Brush.verticalGradient(listOf(gradeColor, gradeDark))
             )
     ) {
-        // Magical Floating Blobs
-        androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
-            val cw = size.width
-            val ch = size.height
-            drawCircle(
-                color = Color.White.copy(alpha = 0.06f),
-                radius = cw * 0.45f,
-                center = androidx.compose.ui.geometry.Offset(cw * 0.85f, ch * 0.08f)
-            )
-            drawCircle(
-                color = Color.White.copy(alpha = 0.04f),
-                radius = cw * 0.55f,
-                center = androidx.compose.ui.geometry.Offset(cw * 0.15f, ch * 0.92f)
-            )
-        }
-
-        Scaffold(
-            containerColor = Color.Transparent
-        ) { padding ->
-            Column(modifier = Modifier.fillMaxSize()) {
-                    // Header Section
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 40.dp, start = 20.dp, end = 20.dp, bottom = 20.dp)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            IconButton(
-                                onClick = { 
-                                    if (selectedSection != null) selectedSection = null 
-                                    else onBack() 
-                                },
-                                modifier = Modifier.background(Color.White.copy(alpha = 0.15f), CircleShape)
-                            ) {
-                                Icon(Icons.Default.ArrowBack, null, tint = Color.White)
-                            }
-                            Spacer(Modifier.width(16.dp))
-                            Text(
-                                text = if (selectedSection == null) "Select Section" else "Select Your Name",
-                                fontSize = 32.sp,
-                                fontWeight = FontWeight.Black,
-                                color = Color.White,
-                                letterSpacing = (-1).sp
-                            )
-                        }
-                        
-                        Spacer(Modifier.height(24.dp))
-                        
-                        // Glassmorphic Search Bar
-                        Surface(
-                            modifier = Modifier.fillMaxWidth(),
-                            color = Color.White.copy(alpha = 0.15f),
-                            shape = RoundedCornerShape(24.dp),
-                            border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f))
-                        ) {
-                            TextField(
-                                value = searchQuery,
-                                onValueChange = { searchQuery = it },
-                                placeholder = { 
-                                    Text(
-                                        if (selectedSection == null) "Find your section..." else "Find your name...",
-                                        color = Color.White.copy(alpha = 0.6f),
-                                        fontWeight = FontWeight.Medium
-                                    ) 
-                                },
-                                leadingIcon = { Icon(Icons.Default.Search, null, tint = Color.White) },
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = TextFieldDefaults.colors(
-                                    focusedContainerColor = Color.Transparent,
-                                    unfocusedContainerColor = Color.Transparent,
-                                    disabledContainerColor = Color.Transparent,
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent,
-                                    cursorColor = Color.White,
-                                    focusedTextColor = Color.White,
-                                    unfocusedTextColor = Color.White
-                                ),
-                                singleLine = true
-                            )
-                        }
-                    }
-
-                    // Adaptive Grid Content
-                    Box(modifier = Modifier.weight(1f)) {
-                        if (uiState.isLoading) {
-                            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                                CircularProgressIndicator(color = Color.White)
-                            }
-                        } else if (uiState.errorMessage != null) {
-                            Box(modifier = Modifier.fillMaxSize().padding(32.dp), contentAlignment = Alignment.Center) {
-                                Text(text = uiState.errorMessage ?: "", color = Color.White, textAlign = TextAlign.Center)
-                            }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton(onClick = {
+                        if (selectedSection != null) {
+                            selectedSection = null
+                            searchQuery = ""
                         } else {
-                            if (selectedSection == null) {
-                                SectionGridContent(
-                                    uiState = uiState,
-                                    searchQuery = searchQuery,
-                                    themeColor = themeColor,
-                                    onSelect = { selectedSection = it }
-                                )
-                            } else {
-                                StudentGridContent(
-                                    uiState = uiState,
-                                    selectedSection = selectedSection!!,
-                                    searchQuery = searchQuery,
-                                    themeColor = themeColor,
-                                    onSelect = { student ->
-                                        viewModel.loginStudent(student, onStudentSelected)
-                                    }
-                                )
-                            }
+                            onBack()
+                        }
+                    }) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.White
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent
+                )
+            )
+        },
+        containerColor = Color.Transparent
+    ) { padding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            Column(
+                modifier = Modifier
+                    .then(
+                        if (isTablet) Modifier.widthIn(max = 900.dp) else Modifier.fillMaxWidth()
+                    )
+            ) {
+                // ── Header ──────────────────────────────────────────────────
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = if (isTablet) 32.dp else 16.dp,
+                            vertical = 8.dp
+                        )
+                ) {
+                    // Title
+                    Text(
+                        text = if (selectedSection == null)
+                            strings.selectYourGrade
+                        else
+                            "Who are you?",
+                        fontSize = if (isTablet) 24.sp else 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+
+                    Spacer(Modifier.height(12.dp))
+
+                    // Search bar
+                    OutlinedTextField(
+                        value = searchQuery,
+                        onValueChange = { searchQuery = it },
+                        placeholder = {
+                            Text(
+                                if (selectedSection == null) "Search sections..."
+                                else "Search names...",
+                                color = Color.White.copy(alpha = 0.5f)
+                            )
+                        },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Default.Search,
+                                contentDescription = null,
+                                tint = Color.White.copy(alpha = 0.7f)
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(16.dp),
+                        singleLine = true,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White,
+                            cursorColor = Color.White,
+                            focusedBorderColor = Color.White.copy(alpha = 0.5f),
+                            unfocusedBorderColor = Color.White.copy(alpha = 0.25f),
+                            focusedContainerColor = Color.White.copy(alpha = 0.1f),
+                            unfocusedContainerColor = Color.White.copy(alpha = 0.1f)
+                        )
+                    )
+
+                    Spacer(Modifier.height(16.dp))
+                }
+
+                // ── Content Grid ────────────────────────────────────────────
+                Box(modifier = Modifier.weight(1f)) {
+                    if (uiState.isLoading) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    } else if (uiState.errorMessage != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(32.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = uiState.errorMessage ?: "",
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center,
+                                fontSize = 16.sp
+                            )
+                        }
+                    } else {
+                        if (selectedSection == null) {
+                            // ── Section Grid ────────────────────────────────
+                            SectionGrid(
+                                uiState = uiState,
+                                searchQuery = searchQuery,
+                                gradeColor = gradeColor,
+                                gridColumns = gridColumns,
+                                isTablet = isTablet,
+                                onSelect = {
+                                    selectedSection = it
+                                    searchQuery = ""
+                                }
+                            )
+                        } else {
+                            // ── Name Grid ───────────────────────────────────
+                            NameGrid(
+                                uiState = uiState,
+                                selectedSection = selectedSection!!,
+                                searchQuery = searchQuery,
+                                gradeColor = gradeColor,
+                                gridColumns = gridColumns,
+                                isTablet = isTablet,
+                                onSelect = { student ->
+                                    viewModel.loginStudent(student, onStudentSelected)
+                                }
+                            )
                         }
                     }
                 }
+            }
         }
     }
+    } // end outer Box
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Section Grid — Cards in a responsive grid
+// ─────────────────────────────────────────────────────────────────────────────
 @Composable
-private fun SectionGridContent(
+private fun SectionGrid(
     uiState: StudentSelectionViewModel.SelectionState,
     searchQuery: String,
-    themeColor: Color,
+    gradeColor: Color,
+    gridColumns: Int,
+    isTablet: Boolean,
     onSelect: (String) -> Unit
 ) {
     val sections = uiState.students
@@ -406,13 +496,19 @@ private fun SectionGridContent(
         .sortedBy { it.uppercase() }
 
     if (sections.isEmpty()) {
-        EmptyState(if (searchQuery.isEmpty()) "No sections available." else "No section matches '$searchQuery'")
+        EmptyState(
+            if (searchQuery.isEmpty()) "No sections available."
+            else "No section matches '$searchQuery'"
+        )
     } else {
-        androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
-            columns = androidx.compose.foundation.lazy.grid.GridCells.Adaptive(minSize = 300.dp),
-            contentPadding = PaddingValues(20.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(gridColumns),
+            contentPadding = PaddingValues(
+                horizontal = if (isTablet) 32.dp else 16.dp,
+                vertical = 8.dp
+            ),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.fillMaxSize()
         ) {
             items(sections.size) { index ->
@@ -421,7 +517,8 @@ private fun SectionGridContent(
                 SectionCard(
                     section = section,
                     studentCount = count,
-                    color = themeColor,
+                    color = gradeColor,
+                    isTablet = isTablet,
                     onClick = { onSelect(section) }
                 )
             }
@@ -429,12 +526,17 @@ private fun SectionGridContent(
     }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Name Grid — Student cards in a responsive grid
+// ─────────────────────────────────────────────────────────────────────────────
 @Composable
-private fun StudentGridContent(
+private fun NameGrid(
     uiState: StudentSelectionViewModel.SelectionState,
     selectedSection: String,
     searchQuery: String,
-    themeColor: Color,
+    gradeColor: Color,
+    gridColumns: Int,
+    isTablet: Boolean,
     onSelect: (Student) -> Unit
 ) {
     val filteredStudents = uiState.students
@@ -445,18 +547,22 @@ private fun StudentGridContent(
     if (filteredStudents.isEmpty()) {
         EmptyState("No name matches '$searchQuery' in $selectedSection.")
     } else {
-        androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
-            columns = androidx.compose.foundation.lazy.grid.GridCells.Adaptive(minSize = 280.dp),
-            contentPadding = PaddingValues(20.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(gridColumns),
+            contentPadding = PaddingValues(
+                horizontal = if (isTablet) 32.dp else 16.dp,
+                vertical = 8.dp
+            ),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.fillMaxSize()
         ) {
             items(filteredStudents.size) { index ->
                 val student = filteredStudents[index]
                 StudentNameCard(
                     student = student,
-                    gradeColor = themeColor,
+                    gradeColor = gradeColor,
+                    isTablet = isTablet,
                     onClick = { onSelect(student) }
                 )
             }
@@ -464,43 +570,71 @@ private fun StudentGridContent(
     }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Empty state
+// ─────────────────────────────────────────────────────────────────────────────
 @Composable
 private fun EmptyState(message: String) {
-    Box(modifier = Modifier.fillMaxSize().padding(32.dp), contentAlignment = Alignment.Center) {
-        Text(
-            text = message,
-            color = Color.White.copy(alpha = 0.7f),
-            textAlign = TextAlign.Center,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium
-        )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(
+                Icons.Default.SearchOff,
+                contentDescription = null,
+                modifier = Modifier.size(48.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+            )
+            Spacer(Modifier.height(12.dp))
+            Text(
+                text = message,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium
+            )
+        }
     }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Section Card — clean Material3 style
+// ─────────────────────────────────────────────────────────────────────────────
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SectionCard(section: String, studentCount: Int, color: Color, onClick: () -> Unit) {
+fun SectionCard(
+    section: String,
+    studentCount: Int,
+    color: Color,
+    isTablet: Boolean = false,
+    onClick: () -> Unit
+) {
     Card(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.95f)),
-        border = BorderStroke(1.5.dp, color.copy(alpha = 0.1f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(1.dp, color.copy(alpha = 0.15f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(if (isTablet) 20.dp else 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Magical Gradient Avatar
+            // Section initial badge
             Box(
                 modifier = Modifier
-                    .size(60.dp)
+                    .size(if (isTablet) 56.dp else 48.dp)
                     .clip(CircleShape)
                     .background(
-                        androidx.compose.ui.graphics.Brush.linearGradient(
+                        Brush.linearGradient(
                             listOf(color, color.copy(alpha = 0.7f))
                         )
                     ),
@@ -509,41 +643,42 @@ fun SectionCard(section: String, studentCount: Int, color: Color, onClick: () ->
                 Text(
                     text = section.take(1).uppercase(),
                     color = Color.White,
-                    fontSize = 24.sp,
+                    fontSize = if (isTablet) 22.sp else 18.sp,
                     fontWeight = FontWeight.Black
                 )
             }
-            
-            Spacer(modifier = Modifier.width(16.dp))
-            
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = section,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Black,
-                    color = Color(0xFF1E293B)
-                )
-                Text(
-                    text = "$studentCount Student${if (studentCount != 1) "s" else ""}",
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF64748B)
-                )
-            }
-            
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                contentDescription = null,
-                tint = color.copy(alpha = 0.5f),
-                modifier = Modifier.size(20.dp)
+
+            Spacer(Modifier.height(10.dp))
+
+            Text(
+                text = section,
+                fontSize = if (isTablet) 16.sp else 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
+                maxLines = 1
+            )
+            Text(
+                text = "$studentCount student${if (studentCount != 1) "s" else ""}",
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
             )
         }
     }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Student Name Card — clean Material3 grid card
+// ─────────────────────────────────────────────────────────────────────────────
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StudentNameCard(student: Student, gradeColor: Color, onClick: () -> Unit) {
+fun StudentNameCard(
+    student: Student,
+    gradeColor: Color,
+    isTablet: Boolean = false,
+    onClick: () -> Unit
+) {
     val initials = student.fullName.split(" ")
         .filter { it.isNotBlank() }
         .take(2)
@@ -552,24 +687,26 @@ fun StudentNameCard(student: Student, gradeColor: Color, onClick: () -> Unit) {
     Card(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp), // More rounded for "Magical" feel
-        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.95f)),
-        border = BorderStroke(1.5.dp, gradeColor.copy(alpha = 0.1f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(1.dp, gradeColor.copy(alpha = 0.1f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(if (isTablet) 20.dp else 14.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // High-impact Initials Avatar
+            // Initials avatar
             Box(
                 modifier = Modifier
-                    .size(56.dp)
+                    .size(if (isTablet) 56.dp else 48.dp)
                     .clip(CircleShape)
                     .background(
-                        androidx.compose.ui.graphics.Brush.linearGradient(
+                        Brush.linearGradient(
                             listOf(gradeColor, gradeColor.copy(alpha = 0.7f))
                         )
                     ),
@@ -579,41 +716,36 @@ fun StudentNameCard(student: Student, gradeColor: Color, onClick: () -> Unit) {
                     text = initials,
                     color = Color.White,
                     fontWeight = FontWeight.Black,
-                    fontSize = 20.sp,
-                    style = androidx.compose.ui.text.TextStyle(
-                        shadow = androidx.compose.ui.graphics.Shadow(
-                            color = Color.Black.copy(alpha = 0.2f),
-                            offset = androidx.compose.ui.geometry.Offset(0f, 2f),
-                            blurRadius = 4f
-                        )
-                    )
+                    fontSize = if (isTablet) 20.sp else 16.sp
                 )
             }
-            
-            Spacer(modifier = Modifier.width(16.dp))
-            
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = student.fullName,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Black,
-                    color = Color(0xFF1E293B),
-                    letterSpacing = (-0.2).sp
-                )
-                Text(
-                    text = "Tap to enter classroom",
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF64748B)
-                )
-            }
-            
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                contentDescription = null,
-                tint = gradeColor.copy(alpha = 0.5f),
-                modifier = Modifier.size(20.dp)
+
+            Spacer(Modifier.height(10.dp))
+
+            Text(
+                text = student.fullName,
+                fontSize = if (isTablet) 14.sp else 13.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+                lineHeight = 18.sp
             )
         }
     }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// GradeCard — kept for backward compatibility but no longer primary
+// ─────────────────────────────────────────────────────────────────────────────
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun GradeCard(grade: Int, color: Color, subtitle: String, onClick: () -> Unit) {
+    GradeSelectionCard(
+        grade = grade,
+        subtitle = subtitle,
+        color = color,
+        isTablet = false,
+        onClick = onClick
+    )
 }

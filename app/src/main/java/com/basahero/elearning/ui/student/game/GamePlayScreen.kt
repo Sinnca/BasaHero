@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -198,28 +199,43 @@ fun GamePlayScreen(
         }
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        when (uiState.phase) {
-            GamePhase.LOBBY -> {
-                Text("Waiting for teacher to start...", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                CircularProgressIndicator(modifier = Modifier.padding(top = 32.dp))
-            }
-            GamePhase.QUESTION, GamePhase.REVEAL -> {
-                QuestionPlayPhase(uiState, onAnswerSelected = { viewModel.submitAnswer(it) })
-            }
-            GamePhase.DONE -> {
-                Text("Waiting for results...", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+    val backgroundColor = when (uiState.phase) {
+        GamePhase.LOBBY, GamePhase.DONE -> Color(0xFF511D89) // Deep Purple
+        else -> Color(0xFFF5F5F5) // Light gray for questions
+    }
+    val textColor = if (backgroundColor == Color(0xFF511D89)) Color.White else Color.Black
+
+    Surface(modifier = Modifier.fillMaxSize(), color = backgroundColor) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            when (uiState.phase) {
+                GamePhase.LOBBY -> {
+                    Text("You're in!", fontSize = 48.sp, fontWeight = FontWeight.Black, color = Color(0xFFFFEB3B))
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text("See your nickname on the screen", fontSize = 24.sp, color = Color.White, textAlign = TextAlign.Center)
+                    Spacer(modifier = Modifier.height(64.dp))
+                    CircularProgressIndicator(color = Color.White, modifier = Modifier.size(64.dp))
+                }
+                GamePhase.QUESTION, GamePhase.REVEAL -> {
+                    QuestionPlayPhase(uiState, onAnswerSelected = { viewModel.submitAnswer(it) })
+                }
+                GamePhase.DONE -> {
+                    Text("Game Over!", fontSize = 48.sp, fontWeight = FontWeight.Black, color = Color(0xFFFFEB3B))
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text("Look at the teacher's screen to see the final results.", fontSize = 24.sp, color = Color.White, textAlign = TextAlign.Center)
+                }
             }
         }
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun QuestionPlayPhase(uiState: GamePlayUiState, onAnswerSelected: (String) -> Unit) {
+fun ColumnScope.QuestionPlayPhase(uiState: GamePlayUiState, onAnswerSelected: (String) -> Unit) {
+    val isTablet = LocalConfiguration.current.screenWidthDp >= 600
     val animatedProgress by animateFloatAsState(targetValue = uiState.timeRemaining / 15f, label = "timer")
     Box(modifier = Modifier.size(100.dp), contentAlignment = Alignment.Center) {
         Canvas(modifier = Modifier.fillMaxSize()) {
@@ -247,37 +263,56 @@ fun QuestionPlayPhase(uiState: GamePlayUiState, onAnswerSelected: (String) -> Un
     
     Spacer(modifier = Modifier.height(48.dp))
     
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        uiState.choices.forEach { choice ->
+    val colors = listOf(
+        Color(0xFFE21B3C), // Red
+        Color(0xFF1368CE), // Blue
+        Color(0xFFD89E00), // Yellow/Amber
+        Color(0xFF26890C)  // Green
+    )
+
+    FlowRow(
+        maxItemsInEachRow = if (isTablet) 2 else 1,
+        modifier = Modifier.fillMaxWidth().weight(1f),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        uiState.choices.forEachIndexed { index, choice ->
             val isSelected = uiState.selectedAnswerId == choice.id
             val isCorrect = choice.isCorrect
             
+            val baseColor = colors.getOrElse(index % colors.size) { Color.Gray }
             val backgroundColor = when {
                 uiState.phase == GamePhase.REVEAL && isCorrect -> Color(0xFF4CAF50)
                 uiState.phase == GamePhase.REVEAL && isSelected && !isCorrect -> Color(0xFFF44336)
-                isSelected -> Color(0xFFE3F2FD)
-                uiState.hasAnswered -> Color(0xFFF5F5F5)
-                else -> Color.White
+                uiState.hasAnswered && !isSelected -> baseColor.copy(alpha = 0.4f)
+                else -> baseColor
             }
             
-            val textColor = when {
-                uiState.phase == GamePhase.REVEAL && (isCorrect || isSelected) -> Color.White
-                else -> Color.Black
+            val textColor = Color.White
+
+            val modifier = if (isTablet) {
+                Modifier.fillMaxWidth(0.48f).fillMaxHeight(0.48f)
+            } else {
+                Modifier.fillMaxWidth().height(80.dp)
             }
 
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp)
+                modifier = modifier
                     .clip(RoundedCornerShape(12.dp))
                     .background(backgroundColor)
                     .clickable(enabled = !uiState.hasAnswered) {
                         onAnswerSelected(choice.id)
                     }
                     .padding(16.dp),
-                contentAlignment = Alignment.CenterStart
+                contentAlignment = Alignment.Center
             ) {
-                Text(choice.choiceText, fontSize = 18.sp, color = textColor, fontWeight = FontWeight.SemiBold)
+                Text(
+                    text = choice.choiceText, 
+                    fontSize = if (isTablet) 28.sp else 20.sp, 
+                    color = textColor, 
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }

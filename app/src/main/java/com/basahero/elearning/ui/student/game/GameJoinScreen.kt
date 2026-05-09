@@ -19,6 +19,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.basahero.elearning.data.local.SessionManager
@@ -117,65 +118,84 @@ fun GameJoinScreen(
         }
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    val isTablet = LocalConfiguration.current.screenWidthDp >= 600
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color(0xFF673AB7) // Deep Purple Theme
     ) {
-        Text("Enter Game Code", fontSize = 28.sp, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(8.dp))
-        Text("Look at the teacher's screen to get the 4-digit code.", fontSize = 16.sp, color = Color.Gray, textAlign = TextAlign.Center)
-        
-        Spacer(modifier = Modifier.height(32.dp))
+        Column(
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text("Enter Game PIN", fontSize = if (isTablet) 42.sp else 32.sp, fontWeight = FontWeight.Bold, color = Color.White)
+            Spacer(modifier = Modifier.height(12.dp))
+            Text("Look at the teacher's screen to get the 4-digit PIN.", fontSize = if (isTablet) 20.sp else 16.sp, color = Color.White.copy(alpha = 0.8f), textAlign = TextAlign.Center)
+            
+            Spacer(modifier = Modifier.height(48.dp))
 
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            for (i in 0..3) {
-                OutlinedTextField(
-                    value = uiState.codeDigits[i],
-                    onValueChange = { newValue ->
-                        if (newValue.length <= 1) {
-                            viewModel.updateDigit(i, newValue)
-                            if (newValue.isNotEmpty() && i < 3) {
-                                focusRequesters[i + 1].requestFocus()
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                for (i in 0..3) {
+                    OutlinedTextField(
+                        value = uiState.codeDigits[i],
+                        onValueChange = { newValue ->
+                            if (newValue.length <= 1) {
+                                viewModel.updateDigit(i, newValue)
+                                if (newValue.isNotEmpty() && i < 3) {
+                                    focusRequesters[i + 1].requestFocus()
+                                }
                             }
-                        }
-                    },
-                    modifier = Modifier
-                        .width(64.dp)
-                        .height(72.dp)
-                        .focusRequester(focusRequesters[i])
-                        .onKeyEvent { keyEvent ->
-                            if (keyEvent.key == Key.Backspace && uiState.codeDigits[i].isEmpty() && i > 0) {
-                                focusRequesters[i - 1].requestFocus()
-                                true
-                            } else false
                         },
-                    textStyle = LocalTextStyle.current.copy(
-                        textAlign = TextAlign.Center,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    singleLine = true,
-                    shape = RoundedCornerShape(12.dp)
-                )
+                        modifier = Modifier
+                            .width(if (isTablet) 96.dp else 72.dp)
+                            .height(if (isTablet) 120.dp else 84.dp)
+                            .focusRequester(focusRequesters[i])
+                            .onKeyEvent { keyEvent ->
+                                if (keyEvent.key == Key.Backspace && uiState.codeDigits[i].isEmpty() && i > 0) {
+                                    focusRequesters[i - 1].requestFocus()
+                                    true
+                                } else false
+                            },
+                        textStyle = LocalTextStyle.current.copy(
+                            textAlign = TextAlign.Center,
+                            fontSize = if (isTablet) 48.sp else 32.sp,
+                            fontWeight = FontWeight.Black
+                        ),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        singleLine = true,
+                        shape = RoundedCornerShape(16.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedContainerColor = Color.White,
+                            focusedContainerColor = Color.White,
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black
+                        )
+                    )
+                }
             }
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-        if (uiState.isLoading) {
-            CircularProgressIndicator()
-        }
+            if (uiState.isLoading) {
+                CircularProgressIndicator(color = Color.White)
+            }
 
-        if (uiState.error != null) {
-            Text(uiState.error!!, color = Color.Red, fontSize = 16.sp, modifier = Modifier.padding(16.dp))
-        }
+            if (uiState.error != null) {
+                Surface(color = Color.White, shape = RoundedCornerShape(8.dp)) {
+                    Text(uiState.error!!, color = Color.Red, fontSize = 18.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(16.dp))
+                }
+            }
 
-        Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(48.dp))
 
-        Button(onClick = onBack, modifier = Modifier.fillMaxWidth().height(56.dp), colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray, contentColor = Color.Black)) {
-            Text("Cancel", fontSize = 18.sp)
+            Button(
+                onClick = onBack, 
+                modifier = Modifier.widthIn(max = 300.dp).fillMaxWidth().height(64.dp), 
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.2f), contentColor = Color.White)
+            ) {
+                Text("Cancel", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            }
         }
     }
 }

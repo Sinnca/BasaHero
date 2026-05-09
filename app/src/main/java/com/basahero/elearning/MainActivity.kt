@@ -294,6 +294,19 @@ fun PhilIRIApp() {
                 // ✅ Pass the navigation actions for the Pre/Post cards
                 onPreTestClick = { navController.navigate("pre_test/$quarterId") },
                 onPostTestClick = { navController.navigate("post_test/$quarterId") },
+                onNavigateHome = { 
+                    navController.popBackStack(Routes.STUDENT_HOME, inclusive = false)
+                },
+                onNavigateGame = { 
+                    navController.popBackStack(Routes.STUDENT_HOME, inclusive = false)
+                    navController.navigate(Routes.GAME_JOIN)
+                },
+                onNavigateProfile = {
+                    navController.popBackStack(Routes.STUDENT_HOME, inclusive = false)
+                    // Currently, Profile is just tab 3 in StudentHomeScreen. 
+                    // To handle tab switching from MainActivity cleanly, we might just navigate home for now,
+                    // or implement a deep link arg. For now, pop to Home since it is the root.
+                },
                 onBack = { navController.popBackStack() }
             )
         }
@@ -425,6 +438,10 @@ fun PhilIRIApp() {
                 viewModel = viewModel,
                 onClassClick = { classId, className, gradeLevel ->
                     navController.navigate("class_roster/$classId/$className/$gradeLevel")
+                },
+                onHostGameClick = { classId ->
+                    val defaultLessonId = java.util.UUID.randomUUID().toString()
+                    navController.navigate("game_host/$classId/$defaultLessonId")
                 },
                 onLogout = {
                     coroutineScope.launch { sessionManager.setTeacherLoggedIn(false) }

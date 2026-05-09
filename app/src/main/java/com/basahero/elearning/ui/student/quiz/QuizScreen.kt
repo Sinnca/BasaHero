@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalConfiguration
 import com.basahero.elearning.data.model.*
 import com.basahero.elearning.data.model.QuizResult
 import com.basahero.elearning.domain.QuizScoringUseCase
@@ -39,6 +40,7 @@ fun QuizScreen(
     val uiState by viewModel.uiState.collectAsState()
     val haptic = LocalHapticFeedback.current
     val strings = LocalAppStrings.current
+    val isTablet = LocalConfiguration.current.screenWidthDp >= 600
 
     LaunchedEffect(lessonId) {
         viewModel.loadQuiz(lessonId, lessonTitle)
@@ -115,12 +117,20 @@ fun QuizScreen(
             val question = uiState.currentQuestion ?: return@Column
             val currentAnswer = uiState.answers[question.id]
 
-            // ── Question content ──────────────────────────────────────────────
-            Column(
+            // ── Question content — center constrained on tablet ──────────────
+            Box(
                 modifier = Modifier
                     .weight(1f)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.TopCenter
+            ) {
+            Column(
+                modifier = Modifier
+                    .then(
+                        if (isTablet) Modifier.widthIn(max = 720.dp) else Modifier.fillMaxWidth()
+                    )
                     .verticalScroll(rememberScrollState())
-                    .padding(16.dp)
+                    .padding(if (isTablet) 28.dp else 16.dp)
             ) {
                 // Points badge
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -144,17 +154,17 @@ fun QuizScreen(
                     )
                 }
 
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(if (isTablet) 28.dp else 16.dp))
 
                 // Question text
                 Text(
                     text = question.questionText,
-                    fontSize = 17.sp,
+                    fontSize = if (isTablet) 20.sp else 17.sp,
                     fontWeight = FontWeight.Medium,
-                    lineHeight = 26.sp
+                    lineHeight = if (isTablet) 30.sp else 26.sp
                 )
 
-                Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(if (isTablet) 32.dp else 24.dp))
 
                 // ── Route to the correct animated question component ──────────
                 when (question.questionType) {
@@ -271,13 +281,20 @@ fun QuizScreen(
                     )
                 }
             }
+            } // end Box
 
-            // ── Navigation buttons ────────────────────────────────────────────
+            // ── Navigation buttons — center constrained on tablet ─────────────
             Surface(shadowElevation = 4.dp) {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
+                        .then(
+                            if (isTablet) Modifier.widthIn(max = 720.dp) else Modifier.fillMaxWidth()
+                        )
+                        .padding(if (isTablet) 20.dp else 16.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     OutlinedButton(
@@ -323,8 +340,9 @@ fun QuizScreen(
                             Icon(Icons.Default.ArrowForward, contentDescription = null,
                                 modifier = Modifier.size(16.dp))
                         }
-                    }
                 }
+                } // end Row
+                } // end Box
             }
         }
     }

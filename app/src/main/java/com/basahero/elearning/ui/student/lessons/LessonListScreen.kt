@@ -1,6 +1,7 @@
 package com.basahero.elearning.ui.student.lessons
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -8,12 +9,15 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -21,20 +25,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.basahero.elearning.data.model.Lesson
 import com.basahero.elearning.data.model.LessonStatus
-import com.basahero.elearning.data.repository.LessonRepository
-import com.basahero.elearning.data.repository.PrePostRepository
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import androidx.compose.foundation.background
-import com.basahero.elearning.ui.common.TwoPaneLayout
-import com.basahero.elearning.ui.common.rememberIsTablet
+import com.basahero.elearning.ui.common.LocalAppStrings
+
+import com.basahero.elearning.ui.student.home.StudentBottomNavBar
 
 // ─────────────────────────────────────────────────────────────────────────────
-// LessonListViewModel
-// ─────────────────────────────────────────────────────────────────────────────
-
-// ─────────────────────────────────────────────────────────────────────────────
-// LessonListScreen
+// LessonListScreen — wireframe accurate, centered column for tablet
 // ─────────────────────────────────────────────────────────────────────────────
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,13 +40,16 @@ fun LessonListScreen(
     quarterTitle: String,
     viewModel: LessonListViewModel,
     onLessonClick: (lessonId: String) -> Unit,
-    onPreTestClick: () -> Unit, // 👈 NEW Action
-    onPostTestClick: () -> Unit, // 👈 NEW Action
+    onPreTestClick: () -> Unit,
+    onPostTestClick: () -> Unit,
+    onNavigateHome: () -> Unit,
+    onNavigateGame: () -> Unit,
+    onNavigateProfile: () -> Unit,
     onBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val isTablet = rememberIsTablet()
-    var selectedLessonId by remember { mutableStateOf<String?>(null) }
+    val isTablet = LocalConfiguration.current.screenWidthDp >= 600
+    val strings = LocalAppStrings.current
 
     LaunchedEffect(quarterId) {
         viewModel.loadLessons(quarterId, studentId, quarterTitle)
@@ -59,115 +58,116 @@ fun LessonListScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(uiState.quarterTitle) },
+                title = { 
+                    Text(
+                        text = uiState.quarterTitle,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = if (isTablet) 22.sp else 20.sp
+                    ) 
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    titleContentColor = MaterialTheme.colorScheme.primary
+                )
+            )
+        },
+        bottomBar = {
+            StudentBottomNavBar(
+                selectedTab = 1, // "Quarters" tab is always active when viewing a quarter
+                onTabSelected = { tab ->
+                    when (tab) {
+                        0 -> onNavigateHome()
+                        1 -> onBack() // Pop back to quarters list
+                        2 -> onNavigateGame()
+                        3 -> onNavigateProfile()
                     }
                 }
             )
-        }
+        },
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
-        TwoPaneLayout(
-            isTablet = isTablet,
-            showDetail = selectedLessonId != null,
-            listPane = {
-                // ── Lesson list pane ─────────────────────────────────────────────
-                if (uiState.isLoading) {
-                    Box(
-                        Modifier.fillMaxSize().padding(padding),
-                        contentAlignment = Alignment.Center
-                    ) { CircularProgressIndicator() }
-                    return@TwoPaneLayout
-                }
+        if (uiState.isLoading) {
+            Box(
+                Modifier.fillMaxSize().padding(padding),
+                contentAlignment = Alignment.Center
+            ) { CircularProgressIndicator() }
+            return@Scaffold
+        }
 
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding)
-                        .padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    item { Spacer(modifier = Modifier.height(8.dp)) }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .then(
+                        if (isTablet) Modifier.widthIn(max = 800.dp) else Modifier.fillMaxWidth()
+                    )
+                    .padding(horizontal = if (isTablet) 32.dp else 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                item { Spacer(modifier = Modifier.height(8.dp)) }
 
-                    // 🚀 PHASE 3B: Pre-Test Card (Top)
-                    if (uiState.hasPrePostContent) {
-                        item {
-                            PrePostCard(
-                                title = "Quarter Pre-Test",
-                                subtitle = if (uiState.isPreTestDone) "Completed" else "Required to unlock lessons",
-                                isDone = uiState.isPreTestDone,
-                                isLocked = false, // Pre-test is never locked!
-                                icon = Icons.Default.Assignment,
-                                onClick = onPreTestClick
-                            )
-                        }
-                    }
-
-                    // Normal Lessons
-                    itemsIndexed(uiState.lessons) { index, lesson ->
-                        LessonCard(
-                            lesson = lesson,
-                            lessonNumber = index + 1,
-                            onClick = {
-                                if (lesson.status != LessonStatus.LOCKED) {
-                                    selectedLessonId = lesson.id
-                                    if (!isTablet) onLessonClick(lesson.id)
-                                }
-                            }
+                // ── Pre-Test Card
+                if (uiState.hasPrePostContent) {
+                    item {
+                        PrePostCard(
+                            title = strings.preTest,
+                            subtitle = if (uiState.isPreTestDone) strings.done else "Required to unlock lessons",
+                            isDone = uiState.isPreTestDone,
+                            isLocked = false, // Pre-test is always open
+                            icon = Icons.Default.Assignment,
+                            isTablet = isTablet,
+                            onClick = onPreTestClick
                         )
                     }
-
-                    // 🚀 PHASE 3B: Post-Test Card (Bottom)
-                    if (uiState.hasPrePostContent) {
-                        item {
-                            PrePostCard(
-                                title = "Quarter Post-Test",
-                                subtitle = if (uiState.isPostTestDone) "Completed" else "Unlock by finishing all lessons",
-                                isDone = uiState.isPostTestDone,
-                                isLocked = !uiState.allLessonsDone, // Locked until all lessons are done!
-                                icon = Icons.Default.EmojiEvents,
-                                onClick = { if (uiState.allLessonsDone) onPostTestClick() }
-                            )
-                        }
-                    }
-
-                    item { Spacer(modifier = Modifier.height(16.dp)) }
                 }
-            },
-            detailPane = {
-                // ── Detail pane (tablet only) ─────────────────────────────────
-                val lessonId = selectedLessonId
-                if (lessonId != null) {
-                    // Navigate to the reading screen in the right pane
-                    LaunchedEffect(lessonId) { onLessonClick(lessonId) }
-                } else {
-                    // Empty state — shown before any lesson is selected
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            Icon(
-                                Icons.Default.MenuBook,
-                                contentDescription = null,
-                                modifier = Modifier.size(64.dp),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
-                            )
-                            Text(
-                                text = "Select a lesson to start reading",
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                style = MaterialTheme.typography.bodyLarge
-                            )
+
+                // ── Lessons
+                itemsIndexed(uiState.lessons) { index, lesson ->
+                    LessonCard(
+                        lesson = lesson,
+                        lessonNumber = index + 1,
+                        isTablet = isTablet,
+                        onClick = {
+                            if (lesson.status != LessonStatus.LOCKED) {
+                                onLessonClick(lesson.id)
+                            }
                         }
+                    )
+                }
+
+                // ── Post-Test Card
+                if (uiState.hasPrePostContent) {
+                    item {
+                        PrePostCard(
+                            title = strings.postTest,
+                            subtitle = if (uiState.isPostTestDone) strings.done else "Unlock by finishing all lessons",
+                            isDone = uiState.isPostTestDone,
+                            isLocked = !uiState.allLessonsDone,
+                            icon = Icons.Default.EmojiEvents,
+                            isTablet = isTablet,
+                            onClick = { if (uiState.allLessonsDone) onPostTestClick() }
+                        )
                     }
                 }
+
+                item { Spacer(modifier = Modifier.height(32.dp)) }
             }
-        )
+        }
     }
 }
 
-// ── Shared Pre/Post Card ──────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// Shared Pre/Post Card
+// ─────────────────────────────────────────────────────────────────────────────
 @Composable
 fun PrePostCard(
     title: String,
@@ -175,154 +175,171 @@ fun PrePostCard(
     isDone: Boolean,
     isLocked: Boolean,
     icon: ImageVector,
+    isTablet: Boolean,
     onClick: () -> Unit
 ) {
-    val containerColor = when {
-        isDone -> MaterialTheme.colorScheme.tertiaryContainer
-        isLocked -> MaterialTheme.colorScheme.surfaceVariant
-        else -> MaterialTheme.colorScheme.secondaryContainer
-    }
+    val successColor = Color(0xFF10B981) // Green
+    val primaryColor = Color(0xFF2563EB) // Blue
+    val greyColor = Color(0xFF9CA3AF)
 
+    val containerColor = MaterialTheme.colorScheme.surface
     val borderColor = when {
-        isDone -> MaterialTheme.colorScheme.tertiary
-        isLocked -> MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
-        else -> MaterialTheme.colorScheme.secondary
+        isDone -> successColor.copy(alpha = 0.5f)
+        isLocked -> greyColor.copy(alpha = 0.3f)
+        else -> primaryColor.copy(alpha = 0.5f)
     }
 
     Card(
         onClick = onClick,
         enabled = !isLocked,
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = containerColor),
-        border = BorderStroke(1.dp, borderColor)
+        border = BorderStroke(1.dp, borderColor),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (isLocked) 0.dp else 2.dp)
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(if (isTablet) 24.dp else 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
-                    .size(44.dp)
+                    .size(if (isTablet) 56.dp else 48.dp)
                     .clip(CircleShape)
                     .background(
-                        if (isLocked) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.1f)
-                        else MaterialTheme.colorScheme.background.copy(alpha = 0.5f)
+                        when {
+                            isDone -> successColor.copy(alpha = 0.15f)
+                            isLocked -> greyColor.copy(alpha = 0.15f)
+                            else -> primaryColor.copy(alpha = 0.1f)
+                        }
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = if (isDone) Icons.Default.Check else if (isLocked) Icons.Default.Lock else icon,
                     contentDescription = null,
-                    tint = if (isDone) MaterialTheme.colorScheme.tertiary else if (isLocked) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f) else MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.size(24.dp)
+                    tint = when {
+                        isDone -> successColor
+                        isLocked -> greyColor
+                        else -> primaryColor
+                    },
+                    modifier = Modifier.size(if (isTablet) 28.dp else 24.dp)
                 )
             }
 
-            Spacer(modifier = Modifier.width(14.dp))
+            Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = subtitle,
-                    fontSize = 11.sp,
-                    color = if (isLocked) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.secondary,
-                    fontWeight = FontWeight.Medium
-                )
-                Text(
                     text = title,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = if (isLocked) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface
+                    fontSize = if (isTablet) 18.sp else 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = if (isLocked) greyColor else MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = subtitle,
+                    fontSize = if (isTablet) 14.sp else 13.sp,
+                    color = if (isLocked) greyColor else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
     }
 }
 
-// ── Lesson Card ───────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// Lesson Card
+// ─────────────────────────────────────────────────────────────────────────────
 @Composable
 fun LessonCard(
     lesson: Lesson,
     lessonNumber: Int,
+    isTablet: Boolean,
     onClick: () -> Unit
 ) {
     val isDone = lesson.status == LessonStatus.DONE
     val isInProgress = lesson.status == LessonStatus.IN_PROGRESS
     val isLocked = lesson.status == LessonStatus.LOCKED
 
-    val containerColor = when {
-        isDone -> MaterialTheme.colorScheme.tertiaryContainer
-        isInProgress -> MaterialTheme.colorScheme.primaryContainer
-        else -> MaterialTheme.colorScheme.surfaceVariant
-    }
+    val successColor = Color(0xFF10B981) // Green
+    val primaryColor = Color(0xFF2563EB) // Blue
+    val warningColor = Color(0xFFF59E0B) // Orange
+    val greyColor = Color(0xFF9CA3AF)
 
+    val containerColor = MaterialTheme.colorScheme.surface
     val borderColor = when {
-        isDone -> MaterialTheme.colorScheme.tertiary
-        isInProgress -> MaterialTheme.colorScheme.primary
-        else -> MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+        isDone -> successColor.copy(alpha = 0.5f)
+        isInProgress -> warningColor.copy(alpha = 0.5f)
+        else -> greyColor.copy(alpha = 0.3f)
     }
 
     Card(
         onClick = onClick,
         enabled = !isLocked,
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = containerColor),
-        border = BorderStroke(1.dp, borderColor)
+        border = BorderStroke(1.dp, borderColor),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (isLocked) 0.dp else 2.dp)
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(if (isTablet) 24.dp else 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
-                    .size(44.dp)
-                    .clip(CircleShape),
+                    .size(if (isTablet) 56.dp else 48.dp)
+                    .clip(CircleShape)
+                    .background(
+                        when {
+                            isDone -> successColor.copy(alpha = 0.15f)
+                            isInProgress -> warningColor.copy(alpha = 0.1f)
+                            else -> greyColor.copy(alpha = 0.1f)
+                        }
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 when {
                     isDone -> Icon(
-                        Icons.Default.CheckCircle,
+                        Icons.Default.Check,
                         contentDescription = "Done",
-                        tint = MaterialTheme.colorScheme.tertiary,
-                        modifier = Modifier.size(44.dp)
+                        tint = successColor,
+                        modifier = Modifier.size(if (isTablet) 28.dp else 24.dp)
                     )
-                    isInProgress -> Text(
-                        text = "$lessonNumber",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.primary
+                    isInProgress -> Icon(
+                        Icons.Default.PlayArrow,
+                        contentDescription = "Play",
+                        tint = warningColor,
+                        modifier = Modifier.size(if (isTablet) 28.dp else 24.dp)
                     )
                     else -> Icon(
                         Icons.Default.Lock,
                         contentDescription = "Locked",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                        modifier = Modifier.size(24.dp)
+                        tint = greyColor,
+                        modifier = Modifier.size(if (isTablet) 24.dp else 20.dp)
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.width(14.dp))
+            Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = lesson.competency,
-                    fontSize = 11.sp,
+                    text = "Lesson $lessonNumber: ${lesson.competency}",
+                    fontSize = if (isTablet) 14.sp else 12.sp,
                     color = when {
-                        isDone -> MaterialTheme.colorScheme.onTertiaryContainer
-                        isInProgress -> MaterialTheme.colorScheme.primary
-                        else -> MaterialTheme.colorScheme.onSurfaceVariant
+                        isDone -> successColor
+                        isInProgress -> warningColor
+                        else -> greyColor
                     },
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Bold
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = lesson.title,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = if (isLocked)
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    else
-                        MaterialTheme.colorScheme.onSurface
+                    fontSize = if (isTablet) 18.sp else 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = if (isLocked) greyColor else MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -333,22 +350,23 @@ fun LessonCard(
 
 @Composable
 fun StatusChip(status: String) {
+    val strings = LocalAppStrings.current
     val (text, color) = when (status) {
-        LessonStatus.DONE -> "Done" to MaterialTheme.colorScheme.tertiary
-        LessonStatus.IN_PROGRESS -> "Start" to MaterialTheme.colorScheme.primary
-        else -> "Locked" to MaterialTheme.colorScheme.onSurfaceVariant
+        LessonStatus.DONE -> strings.done to Color(0xFF10B981)
+        LessonStatus.IN_PROGRESS -> strings.inProgress to Color(0xFFF59E0B)
+        else -> strings.locked to Color(0xFF9CA3AF)
     }
 
     Surface(
         shape = RoundedCornerShape(20.dp),
-        color = color.copy(alpha = 0.15f),
-        border = BorderStroke(1.dp, color.copy(alpha = 0.4f))
+        color = color.copy(alpha = 0.1f),
+        border = BorderStroke(1.dp, color.copy(alpha = 0.2f))
     ) {
         Text(
             text = text,
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
-            fontSize = 11.sp,
-            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold,
             color = color
         )
     }

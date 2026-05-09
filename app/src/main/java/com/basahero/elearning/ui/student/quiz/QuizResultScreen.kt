@@ -87,26 +87,24 @@ fun QuizResultScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        listOf(
-                            MaterialTheme.colorScheme.background,
-                            if (passed) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-                            else MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.2f)
-                        )
-                    )
-                )
+                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
+            contentAlignment = Alignment.TopCenter
         ) {
-            val contentModifier = if (isTablet)
-                Modifier.width(520.dp).align(Alignment.TopCenter)
-            else
-                Modifier.fillMaxWidth()
-
+            Card(
+                modifier = Modifier
+                    .then(
+                        if (isTablet) Modifier.width(600.dp).padding(vertical = 32.dp)
+                        else Modifier.fillMaxWidth().fillMaxHeight()
+                    ),
+                shape = if (isTablet) RoundedCornerShape(24.dp) else RoundedCornerShape(0.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                elevation = CardDefaults.cardElevation(defaultElevation = if (isTablet) 8.dp else 0.dp)
+            ) {
             Column(
-                modifier = contentModifier
-                    .padding(padding)
+                modifier = Modifier
+                    .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 24.dp, vertical = 16.dp)
+                    .padding(horizontal = if (isTablet) 48.dp else 24.dp, vertical = 24.dp)
                     .graphicsLayer { alpha = enterAlpha.value; scaleX = enterScale.value; scaleY = enterScale.value },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -230,6 +228,7 @@ fun QuizResultScreen(
 
                 Spacer(Modifier.height(24.dp))
             }
+            } // end Card
         }
     }
 }

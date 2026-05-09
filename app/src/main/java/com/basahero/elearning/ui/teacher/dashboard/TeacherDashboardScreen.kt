@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalConfiguration
 import com.basahero.elearning.data.repository.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,6 +27,7 @@ import com.basahero.elearning.data.repository.*
 fun TeacherDashboardScreen(
     viewModel: TeacherDashboardViewModel,
     onClassClick: (classId: String, className: String, gradeLevel: Int) -> Unit,
+    onHostGameClick: (classId: String) -> Unit,
     onLogout: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -102,13 +104,6 @@ fun TeacherDashboardScreen(
                             }
                         }
                     }
-                    IconButton(
-                        onClick = { viewModel.signOut(onLogout) },
-                        modifier = Modifier.background(Color(0xFFFEF2F2), CircleShape)
-                    ) {
-                        Icon(Icons.AutoMirrored.Filled.Logout, "Logout", tint = Color(0xFFEF4444), modifier = Modifier.size(20.dp))
-                    }
-                    Spacer(Modifier.width(8.dp))
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.White,
@@ -125,8 +120,8 @@ fun TeacherDashboardScreen(
             ) {
                 val items = listOf(
                     Triple("Dashboard", Icons.Default.Dashboard, 0),
-                    Triple("Students", Icons.Default.Group, 1),
-                    Triple("Reports", Icons.Default.Assessment, 2),
+                    Triple("Classes", Icons.Default.Class, 1),
+                    Triple("Game", Icons.Default.SportsEsports, 2),
                     Triple("Profile", Icons.Default.Person, 3)
                 )
                 
@@ -172,8 +167,24 @@ fun TeacherDashboardScreen(
                         )
                     }
                 }
-                1 -> PlaceholderTabContent("Student Directory", "Manage all your students in one place.")
-                2 -> PlaceholderTabContent("Class Analytics", "View performance reports and insights.")
+                1 -> {
+                    if (uiState.classes.isEmpty()) {
+                        EmptyDashboardState()
+                    } else {
+                        ClassListContent(
+                            uiState = uiState,
+                            onClassClick = onClassClick
+                        )
+                    }
+                }
+                2 -> GameTabContent(
+                    uiState = uiState,
+                    onHostGameClick = onHostGameClick
+                )
+                3 -> TeacherProfileContent(
+                    uiState = uiState,
+                    onLogout = { viewModel.signOut(onLogout) }
+                )
             }
         }
 
@@ -219,35 +230,65 @@ fun EmptyDashboardState() {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ClassListContent(
     uiState: TeacherDashboardViewModel.DashboardUiState,
     onClassClick: (classId: String, className: String, gradeLevel: Int) -> Unit
 ) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+    val isTablet = LocalConfiguration.current.screenWidthDp >= 600
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopCenter
     ) {
-        item {
-            DashboardStatsRow(classes = uiState.classes)
-            Spacer(Modifier.height(24.dp))
-            Text(
-                "My Classes", 
-                fontSize = 20.sp, 
-                fontWeight = FontWeight.Black, 
-                color = Color(0xFF1E293B),
-                letterSpacing = (-0.5).sp
-            )
-        }
+        LazyColumn(
+            modifier = Modifier
+                .then(if (isTablet) Modifier.widthIn(max = 900.dp) else Modifier.fillMaxWidth())
+                .padding(if (isTablet) 32.dp else 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item {
+                DashboardStatsRow(classes = uiState.classes)
+                Spacer(Modifier.height(32.dp))
+                Text(
+                    "My Classes", 
+                    fontSize = 22.sp, 
+                    fontWeight = FontWeight.Black, 
+                    color = Color(0xFF1E293B),
+                    letterSpacing = (-0.5).sp
+                )
+            }
 
-        items(uiState.classes) { classInfo ->
-            ClassCard(
-                classInfo = classInfo,
-                onClick = { onClassClick(classInfo.id, classInfo.name, classInfo.gradeLevel) }
-            )
-        }
+            if (isTablet) {
+                item {
+                    FlowRow(
+                        maxItemsInEachRow = 2,
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        uiState.classes.forEach { classInfo ->
+                            ClassCard(
+                                classInfo = classInfo,
+                                modifier = Modifier.weight(1f).fillMaxWidth(),
+                                onClick = { onClassClick(classInfo.id, classInfo.name, classInfo.gradeLevel) }
+                            )
+                        }
+                    }
+                }
+            } else {
+                items(uiState.classes) { classInfo ->
+                    ClassCard(
+                        classInfo = classInfo,
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { onClassClick(classInfo.id, classInfo.name, classInfo.gradeLevel) }
+                    )
+                }
+            }
 
-        item { Spacer(Modifier.height(80.dp)) }
+            item { Spacer(Modifier.height(80.dp)) }
+        }
     }
 }
 
@@ -341,7 +382,7 @@ fun StatCard(modifier: Modifier, value: String, label: String,
 
 // ── Class card ────────────────────────────────────────────────────────────────
 @Composable
-fun ClassCard(classInfo: ClassInfo, onClick: () -> Unit) {
+fun ClassCard(classInfo: ClassInfo, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val gradeColor = when (classInfo.gradeLevel) {
         4 -> Color(0xFF2563EB) // Royal Blue
         5 -> Color(0xFF059669) // Emerald
@@ -350,7 +391,7 @@ fun ClassCard(classInfo: ClassInfo, onClick: () -> Unit) {
 
     Card(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         border = BorderStroke(1.5.dp, Color(0xFFE2E8F0)), // Increased thickness and visibility
@@ -485,3 +526,109 @@ fun CreateClassDialog(onDismiss: () -> Unit, onConfirm: (String, Int) -> Unit) {
         }
     )
 }
+
+// -----------------------------------------------------------------------------
+// Tab 2: Game Content
+// -----------------------------------------------------------------------------
+@Composable
+fun GameTabContent(
+    uiState: TeacherDashboardViewModel.DashboardUiState,
+    onHostGameClick: (classId: String) -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp)
+    ) {
+        Text("Host a Game", fontSize = 22.sp, fontWeight = FontWeight.Black, color = Color(0xFF1E293B))
+        Text("Select a section to play with.", fontSize = 14.sp, color = Color(0xFF64748B))
+        Spacer(Modifier.height(16.dp))
+        
+        if (uiState.classes.isEmpty()) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("No sections available.", color = Color(0xFF94A3B8))
+            }
+        } else {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(uiState.classes) { cls ->
+                    Card(
+                        onClick = { onHostGameClick(cls.id) },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(Icons.Default.SportsEsports, null, tint = Color(0xFFEA580C), modifier = Modifier.size(32.dp))
+                            Spacer(Modifier.width(16.dp))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(cls.name, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color(0xFF1E293B))
+                                Text("Grade ${cls.gradeLevel} • ${cls.studentCount} Students", fontSize = 13.sp, color = Color(0xFF64748B))
+                            }
+                            Icon(Icons.Default.ChevronRight, null, tint = Color(0xFF94A3B8))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Tab 3: Profile Content
+// -----------------------------------------------------------------------------
+@Composable
+fun TeacherProfileContent(
+    uiState: TeacherDashboardViewModel.DashboardUiState,
+    onLogout: () -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(Modifier.height(32.dp))
+        // Avatar
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .background(Color(0xFF3B82F6), CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = uiState.teacher?.fullName?.take(1)?.uppercase() ?: "T",
+                fontSize = 40.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+        Spacer(Modifier.height(16.dp))
+        Text(
+            text = uiState.teacher?.fullName ?: "Unknown Teacher",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Black,
+            color = Color(0xFF1E293B)
+        )
+        Text(
+            text = uiState.teacher?.email ?: "No email",
+            fontSize = 14.sp,
+            color = Color(0xFF64748B)
+        )
+        
+        Spacer(Modifier.height(48.dp))
+        
+        Button(
+            onClick = onLogout,
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEF4444)),
+            modifier = Modifier.fillMaxWidth().height(50.dp),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Icon(Icons.AutoMirrored.Filled.Logout, null)
+            Spacer(Modifier.width(8.dp))
+            Text("Log Out", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+        }
+    }
+}
+
