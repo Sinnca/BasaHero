@@ -204,6 +204,7 @@ class TeacherAuthRepository {
 
     suspend fun getCurrentTeacher(): TeacherProfile? {
         return try {
+            SupabaseClient.client.auth.awaitInitialization()
             val user = SupabaseClient.client.auth.currentUserOrNull() ?: return null
             val teacher = SupabaseClient.client
                 .from("teacher")
@@ -228,6 +229,7 @@ class TeacherAuthRepository {
     // Called after Google Sign-In to ensure teacher profile exists in public.teacher table
     suspend fun getOrCreateTeacherProfile(): Result<TeacherProfile> {
         return try {
+            SupabaseClient.client.auth.awaitInitialization()
             val user = SupabaseClient.client.auth.currentUserOrNull()
                 ?: return Result.failure(Exception("No authenticated user"))
 

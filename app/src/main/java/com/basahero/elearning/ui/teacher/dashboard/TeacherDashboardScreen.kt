@@ -40,6 +40,19 @@ fun TeacherDashboardScreen(
         return
     }
 
+    if (uiState.errorMessage != null) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(uiState.errorMessage!!, color = Color.Red, fontWeight = FontWeight.Bold)
+                Spacer(Modifier.height(16.dp))
+                Button(onClick = { viewModel.signOut(onLogout) }) {
+                    Text("Log Out")
+                }
+            }
+        }
+        return
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
