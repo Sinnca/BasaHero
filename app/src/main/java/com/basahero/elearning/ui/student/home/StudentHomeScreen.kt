@@ -30,6 +30,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.basahero.elearning.data.model.Quarter
+import com.basahero.elearning.ui.common.LocalAppStrings
+import com.basahero.elearning.data.local.SessionManager
+import kotlinx.coroutines.launch
+import androidx.compose.ui.platform.LocalContext
 import kotlin.math.min
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -46,6 +50,11 @@ fun StudentHomeScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val isTablet = LocalConfiguration.current.screenWidthDp >= 600
+    val strings = LocalAppStrings.current
+    val context = LocalContext.current
+    val sessionManager = remember { SessionManager(context) }
+    val languageCode by sessionManager.language.collectAsState(initial = "en")
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(studentId) { viewModel.loadHome(studentId) }
 
@@ -54,7 +63,7 @@ fun StudentHomeScreen(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 CircularProgressIndicator(strokeWidth = 4.dp, modifier = Modifier.size(48.dp))
                 Spacer(Modifier.height(16.dp))
-                Text("Loading your adventure...", fontSize = 15.sp,
+                Text(strings.loadingYourAdventure, fontSize = 15.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
@@ -86,12 +95,12 @@ fun StudentHomeScreen(
                         Spacer(Modifier.width(10.dp))
                         Column {
                             Text(
-                                text = "Hi, ${student.fullName.split(" ").first()}! 👋",
+                                text = strings.hiGreeting(student.fullName.split(" ").first()),
                                 fontSize = 17.sp,
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
-                                text = "Grade ${student.gradeLevel}  ·  ${student.section}",
+                                text = strings.gradeAndSection(student.gradeLevel, student.section),
                                 fontSize = 11.sp,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -99,12 +108,26 @@ fun StudentHomeScreen(
                     }
                 },
                 actions = {
+                    // Language toggle
+                    TextButton(
+                        onClick = {
+                            val newLang = if (languageCode == "en") "fil" else "en"
+                            coroutineScope.launch { sessionManager.setLanguage(newLang) }
+                        }
+                    ) {
+                        Text(
+                            text = if (languageCode == "en") "EN" else "FIL",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 13.sp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
                     IconButton(onClick = onJoinGameClick) {
-                        Icon(Icons.Default.VideogameAsset, contentDescription = "Join Game",
+                        Icon(Icons.Default.VideogameAsset, contentDescription = strings.joinGame,
                             tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     IconButton(onClick = onLogout) {
-                        Icon(Icons.Default.Logout, contentDescription = "Logout",
+                        Icon(Icons.Default.Logout, contentDescription = strings.logout,
                             tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 },
@@ -123,7 +146,7 @@ fun StudentHomeScreen(
                 item { Spacer(Modifier.height(4.dp)) }
                 item { GreetingBanner(progress = uiState.overallProgress, gradeLevel = student.gradeLevel) }
                 item {
-                    Text("My Quarters", fontSize = 20.sp, fontWeight = FontWeight.Bold,
+                    Text(strings.myQuarters, fontSize = 20.sp, fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(vertical = 4.dp))
                 }
                 // Rows of 2 cards each
@@ -158,7 +181,7 @@ fun StudentHomeScreen(
                 item { Spacer(Modifier.height(4.dp)) }
                 item { GreetingBanner(progress = uiState.overallProgress, gradeLevel = student.gradeLevel) }
                 item {
-                    Text("My Quarters", fontSize = 18.sp, fontWeight = FontWeight.Bold,
+                    Text(strings.myQuarters, fontSize = 18.sp, fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(vertical = 4.dp))
                 }
                 items(uiState.quarters) { quarter ->
@@ -182,6 +205,7 @@ fun StudentHomeScreen(
 // ─────────────────────────────────────────────────────────────────────────────
 @Composable
 private fun GreetingBanner(progress: Float, gradeLevel: Int) {
+    val strings = LocalAppStrings.current
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -202,22 +226,22 @@ private fun GreetingBanner(progress: Float, gradeLevel: Int) {
             )
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Grade $gradeLevel English",
+                    text = strings.english,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
                 )
                 Text(
-                    text = "${(progress * 100).toInt()}% Complete",
+                    text = strings.percentComplete((progress * 100).toInt()),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = if (progress < 0.5f) "Keep it up, hero! 💪"
-                           else if (progress < 1f)  "Almost there! 🌟"
-                           else                      "All done! Amazing! 🎉",
+                    text = if (progress < 0.5f) strings.keepItUp
+                           else if (progress < 1f)  strings.almostThere
+                           else                      strings.allDone,
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
                 )
@@ -236,6 +260,7 @@ fun QuarterCard(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
+    val strings = LocalAppStrings.current
     val isLocked = !quarter.isActive
 
     // Scale animation on click (press effect)
@@ -311,13 +336,13 @@ fun QuarterCard(
                     Spacer(Modifier.height(2.dp))
                     if (isLocked) {
                         Text(
-                            "🔒 Complete previous quarter first",
+                            strings.completePreviousQuarter,
                             fontSize = 12.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     } else {
                         Text(
-                            "${quarter.completedLessons} of ${quarter.totalLessons} lessons done ✔",
+                            strings.lessonsProgress(quarter.completedLessons, quarter.totalLessons),
                             fontSize = 12.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

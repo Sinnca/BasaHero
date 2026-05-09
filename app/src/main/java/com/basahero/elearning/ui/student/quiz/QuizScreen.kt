@@ -22,6 +22,7 @@ import com.basahero.elearning.domain.QuizScoringUseCase
 import com.basahero.elearning.ui.common.QuizShimmer
 import com.basahero.elearning.ui.common.triggerCorrect
 import com.basahero.elearning.ui.common.triggerWrong
+import com.basahero.elearning.ui.common.LocalAppStrings
 
 // ─────────────────────────────────────────────────────────────────────────────
 // QuizScreen
@@ -37,6 +38,7 @@ fun QuizScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val haptic = LocalHapticFeedback.current
+    val strings = LocalAppStrings.current
 
     LaunchedEffect(lessonId) {
         viewModel.loadQuiz(lessonId, lessonTitle)
@@ -53,8 +55,8 @@ fun QuizScreen(
                 TopAppBar(
                     title = {
                         Column {
-                            Text("Quiz", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                            Text("Loading questions…", fontSize = 12.sp,
+                            Text(strings.quiz, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                            Text(strings.loadingQuestions, fontSize = 12.sp,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     },
@@ -76,9 +78,9 @@ fun QuizScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("Quiz", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                        Text(strings.quiz, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                         Text(
-                            "Question ${uiState.currentIndex + 1} of ${uiState.questions.size}",
+                            strings.questionOf(uiState.currentIndex + 1, uiState.questions.size),
                             fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -285,7 +287,7 @@ fun QuizScreen(
                         Icon(Icons.Default.ArrowBack, contentDescription = null,
                             modifier = Modifier.size(16.dp))
                         Spacer(Modifier.width(4.dp))
-                        Text("Back")
+                        Text(strings.back)
                     }
 
                     if (uiState.isLastQuestion) {
@@ -304,7 +306,7 @@ fun QuizScreen(
                             Icon(Icons.Default.Check, contentDescription = null,
                                 modifier = Modifier.size(16.dp))
                             Spacer(Modifier.width(4.dp))
-                            Text("Submit Quiz")
+                            Text(strings.submitQuiz)
                         }
                     } else {
                         Button(
@@ -316,7 +318,7 @@ fun QuizScreen(
                             },
                             enabled = uiState.answers.containsKey(question.id)
                         ) {
-                            Text("Next")
+                            Text(strings.next)
                             Spacer(Modifier.width(4.dp))
                             Icon(Icons.Default.ArrowForward, contentDescription = null,
                                 modifier = Modifier.size(16.dp))

@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.basahero.elearning.ui.common.AnimatedScrollIndicator
+import com.basahero.elearning.ui.common.LocalAppStrings
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ReadingScreen
@@ -30,6 +31,7 @@ fun ReadingScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
+    val strings = LocalAppStrings.current
 
     LaunchedEffect(lessonId) {
         viewModel.loadLesson(lessonId)
@@ -45,7 +47,7 @@ fun ReadingScreen(
     // ✅ FIXED: Calculates the bottom threshold WITHOUT recomposing the UI on every pixel!
     val isAtBottom by remember {
         derivedStateOf {
-            scrollState.maxValue > 0 && scrollState.value >= scrollState.maxValue - 200
+            scrollState.maxValue == 0 || scrollState.value >= scrollState.maxValue - 200
         }
     }
 
@@ -114,7 +116,7 @@ fun ReadingScreen(
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            "Take the Quiz",
+                            strings.takeTheQuiz,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -143,7 +145,7 @@ fun ReadingScreen(
                         )
                         Spacer(Modifier.width(6.dp))
                         Text(
-                            "Scroll down to read the full passage",
+                            strings.scrollDownToRead,
                             fontSize = 12.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -235,7 +237,7 @@ fun ReadingScreen(
                     )
                     Spacer(Modifier.width(8.dp))
                     Text(
-                        "You've finished reading! Ready for the quiz?",
+                        strings.youveFinishedReading,
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.tertiary,
                         fontWeight = FontWeight.Medium

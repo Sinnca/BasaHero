@@ -49,10 +49,9 @@ class ReadingViewModel(
                 val wordsToFind = rawWords.split(",").map { it.trim() }.filter { it.isNotBlank() }
 
                 wordsToFind.forEach { word ->
-                    var startIndex = l.passageText.indexOf(word, ignoreCase = true)
-                    while (startIndex >= 0) {
+                    val startIndex = l.passageText.indexOf(word, ignoreCase = true)
+                    if (startIndex >= 0) {
                         highlights.add(HighlightedWord(word, startIndex, startIndex + word.length))
-                        startIndex = l.passageText.indexOf(word, startIndex + 1, ignoreCase = true)
                     }
                 }
             }

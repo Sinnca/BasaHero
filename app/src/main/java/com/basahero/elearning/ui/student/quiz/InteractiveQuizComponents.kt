@@ -33,6 +33,7 @@ import androidx.compose.ui.zIndex
 import com.basahero.elearning.data.model.QuizQuestion
 import com.basahero.elearning.ui.common.AnimatedAnswerCard
 import com.basahero.elearning.ui.common.ShakingTextField
+import com.basahero.elearning.ui.common.LocalAppStrings
 import kotlin.math.roundToInt
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -146,30 +147,32 @@ fun DragDropSequencingQuestion(
     var dragOffset by remember { mutableStateOf(0f) }
 
     Column(Modifier.fillMaxWidth()) {
+        val strings = LocalAppStrings.current
         Text(
-            text = if (isSubmitted) "Correct sequence:" else "Long press the ≡ handle to drag and reorder:",
+            text = if (isSubmitted) strings.correctSequence else strings.longPressToReorder,
             fontSize = 13.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
         listState.forEachIndexed { index, id ->
-            val choice = question.choices.find { it.id == id }
-            val isBeingDragged = draggedItemIndex == index
-            val zIndex = if (isBeingDragged) 1f else 0f
-            val yOffset = if (isBeingDragged) dragOffset.roundToInt() else 0
+            key(id) {
+                val choice = question.choices.find { it.id == id }
+                val isBeingDragged = draggedItemIndex == index
+                val zIndex = if (isBeingDragged) 1f else 0f
+                val yOffset = if (isBeingDragged) dragOffset.roundToInt() else 0
 
-            // Submit reveal: green if correct slot, red if wrong slot
-            val isCorrectSlot = isSubmitted && question.correctAnswerIds.getOrNull(index) == id
-            val bgColor = when {
-                isSubmitted && isCorrectSlot -> MaterialTheme.colorScheme.tertiaryContainer
-                isSubmitted && !isCorrectSlot -> MaterialTheme.colorScheme.errorContainer
-                isBeingDragged -> MaterialTheme.colorScheme.primaryContainer
-                else -> MaterialTheme.colorScheme.surface
-            }
+                // Submit reveal: green if correct slot, red if wrong slot
+                val isCorrectSlot = isSubmitted && question.correctAnswerIds.getOrNull(index) == id
+                val bgColor = when {
+                    isSubmitted && isCorrectSlot -> MaterialTheme.colorScheme.tertiaryContainer
+                    isSubmitted && !isCorrectSlot -> MaterialTheme.colorScheme.errorContainer
+                    isBeingDragged -> MaterialTheme.colorScheme.primaryContainer
+                    else -> MaterialTheme.colorScheme.surface
+                }
 
-            Card(
-                modifier = Modifier
+                Card(
+                    modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
                     .zIndex(zIndex)
@@ -183,15 +186,16 @@ fun DragDropSequencingQuestion(
                                 dragOffset += dragAmount.y
 
                                 // Snap: swap when dragged past the neighbouring card's midpoint
-                                val targetIndex = (index + (dragOffset / size.height).roundToInt())
+                                val currentIndex = draggedItemIndex ?: index
+                                val targetIndex = (currentIndex + (dragOffset / size.height).roundToInt())
                                     .coerceIn(0, listState.size - 1)
-                                if (targetIndex != index) {
+                                if (targetIndex != currentIndex) {
                                     val newList = listState.toMutableList()
-                                    newList.removeAt(index)
+                                    newList.removeAt(currentIndex)
                                     newList.add(targetIndex, id)
                                     listState = newList
                                     draggedItemIndex = targetIndex
-                                    dragOffset = 0f
+                                    dragOffset -= (targetIndex - currentIndex) * size.height
                                     onOrderChanged(newList)
                                 }
                             },
@@ -246,6 +250,7 @@ fun DragDropSequencingQuestion(
         }
     }
 }
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 4. Matching — Two-Column Layout with Canvas-Drawn Connecting Lines
@@ -266,13 +271,14 @@ fun CanvasMatchingQuestion(
     var rightAnchors by remember { mutableStateOf(mutableMapOf<String, Offset>()) }
     var selectedLeft by remember { mutableStateOf<String?>(null) }
 
+    val correctColor = MaterialTheme.colorScheme.tertiary
     val primaryColor = MaterialTheme.colorScheme.primary
     val errorColor = MaterialTheme.colorScheme.error
-    val correctColor = MaterialTheme.colorScheme.tertiary
+    val strings = LocalAppStrings.current
 
     if (!isSubmitted) {
         Text(
-            text = "Tap a word on the left, then tap its match on the right.",
+            text = strings.tapLeftThenRight,
             fontSize = 13.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(bottom = 12.dp)
@@ -418,7 +424,7 @@ fun CanvasMatchingQuestion(
     // Clear selection hint
     if (selectedLeft != null && !isSubmitted) {
         Text(
-            text = "Now tap a word on the right to connect →",
+            text = strings.nowTapRight,
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Medium,

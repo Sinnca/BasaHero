@@ -72,11 +72,23 @@ import com.basahero.elearning.ui.teacher.progress.StudentProgressViewModel
 import com.basahero.elearning.ui.teacher.analytics.ClassAnalyticsScreen
 import com.basahero.elearning.ui.teacher.analytics.ClassAnalyticsViewModel
 
+import com.basahero.elearning.ui.common.LocalAppStrings
+import com.basahero.elearning.ui.common.getStrings
+import androidx.compose.runtime.CompositionLocalProvider
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // Hide system bars for immersive experience
+        androidx.core.view.WindowCompat.setDecorFitsSystemWindows(window, false)
+        androidx.core.view.WindowInsetsControllerCompat(window, window.decorView).let { controller ->
+            controller.hide(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            controller.systemBarsBehavior = androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+
         setContent {
             // PhilIRITheme is applied inside PhilIRIApp where gradeLevel is available
             PhilIRIApp()
@@ -136,6 +148,10 @@ fun PhilIRIApp() {
 
     val isTeacherLoggedIn by sessionManager.isTeacherLoggedIn.collectAsState(initial = false)
 
+    // ── Language preference ──────────────────────────────────────────────
+    val languageCode by sessionManager.language.collectAsState(initial = "en")
+    val appStrings = remember(languageCode) { getStrings(languageCode) }
+
     LaunchedEffect(currentSession, isTeacherLoggedIn) {
         if (currentSession != null) {
             navController.navigate(Routes.STUDENT_HOME) {
@@ -150,6 +166,7 @@ fun PhilIRIApp() {
 
     // ── Apply the grade-level colour scheme to the entire app ─────────────
     PhilIRITheme(gradeLevel = gradeLevel) {
+        CompositionLocalProvider(LocalAppStrings provides appStrings) {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
@@ -596,12 +613,14 @@ fun PhilIRIApp() {
         }
     }           // end NavHost
     }           // end Surface
+    }           // end CompositionLocalProvider
     }           // end PhilIRITheme
 }
 
 @OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 fun RoleSelectScreen(onStudentClick: () -> Unit, onTeacherClick: () -> Unit) {
+    val strings = LocalAppStrings.current
     // ── Animated entrance ───────────────────────────────────────────────────
     val alpha = remember { androidx.compose.animation.core.Animatable(0f) }
     val scale = remember { androidx.compose.animation.core.Animatable(0.8f) }
@@ -772,7 +791,7 @@ fun RoleSelectScreen(onStudentClick: () -> Unit, onTeacherClick: () -> Unit) {
 
             // ── "Select Account Type" ───────────────────────────────────────
             Text(
-                text = "GET STARTED",
+                text = strings.getStarted,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.6f),
@@ -804,13 +823,13 @@ fun RoleSelectScreen(onStudentClick: () -> Unit, onTeacherClick: () -> Unit) {
                     Spacer(Modifier.width(20.dp))
                     Column {
                         Text(
-                            text = "Student",
+                            text = strings.student,
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Black,
                             color = androidx.compose.ui.graphics.Color(0xFF1340A0)
                         )
                         Text(
-                            text = "Start your learning journey",
+                            text = strings.startYourLearningJourney,
                             fontSize = 13.sp,
                             color = androidx.compose.ui.graphics.Color(0xFF1340A0).copy(alpha = 0.6f)
                         )
@@ -844,13 +863,13 @@ fun RoleSelectScreen(onStudentClick: () -> Unit, onTeacherClick: () -> Unit) {
                     Spacer(Modifier.width(20.dp))
                     Column {
                         Text(
-                            text = "Teacher",
+                            text = strings.teacher,
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Black,
                             color = androidx.compose.ui.graphics.Color.White
                         )
                         Text(
-                            text = "Manage classes & analytics",
+                            text = strings.manageClassesAndAnalytics,
                             fontSize = 13.sp,
                             color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.6f)
                         )
