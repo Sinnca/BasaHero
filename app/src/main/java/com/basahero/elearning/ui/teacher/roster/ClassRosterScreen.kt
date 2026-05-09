@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -92,7 +93,16 @@ fun ClassRosterScreen(
         }
     ) { padding ->
 
-        Column(modifier = Modifier.fillMaxSize().padding(padding)) {
+        val isTablet = LocalConfiguration.current.screenWidthDp >= 600
+
+        Box(
+            modifier = Modifier.fillMaxSize().padding(padding),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            Column(
+                modifier = Modifier
+                    .then(if (isTablet) Modifier.widthIn(max = 900.dp) else Modifier.fillMaxWidth())
+            ) {
             // Search bar
             OutlinedTextField(
                 value = uiState.searchQuery,
@@ -163,6 +173,7 @@ fun ClassRosterScreen(
                 item { Spacer(Modifier.height(16.dp)) }
             }
         }
+        } // Close Box
     }
 
     // Add student dialog

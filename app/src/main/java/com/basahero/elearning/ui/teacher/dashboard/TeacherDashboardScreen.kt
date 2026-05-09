@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalConfiguration
 import com.basahero.elearning.data.repository.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -219,35 +220,65 @@ fun EmptyDashboardState() {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ClassListContent(
     uiState: TeacherDashboardViewModel.DashboardUiState,
     onClassClick: (classId: String, className: String, gradeLevel: Int) -> Unit
 ) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+    val isTablet = LocalConfiguration.current.screenWidthDp >= 600
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopCenter
     ) {
-        item {
-            DashboardStatsRow(classes = uiState.classes)
-            Spacer(Modifier.height(24.dp))
-            Text(
-                "My Classes", 
-                fontSize = 20.sp, 
-                fontWeight = FontWeight.Black, 
-                color = Color(0xFF1E293B),
-                letterSpacing = (-0.5).sp
-            )
-        }
+        LazyColumn(
+            modifier = Modifier
+                .then(if (isTablet) Modifier.widthIn(max = 900.dp) else Modifier.fillMaxWidth())
+                .padding(if (isTablet) 32.dp else 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item {
+                DashboardStatsRow(classes = uiState.classes)
+                Spacer(Modifier.height(32.dp))
+                Text(
+                    "My Classes", 
+                    fontSize = 22.sp, 
+                    fontWeight = FontWeight.Black, 
+                    color = Color(0xFF1E293B),
+                    letterSpacing = (-0.5).sp
+                )
+            }
 
-        items(uiState.classes) { classInfo ->
-            ClassCard(
-                classInfo = classInfo,
-                onClick = { onClassClick(classInfo.id, classInfo.name, classInfo.gradeLevel) }
-            )
-        }
+            if (isTablet) {
+                item {
+                    FlowRow(
+                        maxItemsInEachRow = 2,
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        uiState.classes.forEach { classInfo ->
+                            ClassCard(
+                                classInfo = classInfo,
+                                modifier = Modifier.weight(1f).fillMaxWidth(),
+                                onClick = { onClassClick(classInfo.id, classInfo.name, classInfo.gradeLevel) }
+                            )
+                        }
+                    }
+                }
+            } else {
+                items(uiState.classes) { classInfo ->
+                    ClassCard(
+                        classInfo = classInfo,
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { onClassClick(classInfo.id, classInfo.name, classInfo.gradeLevel) }
+                    )
+                }
+            }
 
-        item { Spacer(Modifier.height(80.dp)) }
+            item { Spacer(Modifier.height(80.dp)) }
+        }
     }
 }
 
@@ -341,7 +372,7 @@ fun StatCard(modifier: Modifier, value: String, label: String,
 
 // ── Class card ────────────────────────────────────────────────────────────────
 @Composable
-fun ClassCard(classInfo: ClassInfo, onClick: () -> Unit) {
+fun ClassCard(classInfo: ClassInfo, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val gradeColor = when (classInfo.gradeLevel) {
         4 -> Color(0xFF2563EB) // Royal Blue
         5 -> Color(0xFF059669) // Emerald
@@ -350,7 +381,7 @@ fun ClassCard(classInfo: ClassInfo, onClick: () -> Unit) {
 
     Card(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         border = BorderStroke(1.5.dp, Color(0xFFE2E8F0)), // Increased thickness and visibility

@@ -6,6 +6,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.VideogameAsset
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,6 +24,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.basahero.elearning.data.model.QuizQuestion
 import com.basahero.elearning.data.repository.*
+import com.basahero.elearning.data.remote.SupabaseClient
+import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -43,7 +49,8 @@ data class GameHostUiState(
     val answers: List<GameAnswer> = emptyList(),
     val leaderboard: List<LeaderboardEntry> = emptyList(),
     val isLoading: Boolean = false,
-    val phase: GamePhase = GamePhase.LOBBY
+    val phase: GamePhase = GamePhase.LOBBY,
+    val titleText: String = "Loading..."
 )
 
 class GameHostViewModel(
@@ -61,6 +68,18 @@ class GameHostViewModel(
     fun startGame(classId: String, lessonId: String) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
+            
+            // Fetch dynamic class details
+            val classDetails = withContext(Dispatchers.IO) {
+                try {
+                    val row = SupabaseClient.client.from("class").select { filter { eq("id", classId) } }.decodeSingleOrNull<ClassRow>()
+                    if (row != null) "Grade ${row.grade_level} - ${row.name}" else "Class Game"
+                } catch (e: Exception) {
+                    "Class Game"
+                }
+            }
+            _uiState.update { it.copy(titleText = classDetails) }
+
             var questions = withContext(Dispatchers.IO) {
                 quizRepo.getQuizForLesson(lessonId).filter { it.questionType == "MCQ" }
             }
@@ -213,53 +232,153 @@ fun GameHostScreen(
     }
 
     if (uiState.isLoading) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
+        Box(modifier = Modifier.fillMaxSize().background(Color(0xFF511D89)), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator(color = Color.White)
         }
         return
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color(0xFF511D89) // Deep Purple Background
     ) {
-        when (uiState.phase) {
-            GamePhase.LOBBY -> LobbyPhase(uiState, onStart = { viewModel.nextQuestion() })
-            GamePhase.QUESTION -> QuestionPhase(uiState, onReveal = { viewModel.revealAnswer() })
-            GamePhase.REVEAL -> RevealPhase(uiState, onNext = { viewModel.nextQuestion() })
-            GamePhase.DONE -> DonePhase(uiState, onBack = onBack)
+        Column(
+            modifier = Modifier.fillMaxSize().padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Header
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Default.VideogameAsset, contentDescription = null, tint = Color(0xFFB39DDB), modifier = Modifier.size(28.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Game Mode", fontSize = 24.sp, fontWeight = FontWeight.Black, color = Color.White)
+                    }
+                    if (uiState.titleText.isNotEmpty()) {
+                        Text(uiState.titleText, fontSize = 14.sp, color = Color(0xFFD1C4E9), modifier = Modifier.padding(start = 36.dp))
+                    }
+                }
+                IconButton(onClick = onBack) {
+                    Icon(Icons.Default.Close, "Close", tint = Color.White)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            when (uiState.phase) {
+                GamePhase.LOBBY -> LobbyPhase(uiState, onStart = { viewModel.nextQuestion() })
+                GamePhase.QUESTION -> QuestionPhase(uiState, onReveal = { viewModel.revealAnswer() })
+                GamePhase.REVEAL -> RevealPhase(uiState, onNext = { viewModel.nextQuestion() })
+                GamePhase.DONE -> DonePhase(uiState, onBack = onBack)
+            }
         }
     }
 }
 
 @Composable
 fun ColumnScope.LobbyPhase(uiState: GameHostUiState, onStart: () -> Unit) {
-    Text("Join Code", fontSize = 24.sp, color = Color.Gray)
-    Text(uiState.session?.joinCode ?: "----", fontSize = 64.sp, fontWeight = FontWeight.Bold, letterSpacing = 8.sp)
-    
-    Spacer(modifier = Modifier.height(32.dp))
-    
-    Box(modifier = Modifier.size(200.dp).background(Color.LightGray, RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
-        Text("QR Code Placeholder", color = Color.DarkGray)
-    }
-    
-    Spacer(modifier = Modifier.height(32.dp))
-    
-    Text("${uiState.connectedStudents.size} Students Joined", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
-    
-    LazyColumn(modifier = Modifier.weight(1f).padding(vertical = 16.dp)) {
-        items(uiState.connectedStudents) { student ->
-            Text(student.fullName, fontSize = 18.sp, modifier = Modifier.padding(4.dp))
+    val totalExpectedStudents = 32 // Hardcoded for demo, normally from class details
+
+    // PIN Card
+    Surface(
+        modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+        color = Color(0xFF6A35A3),
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(vertical = 32.dp, horizontal = 16.dp)
+        ) {
+            Text("Join Code", fontSize = 16.sp, color = Color(0xFFD1C4E9))
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = (uiState.session?.joinCode ?: "----").toList().joinToString(" "), 
+                fontSize = 72.sp, 
+                fontWeight = FontWeight.Black, 
+                color = Color(0xFFFFEB3B), // Bright Yellow
+                letterSpacing = 8.sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text("Students enter this code to join", fontSize = 14.sp, color = Color(0xFFD1C4E9))
         }
     }
-    
+
+    Spacer(modifier = Modifier.height(32.dp))
+
+    // Students Joined Progress
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("Students Joined (${uiState.connectedStudents.size}/$totalExpectedStudents)", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
+        Spacer(modifier = Modifier.height(8.dp))
+        val progress = if (totalExpectedStudents > 0) uiState.connectedStudents.size.toFloat() / totalExpectedStudents else 0f
+        LinearProgressIndicator(
+            progress = { progress },
+            modifier = Modifier.fillMaxWidth().height(10.dp).clip(RoundedCornerShape(5.dp)),
+            color = Color(0xFF69F0AE), // Bright Green
+            trackColor = Color.White
+        )
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    // Avatar Row
+    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        val displayLimit = 5
+        val displayedStudents = uiState.connectedStudents.take(displayLimit)
+        val overflow = uiState.connectedStudents.size - displayLimit
+
+        displayedStudents.forEach { student ->
+            Box(
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .size(40.dp)
+                    .clip(androidx.compose.foundation.shape.CircleShape)
+                    .background(Color(0xFF8E24AA)),
+                contentAlignment = Alignment.Center
+            ) {
+                val initials = student.fullName.split(" ").take(2).joinToString("") { it.firstOrNull()?.uppercase() ?: "" }
+                Text(initials, color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+            }
+        }
+        if (overflow > 0) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(androidx.compose.foundation.shape.CircleShape)
+                    .background(Color(0xFF7E57C2)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("+$overflow", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+            }
+        }
+    }
+
+    Spacer(modifier = Modifier.weight(1f))
+
+    // Start Button
     Button(
         onClick = onStart,
         enabled = uiState.connectedStudents.isNotEmpty(),
-        modifier = Modifier.fillMaxWidth().height(56.dp)
+        modifier = Modifier.fillMaxWidth().height(64.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0xFFFFD700), // Yellow
+            contentColor = Color.Black,
+            disabledContainerColor = Color(0xFF5E35B1),
+            disabledContentColor = Color(0xFF9575CD)
+        )
     ) {
-        Text("Start Game", fontSize = 18.sp)
+        Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(24.dp))
+        Spacer(modifier = Modifier.width(8.dp))
+        Text("Start Game", fontSize = 22.sp, fontWeight = FontWeight.Bold)
     }
+
+    Spacer(modifier = Modifier.height(16.dp))
+    Text("Live via Supabase Realtime • Internet required", fontSize = 12.sp, color = Color(0xFFB39DDB), modifier = Modifier.align(Alignment.CenterHorizontally))
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
@@ -299,54 +418,111 @@ fun ColumnScope.QuestionPhase(uiState: GameHostUiState, onReveal: () -> Unit) {
 
 @Composable
 fun ColumnScope.RevealPhase(uiState: GameHostUiState, onNext: () -> Unit) {
-    Text("Correct Answer", fontSize = 20.sp, color = Color.Gray)
+    Text("Correct Answer", fontSize = 24.sp, color = Color(0xFFD1C4E9))
     Spacer(modifier = Modifier.height(16.dp))
     
-    Text(uiState.currentQuestion?.questionText ?: "", fontSize = 24.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
+    Text(uiState.currentQuestion?.questionText ?: "", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color.White, textAlign = TextAlign.Center)
     Spacer(modifier = Modifier.height(24.dp))
     
-    Text("Answer revealed on student devices", fontSize = 18.sp, fontStyle = androidx.compose.ui.text.font.FontStyle.Italic)
+    Surface(
+        color = Color(0xFF6A35A3),
+        shape = RoundedCornerShape(16.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp)
+    ) {
+        Text("Answer revealed on student devices", fontSize = 18.sp, color = Color(0xFFFFEB3B), textAlign = TextAlign.Center, modifier = Modifier.padding(16.dp))
+    }
     
-    Spacer(modifier = Modifier.height(32.dp))
+    Spacer(modifier = Modifier.height(48.dp))
     
-    Text("Current Top 5", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-    LazyColumn(modifier = Modifier.weight(1f).padding(vertical = 16.dp)) {
-        items(uiState.leaderboard.take(5)) { entry ->
-            Row(modifier = Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(entry.studentName, fontSize = 18.sp)
-                Text("${entry.correctCount} pts", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+    Text("Current Top 5", fontSize = 32.sp, fontWeight = FontWeight.Black, color = Color(0xFFFFD700))
+    LazyColumn(
+        modifier = Modifier.weight(1f).padding(vertical = 16.dp).widthIn(max = 600.dp)
+    ) {
+        items(uiState.leaderboard.take(5).withIndex().toList()) { (index, entry) ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+                    .background(Color.White.copy(alpha = 0.1f), RoundedCornerShape(12.dp))
+                    .padding(16.dp), 
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("#${index + 1}", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFFEB3B), modifier = Modifier.width(40.dp))
+                    Text(entry.studentName, fontSize = 20.sp, fontWeight = FontWeight.Medium, color = Color.White)
+                }
+                Text("${entry.correctCount} pts", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.White)
             }
         }
     }
     
     val isLast = (uiState.session?.questionIndex ?: 0) >= (uiState.session?.questionOrder?.size?.minus(1) ?: 0)
-    Button(onClick = onNext, modifier = Modifier.fillMaxWidth().height(56.dp)) {
-        Text(if (isLast) "End Game" else "Next Question", fontSize = 18.sp)
+    Button(
+        onClick = onNext, 
+        modifier = Modifier.widthIn(max = 400.dp).fillMaxWidth().height(64.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFD700), contentColor = Color.Black)
+    ) {
+        Text(if (isLast) "End Game" else "Next Question", fontSize = 22.sp, fontWeight = FontWeight.Bold)
     }
 }
 
 @Composable
 fun ColumnScope.DonePhase(uiState: GameHostUiState, onBack: () -> Unit) {
-    Text("Final Leaderboard", fontSize = 32.sp, fontWeight = FontWeight.Bold)
-    Spacer(modifier = Modifier.height(24.dp))
+    Text("Final Leaderboard", fontSize = 48.sp, fontWeight = FontWeight.Black, color = Color(0xFFFFD700))
+    Spacer(modifier = Modifier.height(32.dp))
     
-    LazyColumn(modifier = Modifier.weight(1f)) {
+    LazyColumn(
+        modifier = Modifier.weight(1f).widthIn(max = 800.dp),
+        contentPadding = PaddingValues(bottom = 32.dp)
+    ) {
         items(uiState.leaderboard.withIndex().toList()) { (index, entry) ->
+            val isTop3 = index < 3
+            val (bgColor, textColor, badgeColor) = when (index) {
+                0 -> Triple(Color(0xFFFFD700).copy(alpha = 0.2f), Color(0xFFFFD700), Color(0xFFFFD700)) // Gold
+                1 -> Triple(Color(0xFFE0E0E0).copy(alpha = 0.2f), Color.White, Color(0xFFE0E0E0)) // Silver
+                2 -> Triple(Color(0xFFFF8A65).copy(alpha = 0.2f), Color.White, Color(0xFFFF8A65)) // Bronze
+                else -> Triple(Color(0xFF7E57C2).copy(alpha = 0.3f), Color.White, Color.Transparent)
+            }
+
             Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).background(if (index < 3) Color(0xFFFFF8E1) else Color.Transparent, RoundedCornerShape(8.dp)).padding(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .background(bgColor, RoundedCornerShape(16.dp))
+                    .padding(20.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("#${index + 1}", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = if (index == 0) Color(0xFFFFD700) else Color.DarkGray, modifier = Modifier.width(40.dp))
-                    Text(entry.studentName, fontSize = 18.sp)
+                    Box(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .background(if (isTop3) badgeColor else Color.Transparent, androidx.compose.foundation.shape.CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            "#${index + 1}", 
+                            fontSize = 24.sp, 
+                            fontWeight = FontWeight.Black, 
+                            color = if (isTop3) Color(0xFF511D89) else Color(0xFFB39DDB)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Text(entry.studentName, fontSize = 24.sp, fontWeight = FontWeight.Bold, color = textColor)
                 }
-                Text("${entry.correctCount} correct", fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                Text("${entry.correctCount} pts", fontSize = 28.sp, fontWeight = FontWeight.Black, color = textColor)
             }
         }
     }
     
-    Button(onClick = onBack, modifier = Modifier.fillMaxWidth().height(56.dp)) {
-        Text("Back to Dashboard", fontSize = 18.sp)
+    Button(
+        onClick = onBack, 
+        modifier = Modifier.widthIn(max = 400.dp).fillMaxWidth().height(64.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color(0xFF511D89))
+    ) {
+        Text("Back to Dashboard", fontSize = 22.sp, fontWeight = FontWeight.Bold)
     }
 }
