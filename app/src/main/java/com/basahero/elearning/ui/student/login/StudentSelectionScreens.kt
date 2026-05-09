@@ -56,6 +56,17 @@ fun StudentGradeSelectScreen(
         GradeInfo(6, Color(0xFFE65100), "The Masters!")
     )
 
+    // Blue gradient background colors
+    val bgTop = Color(0xFF2563EB)
+    val bgBottom = Color(0xFF1E3A8A)
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Brush.verticalGradient(listOf(bgTop, bgBottom))
+            )
+    ) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -64,16 +75,17 @@ fun StudentGradeSelectScreen(
                     IconButton(onClick = onBack) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = "Back",
+                            tint = Color.White
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = Color.Transparent
                 )
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = Color.Transparent
     ) { padding ->
         Box(
             modifier = Modifier
@@ -90,25 +102,35 @@ fun StudentGradeSelectScreen(
                     .padding(horizontal = if (isTablet) 32.dp else 16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // Title card
                 item {
-                    Surface(
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 8.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        tonalElevation = 1.dp
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
+                            text = "\uD83C\uDF1F", // star emoji
+                            fontSize = 40.sp
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        Text(
                             text = strings.selectYourGrade,
-                            modifier = Modifier.padding(
-                                horizontal = 20.dp,
-                                vertical = 16.dp
-                            ),
-                            fontSize = if (isTablet) 22.sp else 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            modifier = Modifier.padding(horizontal = 20.dp),
+                            fontSize = if (isTablet) 26.sp else 22.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.White,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            text = if (strings == com.basahero.elearning.ui.common.getStrings("fil"))
+                                "Pumili ng iyong baitang para magsimula"
+                            else
+                                "Choose your grade level to get started",
+                            fontSize = if (isTablet) 15.sp else 13.sp,
+                            color = Color.White.copy(alpha = 0.7f),
+                            textAlign = TextAlign.Center
                         )
                     }
                 }
@@ -121,22 +143,16 @@ fun StudentGradeSelectScreen(
 
                     // Grade header label
                     item {
-                        Surface(
-                            shape = RoundedCornerShape(12.dp),
-                            color = grade.color.copy(alpha = 0.12f),
-                            border = BorderStroke(1.dp, grade.color.copy(alpha = 0.3f))
-                        ) {
-                            Text(
-                                text = strings.grade(grade.level),
-                                modifier = Modifier.padding(
-                                    horizontal = 16.dp,
-                                    vertical = 8.dp
-                                ),
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = grade.color
-                            )
-                        }
+                        Text(
+                            text = strings.grade(grade.level),
+                            modifier = Modifier.padding(
+                                horizontal = 4.dp,
+                                vertical = 4.dp
+                            ),
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White.copy(alpha = 0.8f)
+                        )
                     }
 
                     item {
@@ -165,7 +181,7 @@ fun StudentGradeSelectScreen(
                         Text(
                             text = strings.alreadyHaveAccount + " " + strings.loginHere,
                             fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.primary,
+                            color = Color.White.copy(alpha = 0.8f),
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -174,6 +190,7 @@ fun StudentGradeSelectScreen(
             }
         }
     }
+    } // end outer Box
 }
 
 private data class GradeInfo(val level: Int, val color: Color, val subtitle: String)
@@ -191,13 +208,12 @@ private fun GradeSelectionCard(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .height(if (isTablet) 100.dp else 88.dp),
+            .height(if (isTablet) 110.dp else 96.dp),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = color
         ),
-        border = BorderStroke(1.5.dp, color.copy(alpha = 0.2f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
         Row(
             modifier = Modifier
@@ -208,18 +224,14 @@ private fun GradeSelectionCard(
             // Number badge
             Box(
                 modifier = Modifier
-                    .size(if (isTablet) 64.dp else 52.dp)
+                    .size(if (isTablet) 64.dp else 56.dp)
                     .clip(CircleShape)
-                    .background(
-                        Brush.linearGradient(
-                            listOf(color, color.copy(alpha = 0.7f))
-                        )
-                    ),
+                    .background(Color.White.copy(alpha = 0.25f)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = grade.toString(),
-                    fontSize = if (isTablet) 28.sp else 22.sp,
+                    fontSize = if (isTablet) 30.sp else 24.sp,
                     fontWeight = FontWeight.Black,
                     color = Color.White
                 )
@@ -233,19 +245,19 @@ private fun GradeSelectionCard(
                     text = strings.grade(grade),
                     fontSize = if (isTablet) 22.sp else 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = Color.White
                 )
                 Text(
                     text = subtitle,
                     fontSize = if (isTablet) 14.sp else 12.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = Color.White.copy(alpha = 0.8f)
                 )
             }
 
             Icon(
                 Icons.Default.ChevronRight,
                 contentDescription = null,
-                tint = color.copy(alpha = 0.5f),
+                tint = Color.White.copy(alpha = 0.7f),
                 modifier = Modifier.size(28.dp)
             )
         }
@@ -296,7 +308,20 @@ fun StudentNameSelectScreen(
         6 -> Color(0xFFE65100)
         else -> Color(0xFF1340A0)
     }
+    val gradeDark = when (gradeLevel) {
+        4 -> Color(0xFF1E3A8A)
+        5 -> Color(0xFF1B5E20)
+        6 -> Color(0xFFBF360C)
+        else -> Color(0xFF07153A)
+    }
 
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Brush.verticalGradient(listOf(gradeColor, gradeDark))
+            )
+    ) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -312,16 +337,17 @@ fun StudentNameSelectScreen(
                     }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = "Back",
+                            tint = Color.White
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = Color.Transparent
                 )
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = Color.Transparent
     ) { padding ->
         Box(
             modifier = Modifier
@@ -352,7 +378,7 @@ fun StudentNameSelectScreen(
                             "Who are you?",
                         fontSize = if (isTablet) 24.sp else 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = Color.White
                     )
 
                     Spacer(Modifier.height(12.dp))
@@ -365,24 +391,27 @@ fun StudentNameSelectScreen(
                             Text(
                                 if (selectedSection == null) "Search sections..."
                                 else "Search names...",
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = Color.White.copy(alpha = 0.5f)
                             )
                         },
                         leadingIcon = {
                             Icon(
                                 Icons.Default.Search,
                                 contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                tint = Color.White.copy(alpha = 0.7f)
                             )
                         },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp),
                         singleLine = true,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = gradeColor,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-                            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White,
+                            cursorColor = Color.White,
+                            focusedBorderColor = Color.White.copy(alpha = 0.5f),
+                            unfocusedBorderColor = Color.White.copy(alpha = 0.25f),
+                            focusedContainerColor = Color.White.copy(alpha = 0.1f),
+                            unfocusedContainerColor = Color.White.copy(alpha = 0.1f)
                         )
                     )
 
@@ -445,6 +474,7 @@ fun StudentNameSelectScreen(
             }
         }
     }
+    } // end outer Box
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

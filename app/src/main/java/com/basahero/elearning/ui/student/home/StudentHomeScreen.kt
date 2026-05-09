@@ -89,73 +89,20 @@ fun StudentHomeScreen(
         }
     }
 
-    // Grade colors
-    val primaryBlue = Color(0xFF2563EB)
-    val darkBlue = Color(0xFF1E40AF)
+    // Grade-adaptive colors — uses the theme's primary color per grade level
+    val primaryColor = MaterialTheme.colorScheme.primary
+    val darkColor = MaterialTheme.colorScheme.onPrimaryContainer
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
-            // ── Bottom Navigation Bar ────────────────────────────────────────
-            NavigationBar(
-                containerColor = MaterialTheme.colorScheme.surface,
-                tonalElevation = 8.dp
-            ) {
-                NavigationBarItem(
-                    selected = selectedTab == 0,
-                    onClick = { selectedTab = 0 },
-                    icon = { Icon(Icons.Default.Home, contentDescription = null) },
-                    label = { Text("Home", fontSize = 11.sp) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = primaryBlue,
-                        selectedTextColor = primaryBlue,
-                        indicatorColor = primaryBlue.copy(alpha = 0.1f)
-                    )
-                )
-                NavigationBarItem(
-                    selected = selectedTab == 1,
-                    onClick = {
-                        selectedTab = 1
-                        // Navigate to first active quarter's lessons
-                        val activeQ = uiState.quarters.firstOrNull { it.isActive }
-                        if (activeQ != null) {
-                            onQuarterClick(activeQ.id, student.gradeLevel)
-                        }
-                    },
-                    icon = { Icon(Icons.Default.MenuBook, contentDescription = null) },
-                    label = { Text(strings.lessons, fontSize = 11.sp) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = primaryBlue,
-                        selectedTextColor = primaryBlue,
-                        indicatorColor = primaryBlue.copy(alpha = 0.1f)
-                    )
-                )
-                NavigationBarItem(
-                    selected = selectedTab == 2,
-                    onClick = {
-                        selectedTab = 2
-                        onJoinGameClick()
-                    },
-                    icon = { Icon(Icons.Default.SportsEsports, contentDescription = null) },
-                    label = { Text("Game", fontSize = 11.sp) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = primaryBlue,
-                        selectedTextColor = primaryBlue,
-                        indicatorColor = primaryBlue.copy(alpha = 0.1f)
-                    )
-                )
-                NavigationBarItem(
-                    selected = selectedTab == 3,
-                    onClick = { selectedTab = 3 },
-                    icon = { Icon(Icons.Default.Person, contentDescription = null) },
-                    label = { Text("Profile", fontSize = 11.sp) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = primaryBlue,
-                        selectedTextColor = primaryBlue,
-                        indicatorColor = primaryBlue.copy(alpha = 0.1f)
-                    )
-                )
-            }
+            StudentBottomNavBar(
+                selectedTab = selectedTab,
+                onTabSelected = { tab ->
+                    if (tab == 2) onJoinGameClick()
+                    else selectedTab = tab
+                }
+            )
         }
     ) { padding ->
         // ── Profile tab ─────────────────────────────────────────────────
@@ -168,6 +115,18 @@ fun StudentHomeScreen(
                     coroutineScope.launch { sessionManager.setLanguage(newLang) }
                 },
                 onLogout = onLogout,
+                modifier = Modifier.padding(padding)
+            )
+            return@Scaffold
+        }
+
+        // ── Quarters tab ────────────────────────────────────────────────
+        if (selectedTab == 1) {
+            QuartersListContent(
+                quarters = uiState.quarters,
+                studentGradeLevel = student.gradeLevel,
+                isTablet = isTablet,
+                onQuarterClick = onQuarterClick,
                 modifier = Modifier.padding(padding)
             )
             return@Scaffold
@@ -194,7 +153,7 @@ fun StudentHomeScreen(
                             .fillMaxWidth()
                             .background(
                                 Brush.verticalGradient(
-                                    listOf(primaryBlue, darkBlue)
+                                    listOf(primaryColor, darkColor)
                                 ),
                                 shape = RoundedCornerShape(
                                     bottomStart = 28.dp,
@@ -291,7 +250,7 @@ fun StudentHomeScreen(
                                 )
                                 StatBadge(
                                     icon = Icons.Default.School,
-                                    iconColor = primaryBlue,
+                                    iconColor = primaryColor,
                                     value = "Gr.${student.gradeLevel}",
                                     label = if (languageCode == "fil") "Baitang" else "Grade\nlevel",
                                     modifier = Modifier.weight(1f)
@@ -334,8 +293,8 @@ fun StudentHomeScreen(
                                 .fillMaxWidth()
                                 .height(10.dp)
                                 .clip(RoundedCornerShape(5.dp)),
-                            color = primaryBlue,
-                            trackColor = primaryBlue.copy(alpha = 0.12f)
+                            color = primaryColor,
+                            trackColor = primaryColor.copy(alpha = 0.12f)
                         )
                     }
                 }
@@ -441,7 +400,7 @@ fun QuarterCard(
         label = "card_scale"
     )
 
-    val primaryBlue = Color(0xFF2563EB)
+    val primaryColor = MaterialTheme.colorScheme.primary
 
     val cardMod: Modifier = modifier
         .let { m -> if (!isLocked) m.clickable(interactionSource = interactionSource, indication = null, onClick = onClick) else m }
@@ -451,7 +410,7 @@ fun QuarterCard(
         modifier = cardMod,
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isActive) primaryBlue
+            containerColor = if (isActive) primaryColor
             else MaterialTheme.colorScheme.surface
         ),
         border = if (!isActive) BorderStroke(
@@ -492,9 +451,9 @@ fun QuarterCard(
                     }
                 } else {
                     // Progress ring
-                    val progressColor = if (isActive) Color.White else primaryBlue
+                    val progressColor = if (isActive) Color.White else primaryColor
                     val trackColor = if (isActive) Color.White.copy(alpha = 0.2f)
-                    else primaryBlue.copy(alpha = 0.12f)
+                    else primaryColor.copy(alpha = 0.12f)
 
                     ProgressRing(
                         progress = quarter.progressPercent,
@@ -558,7 +517,7 @@ private fun ProfileContent(
     modifier: Modifier = Modifier
 ) {
     val strings = LocalAppStrings.current
-    val primaryBlue = Color(0xFF2563EB)
+    val primaryColor = MaterialTheme.colorScheme.primary
 
     Column(
         modifier = modifier
@@ -575,7 +534,7 @@ private fun ProfileContent(
                 .size(80.dp)
                 .clip(CircleShape)
                 .background(
-                    Brush.linearGradient(listOf(primaryBlue, primaryBlue.copy(alpha = 0.7f)))
+                    Brush.linearGradient(listOf(primaryColor, primaryColor.copy(alpha = 0.7f)))
                 ),
             contentAlignment = Alignment.Center
         ) {
@@ -623,7 +582,7 @@ private fun ProfileContent(
                 Icon(
                     Icons.Default.Language,
                     contentDescription = null,
-                    tint = primaryBlue,
+                    tint = primaryColor,
                     modifier = Modifier.size(24.dp)
                 )
                 Spacer(Modifier.width(16.dp))
@@ -641,14 +600,14 @@ private fun ProfileContent(
                 }
                 Surface(
                     shape = RoundedCornerShape(8.dp),
-                    color = primaryBlue.copy(alpha = 0.1f)
+                    color = primaryColor.copy(alpha = 0.1f)
                 ) {
                     Text(
                         text = if (languageCode == "en") "EN" else "FIL",
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
-                        color = primaryBlue
+                        color = primaryColor
                     )
                 }
             }
@@ -719,3 +678,64 @@ fun ProgressRing(progress: Float, size: Dp, strokeWidth: Dp, color: Color, track
         }
     }
 }
+// -----------------------------------------------------------------------------
+// Quarters List Content � Shown when "Quarters" tab is selected
+// -----------------------------------------------------------------------------
+@Composable
+fun QuartersListContent(
+    quarters: List<Quarter>,
+    studentGradeLevel: Int,
+    isTablet: Boolean,
+    onQuarterClick: (String, Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val strings = LocalAppStrings.current
+
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .then(
+                    if (isTablet) Modifier.widthIn(max = 720.dp) else Modifier.fillMaxWidth()
+                )
+                .padding(horizontal = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item {
+                Spacer(Modifier.height(24.dp))
+                Text(
+                    text = strings.myQuarters,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = "Select a quarter to view its pre-test and lessons",
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(Modifier.height(8.dp))
+            }
+
+            items(quarters) { quarter ->
+                QuarterCard(
+                    quarter = quarter,
+                    isTablet = isTablet,
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        if (quarter.isActive) {
+                            onQuarterClick(quarter.id, studentGradeLevel)
+                        }
+                    }
+                )
+            }
+            
+            item {
+                Spacer(Modifier.height(32.dp))
+            }
+        }
+    }
+}
+

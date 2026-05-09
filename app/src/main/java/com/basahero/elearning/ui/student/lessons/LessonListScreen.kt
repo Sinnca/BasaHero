@@ -27,6 +27,8 @@ import com.basahero.elearning.data.model.Lesson
 import com.basahero.elearning.data.model.LessonStatus
 import com.basahero.elearning.ui.common.LocalAppStrings
 
+import com.basahero.elearning.ui.student.home.StudentBottomNavBar
+
 // ─────────────────────────────────────────────────────────────────────────────
 // LessonListScreen — wireframe accurate, centered column for tablet
 // ─────────────────────────────────────────────────────────────────────────────
@@ -40,6 +42,9 @@ fun LessonListScreen(
     onLessonClick: (lessonId: String) -> Unit,
     onPreTestClick: () -> Unit,
     onPostTestClick: () -> Unit,
+    onNavigateHome: () -> Unit,
+    onNavigateGame: () -> Unit,
+    onNavigateProfile: () -> Unit,
     onBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -69,6 +74,19 @@ fun LessonListScreen(
                     containerColor = MaterialTheme.colorScheme.surface,
                     titleContentColor = MaterialTheme.colorScheme.primary
                 )
+            )
+        },
+        bottomBar = {
+            StudentBottomNavBar(
+                selectedTab = 1, // "Quarters" tab is always active when viewing a quarter
+                onTabSelected = { tab ->
+                    when (tab) {
+                        0 -> onNavigateHome()
+                        1 -> onBack() // Pop back to quarters list
+                        2 -> onNavigateGame()
+                        3 -> onNavigateProfile()
+                    }
+                }
             )
         },
         containerColor = MaterialTheme.colorScheme.background
