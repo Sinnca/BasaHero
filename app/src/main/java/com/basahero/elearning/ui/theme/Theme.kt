@@ -54,4 +54,5 @@ fun PhilIRITheme(gradeLevel: Int = 0, content: @Composable () -> Unit) {
     )
 }
 
-val PhilIRITypography = Typography()
+// Wire Fredoka One (defined in Type.kt) as the global app typography
+val PhilIRITypography = Typography
