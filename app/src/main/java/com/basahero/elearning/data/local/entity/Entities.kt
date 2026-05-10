@@ -83,11 +83,18 @@ data class LessonEntity(
     @ColumnInfo(name = "passage_text") val passageText: String,
     @ColumnInfo(name = "image_path") val imagePath: String?,
 
-    // NEW — Phase 3B Step 6
-    // JSON array of highlighted vocabulary words with character positions
-    // Empty string "[]" if no highlights defined for this lesson
+    // Phase 3B Step 6 — highlighted vocabulary words
     @ColumnInfo(name = "highlighted_words", defaultValue = "[]")
-    val highlightedWords: String = "[]"
+    val highlightedWords: String = "[]",
+
+    // Optional lecture text — empty string means lesson starts directly with reading
+    @ColumnInfo(name = "lecture_text", defaultValue = "")
+    val lectureText: String = "",
+
+    // JSON array of lesson parts — each part has passageText, highlighted_words, miniQuestions
+    // Format: [{"passageText":"...","highlighted_words":["word"],"miniQuestions":[...]}]
+    @ColumnInfo(name = "parts_json", defaultValue = "[]")
+    val partsJson: String = "[]"
 )
 
 

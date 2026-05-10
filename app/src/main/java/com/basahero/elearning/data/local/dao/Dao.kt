@@ -27,6 +27,9 @@ interface QuarterDao {
     @Query("SELECT * FROM quarter WHERE grade_level_id = :gradeId ORDER BY quarter_number ASC")
     fun observeByGrade(gradeId: Int): Flow<List<QuarterEntity>>
 
+    @Query("SELECT COUNT(*) FROM quarter")
+    suspend fun countAll(): Int
+
     @Query("SELECT * FROM quarter WHERE id = :id")
     suspend fun getById(id: String): QuarterEntity?
 
@@ -50,6 +53,9 @@ interface LessonDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(lessons: List<LessonEntity>)
+
+    @Query("DELETE FROM lesson WHERE quarter_id = :quarterId")
+    suspend fun deleteByQuarter(quarterId: String)
 }
 
 // ─────────────────────────────────────────────

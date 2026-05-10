@@ -395,6 +395,7 @@ fun ColumnScope.QuestionPhase(uiState: GameHostUiState, onReveal: () -> Unit) {
             kotlinx.coroutines.delay(100)
             timeLeft -= 0.1f
         }
+        onReveal() // Auto-reveal when timer hits 0
     }
 
     Text("Question ${uiState.session?.questionIndex?.plus(1) ?: 1}", fontSize = 20.sp, color = Color.Gray)
@@ -410,14 +411,15 @@ fun ColumnScope.QuestionPhase(uiState: GameHostUiState, onReveal: () -> Unit) {
     Text("$answersForCurrentQ of $totalStudents answered", fontSize = 24.sp, fontWeight = FontWeight.SemiBold)
     
     Spacer(modifier = Modifier.height(32.dp))
-    
-    Button(onClick = onReveal, modifier = Modifier.fillMaxWidth().height(56.dp)) {
-        Text("Reveal Answer", fontSize = 18.sp)
-    }
 }
 
 @Composable
 fun ColumnScope.RevealPhase(uiState: GameHostUiState, onNext: () -> Unit) {
+    LaunchedEffect(uiState.currentQuestion) {
+        kotlinx.coroutines.delay(5000) // Show leaderboard for 5 seconds
+        onNext() // Auto-advance to next question or end game
+    }
+
     Text("Correct Answer", fontSize = 24.sp, color = Color(0xFFD1C4E9))
     Spacer(modifier = Modifier.height(16.dp))
     
@@ -455,16 +457,6 @@ fun ColumnScope.RevealPhase(uiState: GameHostUiState, onNext: () -> Unit) {
                 Text("${entry.correctCount} pts", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.White)
             }
         }
-    }
-    
-    val isLast = (uiState.session?.questionIndex ?: 0) >= (uiState.session?.questionOrder?.size?.minus(1) ?: 0)
-    Button(
-        onClick = onNext, 
-        modifier = Modifier.widthIn(max = 400.dp).fillMaxWidth().height(64.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFD700), contentColor = Color.Black)
-    ) {
-        Text(if (isLast) "End Game" else "Next Question", fontSize = 22.sp, fontWeight = FontWeight.Bold)
     }
 }
 

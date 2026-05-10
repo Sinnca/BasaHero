@@ -134,7 +134,7 @@ class GamePlayViewModel(
     fun submitAnswer(choiceId: String) {
         if (_uiState.value.hasAnswered || _uiState.value.phase != GamePhase.QUESTION) return
         
-        _uiState.update { it.copy(selectedAnswerId = choiceId, hasAnswered = true, phase = GamePhase.REVEAL) }
+        _uiState.update { it.copy(selectedAnswerId = choiceId, hasAnswered = true) }
         
         viewModelScope.launch {
             val state = _uiState.value
@@ -157,10 +157,8 @@ class GamePlayViewModel(
     }
 
     fun tickTimer() {
-        if (!_uiState.value.hasAnswered && _uiState.value.timeRemaining > 0) {
+        if (_uiState.value.timeRemaining > 0) {
             _uiState.update { it.copy(timeRemaining = it.timeRemaining - 1) }
-        } else if (!_uiState.value.hasAnswered && _uiState.value.timeRemaining == 0) {
-            _uiState.update { it.copy(hasAnswered = true, phase = GamePhase.REVEAL) }
         }
     }
 
@@ -184,9 +182,9 @@ fun GamePlayScreen(
         viewModel.startPlaying(sessionId, studentId)
     }
 
-    LaunchedEffect(uiState.phase, uiState.hasAnswered) {
-        if (uiState.phase == GamePhase.QUESTION && !uiState.hasAnswered) {
-            while (uiState.timeRemaining > 0 && !uiState.hasAnswered) {
+    LaunchedEffect(uiState.phase) {
+        if (uiState.phase == GamePhase.QUESTION) {
+            while (uiState.timeRemaining > 0) {
                 delay(1000)
                 viewModel.tickTimer()
             }
@@ -330,5 +328,9 @@ fun ColumnScope.QuestionPlayPhase(uiState: GamePlayUiState, onAnswerSelected: (S
             Text("Time's Up!", color = Color(0xFFF44336), fontSize = 24.sp, fontWeight = FontWeight.Bold)
         }
         Text("Waiting for next question...", fontSize = 16.sp, color = Color.Gray, modifier = Modifier.padding(top = 8.dp))
+    } else if (uiState.hasAnswered) {
+        Spacer(modifier = Modifier.height(32.dp))
+        Text("Answer submitted!", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1565C0))
+        Text("Waiting for others...", fontSize = 16.sp, color = Color.Gray, modifier = Modifier.padding(top = 8.dp))
     }
 }

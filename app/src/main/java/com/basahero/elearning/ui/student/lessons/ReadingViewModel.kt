@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 
 import com.basahero.elearning.data.local.SessionManager
 import com.basahero.elearning.data.repository.PronunciationRepository
+import com.basahero.elearning.data.repository.ProgressRepository
 
 // 🚀 NEW DATA CLASS for Step 6
 data class HighlightedWord(
@@ -20,6 +21,7 @@ data class HighlightedWord(
 class ReadingViewModel(
     private val lessonRepository: LessonRepository,
     private val pronunciationRepository: PronunciationRepository,
+    private val progressRepository: ProgressRepository,
     private val sessionManager: SessionManager
 ) : ViewModel() {
 
@@ -82,6 +84,29 @@ class ReadingViewModel(
                 isCorrect = isCorrect,
                 score = score
             )
+        }
+    }
+
+    fun saveLessonProgress(context: android.content.Context, totalCorrect: Int, totalQuestions: Int) {
+        val lessonId = _uiState.value.lesson?.id ?: return
+        
+        viewModelScope.launch {
+            val studentId = sessionManager.studentSession.first()?.studentId ?: return@launch
+            
+            // To ensure the lesson is marked as DONE even if totalQuestions is 0,
+            // we'll pass totalCorrect = 1, totalQuestions = 1 if there were no questions.
+            val safeScore = if (totalQuestions == 0) 1 else totalCorrect
+            val safeTotal = if (totalQuestions == 0) 1 else totalQuestions
+
+            progressRepository.saveQuizResult(
+                studentId = studentId,
+                lessonId = lessonId,
+                score = safeScore,
+                total = safeTotal
+            )
+            
+            // ── Trigger WorkManager sync to push progress to Supabase ────────
+            com.basahero.elearning.domain.SyncProgressUseCase().execute(context)
         }
     }
 }

@@ -400,13 +400,13 @@ class ClassRepository {
     }
 
     // Bulk import students from CSV
-    suspend fun importStudentsFromCsv(classId: Int, gradeLevel: Int, rows: List<CsvStudentRow>): Result<Int> {
+    suspend fun importStudentsFromCsv(classId: String, gradeLevel: Int, rows: List<CsvStudentRow>): Result<Int> {
         return try {
             val studentRows = rows.map { csv ->
                 val now = java.time.Instant.now().toString()
                 StudentRow(
                     id = java.util.UUID.randomUUID().toString(),
-                    class_id = classId.toString(),
+                    class_id = classId,
                     full_name = csv.fullName.trim(),
                     section = csv.section.trim(),
                     grade_level = gradeLevel,

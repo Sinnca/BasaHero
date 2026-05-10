@@ -184,6 +184,9 @@ dependencies {
     // ── Lottie animations (added) ─────────────────────────────────────────
     implementation(libs.lottie.compose)
 
+    // ── Drag and Drop Reordering (added) ──────────────────────────────────
+    implementation("org.burnoutcrew.composereorderable:reorderable:0.9.6")
+
     // ── Vosk Offline Speech Recognition (added) ───────────────────────────
     implementation("net.java.dev.jna:jna:5.13.0@aar")
     implementation("com.alphacephei:vosk-android:0.3.38") {

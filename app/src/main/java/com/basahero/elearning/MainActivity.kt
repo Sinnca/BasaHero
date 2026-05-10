@@ -140,6 +140,12 @@ fun PhilIRIApp() {
     val prePostRepository = remember { PrePostRepository(database) }
     val scoringUseCase = remember { QuizScoringUseCase() }
 
+    // 🚀 NEW: Guarantee the database is seeded if it's empty
+    val seeder = remember { DatabaseSeeder(context) }
+    LaunchedEffect(Unit) {
+        AppDatabase.seedIfEmpty(seeder)
+    }
+
     val sessionManager = remember { SessionManager(context) }
     val currentSession by sessionManager.studentSession.collectAsState(initial = null)
 
@@ -369,11 +375,11 @@ fun PhilIRIApp() {
                 factory = object : ViewModelProvider.Factory {
                     @Suppress("UNCHECKED_CAST")
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return ReadingViewModel(lessonRepository, pronunciationRepository, sessionManager) as T
+                        return ReadingViewModel(lessonRepository, pronunciationRepository, progressRepository, sessionManager) as T
                     }
                 }
             )
-            ReadingScreen(lessonId = lessonId, viewModel = viewModel, onStartQuiz = { id -> navController.navigate("quiz/$id") }, onBack = { navController.popBackStack() })
+            ReadingScreen(lessonId = lessonId, viewModel = viewModel, onBack = { navController.popBackStack() })
         }
 
         composable(Routes.QUIZ) { backStackEntry ->

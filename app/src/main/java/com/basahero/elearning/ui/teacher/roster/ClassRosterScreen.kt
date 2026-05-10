@@ -81,7 +81,7 @@ fun ClassRosterScreen(
                         Icon(Icons.Default.VideogameAsset, "Host Game")
                     }
                     // Import CSV
-                    IconButton(onClick = { csvLauncher.launch("text/csv") }) {
+                    IconButton(onClick = { csvLauncher.launch("*/*") }) {
                         Icon(Icons.Default.Upload, "Import CSV")
                     }
                     // Add student manually
