@@ -122,7 +122,7 @@ class ClassRosterViewModel(
                 reader.close()
 
                 val result = classRepository.importStudentsFromCsv(
-                    classId = classId.toIntOrNull() ?: 0,
+                    classId = classId,
                     gradeLevel = gradeLevel,
                     rows = csvRows
                 )
