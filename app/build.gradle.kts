@@ -151,6 +151,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)  // added — for icons across the app
     debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.6.7")
 
     // ── Navigation (added) ────────────────────────────────────────────────
     implementation(libs.androidx.navigation.compose)

@@ -75,22 +75,17 @@ import com.basahero.elearning.ui.teacher.analytics.ClassAnalyticsViewModel
 import com.basahero.elearning.ui.common.LocalAppStrings
 import com.basahero.elearning.ui.common.getStrings
 import androidx.compose.runtime.CompositionLocalProvider
+import com.basahero.elearning.ui.theme.fredokaFontFamily
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+        // Draw behind status bar & nav bar, but let Compose handle inset padding
         enableEdgeToEdge()
-
-        // Hide system bars for immersive experience
         androidx.core.view.WindowCompat.setDecorFitsSystemWindows(window, false)
-        androidx.core.view.WindowInsetsControllerCompat(window, window.decorView).let { controller ->
-            controller.hide(androidx.core.view.WindowInsetsCompat.Type.systemBars())
-            controller.systemBarsBehavior = androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
 
         setContent {
-            // PhilIRITheme is applied inside PhilIRIApp where gradeLevel is available
             PhilIRIApp()
         }
     }
@@ -174,7 +169,9 @@ fun PhilIRIApp() {
     PhilIRITheme(gradeLevel = gradeLevel) {
         CompositionLocalProvider(LocalAppStrings provides appStrings) {
         Surface(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .safeDrawingPadding(),
             color = MaterialTheme.colorScheme.background
         ) {
 
@@ -568,7 +565,8 @@ fun PhilIRIApp() {
                     override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                         return com.basahero.elearning.ui.student.game.GameJoinViewModel(
                             com.basahero.elearning.data.repository.GameRepository(),
-                            sessionManager
+                            sessionManager,
+                            studentRepository
                         ) as T
                     }
                 }
@@ -792,6 +790,7 @@ fun RoleSelectScreen(onStudentClick: () -> Unit, onTeacherClick: () -> Unit) {
                 color = androidx.compose.ui.graphics.Color.White,
                 letterSpacing = 3.sp,
                 style = androidx.compose.ui.text.TextStyle(
+                    fontFamily = fredokaFontFamily,
                     shadow = androidx.compose.ui.graphics.Shadow(
                         color = androidx.compose.ui.graphics.Color(0x88000000),
                         offset = androidx.compose.ui.geometry.Offset(0f, 8f),

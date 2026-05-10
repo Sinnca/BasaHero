@@ -18,11 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
+import androidx.compose.foundation.Canvas
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -36,9 +38,6 @@ import com.basahero.elearning.ui.common.LocalAppStrings
 import kotlinx.coroutines.launch
 import kotlin.math.min
 
-// ─────────────────────────────────────────────────────────────────────────────
-// StudentHomeScreen — Matches wireframe: blue header, stats, quarters, bottom nav
-// ─────────────────────────────────────────────────────────────────────────────
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudentHomeScreen(
@@ -78,7 +77,6 @@ fun StudentHomeScreen(
 
     val student = uiState.student ?: return
 
-    // Computed stats
     val totalLessons = uiState.quarters.sumOf { it.totalLessons }
     val completedLessons = uiState.quarters.sumOf { it.completedLessons }
     val greetingTime = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY).let { hour ->
@@ -89,7 +87,6 @@ fun StudentHomeScreen(
         }
     }
 
-    // Grade-adaptive colors — uses the theme's primary color per grade level
     val primaryColor = MaterialTheme.colorScheme.primary
     val darkColor = MaterialTheme.colorScheme.onPrimaryContainer
 
@@ -105,7 +102,6 @@ fun StudentHomeScreen(
             )
         }
     ) { padding ->
-        // ── Profile tab ─────────────────────────────────────────────────
         if (selectedTab == 3) {
             ProfileContent(
                 student = student,
@@ -120,7 +116,6 @@ fun StudentHomeScreen(
             return@Scaffold
         }
 
-        // ── Quarters tab ────────────────────────────────────────────────
         if (selectedTab == 1) {
             QuartersListContent(
                 quarters = uiState.quarters,
@@ -132,7 +127,6 @@ fun StudentHomeScreen(
             return@Scaffold
         }
 
-        // ── Home tab content ────────────────────────────────────────────
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -140,43 +134,80 @@ fun StudentHomeScreen(
             contentAlignment = Alignment.TopCenter
         ) {
             LazyColumn(
-                modifier = Modifier
-                    .then(
-                        if (isTablet) Modifier.widthIn(max = 720.dp) else Modifier.fillMaxWidth()
-                    ),
+                modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(0.dp)
             ) {
-                // ── Blue gradient header card ────────────────────────────
                 item {
+                    // ── Profile header card with gradient + bubbles ──
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(
-                                Brush.verticalGradient(
-                                    listOf(primaryColor, darkColor)
-                                ),
-                                shape = RoundedCornerShape(
-                                    bottomStart = 28.dp,
-                                    bottomEnd = 28.dp
-                                )
-                            )
-                            .padding(
-                                start = 20.dp, end = 20.dp,
-                                top = 20.dp, bottom = 24.dp
-                            )
+                            .height(if (isTablet) 320.dp else 260.dp)
+                            .clip(RoundedCornerShape(bottomStart = 36.dp, bottomEnd = 36.dp))
                     ) {
-                        Column {
-                            // Top row: Avatar + Greeting + Settings
+                        // Layer 1: radial gradient background
+                        Box(
+                            modifier = Modifier
+                                .matchParentSize()
+                                .background(
+                                    Brush.radialGradient(
+                                        colors = listOf(
+                                            primaryColor.copy(alpha = 0.85f),
+                                            primaryColor,
+                                            Color(primaryColor.red * 0.6f, primaryColor.green * 0.6f, primaryColor.blue * 0.8f)
+                                        ),
+                                        radius = 1200f
+                                    )
+                                )
+                        )
+
+                        // Layer 2: decorative bubbles drawn on Canvas
+                        Canvas(
+                            modifier = Modifier
+                                .matchParentSize()
+                        ) {
+                            val bubbleColor = Color.White.copy(alpha = 0.08f)
+                            val bubbleColorMid = Color.White.copy(alpha = 0.05f)
+                            // Large bubble top-right
+                            drawCircle(color = bubbleColor, radius = size.width * 0.42f,
+                                center = androidx.compose.ui.geometry.Offset(size.width * 1.05f, -size.height * 0.25f))
+                            // Medium bubble top-left
+                            drawCircle(color = bubbleColorMid, radius = size.width * 0.28f,
+                                center = androidx.compose.ui.geometry.Offset(-size.width * 0.06f, size.height * 0.15f))
+                            // Small bubble bottom-right
+                            drawCircle(color = bubbleColor, radius = size.width * 0.18f,
+                                center = androidx.compose.ui.geometry.Offset(size.width * 0.88f, size.height * 1.05f))
+                            // Tiny bubble center-top
+                            drawCircle(color = bubbleColor, radius = size.width * 0.10f,
+                                center = androidx.compose.ui.geometry.Offset(size.width * 0.65f, size.height * 0.08f))
+                            // Tiny bubble bottom-left
+                            drawCircle(color = bubbleColorMid, radius = size.width * 0.12f,
+                                center = androidx.compose.ui.geometry.Offset(size.width * 0.12f, size.height * 1.0f))
+                        }
+
+                        // Layer 3: content
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(
+                                    start = if (isTablet) 32.dp else 20.dp,
+                                    end = if (isTablet) 32.dp else 20.dp,
+                                    top = if (isTablet) 36.dp else 24.dp,
+                                    bottom = if (isTablet) 36.dp else 28.dp
+                                )
+                        ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                // Avatar
+                                // Avatar circle with white border
                                 Box(
                                     modifier = Modifier
-                                        .size(52.dp)
+                                        .size(if (isTablet) 76.dp else 60.dp)
+                                        .background(Color.White.copy(alpha = 0.25f), CircleShape)
+                                        .padding(3.dp)
                                         .clip(CircleShape)
-                                        .background(Color.White.copy(alpha = 0.2f)),
+                                        .background(Color.White.copy(alpha = 0.15f), CircleShape),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     val initials = student.fullName.split(" ")
@@ -187,49 +218,50 @@ fun StudentHomeScreen(
                                         text = initials,
                                         color = Color.White,
                                         fontWeight = FontWeight.Bold,
-                                        fontSize = 18.sp
+                                        fontSize = if (isTablet) 24.sp else 20.sp
                                     )
                                 }
 
-                                Spacer(Modifier.width(14.dp))
+                                Spacer(Modifier.width(16.dp))
 
-                                // Greeting text
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(
                                         text = greetingTime,
-                                        fontSize = 14.sp,
-                                        color = Color.White.copy(alpha = 0.8f)
+                                        fontSize = if (isTablet) 18.sp else 15.sp,
+                                        color = Color.White.copy(alpha = 0.85f)
                                     )
                                     Text(
                                         text = student.fullName,
-                                        fontSize = if (isTablet) 22.sp else 20.sp,
+                                        fontSize = if (isTablet) 30.sp else 24.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = Color.White
                                     )
+                                    Text(
+                                        text = if (languageCode == "fil") "Baitang ${student.gradeLevel} · ${student.section}" else "Grade ${student.gradeLevel} · ${student.section}",
+                                        fontSize = if (isTablet) 15.sp else 13.sp,
+                                        color = Color.White.copy(alpha = 0.75f)
+                                    )
                                 }
 
-                                // Settings gear
-                                IconButton(
-                                    onClick = { selectedTab = 3 },
+                                // Settings button
+                                Box(
                                     modifier = Modifier
-                                        .size(40.dp)
-                                        .background(
-                                            Color.White.copy(alpha = 0.15f),
-                                            CircleShape
-                                        )
+                                        .size(if (isTablet) 52.dp else 44.dp)
+                                        .background(Color.White.copy(alpha = 0.18f), CircleShape)
+                                        .clickable { selectedTab = 3 },
+                                    contentAlignment = Alignment.Center
                                 ) {
                                     Icon(
                                         Icons.Default.Settings,
                                         contentDescription = null,
                                         tint = Color.White,
-                                        modifier = Modifier.size(20.dp)
+                                        modifier = Modifier.size(if (isTablet) 26.dp else 22.dp)
                                     )
                                 }
                             }
 
-                            Spacer(Modifier.height(20.dp))
+                            Spacer(Modifier.weight(1f))
 
-                            // Stats row: Day streak, XP, Grade level
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -239,6 +271,7 @@ fun StudentHomeScreen(
                                     iconColor = Color(0xFFFF6B35),
                                     value = "$completedLessons",
                                     label = if (languageCode == "fil") "Aralin\ntapos" else "Lessons\ndone",
+                                    isTablet = isTablet,
                                     modifier = Modifier.weight(1f)
                                 )
                                 StatBadge(
@@ -246,13 +279,15 @@ fun StudentHomeScreen(
                                     iconColor = Color(0xFFFFD700),
                                     value = "${(uiState.overallProgress * 100).toInt()}%",
                                     label = if (languageCode == "fil") "Progreso" else "Progress",
+                                    isTablet = isTablet,
                                     modifier = Modifier.weight(1f)
                                 )
                                 StatBadge(
                                     icon = Icons.Default.School,
-                                    iconColor = primaryColor,
+                                    iconColor = Color.White,
                                     value = "Gr.${student.gradeLevel}",
                                     label = if (languageCode == "fil") "Baitang" else "Grade\nlevel",
+                                    isTablet = isTablet,
                                     modifier = Modifier.weight(1f)
                                 )
                             }
@@ -260,69 +295,106 @@ fun StudentHomeScreen(
                     }
                 }
 
-                // ── Overall Progress section ────────────────────────────
                 item {
-                    Column(
-                        modifier = Modifier.padding(
-                            horizontal = 20.dp,
-                            vertical = 16.dp
-                        )
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = if (languageCode == "fil") "Kabuuang Progreso" else "Overall Progress",
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            Text(
-                                text = "$completedLessons/$totalLessons ${if (languageCode == "fil") "tapos" else "done"}",
-                                fontSize = 13.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontWeight = FontWeight.Medium
-                            )
-                        }
-                        Spacer(Modifier.height(8.dp))
-                        LinearProgressIndicator(
-                            progress = { uiState.overallProgress },
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(10.dp)
-                                .clip(RoundedCornerShape(5.dp)),
-                            color = primaryColor,
-                            trackColor = primaryColor.copy(alpha = 0.12f)
-                        )
+                                .padding(horizontal = if (isTablet) 32.dp else 20.dp, vertical = 24.dp)
+                        ) {
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(24.dp),
+                                colors = CardDefaults.cardColors(containerColor = primaryColor.copy(alpha = 0.08f)),
+                                border = BorderStroke(2.dp, primaryColor.copy(alpha = 0.15f)),
+                                elevation = CardDefaults.cardElevation(0.dp)
+                            ) {
+                                Column(modifier = Modifier.padding(if (isTablet) 24.dp else 20.dp)) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(48.dp)
+                                                    .background(Color.White, CircleShape),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                Text("🌟", fontSize = 24.sp)
+                                            }
+                                            Spacer(Modifier.width(12.dp))
+                                            Column {
+                                                Text(
+                                                    text = if (languageCode == "fil") "Kabuuang Progreso" else "Overall Progress",
+                                                    fontSize = if (isTablet) 20.sp else 16.sp,
+                                                    fontWeight = FontWeight.ExtraBold,
+                                                    color = Color(0xFF1E293B)
+                                                )
+                                                Text(
+                                                    text = "$completedLessons/$totalLessons ${if (languageCode == "fil") "tapos" else "done"}",
+                                                    fontSize = if (isTablet) 16.sp else 14.sp,
+                                                    color = Color(0xFF64748B),
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                            }
+                                        }
+                                        Text(
+                                            text = "${(uiState.overallProgress * 100).toInt()}%",
+                                            fontSize = if (isTablet) 24.sp else 20.sp,
+                                            fontWeight = FontWeight.Black,
+                                            color = primaryColor
+                                        )
+                                    }
+                                    Spacer(Modifier.height(16.dp))
+                                    LinearProgressIndicator(
+                                        progress = { uiState.overallProgress },
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(if (isTablet) 20.dp else 16.dp)
+                                            .clip(RoundedCornerShape(10.dp)),
+                                        color = primaryColor,
+                                        trackColor = Color.White,
+                                        strokeCap = StrokeCap.Round
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
 
-                // ── My Quarters heading ─────────────────────────────────
                 item {
-                    Text(
-                        text = strings.myQuarters,
-                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Spacer(Modifier.height(4.dp))
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = if (isTablet) 32.dp else 20.dp)
+                        ) {
+                            Text(
+                                text = strings.myQuarters,
+                                fontSize = if (isTablet) 24.sp else 20.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                color = Color(0xFF1E293B)
+                            )
+                            Spacer(Modifier.height(8.dp))
+                        }
+                    }
                 }
 
-                // ── Quarter cards ───────────────────────────────────────
                 items(uiState.quarters) { quarter ->
-                    QuarterCard(
-                        quarter = quarter,
-                        isTablet = isTablet,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp, vertical = 6.dp),
-                        onClick = {
-                            if (quarter.isActive) onQuarterClick(quarter.id, student.gradeLevel)
-                        }
-                    )
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        QuarterCard(
+                            quarter = quarter,
+                            isTablet = isTablet,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = if (isTablet) 32.dp else 20.dp, vertical = 8.dp),
+                            onClick = {
+                                if (quarter.isActive) onQuarterClick(quarter.id, student.gradeLevel)
+                            }
+                        )
+                    }
                 }
 
                 item { Spacer(Modifier.height(16.dp)) }
@@ -331,54 +403,66 @@ fun StudentHomeScreen(
     }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Stat badge — used in the blue header (Lessons done, Progress, Grade)
-// ─────────────────────────────────────────────────────────────────────────────
 @Composable
 private fun StatBadge(
     icon: ImageVector,
     iconColor: Color,
     value: String,
     label: String,
+    isTablet: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(16.dp),
-        color = Color.White.copy(alpha = 0.15f)
+    Box(
+        modifier = modifier.height(if (isTablet) 130.dp else 105.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        // Bottom shadow (3D edge)
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .padding(top = 4.dp)
+                .background(Color.Black.copy(alpha = 0.08f), RoundedCornerShape(20.dp))
+        )
+        // Main front face
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .padding(bottom = 4.dp)
+                .background(Color.White.copy(alpha = 0.35f), RoundedCornerShape(20.dp))
+                .padding(horizontal = 4.dp, vertical = 12.dp),
+            contentAlignment = Alignment.Center
         ) {
-            Icon(
-                icon,
-                contentDescription = null,
-                tint = iconColor,
-                modifier = Modifier.size(22.dp)
-            )
-            Spacer(Modifier.height(4.dp))
-            Text(
-                text = value,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = Color.White
-            )
-            Text(
-                text = label,
-                fontSize = 10.sp,
-                color = Color.White.copy(alpha = 0.7f),
-                textAlign = TextAlign.Center,
-                lineHeight = 13.sp,
-                fontWeight = FontWeight.Medium
-            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Icon(
+                    icon,
+                    contentDescription = null,
+                    tint = iconColor,
+                    modifier = Modifier.size(if (isTablet) 32.dp else 28.dp)
+                )
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    text = value,
+                    fontSize = if (isTablet) 24.sp else 20.sp,
+                    fontWeight = FontWeight.Black,
+                    color = Color.White
+                )
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    text = label,
+                    fontSize = if (isTablet) 12.sp else 11.sp,
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    lineHeight = 14.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Quarter card — with progress ring, matching wireframe
-// ─────────────────────────────────────────────────────────────────────────────
 @Composable
 fun QuarterCard(
     quarter: Quarter,
@@ -391,123 +475,134 @@ fun QuarterCard(
     val isActive = quarter.isActive && quarter.progressPercent < 1f
     val isDone = quarter.isActive && quarter.progressPercent >= 1f
 
-    // Press animation
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
     val scale by animateFloatAsState(
-        targetValue = if (isPressed && !isLocked) 0.97f else 1f,
-        animationSpec = spring(stiffness = Spring.StiffnessHigh),
+        targetValue = if (isPressed && !isLocked) 0.96f else 1f,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
         label = "card_scale"
     )
 
     val primaryColor = MaterialTheme.colorScheme.primary
+    val containerColor = if (isActive) primaryColor else Color.White
+    
+    val shadowColor = if (isActive) {
+        Color(primaryColor.red * 0.85f, primaryColor.green * 0.85f, primaryColor.blue * 0.85f)
+    } else if (isLocked) {
+        Color(0xFFE2E8F0) // Gray shadow for locked
+    } else {
+        Color(0xFFE2E8F0) // Gray shadow for completed
+    }
 
-    val cardMod: Modifier = modifier
-        .let { m -> if (!isLocked) m.clickable(interactionSource = interactionSource, indication = null, onClick = onClick) else m }
-        .scale(scale)
+    val baseMod = modifier.graphicsLayer {
+        scaleX = scale
+        scaleY = scale
+    }
+    val cardMod = if (!isLocked) {
+        baseMod.clickable(interactionSource = interactionSource, indication = null, onClick = onClick)
+    } else {
+        baseMod
+    }
 
-    Card(
-        modifier = cardMod,
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isActive) primaryColor
-            else MaterialTheme.colorScheme.surface
-        ),
-        border = if (!isActive) BorderStroke(
-            1.dp,
-            MaterialTheme.colorScheme.outline.copy(alpha = 0.15f)
-        ) else null,
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = if (isActive) 6.dp else 1.dp
+    Box(modifier = cardMod) {
+        // Bottom shadow
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .padding(top = 6.dp)
+                .background(shadowColor, RoundedCornerShape(24.dp))
         )
-    ) {
-        Row(
+        
+        // Front face
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(bottom = 6.dp)
+                .background(containerColor, RoundedCornerShape(24.dp))
+                .then(
+                    if (!isActive && !isLocked) Modifier.border(2.dp, primaryColor.copy(alpha=0.2f), RoundedCornerShape(24.dp)) else Modifier
+                )
+                .padding(if (isTablet) 24.dp else 16.dp)
         ) {
-            // Progress ring or lock
-            Box(
-                modifier = Modifier.size(56.dp),
-                contentAlignment = Alignment.Center
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                if (isLocked) {
-                    Box(
-                        modifier = Modifier
-                            .size(56.dp)
-                            .clip(CircleShape)
-                            .background(
-                                MaterialTheme.colorScheme.surfaceVariant
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            Icons.Default.Lock,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-                            modifier = Modifier.size(22.dp)
+                Box(
+                    modifier = Modifier.size(if (isTablet) 72.dp else 56.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (isLocked) {
+                        Box(
+                            modifier = Modifier
+                                .size(if (isTablet) 72.dp else 56.dp)
+                                .clip(CircleShape)
+                                .background(Color(0xFFF1F5F9)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                Icons.Default.Lock,
+                                contentDescription = null,
+                                tint = Color(0xFF94A3B8),
+                                modifier = Modifier.size(if (isTablet) 32.dp else 24.dp)
+                            )
+                        }
+                    } else {
+                        val progressColor = if (isActive) Color.White else primaryColor
+                        val trackColor = if (isActive) Color.White.copy(alpha = 0.2f)
+                        else primaryColor.copy(alpha = 0.12f)
+
+                        ProgressRing(
+                            progress = quarter.progressPercent,
+                            size = if (isTablet) 72.dp else 56.dp,
+                            strokeWidth = if (isTablet) 8.dp else 5.dp,
+                            color = progressColor,
+                            trackColor = trackColor
                         )
                     }
-                } else {
-                    // Progress ring
-                    val progressColor = if (isActive) Color.White else primaryColor
-                    val trackColor = if (isActive) Color.White.copy(alpha = 0.2f)
-                    else primaryColor.copy(alpha = 0.12f)
+                }
 
-                    ProgressRing(
-                        progress = quarter.progressPercent,
-                        size = 56.dp,
-                        strokeWidth = 5.dp,
-                        color = progressColor,
-                        trackColor = trackColor
+                Spacer(Modifier.width(20.dp))
+
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = quarter.title,
+                        fontSize = if (isTablet) 22.sp else 18.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = if (isActive) Color.White
+                        else if (isLocked) Color(0xFF94A3B8)
+                        else Color(0xFF1E293B)
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = when {
+                            isLocked -> strings.completePreviousQuarter
+                            isDone -> "✔ ${strings.done}"
+                            else -> strings.lessonsProgress(quarter.completedLessons, quarter.totalLessons) +
+                                    " · ${strings.inProgress}"
+                        },
+                        fontSize = if (isTablet) 16.sp else 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = if (isActive) Color.White.copy(alpha = 0.9f)
+                        else if (isLocked) Color(0xFF94A3B8)
+                        else Color(0xFF64748B)
                     )
                 }
-            }
 
-            Spacer(Modifier.width(16.dp))
-
-            // Quarter info
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = quarter.title,
-                    fontSize = if (isTablet) 18.sp else 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = if (isActive) Color.White
-                    else if (isLocked) MaterialTheme.colorScheme.onSurfaceVariant
-                    else MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(Modifier.height(2.dp))
-                Text(
-                    text = when {
-                        isLocked -> strings.completePreviousQuarter
-                        isDone -> "✔ ${strings.done}"
-                        else -> strings.lessonsProgress(quarter.completedLessons, quarter.totalLessons) +
-                                " · ${strings.inProgress}"
-                    },
-                    fontSize = 12.sp,
-                    color = if (isActive) Color.White.copy(alpha = 0.8f)
-                    else MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            // Chevron for active
-            if (!isLocked) {
-                Icon(
-                    Icons.Default.ChevronRight,
-                    contentDescription = null,
-                    tint = if (isActive) Color.White.copy(alpha = 0.6f)
-                    else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-                    modifier = Modifier.size(24.dp)
-                )
+                if (!isLocked) {
+                    Icon(
+                        Icons.Default.ChevronRight,
+                        contentDescription = null,
+                        tint = if (isActive) Color.White.copy(alpha = 0.8f)
+                        else Color(0xFFCBD5E1),
+                        modifier = Modifier.size(if (isTablet) 36.dp else 28.dp)
+                    )
+                }
             }
         }
     }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Profile tab content — settings, language toggle, logout
-// ─────────────────────────────────────────────────────────────────────────────
 @Composable
 private fun ProfileContent(
     student: com.basahero.elearning.data.model.Student,
@@ -528,7 +623,6 @@ private fun ProfileContent(
     ) {
         Spacer(Modifier.height(24.dp))
 
-        // Avatar
         Box(
             modifier = Modifier
                 .size(80.dp)
@@ -566,7 +660,6 @@ private fun ProfileContent(
 
         Spacer(Modifier.height(32.dp))
 
-        // Language toggle
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
@@ -615,7 +708,6 @@ private fun ProfileContent(
 
         Spacer(Modifier.height(12.dp))
 
-        // Logout
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
@@ -646,9 +738,6 @@ private fun ProfileContent(
     }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Animated progress ring
-// ─────────────────────────────────────────────────────────────────────────────
 @Composable
 fun ProgressRing(progress: Float, size: Dp, strokeWidth: Dp, color: Color, trackColor: Color) {
     val animProg by animateFloatAsState(
@@ -678,9 +767,6 @@ fun ProgressRing(progress: Float, size: Dp, strokeWidth: Dp, color: Color, track
         }
     }
 }
-// -----------------------------------------------------------------------------
-// Quarters List Content � Shown when "Quarters" tab is selected
-// -----------------------------------------------------------------------------
 @Composable
 fun QuartersListContent(
     quarters: List<Quarter>,
@@ -690,40 +776,219 @@ fun QuartersListContent(
     modifier: Modifier = Modifier
 ) {
     val strings = LocalAppStrings.current
+    val primaryColor = MaterialTheme.colorScheme.primary
+    val totalLessons = quarters.sumOf { it.totalLessons }
+    val completedLessons = quarters.sumOf { it.completedLessons }
+    val overallProgress = if (totalLessons == 0) 0f else completedLessons.toFloat() / totalLessons
+    val activeCount = quarters.count { it.isActive }
+    val doneCount = quarters.count { it.isActive && it.progressPercent >= 1f }
 
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.TopCenter
-    ) {
+    // Motivational message based on progress
+    val motivationMsg = when {
+        overallProgress >= 1f  -> "\uD83C\uDF89 Congratulations! You finished everything!"
+        overallProgress >= 0.6f -> "\uD83D\uDD25 You're almost there! Keep it up!"
+        overallProgress >= 0.3f -> "\uD83D\uDE80 Great progress! Keep learning!"
+        else                   -> "\uD83C\uDF1F Start your learning adventure!"
+    }
+
+    Box(modifier = modifier.fillMaxSize()) {
         LazyColumn(
-            modifier = Modifier
-                .then(
-                    if (isTablet) Modifier.widthIn(max = 720.dp) else Modifier.fillMaxWidth()
-                )
-                .padding(horizontal = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
+
+            // ── Gamified header ──────────────────────────────────────────────
             item {
-                Spacer(Modifier.height(24.dp))
-                Text(
-                    text = strings.myQuarters,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = "Select a quarter to view its pre-test and lessons",
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(Modifier.height(8.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(if (isTablet) 320.dp else 260.dp)
+                        .clip(RoundedCornerShape(bottomStart = 36.dp, bottomEnd = 36.dp))
+                ) {
+                    // Radial gradient background
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .background(
+                                Brush.radialGradient(
+                                    colors = listOf(
+                                        primaryColor.copy(alpha = 0.80f),
+                                        primaryColor,
+                                        Color(primaryColor.red * 0.55f, primaryColor.green * 0.55f, primaryColor.blue * 0.80f)
+                                    ),
+                                    radius = 1400f
+                                )
+                            )
+                    )
+
+                    // Decorative bubbles
+                    Canvas(modifier = Modifier.matchParentSize()) {
+                        val b1 = Color.White.copy(alpha = 0.07f)
+                        val b2 = Color.White.copy(alpha = 0.04f)
+                        drawCircle(b1, size.width * 0.45f, androidx.compose.ui.geometry.Offset(size.width * 1.05f, -size.height * 0.15f))
+                        drawCircle(b2, size.width * 0.30f, androidx.compose.ui.geometry.Offset(-size.width * 0.08f, size.height * 0.2f))
+                        drawCircle(b1, size.width * 0.20f, androidx.compose.ui.geometry.Offset(size.width * 0.85f, size.height * 1.05f))
+                        drawCircle(b1, size.width * 0.12f, androidx.compose.ui.geometry.Offset(size.width * 0.60f, size.height * 0.05f))
+                        drawCircle(b2, size.width * 0.16f, androidx.compose.ui.geometry.Offset(size.width * 0.20f, size.height * 0.95f))
+                    }
+
+                    // Content
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(
+                                start = if (isTablet) 32.dp else 20.dp,
+                                end = if (isTablet) 32.dp else 20.dp,
+                                top = if (isTablet) 36.dp else 24.dp,
+                                bottom = if (isTablet) 36.dp else 28.dp
+                            )
+                    ) {
+                        // Title row
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(text = "\uD83D\uDCDA", fontSize = if (isTablet) 36.sp else 28.sp)
+                            Spacer(Modifier.width(12.dp))
+                            Column {
+                                Text(
+                                    text = strings.myQuarters,
+                                    fontSize = if (isTablet) 30.sp else 24.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
+                                Text(
+                                    text = "Grade $studentGradeLevel Learning Journey",
+                                    fontSize = if (isTablet) 16.sp else 13.sp,
+                                    color = Color.White.copy(alpha = 0.80f)
+                                )
+                            }
+                        }
+
+                        Spacer(Modifier.height(if (isTablet) 28.dp else 20.dp))
+
+                        // Progress + Stats row
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(20.dp)
+                        ) {
+                            // Big progress ring
+                            ProgressRing(
+                                progress = overallProgress,
+                                size = if (isTablet) 110.dp else 90.dp,
+                                strokeWidth = if (isTablet) 10.dp else 8.dp,
+                                color = Color.White,
+                                trackColor = Color.White.copy(alpha = 0.20f)
+                            )
+
+                            // Stats column
+                            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                                Text(
+                                    text = motivationMsg,
+                                    fontSize = if (isTablet) 17.sp else 14.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
+
+                                // Lessons done bar
+                                Column {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        Text(
+                                            text = "\uD83D\uDCDD Lessons done",
+                                            fontSize = if (isTablet) 14.sp else 12.sp,
+                                            color = Color.White.copy(alpha = 0.85f)
+                                        )
+                                        Text(
+                                            text = "$completedLessons / $totalLessons",
+                                            fontSize = if (isTablet) 14.sp else 12.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color.White
+                                        )
+                                    }
+                                    Spacer(Modifier.height(4.dp))
+                                    LinearProgressIndicator(
+                                        progress = { overallProgress },
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(if (isTablet) 12.dp else 9.dp)
+                                            .clip(RoundedCornerShape(6.dp)),
+                                        color = Color(0xFFFFD700),
+                                        trackColor = Color.White.copy(alpha = 0.20f),
+                                        strokeCap = StrokeCap.Round
+                                    )
+                                }
+
+                                // Mini stat chips
+                                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    QuarterStatChip(emoji = "\uD83D\uDD13", label = "$activeCount Active")
+                                    QuarterStatChip(emoji = "\u2705", label = "$doneCount Done")
+                                    QuarterStatChip(emoji = "\uD83C\uDFC6", label = "${quarters.size} Total")
+                                }
+                            }
+                        }
+
+                        Spacer(Modifier.weight(1f))
+
+                        Text(
+                            text = "\uD83C\uDF1F Keep reading to unlock new lessons!",
+                            fontSize = if (isTablet) 15.sp else 13.sp,
+                            color = Color.White.copy(alpha = 0.8f),
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
             }
 
+            // ── Section label ────────────────────────────────────────────────
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = if (isTablet) 32.dp else 20.dp,
+                            vertical = 24.dp
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column {
+                        Text(
+                            text = "Your Journey",
+                            fontSize = if (isTablet) 24.sp else 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF1E293B)
+                        )
+                        Text(
+                            text = "Tap a quarter to begin or continue",
+                            fontSize = if (isTablet) 15.sp else 13.sp,
+                            color = Color(0xFF64748B)
+                        )
+                    }
+                    // Trophy badge
+                    Box(
+                        modifier = Modifier
+                            .size(if (isTablet) 56.dp else 48.dp)
+                            .background(Color(0xFFFFF3CD), RoundedCornerShape(16.dp)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("\uD83C\uDFC6", fontSize = if (isTablet) 28.sp else 24.sp)
+                    }
+                }
+            }
+
+            // ── Quarter cards ─────────────────────────────────────────────────
             items(quarters) { quarter ->
                 QuarterCard(
                     quarter = quarter,
                     isTablet = isTablet,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = if (isTablet) 32.dp else 20.dp,
+                            vertical = 8.dp
+                        ),
                     onClick = {
                         if (quarter.isActive) {
                             onQuarterClick(quarter.id, studentGradeLevel)
@@ -731,11 +996,29 @@ fun QuartersListContent(
                     }
                 )
             }
-            
-            item {
-                Spacer(Modifier.height(32.dp))
-            }
+
+            item { Spacer(Modifier.height(32.dp)) }
         }
     }
 }
+
+@Composable
+private fun QuarterStatChip(emoji: String, label: String) {
+    Row(
+        modifier = Modifier
+            .background(Color.White.copy(alpha = 0.18f), RoundedCornerShape(20.dp))
+            .padding(horizontal = 10.dp, vertical = 5.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Text(text = emoji, fontSize = 13.sp)
+        Text(
+            text = label,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White
+        )
+    }
+}
+
 

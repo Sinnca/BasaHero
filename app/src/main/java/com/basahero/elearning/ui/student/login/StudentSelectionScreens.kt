@@ -8,6 +8,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.CircleShape
@@ -138,25 +140,11 @@ fun StudentGradeSelectScreen(
                 // Each grade with its card
                 grades.forEach { grade ->
                     item {
+                        Spacer(Modifier.height(12.dp))
+                    }
+
+                    item {
                         Spacer(Modifier.height(8.dp))
-                    }
-
-                    // Grade header label
-                    item {
-                        Text(
-                            text = strings.grade(grade.level),
-                            modifier = Modifier.padding(
-                                horizontal = 4.dp,
-                                vertical = 4.dp
-                            ),
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White.copy(alpha = 0.8f)
-                        )
-                    }
-
-                    item {
-                        Spacer(Modifier.height(4.dp))
                     }
 
                     // Grade card — tappable
@@ -180,9 +168,9 @@ fun StudentGradeSelectScreen(
                     ) {
                         Text(
                             text = strings.alreadyHaveAccount + " " + strings.loginHere,
-                            fontSize = 14.sp,
-                            color = Color.White.copy(alpha = 0.8f),
-                            fontWeight = FontWeight.Medium
+                            fontSize = 16.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
                         )
                     }
                     Spacer(Modifier.height(16.dp))
@@ -195,7 +183,6 @@ fun StudentGradeSelectScreen(
 
 private data class GradeInfo(val level: Int, val color: Color, val subtitle: String)
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun GradeSelectionCard(
     grade: Int,
@@ -204,62 +191,106 @@ private fun GradeSelectionCard(
     isTablet: Boolean,
     onClick: () -> Unit
 ) {
-    Card(
-        onClick = onClick,
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.95f else 1f,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
+        label = "scale"
+    )
+
+    // Calculate a darker shade of the color for the 3D bottom edge
+    val darkColor = Color(
+        red = color.red * 0.8f,
+        green = color.green * 0.8f,
+        blue = color.blue * 0.8f,
+        alpha = 1f
+    )
+
+    val emoji = when(grade) {
+        4 -> "🎒"
+        5 -> "🚀"
+        6 -> "👑"
+        else -> "📚"
+    }
+
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(if (isTablet) 110.dp else 96.dp),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = color
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Number badge
-            Box(
-                modifier = Modifier
-                    .size(if (isTablet) 64.dp else 56.dp)
-                    .clip(CircleShape)
-                    .background(Color.White.copy(alpha = 0.25f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = grade.toString(),
-                    fontSize = if (isTablet) 30.sp else 24.sp,
-                    fontWeight = FontWeight.Black,
-                    color = Color.White
-                )
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
             }
-
-            Spacer(Modifier.width(16.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                val strings = LocalAppStrings.current
-                Text(
-                    text = strings.grade(grade),
-                    fontSize = if (isTablet) 22.sp else 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
-                Text(
-                    text = subtitle,
-                    fontSize = if (isTablet) 14.sp else 12.sp,
-                    color = Color.White.copy(alpha = 0.8f)
-                )
-            }
-
-            Icon(
-                Icons.Default.ChevronRight,
-                contentDescription = null,
-                tint = Color.White.copy(alpha = 0.7f),
-                modifier = Modifier.size(28.dp)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick
             )
+    ) {
+        // Bottom shadow (3D edge)
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .padding(top = 8.dp) // Offset downwards
+                .background(darkColor, RoundedCornerShape(24.dp))
+        )
+        
+        // Main front face
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp) // Push upwards relative to shadow
+                .background(color, RoundedCornerShape(24.dp))
+                .padding(
+                    horizontal = if (isTablet) 32.dp else 24.dp,
+                    vertical = if (isTablet) 32.dp else 24.dp
+                ),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Playful Badge
+                Box(
+                    modifier = Modifier
+                        .size(if (isTablet) 72.dp else 56.dp)
+                        .clip(CircleShape)
+                        .background(Color.White.copy(alpha = 0.25f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = emoji,
+                        fontSize = if (isTablet) 36.sp else 28.sp
+                    )
+                }
+
+                Spacer(Modifier.width(24.dp))
+
+                Column(modifier = Modifier.weight(1f)) {
+                    val strings = LocalAppStrings.current
+                    Text(
+                        text = strings.grade(grade),
+                        fontSize = if (isTablet) 32.sp else 24.sp,
+                        fontWeight = FontWeight.Black,
+                        color = Color.White
+                    )
+                    Text(
+                        text = subtitle,
+                        fontSize = if (isTablet) 18.sp else 14.sp,
+                        color = Color.White.copy(alpha = 0.9f),
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+
+                Icon(
+                    Icons.Default.ChevronRight,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(if (isTablet) 40.dp else 32.dp)
+                )
+            }
         }
     }
 }
@@ -603,7 +634,6 @@ private fun EmptyState(message: String) {
 // ─────────────────────────────────────────────────────────────────────────────
 // Section Card — clean Material3 style
 // ─────────────────────────────────────────────────────────────────────────────
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SectionCard(
     section: String,
@@ -612,58 +642,96 @@ fun SectionCard(
     isTablet: Boolean = false,
     onClick: () -> Unit
 ) {
-    Card(
-        onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        border = BorderStroke(1.dp, color.copy(alpha = 0.15f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.95f else 1f,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
+        label = "scale"
+    )
+
+    // Darker shade for the 3D bottom edge
+    val shadowColor = Color(
+        red = color.red * 0.85f,
+        green = color.green * 0.85f,
+        blue = color.blue * 0.85f,
+        alpha = 1f
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+            }
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick
+            )
     ) {
-        Column(
+        // Bottom shadow (3D edge)
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .padding(top = 6.dp) // Offset downwards
+                .background(shadowColor, RoundedCornerShape(20.dp))
+        )
+        
+        // Main front face
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(if (isTablet) 20.dp else 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(bottom = 6.dp) // Push upwards relative to shadow
+                .background(Color.White, RoundedCornerShape(20.dp))
+                .padding(if (isTablet) 24.dp else 16.dp),
+            contentAlignment = Alignment.Center
         ) {
-            // Section initial badge
-            Box(
-                modifier = Modifier
-                    .size(if (isTablet) 56.dp else 48.dp)
-                    .clip(CircleShape)
-                    .background(
-                        Brush.linearGradient(
-                            listOf(color, color.copy(alpha = 0.7f))
-                        )
-                    ),
-                contentAlignment = Alignment.Center
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
             ) {
+                // Section initial badge
+                Box(
+                    modifier = Modifier
+                        .size(if (isTablet) 64.dp else 56.dp)
+                        .clip(CircleShape)
+                        .background(
+                            Brush.linearGradient(
+                                listOf(color, color.copy(alpha = 0.7f))
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = section.take(1).uppercase(),
+                        color = Color.White,
+                        fontSize = if (isTablet) 28.sp else 24.sp,
+                        fontWeight = FontWeight.Black
+                    )
+                }
+
+                Spacer(Modifier.height(12.dp))
+
                 Text(
-                    text = section.take(1).uppercase(),
-                    color = Color.White,
-                    fontSize = if (isTablet) 22.sp else 18.sp,
-                    fontWeight = FontWeight.Black
+                    text = section,
+                    fontSize = if (isTablet) 20.sp else 16.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color(0xFF1E293B), // Dark slate
+                    textAlign = TextAlign.Center,
+                    maxLines = 1
+                )
+                Text(
+                    text = "$studentCount student${if (studentCount != 1) "s" else ""}",
+                    fontSize = if (isTablet) 14.sp else 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color(0xFF64748B), // Slate gray
+                    textAlign = TextAlign.Center
                 )
             }
-
-            Spacer(Modifier.height(10.dp))
-
-            Text(
-                text = section,
-                fontSize = if (isTablet) 16.sp else 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
-                maxLines = 1
-            )
-            Text(
-                text = "$studentCount student${if (studentCount != 1) "s" else ""}",
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
-            )
         }
     }
 }
@@ -671,7 +739,6 @@ fun SectionCard(
 // ─────────────────────────────────────────────────────────────────────────────
 // Student Name Card — clean Material3 grid card
 // ─────────────────────────────────────────────────────────────────────────────
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudentNameCard(
     student: Student,
@@ -679,58 +746,94 @@ fun StudentNameCard(
     isTablet: Boolean = false,
     onClick: () -> Unit
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.95f else 1f,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
+        label = "scale"
+    )
+
     val initials = student.fullName.split(" ")
         .filter { it.isNotBlank() }
         .take(2)
         .joinToString("") { it.take(1).uppercase() }
 
-    Card(
-        onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        border = BorderStroke(1.dp, gradeColor.copy(alpha = 0.1f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    val shadowColor = Color(
+        red = gradeColor.red * 0.85f,
+        green = gradeColor.green * 0.85f,
+        blue = gradeColor.blue * 0.85f,
+        alpha = 1f
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+            }
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick
+            )
     ) {
-        Column(
+        // Bottom shadow (3D edge)
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .padding(top = 6.dp)
+                .background(shadowColor, RoundedCornerShape(20.dp))
+        )
+        
+        // Main front face
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(if (isTablet) 20.dp else 14.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(bottom = 6.dp)
+                .background(Color.White, RoundedCornerShape(20.dp))
+                .padding(if (isTablet) 24.dp else 16.dp),
+            contentAlignment = Alignment.Center
         ) {
-            // Initials avatar
-            Box(
-                modifier = Modifier
-                    .size(if (isTablet) 56.dp else 48.dp)
-                    .clip(CircleShape)
-                    .background(
-                        Brush.linearGradient(
-                            listOf(gradeColor, gradeColor.copy(alpha = 0.7f))
-                        )
-                    ),
-                contentAlignment = Alignment.Center
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
             ) {
+                // Initials avatar
+                Box(
+                    modifier = Modifier
+                        .size(if (isTablet) 64.dp else 56.dp)
+                        .clip(CircleShape)
+                        .background(
+                            Brush.linearGradient(
+                                listOf(gradeColor, gradeColor.copy(alpha = 0.7f))
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = initials,
+                        color = Color.White,
+                        fontWeight = FontWeight.Black,
+                        fontSize = if (isTablet) 24.sp else 20.sp
+                    )
+                }
+
+                Spacer(Modifier.height(12.dp))
+
                 Text(
-                    text = initials,
-                    color = Color.White,
-                    fontWeight = FontWeight.Black,
-                    fontSize = if (isTablet) 20.sp else 16.sp
+                    text = student.fullName,
+                    fontSize = if (isTablet) 16.sp else 14.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color(0xFF1E293B),
+                    textAlign = TextAlign.Center,
+                    maxLines = 2,
+                    lineHeight = if (isTablet) 22.sp else 18.sp
                 )
             }
-
-            Spacer(Modifier.height(10.dp))
-
-            Text(
-                text = student.fullName,
-                fontSize = if (isTablet) 14.sp else 13.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
-                maxLines = 2,
-                lineHeight = 18.sp
-            )
         }
     }
 }

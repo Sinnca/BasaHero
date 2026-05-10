@@ -154,6 +154,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.basahero.elearning.audio.SpeechRecognitionEngine
 import com.basahero.elearning.util.VoskManager
+import com.basahero.elearning.ui.theme.fredokaFontFamily
 import java.util.Locale
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -216,6 +217,7 @@ fun HighlightedPassageText(
     ClickableText(
         text = annotatedText,
         style = TextStyle(
+            fontFamily = fredokaFontFamily,
             fontSize = 16.sp,
             lineHeight = 26.sp,
             color = MaterialTheme.colorScheme.onSurface,
