@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
         PrePostChoiceEntity::class,
         PrePostTestEntity::class,
     ],
-    version  = 2,
+    version  = 8,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -104,9 +104,39 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        // Migration from v2 to v3: add lecture_text column to lesson table
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE lesson ADD COLUMN lecture_text TEXT NOT NULL DEFAULT ''")
+            }
+        }
+
+        // No MIGRATION_3_4 defined intentionally!
+        // fallbackToDestructiveMigration() will wipe the DB and trigger onCreate,
+        // which re-seeds ALL content from the updated JSON files.
+
         fun getInstance(context: Context, seeder: DatabaseSeeder): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE ?: buildDatabase(context, seeder).also { INSTANCE = it }
+            }
+        }
+
+        /**
+         * Triggers the seeder if the DB is empty.
+         * Call this from your DI/Application class AFTER getInstance().
+         * This is the ONLY reliable way to seed — the Room Callback pattern
+         * has a known race condition where INSTANCE is null when onCreate fires.
+         */
+        suspend fun seedIfEmpty(seeder: DatabaseSeeder) {
+            val db = INSTANCE ?: return
+            // If no quarters exist, the database is empty — seed everything
+            val quarterCount = db.quarterDao().countAll()
+            if (quarterCount == 0) {
+                android.util.Log.d("AppDatabase", "Database is empty — seeding now...")
+                seeder.seed(db)
+                android.util.Log.d("AppDatabase", "Seeding complete.")
+            } else {
+                android.util.Log.d("AppDatabase", "Database already has $quarterCount quarter(s), skipping seed.")
             }
         }
 
@@ -119,19 +149,8 @@ abstract class AppDatabase : RoomDatabase() {
                 AppDatabase::class.java,
                 DB_NAME
             )
-                .addMigrations(MIGRATION_1_2) // Applies the schema update safely
-                .addCallback(object : Callback() {
-                    override fun onCreate(db: SupportSQLiteDatabase) {
-                        super.onCreate(db)
-                        // Seed content on first install — runs only once
-                        INSTANCE?.let { database ->
-                            CoroutineScope(Dispatchers.IO).launch {
-                                seeder.seed(database)
-                            }
-                        }
-                    }
-                })
-                .fallbackToDestructiveMigration() // Safely clears db if a migration ever fails
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                .fallbackToDestructiveMigration()
                 .build()
         }
     }

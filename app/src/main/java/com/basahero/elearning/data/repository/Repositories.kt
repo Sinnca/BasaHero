@@ -1,12 +1,14 @@
 package com.basahero.elearning.data.repository
 
 import com.basahero.elearning.data.local.AppDatabase
+import com.basahero.elearning.data.local.SeedLessonPart
 import com.basahero.elearning.data.local.entity.*
 import com.basahero.elearning.data.model.*
 import com.basahero.elearning.data.local.entity.AppConstants.PASS_THRESHOLD
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.json.Json
 import java.time.Instant
 import java.util.UUID
 import com.basahero.elearning.data.remote.SupabaseClient
@@ -274,7 +276,9 @@ class LessonRepository(private val db: AppDatabase) {
                     passageText = lesson.passageText,
                     imagePath = lesson.imagePath,
                     status = status,
-                    highlightedWords = lesson.highlightedWords
+                    highlightedWords = lesson.highlightedWords,
+                    lectureText = lesson.lectureText,
+                    parts = parsePartsJson(lesson.partsJson)
                 )
             }
         }
@@ -290,8 +294,44 @@ class LessonRepository(private val db: AppDatabase) {
                 title = lesson.title,
                 passageText = lesson.passageText,
                 imagePath = lesson.imagePath,
-                highlightedWords = lesson.highlightedWords
+                highlightedWords = lesson.highlightedWords,
+                lectureText = lesson.lectureText,
+                parts = parsePartsJson(lesson.partsJson)
             )
+        }
+    }
+
+    private val partsJsonParser = Json { ignoreUnknownKeys = true; isLenient = true }
+
+    private fun parsePartsJson(jsonStr: String): List<LessonPart> {
+        if (jsonStr.isBlank() || jsonStr == "[]") return emptyList()
+        return try {
+            val seedParts = partsJsonParser.decodeFromString(
+                kotlinx.serialization.builtins.ListSerializer(SeedLessonPart.serializer()),
+                jsonStr
+            )
+            seedParts.map { sp ->
+                fun mapQuestions(questions: List<com.basahero.elearning.data.local.SeedMiniQuestion>) =
+                    questions.map { mq ->
+                        MiniQuestion(
+                            id = mq.id,
+                            questionText = mq.questionText,
+                            questionType = mq.questionType,
+                            choices = mq.choices.map { mc ->
+                                MiniChoice(id = mc.id, choiceText = mc.choiceText, isCorrect = mc.isCorrect, orderIndex = mc.orderIndex)
+                            }
+                        )
+                    }
+                LessonPart(
+                    passageText = sp.passageText,
+                    highlightedWords = sp.highlighted_words,
+                    miniQuestions = mapQuestions(sp.miniQuestions),
+                    activityQuestions = mapQuestions(sp.activityQuestions)
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyList()
         }
     }
 

@@ -281,6 +281,42 @@ class DatabaseSeeder(private val context: Context) {
             db.prePostDao().insertChoices(ppChoices)
         }
     }
+
+    /**
+     * Re-seeds lesson content from JSON files.
+     * Called when lesson JSON has been updated (e.g. after a migration or content update).
+     * Deletes existing lessons, questions, and choices for each quarter, then re-inserts.
+     * Does NOT touch student progress — their scores/status are preserved.
+     */
+    suspend fun reseedLessons(db: AppDatabase) {
+        val files = listOf("grade4_q1.json", "grade5_q1.json", "grade6_q1.json")
+
+        files.forEach { filename ->
+            try {
+                val raw  = context.assets.open("data/$filename").bufferedReader().readText()
+                val seed = json.decodeFromString<SeedFile>(raw)
+                val quarterId = IdMapper.map(seed.quarter.id)
+
+                // Delete old lessons (cascade deletes questions + choices via FK)
+                db.lessonDao().deleteByQuarter(quarterId)
+
+                // Re-insert from updated JSON
+                seed.lessons.forEach { lesson ->
+                    db.lessonDao().insertAll(listOf(lesson.toEntity(seed.quarter.id)))
+
+                    val questions = lesson.questions.map { it.toEntity(lesson.id) }
+                    db.quizDao().insertQuestions(questions)
+
+                    val choices = lesson.questions.flatMap { q ->
+                        q.choices.map { it.toEntity(q.id) }
+                    }
+                    db.quizDao().insertChoices(choices)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 }
 
 // ─────────────────────────────────────────────
@@ -317,22 +353,60 @@ data class SeedLesson(
     val orderIndex:  Int,
     val competency:  String,
     val title:       String,
-    val passageText: String,
+    val passageText: String = "", // Legacy — kept for backward compat
     val imagePath:   String? = null,
-    val highlighted_words: List<String> = emptyList(), // 👈 NEW (Ready for Step 6)
-    val questions:   List<SeedQuestion>
+    val highlighted_words: List<String> = emptyList(),
+    val lectureText: String = "",
+    val parts:       List<SeedLessonPart> = emptyList(), // NEW: multi-part support
+    val questions:   List<SeedQuestion> = emptyList()
 ) {
-    fun toEntity(quarterId: String) = LessonEntity(
-        id          = IdMapper.map(id),
-        quarterId   = IdMapper.map(quarterId),
-        orderIndex  = orderIndex,
-        competency  = competency,
-        title       = title,
-        passageText = passageText,
-        imagePath   = imagePath ?: "",
-        highlightedWords = highlighted_words.joinToString(",") // 👈 Converts List to String for Room
-    )
+    fun toEntity(quarterId: String): LessonEntity {
+        // Serialize parts to JSON string for storage
+        val partsJsonStr = if (parts.isNotEmpty()) {
+            kotlinx.serialization.json.Json.encodeToString(
+                kotlinx.serialization.builtins.ListSerializer(SeedLessonPart.serializer()),
+                parts
+            )
+        } else "[]"
+
+        return LessonEntity(
+            id          = IdMapper.map(id),
+            quarterId   = IdMapper.map(quarterId),
+            orderIndex  = orderIndex,
+            competency  = competency,
+            title       = title,
+            passageText = passageText,
+            imagePath   = imagePath ?: "",
+            highlightedWords = highlighted_words.joinToString(","),
+            lectureText = lectureText,
+            partsJson   = partsJsonStr
+        )
+    }
 }
+
+@Serializable
+data class SeedLessonPart(
+    val passageText: String,
+    val highlighted_words: List<String> = emptyList(),
+    val miniQuestions: List<SeedMiniQuestion> = emptyList(),
+    val activityQuestions: List<SeedMiniQuestion> = emptyList()
+)
+
+@Serializable
+data class SeedMiniQuestion(
+    val id: String,
+    val questionText: String,
+    val questionType: String = "MCQ",
+    val choices: List<SeedMiniChoice> = emptyList()
+)
+
+@Serializable
+data class SeedMiniChoice(
+    val id: String,
+    val choiceText: String,
+    val isCorrect: Boolean,
+    val orderIndex: Int
+)
 
 @Serializable
 data class SeedQuestion(

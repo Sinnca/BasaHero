@@ -1,8 +1,9 @@
 package com.basahero.elearning.ui.student.lessons
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -11,47 +12,43 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import org.burnoutcrew.reorderable.ReorderableItem
+import org.burnoutcrew.reorderable.detectReorderAfterLongPress
+import org.burnoutcrew.reorderable.rememberReorderableLazyListState
+import org.burnoutcrew.reorderable.reorderable
+import com.basahero.elearning.data.model.LessonPart
+import com.basahero.elearning.data.model.MiniChoice
+import com.basahero.elearning.data.model.MiniQuestion
 import com.basahero.elearning.ui.common.AnimatedScrollIndicator
 import com.basahero.elearning.ui.common.LocalAppStrings
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ReadingScreen — tablet + phone responsive
+// ReadingScreen — Multi-step lesson wizard
+// Steps: [Lecture] → [Reading+MiniActivity 1] → [Reading+MiniActivity 2] → Quiz
 // ─────────────────────────────────────────────────────────────────────────────
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReadingScreen(
     lessonId: String,
     viewModel: ReadingViewModel,
-    onStartQuiz: (lessonId: String) -> Unit,
     onBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val scrollState = rememberScrollState()
     val strings = LocalAppStrings.current
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val isTablet = screenWidth >= 600
+    val context = androidx.compose.ui.platform.LocalContext.current
 
-    LaunchedEffect(lessonId) {
-        viewModel.loadLesson(lessonId)
-    }
-
-    // Detect when scrolled near bottom (within 200px)
-    val isAtBottom by remember {
-        derivedStateOf {
-            scrollState.maxValue == 0 || scrollState.value >= scrollState.maxValue - 200
-        }
-    }
-
-    LaunchedEffect(isAtBottom) {
-        if (isAtBottom && !uiState.readingComplete) {
-            viewModel.onScrolledToBottom()
-        }
-    }
+    LaunchedEffect(lessonId) { viewModel.loadLesson(lessonId) }
 
     if (uiState.isLoading || uiState.lesson == null) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -62,16 +59,84 @@ fun ReadingScreen(
 
     val lesson = uiState.lesson!!
 
-    // Compute scroll fraction for the animated indicator (avoid divide-by-zero)
-    val scrollFraction = if (scrollState.maxValue > 0)
-        scrollState.value.toFloat() / scrollState.maxValue
-    else 0f
+    // Build steps list dynamically
+    val steps = remember(lesson) {
+        buildList {
+            if (lesson.hasLecture) add(LessonStep.Lecture(lesson.lectureText))
+            if (lesson.hasParts) {
+                lesson.parts.forEachIndexed { i, part ->
+                    val isShortIntro = part.miniQuestions.isEmpty() && 
+                                       part.activityQuestions.isNotEmpty() && 
+                                       part.passageText.length < 350 && 
+                                       part.passageText.contains("Activity", ignoreCase = true)
+                    
+                    if (!isShortIntro) {
+                        add(LessonStep.ReadingPart(i + 1, part))
+                    }
+                    
+                    if (part.activityQuestions.isNotEmpty()) {
+                        add(LessonStep.Activity(
+                            partNumber = i + 1, 
+                            questions = part.activityQuestions,
+                            introText = if (isShortIntro) part.passageText else null
+                        ))
+                    }
+                }
+            } else {
+                add(LessonStep.ReadingPart(1, LessonPart(
+                    passageText = lesson.passageText,
+                    highlightedWords = uiState.highlightedWords.map { it.word }
+                )))
+            }
+        }
+    }
 
-    // Adaptive sizes
-    val contentPadding = if (isTablet) 32.dp else 16.dp
-    val titleFontSize = if (isTablet) 28.sp else 22.sp
-    val passageFontSize = if (isTablet) 18.sp else 15.sp
-    val imageHeight = if (isTablet) 220.dp else 150.dp
+    // Track graded activity scores
+    var totalCorrect by remember { mutableIntStateOf(0) }
+    var totalQuestions by remember { mutableIntStateOf(0) }
+
+    var currentStepIndex by remember { mutableIntStateOf(0) }
+    val currentStep = steps.getOrNull(currentStepIndex)
+    val isLastStep = currentStepIndex >= steps.lastIndex
+    val scrollState = rememberScrollState()
+
+    // Activity result full-page state
+    var showActivityResult by remember { mutableStateOf(false) }
+    var activityScore by remember { mutableIntStateOf(0) }
+    var activityTotal by remember { mutableIntStateOf(0) }
+    // Key to force-reset ActivityStepContent on retry
+    var activityRetryKey by remember { mutableIntStateOf(0) }
+
+    // Reset scroll when step changes
+    LaunchedEffect(currentStepIndex) { scrollState.scrollTo(0) }
+
+    // ── Full-page Activity Result Screen ──────────────────────────────────────
+    if (showActivityResult) {
+        val pct = if (activityTotal > 0) (activityScore.toFloat() / activityTotal) * 100f else 0f
+        val passed = pct >= 60f
+
+        ActivityResultScreen(
+            score = activityScore,
+            total = activityTotal,
+            passed = passed,
+            isTablet = isTablet,
+            onContinue = {
+                showActivityResult = false
+                if (isLastStep) {
+                    viewModel.saveLessonProgress(context, totalCorrect, totalQuestions)
+                    onBack()
+                } else {
+                    currentStepIndex++
+                }
+            },
+            onRetry = {
+                showActivityResult = false
+                activityRetryKey++
+            },
+            onBackToLessons = onBack
+        )
+        return
+    }
 
     Scaffold(
         topBar = {
@@ -79,34 +144,30 @@ fun ReadingScreen(
                 TopAppBar(
                     title = {
                         Column {
-                            Text(
-                                lesson.competency,
-                                fontSize = if (isTablet) 14.sp else 12.sp,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                            Text(
-                                lesson.title,
-                                fontSize = if (isTablet) 18.sp else 15.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
+                            Text(lesson.competency, fontSize = if (isTablet) 14.sp else 12.sp, color = MaterialTheme.colorScheme.primary)
+                            Text(lesson.title, fontSize = if (isTablet) 18.sp else 15.sp, fontWeight = FontWeight.SemiBold)
                         }
                     },
                     navigationIcon = {
-                        IconButton(onClick = onBack) {
+                        IconButton(onClick = {
+                            if (currentStepIndex > 0) currentStepIndex-- else onBack()
+                        }) {
                             Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                         }
                     }
                 )
-                // Animated reading-progress bar + bouncing scroll hint
-                AnimatedScrollIndicator(
-                    scrollFraction = scrollFraction,
-                    modifier = Modifier.fillMaxWidth()
+                // Step progress indicator
+                LinearProgressIndicator(
+                    progress = { (currentStepIndex + 1).toFloat() / steps.size },
+                    modifier = Modifier.fillMaxWidth().height(4.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant
                 )
             }
         },
         bottomBar = {
-            // Quiz button appears once student scrolls through the passage
-            AnimatedVisibility(visible = uiState.readingComplete) {
+            // Hide the bottom bar on Activity steps — those have their own Submit button
+            if (currentStep !is LessonStep.Activity) {
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
                     shadowElevation = 8.dp
@@ -116,62 +177,29 @@ fun ReadingScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Button(
-                            onClick = { onStartQuiz(lessonId) },
+                            onClick = {
+                                if (isLastStep) {
+                                    viewModel.saveLessonProgress(context, totalCorrect, totalQuestions)
+                                    onBack()
+                                } else {
+                                    currentStepIndex++
+                                }
+                            },
                             modifier = Modifier
-                                .then(
-                                    if (isTablet) Modifier.width(480.dp) else Modifier.fillMaxWidth()
-                                )
+                                .then(if (isTablet) Modifier.width(480.dp) else Modifier.fillMaxWidth())
                                 .padding(16.dp)
                                 .height(56.dp),
                             shape = RoundedCornerShape(12.dp)
                         ) {
-                            Icon(
-                                Icons.Default.Quiz,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp)
-                            )
+                            Text("Next", fontSize = if (isTablet) 18.sp else 16.sp, fontWeight = FontWeight.SemiBold)
                             Spacer(Modifier.width(8.dp))
-                            Text(
-                                strings.takeTheQuiz,
-                                fontSize = if (isTablet) 18.sp else 16.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
+                            Icon(Icons.Default.ArrowForward, contentDescription = null, modifier = Modifier.size(20.dp))
                         }
-                    }
-                }
-            }
-
-            // Scroll hint while not at bottom
-            AnimatedVisibility(visible = !uiState.readingComplete) {
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.surfaceVariant
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.Default.KeyboardArrowDown,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(Modifier.width(6.dp))
-                        Text(
-                            strings.scrollDownToRead,
-                            fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
                     }
                 }
             }
         }
     ) { padding ->
-        // Center-constrained content for tablet
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -179,109 +207,706 @@ fun ReadingScreen(
                 .padding(padding),
             contentAlignment = Alignment.TopCenter
         ) {
+            val contentPadding = if (isTablet) 32.dp else 16.dp
+
             Card(
                 modifier = Modifier
                     .then(
-                        if (isTablet) Modifier
-                            .widthIn(max = 720.dp)
-                            .padding(vertical = 24.dp)
+                        if (isTablet) Modifier.widthIn(max = 720.dp).padding(vertical = 24.dp)
                         else Modifier.fillMaxWidth()
                     ),
                 shape = if (isTablet) RoundedCornerShape(24.dp) else RoundedCornerShape(0.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 elevation = CardDefaults.cardElevation(defaultElevation = if (isTablet) 4.dp else 0.dp)
             ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-                    .padding(contentPadding)
-            ) {
-                // Placeholder for Image
-                Box(
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(imageHeight)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(MaterialTheme.colorScheme.secondaryContainer),
-                    contentAlignment = Alignment.Center
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)
+                        .padding(contentPadding)
                 ) {
-                    Icon(
-                        Icons.Default.MenuBook,
-                        contentDescription = "Story Icon",
-                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                        modifier = Modifier.size(if (isTablet) 64.dp else 48.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(if (isTablet) 28.dp else 20.dp))
-
-                // Competency badge
-                Surface(
-                    shape = RoundedCornerShape(20.dp),
-                    color = MaterialTheme.colorScheme.primaryContainer
-                ) {
-                    Text(
-                        text = lesson.competency,
-                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
-                        fontSize = if (isTablet) 14.sp else 12.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                // Lesson title
-                Text(
-                    text = lesson.title,
-                    fontSize = titleFontSize,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
-
-                // Passage text — interactive highlighted text
-                HighlightedPassageText(
-                    passageText = lesson.passageText,
-                    highlightedWords = uiState.highlightedWords,
-                    modifier = Modifier.fillMaxWidth(),
-                    onPronunciationAttempt = { word, heard, isCorrect, _ ->
-                        val score = if (isCorrect) 100 else 0
-                        viewModel.savePronunciationAttempt(word, heard, isCorrect, score)
-                    }
-                )
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // End of passage indicator
-                if (uiState.readingComplete) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.Default.CheckCircle,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.tertiary,
-                            modifier = Modifier.size(if (isTablet) 24.dp else 20.dp)
+                    when (val step = currentStep) {
+                        is LessonStep.Lecture -> LectureStepContent(step.text, isTablet)
+                        is LessonStep.ReadingPart -> ReadingPartStepContent(
+                            partNumber = step.partNumber,
+                            part = step.part,
+                            isTablet = isTablet,
+                            onPronunciationAttempt = { word, heard, isCorrect, _ ->
+                                val score = if (isCorrect) 100 else 0
+                                viewModel.savePronunciationAttempt(word, heard, isCorrect, score)
+                            }
                         )
-                        Spacer(Modifier.width(8.dp))
-                        Text(
-                            strings.youveFinishedReading,
-                            fontSize = if (isTablet) 16.sp else 14.sp,
-                            color = MaterialTheme.colorScheme.tertiary,
-                            fontWeight = FontWeight.Medium
-                        )
+                        is LessonStep.Activity -> {
+                            key(activityRetryKey) {
+                                ActivityStepContent(
+                                    partNumber = step.partNumber,
+                                    questions = step.questions,
+                                    introText = step.introText,
+                                    isTablet = isTablet,
+                                    onSubmit = { correct, total ->
+                                        totalCorrect += correct
+                                        totalQuestions += total
+                                        activityScore = correct
+                                        activityTotal = total
+                                        showActivityResult = true
+                                    }
+                                )
+                            }
+                        }
+                        null -> {}
                     }
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
-            } // end Card
+        }
+    }
+}
+
+// ─── Step types ──────────────────────────────────────────────────────────────
+sealed class LessonStep {
+    data class Lecture(val text: String) : LessonStep()
+    data class ReadingPart(val partNumber: Int, val part: LessonPart) : LessonStep()
+    data class Activity(val partNumber: Int, val questions: List<MiniQuestion>, val introText: String? = null) : LessonStep()
+}
+
+// ─── Lecture Step ─────────────────────────────────────────────────────────────
+@Composable
+private fun LectureStepContent(text: String, isTablet: Boolean) {
+    // Header icon
+    Box(
+        modifier = Modifier.fillMaxWidth().height(if (isTablet) 180.dp else 120.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.primaryContainer),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(
+                Icons.Default.School,
+                contentDescription = "Lecture",
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier.size(if (isTablet) 64.dp else 48.dp)
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                "Lecture",
+                fontSize = if (isTablet) 20.sp else 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+        }
+    }
+
+    Spacer(Modifier.height(24.dp))
+
+    Text(
+        text = text,
+        fontSize = if (isTablet) 18.sp else 15.sp,
+        lineHeight = if (isTablet) 32.sp else 26.sp,
+        color = MaterialTheme.colorScheme.onSurface
+    )
+}
+
+// ─── Reading Part Step (Passage + Mini Activity on same page) ────────────────
+@Composable
+private fun ReadingPartStepContent(
+    partNumber: Int,
+    part: LessonPart,
+    isTablet: Boolean,
+    onPronunciationAttempt: (String, String, Boolean, Int) -> Unit
+) {
+    // Header
+    Box(
+        modifier = Modifier.fillMaxWidth().height(if (isTablet) 140.dp else 100.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.secondaryContainer),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(
+                Icons.Default.Book,
+                contentDescription = "Reading",
+                tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                modifier = Modifier.size(if (isTablet) 48.dp else 36.dp)
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                "Reading Passage $partNumber",
+                fontSize = if (isTablet) 18.sp else 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
+            )
+        }
+    }
+
+    Spacer(Modifier.height(20.dp))
+
+    // Build HighlightedWord list from string list
+    val highlightedWordObjects = remember(part.passageText, part.highlightedWords) {
+        part.highlightedWords.mapNotNull { word ->
+            val startIndex = part.passageText.indexOf(word, ignoreCase = true)
+            if (startIndex >= 0) HighlightedWord(word, startIndex, startIndex + word.length) else null
+        }
+    }
+
+    // Passage text with highlighted words
+    HighlightedPassageText(
+        passageText = part.passageText,
+        highlightedWords = highlightedWordObjects,
+        modifier = Modifier.fillMaxWidth(),
+        onPronunciationAttempt = onPronunciationAttempt
+    )
+
+    // Mini Activity Section
+    if (part.miniQuestions.isNotEmpty()) {
+        Spacer(Modifier.height(24.dp))
+        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+        Text(
+            "Mini Activity",
+            fontSize = if (isTablet) 20.sp else 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.tertiary
+        )
+        Spacer(Modifier.height(12.dp))
+
+        part.miniQuestions.forEachIndexed { index, question ->
+            MiniQuestionCard(
+                questionNumber = index + 1,
+                question = question,
+                isTablet = isTablet
+            )
+            if (index < part.miniQuestions.lastIndex) {
+                Spacer(Modifier.height(12.dp))
+            }
+        }
+    }
+
+    Spacer(Modifier.height(32.dp))
+}
+
+// ─── Mini Question Card (practice, not graded) ──────────────────────────────
+@Composable
+private fun MiniQuestionCard(
+    questionNumber: Int,
+    question: MiniQuestion,
+    isTablet: Boolean
+) {
+    var selectedChoiceId by remember(question.id) { mutableStateOf<String?>(null) }
+    var showFeedback by remember(question.id) { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+        ),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                "Q$questionNumber: ${question.questionText}",
+                fontSize = if (isTablet) 16.sp else 14.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            if (question.questionType == "SEQUENCING") {
+                // Drag to reorder for MiniQuestionCard
+                var currentChoices by remember(question.id) { mutableStateOf(question.choices.shuffled()) }
+                val state = rememberReorderableLazyListState(onMove = { from, to ->
+                    currentChoices = currentChoices.toMutableList().apply {
+                        add(to.index, removeAt(from.index))
+                    }
+                })
+
+                Text(
+                    "Hold and drag the items to arrange them in the correct order:",
+                    fontSize = if (isTablet) 14.sp else 12.sp,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Spacer(Modifier.height(8.dp))
+
+                LazyColumn(
+                    state = state.listState,
+                    modifier = Modifier
+                        .heightIn(max = (currentChoices.size * 80).dp)
+                        .reorderable(state)
+                        .detectReorderAfterLongPress(state),
+                    userScrollEnabled = false
+                ) {
+                    items(currentChoices, { it.id }) { choice ->
+                        ReorderableItem(state, key = choice.id) { isDragging ->
+                            val elevation = if (isDragging) 8.dp else 0.dp
+                            Surface(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 4.dp),
+                                shape = RoundedCornerShape(8.dp),
+                                color = MaterialTheme.colorScheme.surface,
+                                shadowElevation = elevation,
+                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(14.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(Icons.Default.DragHandle, contentDescription = "Drag")
+                                    Spacer(Modifier.width(12.dp))
+                                    Text(
+                                        choice.choiceText,
+                                        fontSize = if (isTablet) 16.sp else 14.sp,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Spacer(Modifier.height(12.dp))
+                Button(
+                    onClick = { showFeedback = true },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Check Answer")
+                }
+                
+                if (showFeedback) {
+                    val correctOrder = question.choices.sortedBy { it.orderIndex }.map { it.id }
+                    val currentOrder = currentChoices.map { it.id }
+                    val isCorrect = correctOrder == currentOrder
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        if (isCorrect) "✓ Correct!" else "✗ Incorrect. The right order is: \n" + question.choices.sortedBy { it.orderIndex }.joinToString("\n") { it.choiceText },
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = if (isCorrect) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
+                    )
+                }
+            } else {
+                // MCQ choices
+                question.choices.forEach { choice ->
+                    val isSelected = selectedChoiceId == choice.id
+                    val bgColor = when {
+                        !showFeedback -> if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
+                        choice.isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
+                        isSelected && !choice.isCorrect -> MaterialTheme.colorScheme.errorContainer
+                        else -> MaterialTheme.colorScheme.surface
+                    }
+
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 3.dp)
+                            .clickable(enabled = !showFeedback) {
+                                selectedChoiceId = choice.id
+                                showFeedback = true
+                            },
+                        shape = RoundedCornerShape(8.dp),
+                        color = bgColor,
+                        border = BorderStroke(
+                            1.dp,
+                            if (isSelected && !showFeedback) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                        )
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                choice.choiceText,
+                                fontSize = if (isTablet) 14.sp else 12.sp,
+                                modifier = Modifier.weight(1f)
+                            )
+                            if (showFeedback && choice.isCorrect) {
+                                Icon(Icons.Default.CheckCircle, null, tint = MaterialTheme.colorScheme.tertiary, modifier = Modifier.size(18.dp))
+                            }
+                            if (showFeedback && isSelected && !choice.isCorrect) {
+                                Icon(Icons.Default.Cancel, null, tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(18.dp))
+                            }
+                        }
+                    }
+                }
+
+                // Feedback text
+                if (showFeedback) {
+                    val correct = question.choices.find { it.id == selectedChoiceId }?.isCorrect == true
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        if (correct) "✓ Correct!" else "✗ Try again next time!",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = if (correct) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+        }
+    }
+}
+
+// ─── Activity Step (Graded questions for the preceding passage) ─────────────
+@Composable
+private fun ActivityStepContent(
+    partNumber: Int,
+    questions: List<MiniQuestion>,
+    introText: String?,
+    isTablet: Boolean,
+    onSubmit: (correct: Int, total: Int) -> Unit
+) {
+    // Header
+    Box(
+        modifier = Modifier.fillMaxWidth().height(if (isTablet) 140.dp else 100.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.tertiaryContainer),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(
+                Icons.Default.Assignment,
+                contentDescription = "Activity",
+                tint = MaterialTheme.colorScheme.onTertiaryContainer,
+                modifier = Modifier.size(if (isTablet) 48.dp else 36.dp)
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                "Activity $partNumber",
+                fontSize = if (isTablet) 18.sp else 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onTertiaryContainer
+            )
+        }
+    }
+
+    Spacer(Modifier.height(24.dp))
+
+    if (!introText.isNullOrBlank()) {
+        Text(
+            text = introText,
+            fontSize = if (isTablet) 18.sp else 16.sp,
+            lineHeight = if (isTablet) 28.sp else 24.sp,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)
+        )
+    } else {
+        Text(
+            "Let's see what you remember from Reading Passage $partNumber!",
+            fontSize = if (isTablet) 18.sp else 16.sp,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+        Spacer(Modifier.height(24.dp))
+    }
+
+    val answers = remember { mutableStateMapOf<String, Boolean>() }
+
+    // Show questions
+    run {
+        // Show questions
+        questions.forEachIndexed { index, question ->
+            ActivityQuestionCard(
+                questionNumber = index + 1,
+                question = question,
+                isTablet = isTablet,
+                onAnswered = { isCorrect ->
+                    answers[question.id] = isCorrect
+                }
+            )
+            Spacer(Modifier.height(16.dp))
+        }
+
+        Spacer(Modifier.height(24.dp))
+
+        // Submit Button
+        Button(
+            onClick = {
+                val correct = answers.values.count { it }
+                onSubmit(correct, questions.size)
+            },
+            enabled = answers.size == questions.size, // Must answer all
+            modifier = Modifier.fillMaxWidth().height(56.dp),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Text(
+                if (answers.size == questions.size) "Submit Answers" else "Answer all questions to submit",
+                fontSize = if (isTablet) 18.sp else 16.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+    }
+}
+
+// ─── Full-page Activity Result Screen ────────────────────────────────────────
+@Composable
+private fun ActivityResultScreen(
+    score: Int,
+    total: Int,
+    passed: Boolean,
+    isTablet: Boolean,
+    onContinue: () -> Unit,
+    onRetry: () -> Unit,
+    onBackToLessons: () -> Unit
+) {
+    val pct = if (total > 0) (score * 100) / total else 0
+    val circleColor = if (passed) Color(0xFF4CAF50) else Color(0xFFF44336)
+    val bgGradient = if (passed) {
+        Brush.verticalGradient(listOf(Color(0xFFE8F5E9), Color(0xFFC8E6C9)))
+    } else {
+        Brush.verticalGradient(listOf(Color(0xFFFFEBEE), Color(0xFFFFCDD2)))
+    }
+
+    Surface(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(bgGradient)
+                .padding(horizontal = if (isTablet) 48.dp else 24.dp, vertical = 32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            // Emoji header
+            Text(
+                text = if (passed) "🌟" else "💪",
+                fontSize = 64.sp
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            Text(
+                text = if (passed) "Great Job!" else "Keep Trying!",
+                fontSize = if (isTablet) 36.sp else 28.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = if (passed) Color(0xFF2E7D32) else Color(0xFFC62828)
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            Text(
+                text = if (passed) "You passed the activity!" else "You need at least 60% to continue.",
+                fontSize = if (isTablet) 18.sp else 15.sp,
+                color = Color.DarkGray,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(Modifier.height(40.dp))
+
+            // Score Circle
+            Box(
+                modifier = Modifier
+                    .size(if (isTablet) 200.dp else 160.dp)
+                    .clip(CircleShape)
+                    .background(circleColor.copy(alpha = 0.12f))
+                    .border(6.dp, circleColor, CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "$pct%",
+                        fontSize = if (isTablet) 48.sp else 38.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = circleColor
+                    )
+                    Text(
+                        text = "$score / $total",
+                        fontSize = if (isTablet) 18.sp else 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.Gray
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(48.dp))
+
+            // Buttons
+            Column(
+                modifier = Modifier.widthIn(max = if (isTablet) 400.dp else 600.dp).fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                if (passed) {
+                    Button(
+                        onClick = onContinue,
+                        modifier = Modifier.fillMaxWidth().height(58.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+                    ) {
+                        Text("Continue", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                    }
+                } else {
+                    Button(
+                        onClick = onRetry,
+                        modifier = Modifier.fillMaxWidth().height(58.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF44336))
+                    ) {
+                        Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(20.dp), tint = Color.White)
+                        Spacer(Modifier.width(8.dp))
+                        Text("Retry Again", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                    }
+                }
+
+                OutlinedButton(
+                    onClick = onBackToLessons,
+                    modifier = Modifier.fillMaxWidth().height(52.dp),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Icon(Icons.Default.Home, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text("Back to Lessons", fontSize = 16.sp)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ActivityQuestionCard(
+    questionNumber: Int,
+    question: MiniQuestion,
+    isTablet: Boolean,
+    onAnswered: (Boolean) -> Unit
+) {
+    var selectedChoiceId by remember(question.id) { mutableStateOf<String?>(null) }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+        ),
+        shape = RoundedCornerShape(12.dp),
+        border = if (selectedChoiceId != null) BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)) else null
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                "Q$questionNumber: ${question.questionText}",
+                fontSize = if (isTablet) 18.sp else 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            if (question.questionType == "FILL_IN") {
+                // FILL_IN UI
+                var textValue by remember(question.id) { mutableStateOf("") }
+                var hasAnswered by remember(question.id) { mutableStateOf(false) }
+                OutlinedTextField(
+                    value = textValue,
+                    onValueChange = { 
+                        textValue = it
+                        hasAnswered = it.isNotBlank()
+                        // Case-insensitive match against the correct choice
+                        val correctText = question.choices.firstOrNull { c -> c.isCorrect }?.choiceText ?: ""
+                        val isMatch = textValue.trim().equals(correctText.trim(), ignoreCase = true)
+                        onAnswered(isMatch)
+                    },
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                    placeholder = { Text("Type your answer here...") },
+                    shape = RoundedCornerShape(12.dp),
+                    singleLine = true
+                )
+            } else if (question.questionType == "SEQUENCING") {
+                // SEQUENCING UI (Drag to reorder)
+                var currentChoices by remember(question.id) { mutableStateOf(question.choices.shuffled()) }
+                val state = rememberReorderableLazyListState(onMove = { from, to ->
+                    currentChoices = currentChoices.toMutableList().apply {
+                        add(to.index, removeAt(from.index))
+                    }
+                })
+
+                Text(
+                    "Hold and drag the items to arrange them in the correct order:",
+                    fontSize = if (isTablet) 14.sp else 12.sp,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Spacer(Modifier.height(8.dp))
+
+                LazyColumn(
+                    state = state.listState,
+                    modifier = Modifier
+                        .heightIn(max = (currentChoices.size * 80).dp)
+                        .reorderable(state)
+                        .detectReorderAfterLongPress(state),
+                    userScrollEnabled = false
+                ) {
+                    items(currentChoices, { it.id }) { choice ->
+                        ReorderableItem(state, key = choice.id) { isDragging ->
+                            val elevation = if (isDragging) 8.dp else 0.dp
+                            Surface(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 4.dp),
+                                shape = RoundedCornerShape(8.dp),
+                                color = MaterialTheme.colorScheme.surface,
+                                shadowElevation = elevation,
+                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(14.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(Icons.Default.DragHandle, contentDescription = "Drag")
+                                    Spacer(Modifier.width(12.dp))
+                                    Text(
+                                        choice.choiceText,
+                                        fontSize = if (isTablet) 16.sp else 14.sp,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // Notify onAnswered whenever the order changes
+                LaunchedEffect(currentChoices) {
+                    val correctOrder = question.choices.sortedBy { it.orderIndex }.map { it.id }
+                    val currentOrder = currentChoices.map { it.id }
+                    onAnswered(correctOrder == currentOrder)
+                }
+            } else {
+                // MCQ choices
+                question.choices.forEach { choice ->
+                    val isSelected = selectedChoiceId == choice.id
+                    val bgColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
+
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                            .clickable {
+                                selectedChoiceId = choice.id
+                                onAnswered(choice.isCorrect)
+                            },
+                        shape = RoundedCornerShape(8.dp),
+                        color = bgColor,
+                        border = BorderStroke(
+                            1.dp,
+                            if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                        )
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(14.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = isSelected,
+                                onClick = null, // handled by Surface click
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(Modifier.width(12.dp))
+                            Text(
+                                choice.choiceText,
+                                fontSize = if (isTablet) 16.sp else 14.sp,
+                                modifier = Modifier.weight(1f) // Ensure text wraps nicely
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }

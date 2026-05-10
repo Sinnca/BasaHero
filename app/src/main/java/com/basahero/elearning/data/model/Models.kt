@@ -35,12 +35,42 @@ data class Lesson(
     val passageText: String,
     val imagePath: String?,
     val status: String = LessonStatus.LOCKED,
-    val highlightedWords: String = "[]" // 👈 Add this line to match the Entity
+    val highlightedWords: String = "[]",
+    val lectureText: String = "",
+    val parts: List<LessonPart> = emptyList()
 ) {
     val isLocked get() = status == LessonStatus.LOCKED
     val isDone get() = status == LessonStatus.DONE
     val isInProgress get() = status == LessonStatus.IN_PROGRESS
+    val hasLecture get() = lectureText.isNotBlank()
+    val hasParts get() = parts.isNotEmpty()
 }
+
+/**
+ * A single part/section of a lesson.
+ * Each part has its own reading passage and mini-activity questions.
+ * Reading passage + mini-activity are shown on the SAME page.
+ */
+data class LessonPart(
+    val passageText: String,
+    val highlightedWords: List<String> = emptyList(),
+    val miniQuestions: List<MiniQuestion> = emptyList(),
+    val activityQuestions: List<MiniQuestion> = emptyList() // Graded assessment per passage
+)
+
+data class MiniQuestion(
+    val id: String,
+    val questionText: String,
+    val questionType: String = "MCQ",
+    val choices: List<MiniChoice> = emptyList()
+)
+
+data class MiniChoice(
+    val id: String,
+    val choiceText: String,
+    val isCorrect: Boolean,
+    val orderIndex: Int
+)
 
 data class QuizQuestion(
     val id: String,
