@@ -351,7 +351,7 @@ fun PrePostTestContent(
                 QuestionType.MCQ -> AnimatedMcqQuestion(
                     question = question,
                     selectedChoiceId = currentAnswer?.answer,
-                    isSubmitted = state.isSubmitted,
+                    isSubmitted = false,
                     onChoiceSelected = { choiceId ->
                         onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, choiceId))
                     }
@@ -368,7 +368,7 @@ fun PrePostTestContent(
                     question = question,
                     currentOrder = currentAnswer?.selectedChoiceIds
                         ?: remember(question.id) { question.choices.map { it.id }.shuffled() },
-                    isSubmitted = state.isSubmitted,
+                    isSubmitted = false,
                     onOrderChanged = { newOrder ->
                         onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, "", newOrder))
                     }
@@ -376,7 +376,7 @@ fun PrePostTestContent(
                 QuestionType.MATCHING -> CanvasMatchingQuestion(
                     question = question,
                     connections = currentAnswer?.selectedChoiceIds ?: emptyList(),
-                    isSubmitted = state.isSubmitted,
+                    isSubmitted = false,
                     onConnectionMade = { ids ->
                         onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, "", ids))
                     }
@@ -384,7 +384,7 @@ fun PrePostTestContent(
                 QuestionType.PASSAGE -> PassageQuestion(
                     question = question,
                     selectedWordIds = currentAnswer?.selectedChoiceIds ?: emptyList(),
-                    isSubmitted = state.isSubmitted,
+                    isSubmitted = false,
                     onSelectionChanged = { ids ->
                         onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, "", ids))
                     }
@@ -439,6 +439,7 @@ fun PrePostTestContent(
                 if (state.isLastQuestion) {
                     Button(
                         onClick = onSubmit,
+                        enabled = state.answers.size == state.questions.size,
                         modifier = Modifier.height(52.dp),
                         shape = RoundedCornerShape(14.dp),
                         colors = ButtonDefaults.buttonColors(
