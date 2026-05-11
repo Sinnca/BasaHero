@@ -219,7 +219,8 @@ fun PhilIRIApp() {
                             studentId = student.id,
                             studentName = student.fullName,
                             gradeLevel = student.gradeLevel,
-                            section = student.section
+                            section = student.section,
+                            classId = student.classId
                         )
                         navController.navigate(Routes.STUDENT_HOME) {
                             popUpTo(Routes.ROLE_SELECT) { inclusive = true }

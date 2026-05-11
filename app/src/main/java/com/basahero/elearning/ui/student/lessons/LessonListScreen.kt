@@ -433,8 +433,13 @@ fun LessonCard(
             Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.weight(1f)) {
+                val displayTitle = if (lesson.title.startsWith("Lesson", ignoreCase = true)) {
+                    lesson.title
+                } else {
+                    "Lesson $lessonNumber: ${lesson.title}"
+                }
                 Text(
-                    text = "Lesson $lessonNumber: ${lesson.title}",
+                    text = displayTitle,
                     fontSize = if (isTablet) 20.sp else 18.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = titleColor
@@ -466,13 +471,18 @@ fun LessonCard(
             // Action Pill or Score
             if (!isLocked) {
                 if (isDone) {
-                    Text(
-                        text = "100%", // Mock score since Lesson model lacks it
-                        color = primaryColor,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
+                    Surface(
+                        shape = RoundedCornerShape(20.dp),
+                        color = Color(0xFFE2E8F0),
+                        contentColor = primaryColor
+                    ) {
+                        Text(
+                            text = "Review",
+                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 } else {
                     Surface(
                         shape = RoundedCornerShape(20.dp),

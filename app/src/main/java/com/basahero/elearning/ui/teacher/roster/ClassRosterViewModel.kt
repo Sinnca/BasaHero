@@ -31,10 +31,12 @@ class ClassRosterViewModel(
     val uiState: StateFlow<RosterUiState> = _uiState.asStateFlow()
 
     private var classId = ""
+    private var className = ""
     private var gradeLevel = 4
 
-    fun loadRoster(classId: String, gradeLevel: Int) {
+    fun loadRoster(classId: String, className: String, gradeLevel: Int) {
         this.classId = classId
+        this.className = className
         this.gradeLevel = gradeLevel
         viewModelScope.launch {
             val students = classRepository.getStudentsForClass(classId, page = 0)
@@ -123,6 +125,7 @@ class ClassRosterViewModel(
 
                 val result = classRepository.importStudentsFromCsv(
                     classId = classId,
+                    sectionOverride = className,
                     gradeLevel = gradeLevel,
                     rows = csvRows
                 )
@@ -130,7 +133,7 @@ class ClassRosterViewModel(
                 result.fold(
                     onSuccess = { count ->
                         // Reload roster to show imported students
-                        loadRoster(classId, gradeLevel)
+                        loadRoster(classId, className, gradeLevel)
                         _uiState.update { it.copy(showImportResult = true, importedCount = count) }
                     },
                     onFailure = { e ->

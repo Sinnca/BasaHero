@@ -1,6 +1,7 @@
 package com.basahero.elearning.ui.student.login
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.foundation.ExperimentalFoundationApi
 
 import androidx.compose.animation.core.*
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import com.basahero.elearning.data.model.Student
 import com.basahero.elearning.ui.common.LocalAppStrings
+import com.basahero.elearning.ui.theme.fredokaFontFamily
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 1. StudentGradeSelectScreen
@@ -122,7 +124,8 @@ fun StudentGradeSelectScreen(
                             fontSize = if (isTablet) 26.sp else 22.sp,
                             fontWeight = FontWeight.ExtraBold,
                             color = Color.White,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            style = TextStyle(fontFamily = fredokaFontFamily)
                         )
                         Spacer(Modifier.height(4.dp))
                         Text(
@@ -403,13 +406,18 @@ fun StudentNameSelectScreen(
                 ) {
                     // Title
                     Text(
-                        text = if (selectedSection == null)
-                            strings.selectYourGrade
-                        else
-                            "Who are you?",
+                        text = if (selectedSection == null) {
+                            if (strings == com.basahero.elearning.ui.common.getStrings("fil"))
+                                "Pumili ng iyong seksyon"
+                            else
+                                "Select your section"
+                        } else {
+                            "Who are you?"
+                        },
                         fontSize = if (isTablet) 24.sp else 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = Color.White,
+                        style = TextStyle(fontFamily = fredokaFontFamily)
                     )
 
                     Spacer(Modifier.height(12.dp))
@@ -520,11 +528,8 @@ private fun SectionGrid(
     isTablet: Boolean,
     onSelect: (String) -> Unit
 ) {
-    val sections = uiState.students
-        .map { it.section }
-        .distinct()
+    val sections = uiState.sections
         .filter { it.contains(searchQuery, ignoreCase = true) }
-        .sortedBy { it.uppercase() }
 
     if (sections.isEmpty()) {
         EmptyState(

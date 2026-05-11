@@ -17,6 +17,7 @@ class StudentSelectionViewModel(
     data class SelectionState(
         val isLoading: Boolean = false,
         val students: List<Student> = emptyList(),
+        val sections: List<String> = emptyList(),
         val errorMessage: String? = null
     )
 
@@ -27,20 +28,29 @@ class StudentSelectionViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             val students = studentRepository.getStudentsByGrade(gradeLevel)
+            val classes = studentRepository.getClassesByGrade(gradeLevel)
             
-            if (students.isEmpty()) {
+            val sectionNames = classes.map { it.name }.distinct().sortedBy { it.uppercase() }
+
+            if (sectionNames.isEmpty() && students.isEmpty()) {
                 _uiState.update { 
                     it.copy(
                         isLoading = false,
                         students = emptyList(),
-                        errorMessage = "No students found for Grade $gradeLevel."
+                        sections = emptyList(),
+                        errorMessage = "No classes or students found for Grade $gradeLevel."
                     )
                 }
             } else {
+                // If there are students but no classes (legacy/manual), fallback to student sections
+                val finalSections = if (sectionNames.isNotEmpty()) sectionNames 
+                                   else students.map { it.section }.distinct().sortedBy { it.uppercase() }
+
                 _uiState.update { 
                     it.copy(
                         isLoading = false,
                         students = students,
+                        sections = finalSections,
                         errorMessage = null
                     )
                 }
