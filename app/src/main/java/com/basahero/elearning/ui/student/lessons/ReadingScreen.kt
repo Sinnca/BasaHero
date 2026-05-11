@@ -161,6 +161,13 @@ fun ReadingScreen(
                         }) {
                             Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                         }
+                    },
+                    actions = {
+                        if (isReviewMode) {
+                            IconButton(onClick = onBack) {
+                                Icon(Icons.Default.Close, contentDescription = "Exit Review")
+                            }
+                        }
                     }
                 )
                 // Step progress indicator
@@ -469,7 +476,8 @@ private fun MiniQuestionCard(
                 LazyColumn(
                     state = state.listState,
                     modifier = Modifier
-                        .heightIn(max = (currentChoices.size * 80).dp)
+                        .fillMaxWidth()
+                        .heightIn(max = (currentChoices.size * 110).dp) // Increased multiplier for text wrapping
                         .reorderable(state)
                         .then(if (isReviewMode) Modifier else Modifier.detectReorderAfterLongPress(state)),
                     userScrollEnabled = false
@@ -487,7 +495,7 @@ private fun MiniQuestionCard(
                                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
                             ) {
                                 Row(
-                                    modifier = Modifier.padding(14.dp),
+                                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     if (!isReviewMode) {
@@ -529,7 +537,11 @@ private fun MiniQuestionCard(
                 }
             } else {
                 // MCQ choices
-                question.choices.forEach { choice ->
+                val displayChoices = remember(question.id) {
+                    if (isReviewMode) question.choices else question.choices.shuffled()
+                }
+
+                displayChoices.forEach { choice ->
                     val isSelected = if (isReviewMode) choice.isCorrect else selectedChoiceId == choice.id
                     val bgColor = when {
                         isReviewMode && choice.isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
@@ -579,7 +591,7 @@ private fun MiniQuestionCard(
                     val correct = if (isReviewMode) true else question.choices.find { it.id == selectedChoiceId }?.isCorrect == true
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        if (correct) "✓ Correct!" else "✗ Try again next time!",
+                        if (correct) "✓ Correct!" else "✗ Not quite. The correct answer is shown above.",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = if (correct) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
@@ -646,12 +658,15 @@ private fun ActivityStepContent(
         Spacer(Modifier.height(24.dp))
     }
 
+    val shuffledQuestions = remember(questions) {
+        if (isReviewMode) questions else questions.shuffled()
+    }
     val answers = remember { mutableStateMapOf<String, Boolean>() }
 
     // Show questions
     run {
         // Show questions
-        questions.forEachIndexed { index, question ->
+        shuffledQuestions.forEachIndexed { index, question ->
             ActivityQuestionCard(
                 questionNumber = index + 1,
                 question = question,
@@ -892,7 +907,8 @@ private fun ActivityQuestionCard(
                 LazyColumn(
                     state = state.listState,
                     modifier = Modifier
-                        .heightIn(max = (currentChoices.size * 80).dp)
+                        .fillMaxWidth()
+                        .heightIn(max = (currentChoices.size * 110).dp) // Increased multiplier for text wrapping
                         .reorderable(state)
                         .then(if (enabled) Modifier.detectReorderAfterLongPress(state) else Modifier),
                     userScrollEnabled = false
@@ -910,7 +926,7 @@ private fun ActivityQuestionCard(
                                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
                             ) {
                                 Row(
-                                    modifier = Modifier.padding(14.dp),
+                                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     if (enabled) {
@@ -946,7 +962,11 @@ private fun ActivityQuestionCard(
                 }
             } else {
                 // MCQ choices
-                question.choices.forEach { choice ->
+                val displayChoices = remember(question.id) {
+                    if (isReviewMode) question.choices else question.choices.shuffled()
+                }
+
+                displayChoices.forEach { choice ->
                     val isSelected = if (isReviewMode) choice.isCorrect else selectedChoiceId == choice.id
                     val bgColor = when {
                         isReviewMode && choice.isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
