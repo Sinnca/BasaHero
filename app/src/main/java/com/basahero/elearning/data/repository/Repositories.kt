@@ -144,6 +144,14 @@ class StudentRepository(private val db: AppDatabase) {
                 .select { filter { eq("student_id", studentId) } }
                 .decodeList<PrePostTestRow>()
 
+            // Delete local synced records that were deleted remotely
+            val remotePrePostIds = remotePrePost.map { it.id }
+            if (remotePrePostIds.isNotEmpty()) {
+                db.prePostDao().deleteSyncedResultsNotIn(studentId, remotePrePostIds)
+            } else {
+                db.prePostDao().deleteAllSyncedResults(studentId)
+            }
+
             remotePrePost.forEach { row ->
                 try {
                     val entity = PrePostTestEntity(
@@ -167,6 +175,14 @@ class StudentRepository(private val db: AppDatabase) {
                 .from("student_progress")
                 .select { filter { eq("student_id", studentId) } }
                 .decodeList<ProgressRow>()
+
+            // Delete local synced records that were deleted remotely
+            val remoteProgressIds = remoteProgress.map { it.id }
+            if (remoteProgressIds.isNotEmpty()) {
+                db.progressDao().deleteSyncedProgressNotIn(studentId, remoteProgressIds)
+            } else {
+                db.progressDao().deleteAllSyncedProgress(studentId)
+            }
 
             remoteProgress.forEach { row ->
                 try {
@@ -210,7 +226,10 @@ class StudentRepository(private val db: AppDatabase) {
 class LessonRepository(private val db: AppDatabase) {
 
     fun getQuartersWithProgress(gradeLevel: Int, studentId: String): Flow<List<Quarter>> {
-        return db.quarterDao().observeByGrade(gradeLevel).map { quarters ->
+        return kotlinx.coroutines.flow.combine(
+            db.quarterDao().observeByGrade(gradeLevel),
+            db.progressDao().getAllProgressForStudent(studentId)
+        ) { quarters, _ ->
             quarters.map { q ->
                 val total = db.lessonDao().observeByQuarter(q.id).first().size
                 // Uses the new query from Phase 3B ProgressDao

@@ -213,6 +213,12 @@ interface ProgressDao {
 
     @Query("UPDATE student_progress SET synced = 1 WHERE id IN (:ids)")
     suspend fun markSyncedBatch(ids: List<String>)
+
+    @Query("DELETE FROM student_progress WHERE student_id = :studentId AND synced = 1 AND id NOT IN (:remoteIds)")
+    suspend fun deleteSyncedProgressNotIn(studentId: String, remoteIds: List<String>)
+
+    @Query("DELETE FROM student_progress WHERE student_id = :studentId AND synced = 1")
+    suspend fun deleteAllSyncedProgress(studentId: String)
 }
 
 // ─────────────────────────────────────────────
@@ -289,4 +295,10 @@ interface PrePostDao {
 
     @Query("SELECT COUNT(*) FROM pre_post_question WHERE quarter_id = :quarterId AND test_type = :testType")
     suspend fun countQuestions(quarterId: String, testType: String): Int
+
+    @Query("DELETE FROM pre_post_test WHERE student_id = :studentId AND synced = 1 AND id NOT IN (:remoteIds)")
+    suspend fun deleteSyncedResultsNotIn(studentId: String, remoteIds: List<String>)
+
+    @Query("DELETE FROM pre_post_test WHERE student_id = :studentId AND synced = 1")
+    suspend fun deleteAllSyncedResults(studentId: String)
 }
