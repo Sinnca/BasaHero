@@ -111,7 +111,8 @@ class StudentLoginViewModel(
                     studentId = student.id,
                     studentName = student.fullName,
                     gradeLevel = student.gradeLevel,
-                    section = student.section
+                    section = student.section,
+                    classId = student.classId
                 )
 
                 _loginState.value = LoginState.Success(student)

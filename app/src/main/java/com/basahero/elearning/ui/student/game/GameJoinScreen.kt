@@ -51,6 +51,7 @@ data class GameJoinUiState(
     val studentId: String? = null,
     val studentName: String? = null,
     val section: String? = null,
+    val classId: String? = null,
     val joinedPlayers: List<Student> = emptyList()
 )
 
@@ -68,7 +69,12 @@ class GameJoinViewModel(
         viewModelScope.launch {
             val session = sessionManager.studentSession.first()
             Log.d(TAG, "init: studentSession=$session, studentId=${session?.studentId}")
-            _uiState.update { it.copy(studentId = session?.studentId, studentName = session?.studentName, section = session?.section) }
+            _uiState.update { it.copy(
+                studentId = session?.studentId, 
+                studentName = session?.studentName, 
+                section = session?.section,
+                classId = session?.classId
+            ) }
         }
     }
 
@@ -97,6 +103,9 @@ class GameJoinViewModel(
             } else if (session.status == "ACTIVE") {
                 Log.w(TAG, "joinGame: Game already started")
                 _uiState.update { it.copy(isLoading = false, error = "Game already started") }
+            } else if (session.classId != _uiState.value.classId) {
+                Log.w(TAG, "joinGame: Student classId (${_uiState.value.classId}) does not match session classId (${session.classId})")
+                _uiState.update { it.copy(isLoading = false, error = "This game is for another section!") }
             } else {
                 val studentId = _uiState.value.studentId
                 Log.d(TAG, "joinGame: studentId = $studentId")

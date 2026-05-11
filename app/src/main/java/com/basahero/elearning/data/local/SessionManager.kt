@@ -33,6 +33,7 @@ class SessionManager(private val context: Context) {
         val KEY_STUDENT_NAME  = stringPreferencesKey("student_name")
         val KEY_GRADE_LEVEL   = intPreferencesKey("grade_level")
         val KEY_SECTION       = stringPreferencesKey("section")
+        val KEY_CLASS_ID      = stringPreferencesKey("class_id")
 
         // Teacher session (already handled by Supabase Auth — just store flag)
         val KEY_TEACHER_LOGGED_IN = booleanPreferencesKey("teacher_logged_in")
@@ -47,13 +48,15 @@ class SessionManager(private val context: Context) {
         studentId: String,
         studentName: String,
         gradeLevel: Int,
-        section: String
+        section: String,
+        classId: String
     ) {
         context.sessionDataStore.edit { prefs ->
             prefs[KEY_STUDENT_ID]   = studentId
             prefs[KEY_STUDENT_NAME] = studentName
             prefs[KEY_GRADE_LEVEL]  = gradeLevel
             prefs[KEY_SECTION]      = section
+            prefs[KEY_CLASS_ID]     = classId
         }
     }
 
@@ -63,6 +66,7 @@ class SessionManager(private val context: Context) {
             prefs.remove(KEY_STUDENT_NAME)
             prefs.remove(KEY_GRADE_LEVEL)
             prefs.remove(KEY_SECTION)
+            prefs.remove(KEY_CLASS_ID)
         }
     }
 
@@ -79,7 +83,8 @@ class SessionManager(private val context: Context) {
                     studentId   = id,
                     studentName = prefs[KEY_STUDENT_NAME] ?: "",
                     gradeLevel  = prefs[KEY_GRADE_LEVEL] ?: 4,
-                    section     = prefs[KEY_SECTION] ?: ""
+                    section     = prefs[KEY_SECTION] ?: "",
+                    classId     = prefs[KEY_CLASS_ID] ?: ""
                 )
             } else null
         }
@@ -113,5 +118,6 @@ data class StudentSession(
     val studentId: String,
     val studentName: String,
     val gradeLevel: Int,
-    val section: String
+    val section: String,
+    val classId: String
 )

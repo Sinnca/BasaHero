@@ -111,6 +111,18 @@ class StudentRepository(private val db: AppDatabase) {
         return db.studentDao().getByGradeLevel(gradeLevel).map { it.toDomain() }
     }
 
+    suspend fun getClassesByGrade(gradeLevel: Int): List<ClassRow> {
+        return try {
+            SupabaseClient.client
+                .from("class")
+                .select { filter { eq("grade_level", gradeLevel) } }
+                .decodeList<ClassRow>()
+        } catch (e: Exception) {
+            Log.e("StudentRepository", "Supabase getClassesByGrade failed: ${e.message}", e)
+            emptyList()
+        }
+    }
+
     suspend fun updateLastActive(studentId: String) {
         db.studentDao().updateLastActive(studentId, System.currentTimeMillis())
     }

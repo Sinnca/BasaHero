@@ -49,7 +49,7 @@ fun ClassRosterScreen(
         if (shouldLoadMore) viewModel.loadNextPage()
     }
 
-    LaunchedEffect(classId) { viewModel.loadRoster(classId, gradeLevel) }
+    LaunchedEffect(classId) { viewModel.loadRoster(classId, className, gradeLevel) }
 
     // CSV file picker
     val csvLauncher = rememberLauncherForActivityResult(
@@ -179,6 +179,7 @@ fun ClassRosterScreen(
     // Add student dialog
     if (uiState.showAddDialog) {
         AddStudentDialog(
+            defaultSection = className,
             onDismiss = { viewModel.hideAddDialog() },
             onConfirm = { name, section -> viewModel.addStudent(name, section) }
         )
@@ -275,9 +276,9 @@ fun StudentRosterCard(student: StudentInfo, onClick: () -> Unit) {
 
 // ── Add student dialog ────────────────────────────────────────────────────────
 @Composable
-fun AddStudentDialog(onDismiss: () -> Unit, onConfirm: (String, String) -> Unit) {
+fun AddStudentDialog(defaultSection: String = "", onDismiss: () -> Unit, onConfirm: (String, String) -> Unit) {
     var fullName by remember { mutableStateOf("") }
-    var section by remember { mutableStateOf("") }
+    var section by remember { mutableStateOf(defaultSection) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -297,7 +298,8 @@ fun AddStudentDialog(onDismiss: () -> Unit, onConfirm: (String, String) -> Unit)
                     value = section,
                     onValueChange = { section = it },
                     label = { Text("Section") },
-                    placeholder = { Text("e.g. Mabini") },
+                    readOnly = true,
+                    enabled = false,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(10.dp),
                     singleLine = true
