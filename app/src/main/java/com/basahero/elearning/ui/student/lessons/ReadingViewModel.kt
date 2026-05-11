@@ -37,7 +37,8 @@ class ReadingViewModel(
 
     fun loadLesson(lessonId: String) {
         viewModelScope.launch {
-            val lesson = lessonRepository.getLessonById(lessonId)
+            val studentId = sessionManager.studentSession.first()?.studentId
+            val lesson = lessonRepository.getLessonById(lessonId, studentId)
 
             /// 🚀 STEP 6 LOGIC: Find the words in the text
             val highlights = mutableListOf<HighlightedWord>()

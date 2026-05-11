@@ -284,21 +284,27 @@ class LessonRepository(private val db: AppDatabase) {
         }
     }
 
-    suspend fun getLessonById(lessonId: String): Lesson? {
-        return db.lessonDao().getById(lessonId)?.let { lesson ->
-            Lesson(
-                id = lesson.id,
-                quarterId = lesson.quarterId,
-                orderIndex = lesson.orderIndex,
-                competency = lesson.competency,
-                title = lesson.title,
-                passageText = lesson.passageText,
-                imagePath = lesson.imagePath,
-                highlightedWords = lesson.highlightedWords,
-                lectureText = lesson.lectureText,
-                parts = parsePartsJson(lesson.partsJson)
-            )
+    suspend fun getLessonById(lessonId: String, studentId: String? = null): Lesson? {
+        val lesson = db.lessonDao().getById(lessonId) ?: return null
+        val status = if (studentId != null) {
+            db.progressDao().getProgress(studentId, lessonId)?.status ?: DbLessonStatus.IN_PROGRESS
+        } else {
+            DbLessonStatus.IN_PROGRESS
         }
+
+        return Lesson(
+            id = lesson.id,
+            quarterId = lesson.quarterId,
+            orderIndex = lesson.orderIndex,
+            competency = lesson.competency,
+            title = lesson.title,
+            passageText = lesson.passageText,
+            imagePath = lesson.imagePath,
+            status = status,
+            highlightedWords = lesson.highlightedWords,
+            lectureText = lesson.lectureText,
+            parts = parsePartsJson(lesson.partsJson)
+        )
     }
 
     private val partsJsonParser = Json { ignoreUnknownKeys = true; isLenient = true }

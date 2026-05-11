@@ -157,8 +157,13 @@ fun QuizScreen(
                 Spacer(Modifier.height(if (isTablet) 28.dp else 16.dp))
 
                 // Question text
+                // Clean the question text: remove any existing "Q1:", "1.", or "1. " prefixes
+                val cleanQuestionText = question.questionText
+                    .replace(Regex("^Q\\d+[:.]?\\s*", RegexOption.IGNORE_CASE), "")
+                    .replace(Regex("^\\d+[:.]?\\s*"), "")
+
                 Text(
-                    text = question.questionText,
+                    text = "Q${uiState.currentIndex + 1}: $cleanQuestionText",
                     fontSize = if (isTablet) 20.sp else 17.sp,
                     fontWeight = FontWeight.Medium,
                     lineHeight = if (isTablet) 30.sp else 26.sp

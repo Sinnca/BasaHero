@@ -65,18 +65,18 @@ fun ReadingScreen(
             if (lesson.hasLecture) add(LessonStep.Lecture(lesson.lectureText))
             if (lesson.hasParts) {
                 lesson.parts.forEachIndexed { i, part ->
-                    val isShortIntro = part.miniQuestions.isEmpty() && 
-                                       part.activityQuestions.isNotEmpty() && 
-                                       part.passageText.length < 350 && 
-                                       part.passageText.contains("Activity", ignoreCase = true)
-                    
+                    val isShortIntro = part.miniQuestions.isEmpty() &&
+                            part.activityQuestions.isNotEmpty() &&
+                            part.passageText.length < 350 &&
+                            part.passageText.contains("Activity", ignoreCase = true)
+
                     if (!isShortIntro) {
                         add(LessonStep.ReadingPart(i + 1, part))
                     }
-                    
+
                     if (part.activityQuestions.isNotEmpty()) {
                         add(LessonStep.Activity(
-                            partNumber = i + 1, 
+                            partNumber = i + 1,
                             questions = part.activityQuestions,
                             introText = if (isShortIntro) part.passageText else null
                         ))
@@ -98,6 +98,7 @@ fun ReadingScreen(
     var currentStepIndex by remember { mutableIntStateOf(0) }
     val currentStep = steps.getOrNull(currentStepIndex)
     val isLastStep = currentStepIndex >= steps.lastIndex
+    val isReviewMode = lesson.isDone // 👈 NEW: TRUE if lesson already finished
     val scrollState = rememberScrollState()
 
     // Activity result full-page state
@@ -123,7 +124,9 @@ fun ReadingScreen(
             onContinue = {
                 showActivityResult = false
                 if (isLastStep) {
-                    viewModel.saveLessonProgress(context, totalCorrect, totalQuestions)
+                    if (!isReviewMode) {
+                        viewModel.saveLessonProgress(context, totalCorrect, totalQuestions)
+                    }
                     onBack()
                 } else {
                     currentStepIndex++
@@ -166,8 +169,9 @@ fun ReadingScreen(
             }
         },
         bottomBar = {
-            // Hide the bottom bar on Activity steps — those have their own Submit button
-            if (currentStep !is LessonStep.Activity) {
+            // Hide bottom bar on Activity steps UNLESS in review mode
+            // In review mode, we allow the "Next" button to show so they can skip activities
+            if (currentStep !is LessonStep.Activity || isReviewMode) {
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
                     shadowElevation = 8.dp
@@ -179,7 +183,9 @@ fun ReadingScreen(
                         Button(
                             onClick = {
                                 if (isLastStep) {
-                                    viewModel.saveLessonProgress(context, totalCorrect, totalQuestions)
+                                    if (!isReviewMode) {
+                                        viewModel.saveLessonProgress(context, totalCorrect, totalQuestions)
+                                    }
                                     onBack()
                                 } else {
                                     currentStepIndex++
@@ -191,9 +197,18 @@ fun ReadingScreen(
                                 .height(56.dp),
                             shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text("Next", fontSize = if (isTablet) 18.sp else 16.sp, fontWeight = FontWeight.SemiBold)
+                            val buttonText = when {
+                                isReviewMode && isLastStep -> "Finish Review"
+                                isLastStep -> "Next"
+                                else -> "Next"
+                            }
+                            Text(buttonText, fontSize = if (isTablet) 18.sp else 16.sp, fontWeight = FontWeight.SemiBold)
                             Spacer(Modifier.width(8.dp))
-                            Icon(Icons.Default.ArrowForward, contentDescription = null, modifier = Modifier.size(20.dp))
+                            Icon(
+                                if (isReviewMode && isLastStep) Icons.Default.Check else Icons.Default.ArrowForward,
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp)
+                            )
                         }
                     }
                 }
@@ -231,9 +246,12 @@ fun ReadingScreen(
                             partNumber = step.partNumber,
                             part = step.part,
                             isTablet = isTablet,
+                            isReviewMode = isReviewMode,
                             onPronunciationAttempt = { word, heard, isCorrect, _ ->
-                                val score = if (isCorrect) 100 else 0
-                                viewModel.savePronunciationAttempt(word, heard, isCorrect, score)
+                                if (!isReviewMode) {
+                                    val score = if (isCorrect) 100 else 0
+                                    viewModel.savePronunciationAttempt(word, heard, isCorrect, score)
+                                }
                             }
                         )
                         is LessonStep.Activity -> {
@@ -243,12 +261,15 @@ fun ReadingScreen(
                                     questions = step.questions,
                                     introText = step.introText,
                                     isTablet = isTablet,
+                                    isReviewMode = isReviewMode,
                                     onSubmit = { correct, total ->
-                                        totalCorrect += correct
-                                        totalQuestions += total
-                                        activityScore = correct
-                                        activityTotal = total
-                                        showActivityResult = true
+                                        if (!isReviewMode) {
+                                            totalCorrect += correct
+                                            totalQuestions += total
+                                            activityScore = correct
+                                            activityTotal = total
+                                            showActivityResult = true
+                                        }
                                     }
                                 )
                             }
@@ -311,6 +332,7 @@ private fun ReadingPartStepContent(
     partNumber: Int,
     part: LessonPart,
     isTablet: Boolean,
+    isReviewMode: Boolean,
     onPronunciationAttempt: (String, String, Boolean, Int) -> Unit
 ) {
     // Header
@@ -372,7 +394,8 @@ private fun ReadingPartStepContent(
             MiniQuestionCard(
                 questionNumber = index + 1,
                 question = question,
-                isTablet = isTablet
+                isTablet = isTablet,
+                isReviewMode = isReviewMode
             )
             if (index < part.miniQuestions.lastIndex) {
                 Spacer(Modifier.height(12.dp))
@@ -388,7 +411,8 @@ private fun ReadingPartStepContent(
 private fun MiniQuestionCard(
     questionNumber: Int,
     question: MiniQuestion,
-    isTablet: Boolean
+    isTablet: Boolean,
+    isReviewMode: Boolean
 ) {
     var selectedChoiceId by remember(question.id) { mutableStateOf<String?>(null) }
     var showFeedback by remember(question.id) { mutableStateOf(false) }
@@ -401,8 +425,12 @@ private fun MiniQuestionCard(
         shape = RoundedCornerShape(12.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+            val cleanQuestionText = question.questionText
+                .replace(Regex("^Q\\d+[:.]?\\s*", RegexOption.IGNORE_CASE), "")
+                .replace(Regex("^\\d+[:.]?\\s*"), "")
+
             Text(
-                "Q$questionNumber: ${question.questionText}",
+                "Q$questionNumber: $cleanQuestionText",
                 fontSize = if (isTablet) 16.sp else 14.sp,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurface
@@ -412,27 +440,31 @@ private fun MiniQuestionCard(
 
             if (question.questionType == "SEQUENCING") {
                 // Drag to reorder for MiniQuestionCard
-                var currentChoices by remember(question.id) { mutableStateOf(question.choices.shuffled()) }
+                var currentChoices by remember(question.id) {
+                    mutableStateOf(if (isReviewMode) question.choices.sortedBy { it.orderIndex } else question.choices.shuffled())
+                }
                 val state = rememberReorderableLazyListState(onMove = { from, to ->
                     currentChoices = currentChoices.toMutableList().apply {
                         add(to.index, removeAt(from.index))
                     }
                 })
 
-                Text(
-                    "Hold and drag the items to arrange them in the correct order:",
-                    fontSize = if (isTablet) 14.sp else 12.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Spacer(Modifier.height(8.dp))
+                if (!isReviewMode) {
+                    Text(
+                        "Hold and drag the items to arrange them in the correct order:",
+                        fontSize = if (isTablet) 14.sp else 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(Modifier.height(8.dp))
+                }
 
                 LazyColumn(
                     state = state.listState,
                     modifier = Modifier
                         .heightIn(max = (currentChoices.size * 80).dp)
                         .reorderable(state)
-                        .detectReorderAfterLongPress(state),
+                        .then(if (isReviewMode) Modifier else Modifier.detectReorderAfterLongPress(state)),
                     userScrollEnabled = false
                 ) {
                     items(currentChoices, { it.id }) { choice ->
@@ -451,8 +483,10 @@ private fun MiniQuestionCard(
                                     modifier = Modifier.padding(14.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Icon(Icons.Default.DragHandle, contentDescription = "Drag")
-                                    Spacer(Modifier.width(12.dp))
+                                    if (!isReviewMode) {
+                                        Icon(Icons.Default.DragHandle, contentDescription = "Drag")
+                                        Spacer(Modifier.width(12.dp))
+                                    }
                                     Text(
                                         choice.choiceText,
                                         fontSize = if (isTablet) 16.sp else 14.sp,
@@ -465,13 +499,15 @@ private fun MiniQuestionCard(
                 }
 
                 Spacer(Modifier.height(12.dp))
-                Button(
-                    onClick = { showFeedback = true },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Check Answer")
+                if (!isReviewMode) {
+                    Button(
+                        onClick = { showFeedback = true },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Check Answer")
+                    }
                 }
-                
+
                 if (showFeedback) {
                     val correctOrder = question.choices.sortedBy { it.orderIndex }.map { it.id }
                     val currentOrder = currentChoices.map { it.id }
@@ -487,8 +523,9 @@ private fun MiniQuestionCard(
             } else {
                 // MCQ choices
                 question.choices.forEach { choice ->
-                    val isSelected = selectedChoiceId == choice.id
+                    val isSelected = if (isReviewMode) choice.isCorrect else selectedChoiceId == choice.id
                     val bgColor = when {
+                        isReviewMode && choice.isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
                         !showFeedback -> if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
                         choice.isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
                         isSelected && !choice.isCorrect -> MaterialTheme.colorScheme.errorContainer
@@ -499,7 +536,7 @@ private fun MiniQuestionCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 3.dp)
-                            .clickable(enabled = !showFeedback) {
+                            .clickable(enabled = !showFeedback && !isReviewMode) {
                                 selectedChoiceId = choice.id
                                 showFeedback = true
                             },
@@ -531,8 +568,8 @@ private fun MiniQuestionCard(
                 }
 
                 // Feedback text
-                if (showFeedback) {
-                    val correct = question.choices.find { it.id == selectedChoiceId }?.isCorrect == true
+                if (showFeedback || isReviewMode) {
+                    val correct = if (isReviewMode) true else question.choices.find { it.id == selectedChoiceId }?.isCorrect == true
                     Spacer(Modifier.height(4.dp))
                     Text(
                         if (correct) "✓ Correct!" else "✗ Try again next time!",
@@ -553,6 +590,7 @@ private fun ActivityStepContent(
     questions: List<MiniQuestion>,
     introText: String?,
     isTablet: Boolean,
+    isReviewMode: Boolean,
     onSubmit: (correct: Int, total: Int) -> Unit
 ) {
     // Header
@@ -611,6 +649,7 @@ private fun ActivityStepContent(
                 questionNumber = index + 1,
                 question = question,
                 isTablet = isTablet,
+                isReviewMode = isReviewMode,
                 onAnswered = { isCorrect ->
                     answers[question.id] = isCorrect
                 }
@@ -620,21 +659,23 @@ private fun ActivityStepContent(
 
         Spacer(Modifier.height(24.dp))
 
-        // Submit Button
-        Button(
-            onClick = {
-                val correct = answers.values.count { it }
-                onSubmit(correct, questions.size)
-            },
-            enabled = answers.size == questions.size, // Must answer all
-            modifier = Modifier.fillMaxWidth().height(56.dp),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Text(
-                if (answers.size == questions.size) "Submit Answers" else "Answer all questions to submit",
-                fontSize = if (isTablet) 18.sp else 16.sp,
-                fontWeight = FontWeight.SemiBold
-            )
+        if (!isReviewMode) {
+            // Submit Button
+            Button(
+                onClick = {
+                    val correct = answers.values.count { it }
+                    onSubmit(correct, questions.size)
+                },
+                enabled = answers.size == questions.size, // Must answer all
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(
+                    if (answers.size == questions.size) "Submit Answers" else "Answer all questions to submit",
+                    fontSize = if (isTablet) 18.sp else 16.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
     }
 }
@@ -766,6 +807,7 @@ private fun ActivityQuestionCard(
     questionNumber: Int,
     question: MiniQuestion,
     isTablet: Boolean,
+    isReviewMode: Boolean,
     onAnswered: (Boolean) -> Unit
 ) {
     var selectedChoiceId by remember(question.id) { mutableStateOf<String?>(null) }
@@ -778,9 +820,14 @@ private fun ActivityQuestionCard(
         shape = RoundedCornerShape(12.dp),
         border = if (selectedChoiceId != null) BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)) else null
     ) {
+        val enabled = !isReviewMode
         Column(modifier = Modifier.padding(16.dp)) {
+            val cleanQuestionText = question.questionText
+                .replace(Regex("^Q\\d+[:.]?\\s*", RegexOption.IGNORE_CASE), "")
+                .replace(Regex("^\\d+[:.]?\\s*"), "")
+
             Text(
-                "Q$questionNumber: ${question.questionText}",
+                "Q$questionNumber: $cleanQuestionText",
                 fontSize = if (isTablet) 18.sp else 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -790,18 +837,25 @@ private fun ActivityQuestionCard(
 
             if (question.questionType == "FILL_IN") {
                 // FILL_IN UI
-                var textValue by remember(question.id) { mutableStateOf("") }
-                var hasAnswered by remember(question.id) { mutableStateOf(false) }
+                val correctText = question.choices.firstOrNull { c -> c.isCorrect }?.choiceText ?: ""
+                var textValue by remember(question.id) {
+                    mutableStateOf(if (isReviewMode) correctText else "")
+                }
+                var hasAnswered by remember(question.id) { mutableStateOf(isReviewMode) }
                 OutlinedTextField(
                     value = textValue,
-                    onValueChange = { 
-                        textValue = it
-                        hasAnswered = it.isNotBlank()
-                        // Case-insensitive match against the correct choice
-                        val correctText = question.choices.firstOrNull { c -> c.isCorrect }?.choiceText ?: ""
-                        val isMatch = textValue.trim().equals(correctText.trim(), ignoreCase = true)
-                        onAnswered(isMatch)
+                    onValueChange = {
+                        if (enabled) {
+                            textValue = it
+                            hasAnswered = it.isNotBlank()
+                            // Case-insensitive match against the correct choice
+                            val correctText = question.choices.firstOrNull { c -> c.isCorrect }?.choiceText ?: ""
+                            val isMatch = textValue.trim().equals(correctText.trim(), ignoreCase = true)
+                            onAnswered(isMatch)
+                        }
                     },
+                    readOnly = !enabled,
+                    enabled = enabled,
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                     placeholder = { Text("Type your answer here...") },
                     shape = RoundedCornerShape(12.dp),
@@ -809,27 +863,31 @@ private fun ActivityQuestionCard(
                 )
             } else if (question.questionType == "SEQUENCING") {
                 // SEQUENCING UI (Drag to reorder)
-                var currentChoices by remember(question.id) { mutableStateOf(question.choices.shuffled()) }
+                var currentChoices by remember(question.id) {
+                    mutableStateOf(if (isReviewMode) question.choices.sortedBy { it.orderIndex } else question.choices.shuffled())
+                }
                 val state = rememberReorderableLazyListState(onMove = { from, to ->
                     currentChoices = currentChoices.toMutableList().apply {
                         add(to.index, removeAt(from.index))
                     }
                 })
 
-                Text(
-                    "Hold and drag the items to arrange them in the correct order:",
-                    fontSize = if (isTablet) 14.sp else 12.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Spacer(Modifier.height(8.dp))
+                if (!isReviewMode) {
+                    Text(
+                        "Hold and drag the items to arrange them in the correct order:",
+                        fontSize = if (isTablet) 14.sp else 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(Modifier.height(8.dp))
+                }
 
                 LazyColumn(
                     state = state.listState,
                     modifier = Modifier
                         .heightIn(max = (currentChoices.size * 80).dp)
                         .reorderable(state)
-                        .detectReorderAfterLongPress(state),
+                        .then(if (enabled) Modifier.detectReorderAfterLongPress(state) else Modifier),
                     userScrollEnabled = false
                 ) {
                     items(currentChoices, { it.id }) { choice ->
@@ -848,8 +906,10 @@ private fun ActivityQuestionCard(
                                     modifier = Modifier.padding(14.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Icon(Icons.Default.DragHandle, contentDescription = "Drag")
-                                    Spacer(Modifier.width(12.dp))
+                                    if (enabled) {
+                                        Icon(Icons.Default.DragHandle, contentDescription = "Drag")
+                                        Spacer(Modifier.width(12.dp))
+                                    }
                                     Text(
                                         choice.choiceText,
                                         fontSize = if (isTablet) 16.sp else 14.sp,
@@ -860,24 +920,38 @@ private fun ActivityQuestionCard(
                         }
                     }
                 }
-                
+
                 // Notify onAnswered whenever the order changes
                 LaunchedEffect(currentChoices) {
                     val correctOrder = question.choices.sortedBy { it.orderIndex }.map { it.id }
                     val currentOrder = currentChoices.map { it.id }
                     onAnswered(correctOrder == currentOrder)
                 }
+
+                if (isReviewMode) {
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        "✓ Correct Order",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
+                }
             } else {
                 // MCQ choices
                 question.choices.forEach { choice ->
-                    val isSelected = selectedChoiceId == choice.id
-                    val bgColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
+                    val isSelected = if (isReviewMode) choice.isCorrect else selectedChoiceId == choice.id
+                    val bgColor = when {
+                        isReviewMode && choice.isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
+                        isSelected -> MaterialTheme.colorScheme.primaryContainer
+                        else -> MaterialTheme.colorScheme.surface
+                    }
 
                     Surface(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 4.dp)
-                            .clickable {
+                            .clickable(enabled = enabled) {
                                 selectedChoiceId = choice.id
                                 onAnswered(choice.isCorrect)
                             },
@@ -895,7 +969,8 @@ private fun ActivityQuestionCard(
                             RadioButton(
                                 selected = isSelected,
                                 onClick = null, // handled by Surface click
-                                modifier = Modifier.size(20.dp)
+                                modifier = Modifier.size(20.dp),
+                                colors = if (isReviewMode && choice.isCorrect) RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.tertiary) else RadioButtonDefaults.colors()
                             )
                             Spacer(Modifier.width(12.dp))
                             Text(
