@@ -91,9 +91,16 @@ fun ReadingScreen(
         }
     }
 
-    // Track graded activity scores
-    var totalCorrect by remember { mutableIntStateOf(0) }
-    var totalQuestions by remember { mutableIntStateOf(0) }
+    val lessonTotalQuestions = remember(lesson) {
+        if (lesson.hasParts) {
+            lesson.parts.sumOf { it.activityQuestions.size }
+        } else {
+            0
+        }
+    }
+
+    // Track graded activity scores per step
+    val activityScores = remember { mutableStateMapOf<Int, Int>() }
 
     var currentStepIndex by remember { mutableIntStateOf(0) }
     val currentStep = steps.getOrNull(currentStepIndex)
@@ -124,9 +131,6 @@ fun ReadingScreen(
             onContinue = {
                 showActivityResult = false
                 if (isLastStep) {
-                    if (!isReviewMode) {
-                        viewModel.saveLessonProgress(context, totalCorrect, totalQuestions)
-                    }
                     onBack()
                 } else {
                     currentStepIndex++
@@ -183,9 +187,6 @@ fun ReadingScreen(
                         Button(
                             onClick = {
                                 if (isLastStep) {
-                                    if (!isReviewMode) {
-                                        viewModel.saveLessonProgress(context, totalCorrect, totalQuestions)
-                                    }
                                     onBack()
                                 } else {
                                     currentStepIndex++
@@ -264,12 +265,18 @@ fun ReadingScreen(
                                     isReviewMode = isReviewMode,
                                     onSubmit = { correct, total ->
                                         if (!isReviewMode) {
-                                            totalCorrect += correct
-                                            totalQuestions += total
+                                            activityScores[currentStepIndex] = correct
                                             activityScore = correct
                                             activityTotal = total
-                                            showActivityResult = true
+                                            
+                                            // Calculate current cumulative score
+                                            val currentTotalCorrect = activityScores.values.sum()
+                                            val safeTotal = if (lessonTotalQuestions > 0) lessonTotalQuestions else total
+                                            
+                                            // Save IMMEDIATELY so the attempt is registered in Supabase
+                                            viewModel.saveLessonProgress(context, currentTotalCorrect, safeTotal)
                                         }
+                                        showActivityResult = true
                                     }
                                 )
                             }
