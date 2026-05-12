@@ -35,7 +35,7 @@ import com.basahero.elearning.ui.common.LocalAppStrings
 // ReadingScreen — Multi-step lesson wizard
 // Steps: [Lecture] → [Reading+MiniActivity 1] → [Reading+MiniActivity 2] → Quiz
 // ─────────────────────────────────────────────────────────────────────────────
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ReadingScreen(
     lessonId: String,
@@ -421,6 +421,7 @@ private fun ReadingPartStepContent(
 }
 
 // ─── Mini Question Card (practice, not graded) ──────────────────────────────
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun MiniQuestionCard(
     questionNumber: Int,
@@ -533,6 +534,86 @@ private fun MiniQuestionCard(
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = if (isCorrect) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
+                    )
+                }
+            } else if (question.questionType == "HIGHLIGHT") {
+                // HIGHLIGHT logic for MiniQuestionCard
+                val selectedIds = remember(question.id) { mutableStateListOf<String>() }
+                val correctIds = remember(question.id) { question.choices.filter { it.isCorrect }.map { it.id }.toSet() }
+
+                if (!isReviewMode) {
+                    Text(
+                        "Tap the correct words/sentences to highlight them:",
+                        fontSize = if (isTablet) 14.sp else 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(Modifier.height(8.dp))
+                }
+
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    question.choices.forEach { choice ->
+                        val isSelected = if (isReviewMode) choice.isCorrect else selectedIds.contains(choice.id)
+                        val isCorrect = choice.isCorrect
+                        
+                        val bgColor = when {
+                            isReviewMode && isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
+                            !showFeedback -> if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
+                            isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
+                            isSelected && !isCorrect -> MaterialTheme.colorScheme.errorContainer
+                            else -> MaterialTheme.colorScheme.surface
+                        }
+
+                        Surface(
+                            modifier = Modifier
+                                .clickable(enabled = !showFeedback && !isReviewMode) {
+                                    if (selectedIds.contains(choice.id)) {
+                                        selectedIds.remove(choice.id)
+                                    } else {
+                                        selectedIds.add(choice.id)
+                                    }
+                                },
+                            shape = RoundedCornerShape(8.dp),
+                            color = bgColor,
+                            border = BorderStroke(
+                                1.dp,
+                                if (isSelected && !showFeedback) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                            )
+                        ) {
+                            Text(
+                                choice.choiceText,
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                                fontSize = if (isTablet) 16.sp else 14.sp
+                            )
+                        }
+                    }
+                }
+
+                if (!isReviewMode && !showFeedback) {
+                    Spacer(Modifier.height(12.dp))
+                    Button(
+                        onClick = { showFeedback = true },
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = selectedIds.isNotEmpty()
+                    ) {
+                        Text("Check Answer")
+                    }
+                }
+
+                if (showFeedback) {
+                    val currentSelectedSet = selectedIds.toSet()
+                    val isFullyCorrect = currentSelectedSet == correctIds
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        if (isFullyCorrect) "✓ Correct!" else "✗ Not quite. The correct highlights are shown in green.",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = if (isFullyCorrect) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
                     )
                 }
             } else {
@@ -824,6 +905,7 @@ private fun ActivityResultScreen(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun ActivityQuestionCard(
     questionNumber: Int,
@@ -955,6 +1037,75 @@ private fun ActivityQuestionCard(
                     Spacer(Modifier.height(8.dp))
                     Text(
                         "✓ Correct Order",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
+                }
+            } else if (question.questionType == "HIGHLIGHT") {
+                // HIGHLIGHT logic for ActivityQuestionCard
+                val selectedIds = remember(question.id) { mutableStateListOf<String>() }
+                val correctIds = remember(question.id) { question.choices.filter { it.isCorrect }.map { it.id }.toSet() }
+
+                if (!isReviewMode) {
+                    Text(
+                        "Tap the correct words/sentences to highlight them:",
+                        fontSize = if (isTablet) 14.sp else 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(Modifier.height(8.dp))
+                }
+
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    question.choices.forEach { choice ->
+                        val isSelected = if (isReviewMode) choice.isCorrect else selectedIds.contains(choice.id)
+                        
+                        val bgColor = when {
+                            isReviewMode && choice.isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
+                            isSelected -> MaterialTheme.colorScheme.primaryContainer
+                            else -> MaterialTheme.colorScheme.surface
+                        }
+
+                        Surface(
+                            modifier = Modifier
+                                .clickable(enabled = enabled) {
+                                    if (selectedIds.contains(choice.id)) {
+                                        selectedIds.remove(choice.id)
+                                    } else {
+                                        selectedIds.add(choice.id)
+                                    }
+                                    
+                                    // Validation: Correct if ALL correct items selected AND NO incorrect items selected
+                                    val currentSelectedSet = selectedIds.toSet()
+                                    val isMatch = currentSelectedSet == correctIds
+                                    onAnswered(isMatch)
+                                },
+                            shape = RoundedCornerShape(8.dp),
+                            color = bgColor,
+                            border = BorderStroke(
+                                1.dp,
+                                if (isSelected) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                            )
+                        ) {
+                            Text(
+                                choice.choiceText,
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                                fontSize = if (isTablet) 16.sp else 14.sp
+                            )
+                        }
+                    }
+                }
+                
+                if (isReviewMode) {
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        "✓ Correct Highlights",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.tertiary

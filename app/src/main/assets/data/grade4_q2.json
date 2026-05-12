@@ -1,0 +1,4099 @@
+{
+  "quarter": {
+    "id": "q-gr4-q2",
+    "gradeLevelId": 4,
+    "quarterNumber": 2,
+    "title": "Quarter 2",
+    "isActive": true
+  },
+  "lessons": [
+    {
+      "id": "l-gr4-q2-01",
+      "orderIndex": 1,
+      "competency": "Analyzing sound devices",
+      "title": "Lesson 1: Analyzing Sound Devices",
+      "lectureText": "What are Sound Devices?\nSound devices are special words or phrases that make writing sound fun, interesting, and exciting when we read or say them aloud.\nAuthors and poets use sound devices to make stories, poems, and songs more enjoyable and easier to remember.\nThink of sound devices as the “music” of words.",
+      "parts": [
+        {
+          "passageText": "4 Common Sound Devices\n\n1. Alliteration\nAlliteration happens when nearby words begin with the same sound.\n\nExamples:\n• Silly snakes slither slowly.\n• Big brown bears bounce.\n• Funny frogs flip fast.\n\nThe beginning sounds repeat, which makes the sentence interesting to hear.",
+          "highlighted_words": [
+            "Alliteration"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-01-01",
+              "questionText": "Highlight which words have the same beginning sound: “Busy bees buzz behind the bakery.”",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-01-a",
+                  "choiceText": "Busy",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-01-b",
+                  "choiceText": "bees",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-01-c",
+                  "choiceText": "buzz",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-01-01-d",
+                  "choiceText": "behind",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-01-01-e",
+                  "choiceText": "the",
+                  "isCorrect": false,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "mq-01-01-f",
+                  "choiceText": "bakery.",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                }
+              ]
+            },
+            {
+              "id": "mq-01-02",
+              "questionText": "Highlight which words have the same beginning sound: “Silly snakes slither silently in the sand.”",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-02-a",
+                  "choiceText": "Silly",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-02-b",
+                  "choiceText": "snakes",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-02-c",
+                  "choiceText": "slither",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-01-02-d",
+                  "choiceText": "silently",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-01-02-e",
+                  "choiceText": "in",
+                  "isCorrect": false,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "mq-01-02-f",
+                  "choiceText": "the",
+                  "isCorrect": false,
+                  "orderIndex": 6
+                },
+                {
+                  "id": "mq-01-02-g",
+                  "choiceText": "sand.",
+                  "isCorrect": true,
+                  "orderIndex": 7
+                }
+              ]
+            },
+            {
+              "id": "mq-01-03",
+              "questionText": "Highlight which words have the same beginning sound: “Tiny turtles travel through the town.”",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-03-a",
+                  "choiceText": "Tiny",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-03-b",
+                  "choiceText": "turtles",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-03-c",
+                  "choiceText": "travel",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-01-03-d",
+                  "choiceText": "through",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-01-03-e",
+                  "choiceText": "the",
+                  "isCorrect": false,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "mq-01-03-f",
+                  "choiceText": "town.",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                }
+              ]
+            },
+            {
+              "id": "mq-01-04",
+              "questionText": "Highlight which words have the same beginning sound: “Happy hippos hop in the hot water.”",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-04-a",
+                  "choiceText": "Happy",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-04-b",
+                  "choiceText": "hippos",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-04-c",
+                  "choiceText": "hop",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-01-04-d",
+                  "choiceText": "in",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-01-04-e",
+                  "choiceText": "the",
+                  "isCorrect": false,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "mq-01-04-f",
+                  "choiceText": "hot",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                },
+                {
+                  "id": "mq-01-04-g",
+                  "choiceText": "water.",
+                  "isCorrect": false,
+                  "orderIndex": 7
+                }
+              ]
+            },
+            {
+              "id": "mq-01-05",
+              "questionText": "Highlight which words have the same beginning sound: “Funny frogs flip and fly fast.”",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-05-a",
+                  "choiceText": "Funny",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-05-b",
+                  "choiceText": "frogs",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-05-c",
+                  "choiceText": "flip",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-01-05-d",
+                  "choiceText": "and",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-01-05-e",
+                  "choiceText": "fly",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "mq-01-05-f",
+                  "choiceText": "fast.",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "2. RHYME\nRhyme is when words have the same ending sound. It makes poems and songs sound nice and catchy.\n\nExamples of Rhyme:\n• cat – hat\n• sun – fun\n• dog – log\n• tree – bee\n• pen – hen",
+          "highlighted_words": [
+            "Rhyme"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-01-06",
+              "questionText": "Highlight the rhyming words:",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-06-a",
+                  "choiceText": "Cat",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-06-b",
+                  "choiceText": "Mat",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-06-c",
+                  "choiceText": "Dog",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-01-06-d",
+                  "choiceText": "Bit",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-01-06-e",
+                  "choiceText": "Pot",
+                  "isCorrect": false,
+                  "orderIndex": 5
+                }
+              ]
+            },
+            {
+              "id": "mq-01-07",
+              "questionText": "Highlight the rhyming words:",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-07-a",
+                  "choiceText": "All",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-07-b",
+                  "choiceText": "Car",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-07-c",
+                  "choiceText": "Gum",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-01-07-d",
+                  "choiceText": "Mall",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-01-07-e",
+                  "choiceText": "Ball",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                }
+              ]
+            },
+            {
+              "id": "mq-01-08",
+              "questionText": "Highlight the rhyming words:",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-08-a",
+                  "choiceText": "Bun",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-08-b",
+                  "choiceText": "Hid",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-08-c",
+                  "choiceText": "Bid",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-01-08-d",
+                  "choiceText": "Mop",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-01-08-e",
+                  "choiceText": "Mid",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                }
+              ]
+            },
+            {
+              "id": "mq-01-09",
+              "questionText": "Highlight the rhyming words:",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-09-a",
+                  "choiceText": "Boy",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-09-b",
+                  "choiceText": "Log",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-09-c",
+                  "choiceText": "Bow",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-01-09-d",
+                  "choiceText": "Jog",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-01-09-e",
+                  "choiceText": "Mug",
+                  "isCorrect": false,
+                  "orderIndex": 5
+                }
+              ]
+            },
+            {
+              "id": "mq-01-10",
+              "questionText": "Highlight the rhyming words:",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-10-a",
+                  "choiceText": "Eat",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-10-b",
+                  "choiceText": "Meet",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-10-c",
+                  "choiceText": "Teeth",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-01-10-d",
+                  "choiceText": "Pet",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-01-10-e",
+                  "choiceText": "Pen",
+                  "isCorrect": false,
+                  "orderIndex": 5
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "3. Rhythm\nRhythm is the BEAT of words when you read them.\nWhen you read a sentence with rhythm, it feels like it has a pattern or beat.\n\nExamples:\n• “I run, I jump, I play all day.”\n• “I eat, I sleep, I play.”\n• “Run, run, run as fast as you can.”",
+          "highlighted_words": [
+            "Rhythm"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-01-11",
+              "questionText": "Select Yes if the phrase has rhythm and No if it has not: “The dog is sleeping on the floor.”",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-01-11-a",
+                  "choiceText": "Yes",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-11-b",
+                  "choiceText": "No",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-01-12",
+              "questionText": "Select Yes if the phrase has rhythm and No if it has not: “Jump, jump, jump so high.”",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-01-12-a",
+                  "choiceText": "Yes",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-12-b",
+                  "choiceText": "No",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-01-13",
+              "questionText": "Select Yes if the phrase has rhythm and No if it has not: “The sky is blue and bright.”",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-01-13-a",
+                  "choiceText": "Yes",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-13-b",
+                  "choiceText": "No",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-01-14",
+              "questionText": "Select Yes if the phrase has rhythm and No if it has not: “I Sing and sing and sing a happy song.”",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-01-14-a",
+                  "choiceText": "Yes",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-14-b",
+                  "choiceText": "No",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-01-15",
+              "questionText": "Select Yes if the phrase has rhythm and No if it has not: “My pencil is in my bag.”",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-01-15-a",
+                  "choiceText": "Yes",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-15-b",
+                  "choiceText": "No",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "4. ONOMATOPOEIA\nIt is pronounced as “onomatopiya”. Onomatopoeia are words that imitate or copy real sounds we hear in everyday life.\n\nExamples:\n• buzz (sound of a bee)\n• crash (sound of something breaking)\n• bang (loud hit)\n• drip (sound of water)",
+          "highlighted_words": [
+            "ONOMATOPOEIA"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-01-16",
+              "questionText": "Highlight the correct sound for: The dog says",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-16-a",
+                  "choiceText": "woof",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-16-b",
+                  "choiceText": "oink",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-16-c",
+                  "choiceText": "moo",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "mq-01-17",
+              "questionText": "Highlight the correct sound for: The clock goes",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-17-a",
+                  "choiceText": "bang",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-17-b",
+                  "choiceText": "tick-tock",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-17-c",
+                  "choiceText": "pop",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "mq-01-18",
+              "questionText": "Highlight the correct sound for: The telephone goes",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-18-a",
+                  "choiceText": "brrr",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-18-b",
+                  "choiceText": "meow",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-18-c",
+                  "choiceText": "ring",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "mq-01-19",
+              "questionText": "Highlight the correct sound for: The duck says",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-19-a",
+                  "choiceText": "quack",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-19-b",
+                  "choiceText": "arf",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-19-c",
+                  "choiceText": "tweet-tweet",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "mq-01-20",
+              "questionText": "Highlight the correct sound for: The fast car goes",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-20-a",
+                  "choiceText": "boo",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-20-b",
+                  "choiceText": "broom",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-20-c",
+                  "choiceText": "bark",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "5. Repetition\nRepetition is when words or phrases are repeated many times to make them stronger, clearer, or more musical.\n\nExamples:\n• “Run, run, run as fast as you can.”\n• “No, no, no!”\n• “The rain, the rain, the rain won’t stop.”",
+          "highlighted_words": [
+            "Repetition"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-01-21",
+              "questionText": "Identify if it has repetition or not: I want, I want, I want ice cream.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-01-21-a",
+                  "choiceText": "Yes",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-21-b",
+                  "choiceText": "No",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-01-22",
+              "questionText": "Identify if it has repetition or not: Happy, happy, happy day!",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-01-22-a",
+                  "choiceText": "Yes",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-22-b",
+                  "choiceText": "No",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-01-23",
+              "questionText": "Identify if it has repetition or not: The sky is blue.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-01-23-a",
+                  "choiceText": "Yes",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-23-b",
+                  "choiceText": "No",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-01-24",
+              "questionText": "Identify if it has repetition or not: The sun is bright.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-01-24-a",
+                  "choiceText": "Yes",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-24-b",
+                  "choiceText": "No",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-01-25",
+              "questionText": "Identify if it has repetition or not: Clean, clean, clean the room.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-01-25-a",
+                  "choiceText": "Yes",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-25-b",
+                  "choiceText": "No",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "To sum it all up:\n1. Alliteration - nearby words begin with the same sound\n2. Rhyme - when words have the same ending sound\n3. Rhythm - the beat of words when you read them.\n4. Onomatopoeia - words that imitate or copy real sounds we hear in everyday life.\n5. Repetition - when words or phrases are repeated many times\n\nNow that we have already discussed the 5 sound devices. Let’s now move to the activity. Have Fun!",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-01-01",
+              "questionText": "Read the phrase. Choose the correct sound device: “Buzzing bees in the garden”",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-01-a",
+                  "choiceText": "A. Rhyme",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-01-b",
+                  "choiceText": "B. Rhythm",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-01-c",
+                  "choiceText": "C. Onomatopoeia",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-01-01-d",
+                  "choiceText": "D. Repetition",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-01-02",
+              "questionText": "Read the phrase. Choose the correct sound device: “Run, run to school quickly”",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-02-a",
+                  "choiceText": "A. Rhyme",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-02-b",
+                  "choiceText": "B. Rhythm",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-02-c",
+                  "choiceText": "C. Onomatopoeia",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-01-02-d",
+                  "choiceText": "D. Repetition",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-01-03",
+              "questionText": "Read the phrase. Choose the correct sound device: “Cat and hat are on the bed”",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-03-a",
+                  "choiceText": "A. Rhyme",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-03-b",
+                  "choiceText": "B. Rhythm",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-03-c",
+                  "choiceText": "C. Onomatopoeia",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-01-03-d",
+                  "choiceText": "D. Repetition",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-01-04",
+              "questionText": "Read the phrase. Choose the correct sound device: “Tap tap on the window”",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-04-a",
+                  "choiceText": "A. Rhyme",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-04-b",
+                  "choiceText": "B. Rhythm",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-04-c",
+                  "choiceText": "C. Onomatopoeia",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-01-04-d",
+                  "choiceText": "D. Repetition",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-01-05",
+              "questionText": "Read the phrase. Choose the correct sound device: “The clock goes tick-tock”",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-05-a",
+                  "choiceText": "A. Rhyme",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-05-b",
+                  "choiceText": "B. Rhythm",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-05-c",
+                  "choiceText": "C. Onomatopoeia",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-01-05-d",
+                  "choiceText": "D. Repetition",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-01-06",
+              "questionText": "Read the phrase. Choose the correct sound device: “Sun and fun at the beach”",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-06-a",
+                  "choiceText": "A. Rhyme",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-06-b",
+                  "choiceText": "B. Rhythm",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-06-c",
+                  "choiceText": "C. Onomatopoeia",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-01-06-d",
+                  "choiceText": "D. Repetition",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-01-07",
+              "questionText": "Read the phrase. Choose the correct sound device: “Go go go to the playground”",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-07-a",
+                  "choiceText": "A. Rhyme",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-07-b",
+                  "choiceText": "B. Rhythm",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-07-c",
+                  "choiceText": "C. Onomatopoeia",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-01-07-d",
+                  "choiceText": "D. Repetition",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-01-08",
+              "questionText": "Read the phrase. Choose the correct sound device: “I eat, I sleep, I play”",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-08-a",
+                  "choiceText": "A. Rhyme",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-08-b",
+                  "choiceText": "B. Rhythm",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-08-c",
+                  "choiceText": "C. Onomatopoeia",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-01-08-d",
+                  "choiceText": "D. Repetition",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-01-09",
+              "questionText": "Read the phrase. Choose the correct sound device: “The door went bang loudly”",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-09-a",
+                  "choiceText": "A. Rhyme",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-09-b",
+                  "choiceText": "B. Rhythm",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-09-c",
+                  "choiceText": "C. Onomatopoeia",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-01-09-d",
+                  "choiceText": "D. Repetition",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-01-10",
+              "questionText": "Read the phrase. Choose the correct sound device: “Jump and run in the park”",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-10-a",
+                  "choiceText": "A. Rhyme",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-10-b",
+                  "choiceText": "B. Rhythm",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-10-c",
+                  "choiceText": "C. Onomatopoeia",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-01-10-d",
+                  "choiceText": "D. Repetition",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q2-02",
+      "orderIndex": 2,
+      "competency": "Identifying type of plot sequential",
+      "title": "Lesson 2: Identifying Type of Plot Sequential",
+      "lectureText": "What is a sequential plot?\nA sequential plot is a story where events happen in the correct order, one after another.\nIt shows:\n• what happened first\n• what happened next\n• what happened after that\n• what happened last\n\nSignal Words for Sequential Plot\nThese words help us know the order of events:\nfirst\nnext\nthen\nafter\nfinally\nlast\n\nSimple Example Story:\nFirst, Ana woke up early.\nNext, she prepared her school bag.\nThen, she ate breakfast.\nFinally, she went to school.\nThe events happened in order, so this is a sequential plot.",
+      "parts": [
+        {
+          "passageText": "Another story example\nPreparing for Ate Maria’s Wedding\nOne sunny morning in San Pablo, the Santos family woke up early to prepare for Ate Maria’s wedding.\nFirst, Nanay cleaned the house while Tatay arranged the chairs and tables outside. Next, Kuya Ben helped decorate the garden with flowers and colorful ribbons. Then, Lola prepared delicious Filipino foods like pancit, lumpia, and chicken adobo for the visitors.\nAfter that, Ate Maria put on her beautiful white gown while her friends helped fix her hair and makeup. The guests slowly arrived and happily greeted one another.\nFinally, the wedding ceremony began. Everyone smiled and clapped as Ate Maria and Kuya Carlo exchanged vows. At the end of the day, the family celebrated together with music, dancing, and laughter.\n\nIdentifying the Sequential Plot\nOrder: First -> Event: The family cleaned and prepared the place\nOrder: Next -> Event: They decorated the garden\nOrder: Then -> Event: Lola cooked food\nOrder: After that -> Event: Ate Maria prepared for the wedding\nOrder: Finally -> Event: The wedding ceremony happened\n\nNow that we are finished discussing what is a sequential plot. Let’s head to the activity and try it on our own. Have Fun!",
+          "highlighted_words": [
+            "sequential",
+            "plot",
+            "First",
+            "Next",
+            "Then",
+            "After that",
+            "Finally"
+          ],
+          "miniQuestions": [],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "L2 ACTIVITY\nDirections: Read the story carefully. Then answer the activities that follow.\n“Lola’s Birthday Celebration”\nOne Saturday morning, the Reyes family prepared for Lola Elena’s birthday celebration.\nFirst, Mother and Father went to the market to buy ingredients, balloons, and a birthday cake. Next, Kuya Mark cleaned the living room while Ana wiped the tables and chairs.\nThen, Father hung colorful decorations and balloons around the house. After that, Mother cooked spaghetti, fried chicken, and pancit in the kitchen. Later, Ana carefully placed the plates, cups, and spoons on the table.\nSoon, the visitors arrived carrying gifts and smiling happily. Finally, Lola Elena blew out the candles on her cake while everyone sang “Happy Birthday.” The family ate together, played games, and took many pictures.\nEveryone enjoyed the celebration and thanked Lola Elena for the delicious food and fun memories.",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-02-01",
+              "questionText": "Activity A: Arrange the Events. Write numbers 1–6 to show the correct order of events.",
+              "questionType": "SEQUENCING",
+              "choices": [
+                {
+                  "id": "aq-02-01-a",
+                  "choiceText": "The family bought things from the market.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-02-01-b",
+                  "choiceText": "Ana prepared the plates and spoons.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-02-01-c",
+                  "choiceText": "Father decorated the house with balloons.",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-02-01-d",
+                  "choiceText": "Mother cooked food in the kitchen.",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "aq-02-01-e",
+                  "choiceText": "The visitors arrived at the house.",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "aq-02-01-f",
+                  "choiceText": "Lola Elena blew out the candles.",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                }
+              ]
+            },
+            {
+              "id": "aq-02-02",
+              "questionText": "Activity B: 1. What did the parents do first?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-02-02-a",
+                  "choiceText": "a. Decorated the house",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-02-02-b",
+                  "choiceText": "b. Bought things from the market",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-02-02-c",
+                  "choiceText": "c. Sang “Happy Birthday”",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-02-02-d",
+                  "choiceText": "d. Prepared the plates",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-02-03",
+              "questionText": "2. What happened after Kuya Mark cleaned the living room?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-02-03-a",
+                  "choiceText": "a. Father decorated the house",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-02-03-b",
+                  "choiceText": "b. The visitors arrived",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-02-03-c",
+                  "choiceText": "c. Lola blew the candles",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-02-03-d",
+                  "choiceText": "d. The family ate dinner",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-02-04",
+              "questionText": "3. What did Mother cook?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-02-04-a",
+                  "choiceText": "a. Pizza and burger",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-02-04-b",
+                  "choiceText": "b. Adobo and sinigang",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-02-04-c",
+                  "choiceText": "c. Spaghetti, fried chicken, and pancit",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-02-04-d",
+                  "choiceText": "d. Ice cream and cake",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-02-05",
+              "questionText": "4. What happened before the visitors arrived?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-02-05-a",
+                  "choiceText": "a. Lola Elena blew the candles",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-02-05-b",
+                  "choiceText": "b. Ana prepared the plates and spoons",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-02-05-c",
+                  "choiceText": "c. The family took pictures",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-02-05-d",
+                  "choiceText": "d. Everyone went home",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-02-06",
+              "questionText": "5. Which event happened last?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-02-06-a",
+                  "choiceText": "a. The visitors arrived",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-02-06-b",
+                  "choiceText": "b. Father decorated the house",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-02-06-c",
+                  "choiceText": "c. Lola Elena blew out the candles",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-02-06-d",
+                  "choiceText": "d. The family went to the market",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q2-03",
+      "orderIndex": 3,
+      "competency": "Sequencing",
+      "title": "Lesson 3: Sequencing",
+      "lectureText": "What is Sequencing Events?\nSequencing events means putting the events of a story in the correct order.\nIt helps readers understand:\n• what happened first\n• what happened next\n• what happened after that\n• what happened last\nWe arrange events based on the order they happened in the story.\n\nSimple Example\nStory:\nFirst, Mia watered the plants in their garden.\nNext, she fed her pet dog Bruno.\nThen, she helped her mother cook lunch.\nFinally, she watched television with her younger brother.\n\nCorrect Sequence\n1. Watered the plants\n2. Fed her pet dog\n3. Helped cook lunch\n4. Watched television with her brother",
+      "parts": [
+        {
+          "passageText": "MINI ACTIVITY\nTry to answer this mini activity.\nArrange the events based on their correct sequence.\n\nAfter that, Carlo swam in the pool.\nThen, they arrived at the beach resort.\nFinally, they went home tired but happy.\nFirst, Carlo packed his swimming clothes.\nNext, he rode the jeepney with his family.\nLater, the family ate lunch together.",
+          "highlighted_words": [],
+          "miniQuestions": [
+            {
+              "id": "mq-03-01",
+              "questionText": "Arrange the events based on their correct sequence:",
+              "questionType": "SEQUENCING",
+              "choices": [
+                {
+                  "id": "mq-03-01-a",
+                  "choiceText": "First, Carlo packed his swimming clothes.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-03-01-b",
+                  "choiceText": "Next, he rode the jeepney with his family.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-03-01-c",
+                  "choiceText": "Then, they arrived at the beach resort.",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-03-01-d",
+                  "choiceText": "After that, Carlo swam in the pool.",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-03-01-e",
+                  "choiceText": "Later, the family ate lunch together.",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "mq-03-01-f",
+                  "choiceText": "Finally, they went home tired but happy.",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Now that we are finished discussing how to sequence an event. Let’s head to the activity and try it on our own. Have Fun!\n\nL3 ACTIVITY\nDirections:\nRead the events carefully. Write numbers 1–6 to show the correct sequence of events.",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-03-01",
+              "questionText": "Activity 1: Market Trip",
+              "questionType": "SEQUENCING",
+              "choices": [
+                {
+                  "id": "aq-03-01-a",
+                  "choiceText": "Carlo woke up early on Saturday morning.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-03-01-b",
+                  "choiceText": "The family rode a tricycle to the palengke.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-03-01-c",
+                  "choiceText": "They bought vegetables, fish, and fruits.",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-03-01-d",
+                  "choiceText": "Mother paid for the vegetables and fish.",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "aq-03-01-e",
+                  "choiceText": "Carlo helped carry the grocery bags home.",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "aq-03-01-f",
+                  "choiceText": "Mother cooked sinigang for lunch.",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                }
+              ]
+            },
+            {
+              "id": "aq-03-02",
+              "questionText": "Activity 2: School Program",
+              "questionType": "SEQUENCING",
+              "choices": [
+                {
+                  "id": "aq-03-02-a",
+                  "choiceText": "The students practiced dancing before the event.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-03-02-b",
+                  "choiceText": "The teachers prepared the stage and sound system.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-03-02-c",
+                  "choiceText": "The school program started in the morning.",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-03-02-d",
+                  "choiceText": "The students wore their colorful costumes.",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "aq-03-02-e",
+                  "choiceText": "The students performed their dance presentation.",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "aq-03-02-f",
+                  "choiceText": "The visitors clapped after the performance.",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                }
+              ]
+            },
+            {
+              "id": "aq-03-03",
+              "questionText": "Activity 3: Clean-up Drive",
+              "questionType": "SEQUENCING",
+              "choices": [
+                {
+                  "id": "aq-03-03-a",
+                  "choiceText": "The volunteers gathered at the barangay hall early.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-03-03-b",
+                  "choiceText": "The barangay captain gave instructions to everyone.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-03-03-c",
+                  "choiceText": "The children swept the streets and picked up trash.",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-03-03-d",
+                  "choiceText": "The garbage bags were collected by the truck.",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "aq-03-03-e",
+                  "choiceText": "Everyone washed their hands after cleaning.",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "aq-03-03-f",
+                  "choiceText": "The volunteers received snacks and drinks.",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                }
+              ]
+            },
+            {
+              "id": "aq-03-04",
+              "questionText": "Activity 4: Family Picnic",
+              "questionType": "SEQUENCING",
+              "choices": [
+                {
+                  "id": "aq-03-04-a",
+                  "choiceText": "Mother prepared sandwiches and juice at home.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-03-04-b",
+                  "choiceText": "The family packed their things before leaving home.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-03-04-c",
+                  "choiceText": "The family rode to the park together.",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-03-04-d",
+                  "choiceText": "The family spread a mat under the trees.",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "aq-03-04-e",
+                  "choiceText": "The children played patintero and taguan.",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "aq-03-04-f",
+                  "choiceText": "Everyone ate lunch and took pictures.",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                }
+              ]
+            },
+            {
+              "id": "aq-03-05",
+              "questionText": "Activity 5: Birthday Party",
+              "questionType": "SEQUENCING",
+              "choices": [
+                {
+                  "id": "aq-03-05-a",
+                  "choiceText": "Father bought balloons and decorations.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-03-05-b",
+                  "choiceText": "Mother cooked spaghetti and fried chicken.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-03-05-c",
+                  "choiceText": "Ana helped arrange the chairs and tables.",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-03-05-d",
+                  "choiceText": "The guests arrived at the house smiling happily.",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "aq-03-05-e",
+                  "choiceText": "The visitors sang “Happy Birthday.”",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "aq-03-05-f",
+                  "choiceText": "Ana blew out the candles on her cake.",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q2-04",
+      "orderIndex": 4,
+      "competency": "Analyzing figures of speech — simile",
+      "title": "Lesson 4: Analyzing Figures of Speech — Simile",
+      "lectureText": "What is a Simile?\nA simile is a figure of speech that compares two different things using the words:\n• like\n• as\nA simile helps readers imagine something more clearly.\n\nEasy Examples of Simile:\n“Her smile is as bright as the sun.”\n“The baby slept like a peaceful kitten.”\n“He ran as fast as a cheetah.”\nThe words like and as show the comparison.\n\nWhy Do We Use Similes?\nWe use similes to:\n• make stories more interesting\n• help readers imagine better\n• describe people, places, or things clearly\n\nIf a sentence compares two things using like or as, it is probably a simile.",
+      "parts": [
+        {
+          "passageText": "Read the narrative below and try to answer the mini activity to help us understand simile more.\n\n“Baby Ella’s Christening Celebration”\nOne Sunday morning, the Reyes family prepared for Baby Ella’s christening celebration.\nThe church was decorated with white flowers that were as beautiful as a garden in spring. Baby Ella wore a white dress that was soft like cotton. During the ceremony, the baby slept like a quiet angel in her mother’s arms.\nAfter the christening, the family gathered at their house for a celebration. The tables were filled with Filipino foods such as pancit, spaghetti, fried chicken, and lumpia. The children ran around the yard as playful as little puppies while the adults talked and laughed together.\nLater, Tito Ben played cheerful music that sounded like a happy fiesta. Everyone enjoyed the food, games, and picture-taking. At the end of the day, the family felt thankful and happy for Baby Ella’s special celebration.",
+          "highlighted_words": [
+            "simile",
+            "like",
+            "as"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-04-01",
+              "questionText": "Check if the sentence is a simile: The church was as beautiful as a garden in spring.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-04-01-a",
+                  "choiceText": "Yes",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-04-01-b",
+                  "choiceText": "No",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-04-02",
+              "questionText": "Check if the sentence is a simile: Baby Ella’s dress was soft like cotton.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-04-02-a",
+                  "choiceText": "Yes",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-04-02-b",
+                  "choiceText": "No",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-04-03",
+              "questionText": "Check if the sentence is a simile: The baby slept like a quiet angel.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-04-03-a",
+                  "choiceText": "Yes",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-04-03-b",
+                  "choiceText": "No",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-04-04",
+              "questionText": "Check if the sentence is a simile: The family felt thankful and happy for Baby Ella’s special celebration.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-04-04-a",
+                  "choiceText": "Yes",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-04-04-b",
+                  "choiceText": "No",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-04-05",
+              "questionText": "Check if the sentence is a simile: The music sounded like a happy fiesta.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-04-05-a",
+                  "choiceText": "Yes",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-04-05-b",
+                  "choiceText": "No",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-04-06",
+              "questionText": "1. Which sentence contains a simile?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-04-06-a",
+                  "choiceText": "a. The baby cried loudly.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-04-06-b",
+                  "choiceText": "b. The church was full of visitors.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-04-06-c",
+                  "choiceText": "c. The baby slept like a quiet angel.",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-04-06-d",
+                  "choiceText": "d. The family ate together.",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "mq-04-07",
+              "questionText": "2. What words are commonly used in similes?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-04-07-a",
+                  "choiceText": "a. and, but",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-04-07-b",
+                  "choiceText": "b. like, as",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-04-07-c",
+                  "choiceText": "c. because, so",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-04-07-d",
+                  "choiceText": "d. first, next",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "mq-04-08",
+              "questionText": "3. What does the simile “soft like cotton” describe?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-04-08-a",
+                  "choiceText": "a. The food",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-04-08-b",
+                  "choiceText": "b. The flowers",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-04-08-c",
+                  "choiceText": "c. Baby Ella’s dress",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-04-08-d",
+                  "choiceText": "d. The music",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "mq-04-09",
+              "questionText": "4. Why do writers use similes?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-04-09-a",
+                  "choiceText": "a. To make stories shorter",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-04-09-b",
+                  "choiceText": "b. To make descriptions clearer and more interesting",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-04-09-c",
+                  "choiceText": "c. To confuse readers",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-04-09-d",
+                  "choiceText": "d. To list events in order",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "mq-04-10",
+              "questionText": "5. “The children were as playful as little puppies.” What is being compared?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-04-10-a",
+                  "choiceText": "a. Children and puppies",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-04-10-b",
+                  "choiceText": "b. Music and food",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-04-10-c",
+                  "choiceText": "c. Church and garden",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-04-10-d",
+                  "choiceText": "d. Dress and cotton",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Now that we are finished discussing what a simile is. Let’s head to the activity and try to identify similes on our own. Have Fun!\n\nL4 ACTIVITY\nDirection: Highlight a sentence to identify it as a simile.",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-04-01",
+              "questionText": "Highlight the sentences that are similes:",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "aq-04-01-a",
+                  "choiceText": "1. The teacher is as busy as a bee.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-04-01-b",
+                  "choiceText": "2. You are moving as slow as a turtle.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-04-01-c",
+                  "choiceText": "3. The runner ran extremely quickly!",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-04-01-d",
+                  "choiceText": "4. Br! Your hands are as cold as ice.",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "aq-04-01-e",
+                  "choiceText": "5. The baby was as light as a feather.",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "aq-04-01-f",
+                  "choiceText": "6. The girl was very brave when she sang in the play.",
+                  "isCorrect": false,
+                  "orderIndex": 6
+                },
+                {
+                  "id": "aq-04-01-g",
+                  "choiceText": "7. The family gathered at their house for a celebration.",
+                  "isCorrect": false,
+                  "orderIndex": 7
+                },
+                {
+                  "id": "aq-04-01-h",
+                  "choiceText": "8. The new car was shiny like a new penny.",
+                  "isCorrect": true,
+                  "orderIndex": 8
+                },
+                {
+                  "id": "aq-04-01-i",
+                  "choiceText": "9. The adults talked and laughed together.",
+                  "isCorrect": false,
+                  "orderIndex": 9
+                },
+                {
+                  "id": "aq-04-01-j",
+                  "choiceText": "10. Everyone enjoyed the food, games, and picture-taking.",
+                  "isCorrect": false,
+                  "orderIndex": 10
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q2-05",
+      "orderIndex": 5,
+      "competency": "Identifying text type (time order: chronology)",
+      "title": "Lesson 5: Identifying Text Type (Time Order: Chronology)",
+      "lectureText": "What is Chronology?\n“When you tell a story about your day, do you say what happened first, then next, then last?”\n“That is called time order or chronology. It means events are arranged by the time they happen.”\n\nSignal Words for Chronology:\n• first\n• next\n• then\n• after that\n• later\n• finally\n\nWe will read about the steps of a christening. This is an informational text because it gives facts and explains a process. It uses time order to show what happens first until last.\n\n“Steps in a Christening Ceremony”\nA christening (binyag) is an important celebration for Filipino families.\nFirst, the parents choose the date of the christening and prepare the clothes of the baby. They also invite the ninongs and ninangs (godparents).\nNext, on the day of the christening, the family goes to the church early. The baby wears a white outfit for the ceremony.\nThen, the priest welcomes the baby and the parents in front of the church. The godparents stand near the baby during the ceremony.\nAfter that, the priest pours water on the baby’s head and says prayers. This is the main part of the christening.\nLater, pictures are taken with the family, godparents, and guests after the ceremony.\nFinally, the family holds a small celebration or handaan at home or a restaurant with food, laughter, and gifts.\n\n“This text is written in time order. It shows what happens first, next, then, and finally during a christening. Chronology helps us understand the steps clearly, because the events are arranged by the time they happen.”",
+      "parts": [
+        {
+          "passageText": "MINI ACTIVITY\nHere is a mini activity to help you understand time order or chronology more.\nWrite numbers 1–6 in the correct order.",
+          "highlighted_words": [],
+          "miniQuestions": [
+            {
+              "id": "mq-05-01",
+              "questionText": "Arrange the events in the correct order:",
+              "questionType": "SEQUENCING",
+              "choices": [
+                {
+                  "id": "mq-05-01-a",
+                  "choiceText": "Volunteers gather up and pile the trash.",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-05-01-b",
+                  "choiceText": "Barangay captain announces the clean-up day.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-05-01-c",
+                  "choiceText": "Volunteers rest after cleaning.",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                },
+                {
+                  "id": "mq-05-01-d",
+                  "choiceText": "Volunteers clean the streets.",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-05-01-e",
+                  "choiceText": "Volunteers bring cleaning tools.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-05-01-f",
+                  "choiceText": "Trash is collected by garbage trucks.",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Now that we are finished discussing how to identify text type time order or chronology. Let’s head to the activity and try to identify it on our own. Have Fun!\n\nL5 ACTIVITY\nDirections:\nRead each text carefully. Write CHRONOLOGY if it shows time order (steps/events in sequence). Write NOT CHRONOLOGY if it does not.",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-05-01",
+              "questionText": "1. First, Liza wakes up early. Next, she takes a bath. Then, she eats breakfast before going to school.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-01-a",
+                  "choiceText": "CHRONOLOGY",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-01-b",
+                  "choiceText": "NOT CHRONOLOGY",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-05-02",
+              "questionText": "2. Rice is the main food of many Filipinos. It is usually eaten with viand like fish or meat.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-02-a",
+                  "choiceText": "CHRONOLOGY",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-02-b",
+                  "choiceText": "NOT CHRONOLOGY",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-05-03",
+              "questionText": "3. First, the teacher distributes test papers. Next, the students answer the questions. Then, they submit their papers.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-03-a",
+                  "choiceText": "CHRONOLOGY",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-03-b",
+                  "choiceText": "NOT CHRONOLOGY",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-05-04",
+              "questionText": "4. Mangoes are sweet fruits that grow in the Philippines. They are yellow when ripe.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-04-a",
+                  "choiceText": "CHRONOLOGY",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-04-b",
+                  "choiceText": "NOT CHRONOLOGY",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-05-05",
+              "questionText": "5. First, Carlo packs his bag. Next, he rides a jeepney. Then, he arrives at school on time.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-05-a",
+                  "choiceText": "CHRONOLOGY",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-05-b",
+                  "choiceText": "NOT CHRONOLOGY",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-05-06",
+              "questionText": "6. Volcanoes can erupt and release lava. Some famous volcanoes are found in the Philippines.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-06-a",
+                  "choiceText": "CHRONOLOGY",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-06-b",
+                  "choiceText": "NOT CHRONOLOGY",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-05-07",
+              "questionText": "7. First, Ana prepares ingredients. Next, she cooks spaghetti. Then, she serves the food to her family.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-07-a",
+                  "choiceText": "CHRONOLOGY",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-07-b",
+                  "choiceText": "NOT CHRONOLOGY",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-05-08",
+              "questionText": "8. The Philippine eagle is a large bird found in forests. It is known for its strong wings.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-08-a",
+                  "choiceText": "CHRONOLOGY",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-08-b",
+                  "choiceText": "NOT CHRONOLOGY",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-05-09",
+              "questionText": "9. First, the children line up in the school ground. Next, they sing the national anthem. Then, the program officially starts.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-09-a",
+                  "choiceText": "CHRONOLOGY",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-09-b",
+                  "choiceText": "NOT CHRONOLOGY",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-05-10",
+              "questionText": "10. Dogs are loyal pets. They are friendly and can protect their owners.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-10-a",
+                  "choiceText": "CHRONOLOGY",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-10-b",
+                  "choiceText": "NOT CHRONOLOGY",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q2-06",
+      "orderIndex": 6,
+      "competency": "Identifying text type (time order: procedural)",
+      "title": "Lesson 6: Identifying Text Type (Time Order: Procedural)",
+      "lectureText": "What is a Procedural Text?\nA procedural text tells us how to do something step-by-step.\nIt gives instructions or directions to follow.\n\nProcedural texts help people:\n• cook food\n• make projects\n• prepare events\n• follow steps correctly\n\nThe difference between chronology text and procedural text:\n\nChronology text is just telling events in order (“What happened first, next, and last?”).\nExample of chronology: “First, Ana woke up. Next, she ate breakfast.”\n\nMeanwhile, Procedural text tells the steps to follow (“How do we do this?”).\nExample of Procedural text: “First, wash your hands. Next, get your toothbrush.”",
+      "parts": [
+        {
+          "passageText": "Try to answer the mini activity below to help understand procedural and chronology more.\n\nDirections:\nRead each text carefully. Write:\nPROCEDURAL → if the text gives steps or instructions\nCHRONOLOGY → if the text tells events in time order",
+          "highlighted_words": [
+            "procedural",
+            "chronology"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-06-01",
+              "questionText": "1. First, wash your hands. Next, get your toothbrush. Then, brush your teeth for two minutes.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-06-01-a",
+                  "choiceText": "PROCEDURAL",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-06-01-b",
+                  "choiceText": "CHRONOLOGY",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-06-02",
+              "questionText": "2. First, the students arrived at school. Next, they lined up for the flag ceremony. Then, they went to their classrooms.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-06-02-a",
+                  "choiceText": "PROCEDURAL",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-06-02-b",
+                  "choiceText": "CHRONOLOGY",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-06-03",
+              "questionText": "3. First, prepare the ingredients. Next, mix the flour and eggs. Then, cook the pancakes on a pan.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-06-03-a",
+                  "choiceText": "PROCEDURAL",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-06-03-b",
+                  "choiceText": "CHRONOLOGY",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-06-04",
+              "questionText": "4. First, the family rode the jeepney. Next, they arrived at the beach. Then, they swam and ate lunch together.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-06-04-a",
+                  "choiceText": "PROCEDURAL",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-06-04-b",
+                  "choiceText": "CHRONOLOGY",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-06-05",
+              "questionText": "5. First, choose the color of the poster. Next, draw the design. Finally, color the poster neatly.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-06-05-a",
+                  "choiceText": "PROCEDURAL",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-06-05-b",
+                  "choiceText": "CHRONOLOGY",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Now that we are finished discussing how to identify procedural texts. Let’s head to the activity and try to identify procedural texts on our own. Have Fun!\n\nL6 ACTIVITY\nPart A. Literal Comprehension\nRead the text below.\n\n“How to Wash Your Hands”\nFirst, wet your hands with water.\nNext, put soap on your hands.\nThen, rub your hands together for 20 seconds.\nAfter that, rinse your hands with clean water.\nFinally, dry your hands using a clean towel.",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-06-01",
+              "questionText": "1. What should you use after wetting your hands?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-01-a",
+                  "choiceText": "a. towel",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-01-b",
+                  "choiceText": "b. soap",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-06-01-c",
+                  "choiceText": "c. toothbrush",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-06-01-d",
+                  "choiceText": "d. tissue",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-06-02",
+              "questionText": "2. How long should you rub your hands?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-02-a",
+                  "choiceText": "a. 5 seconds",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-02-b",
+                  "choiceText": "b. 10 seconds",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-06-02-c",
+                  "choiceText": "c. 20 seconds",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-06-02-d",
+                  "choiceText": "d. 30 seconds",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-06-03",
+              "questionText": "3. What should you do after rubbing your hands?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-03-a",
+                  "choiceText": "a. dry your hands",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-03-b",
+                  "choiceText": "b. rinse with clean water",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-06-03-c",
+                  "choiceText": "c. eat food",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-06-03-d",
+                  "choiceText": "d. wash clothes",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-06-04",
+              "questionText": "4. What is the last step?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-04-a",
+                  "choiceText": "a. use soap",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-04-b",
+                  "choiceText": "b. wet your hands",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-06-04-c",
+                  "choiceText": "c. dry your hands",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-06-04-d",
+                  "choiceText": "d. rinse your hands",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-06-05",
+              "questionText": "5. What is the text mostly about?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-05-a",
+                  "choiceText": "a. How to wash hands",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-05-b",
+                  "choiceText": "b. How to cook food",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-06-05-c",
+                  "choiceText": "c. How to plant seeds",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-06-05-d",
+                  "choiceText": "d. How to clean a room",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-06-06",
+              "questionText": "6. First, prepare the paper. Next, fold it in half. Then, color the drawing.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-06-a",
+                  "choiceText": "PROCEDURAL",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-06-b",
+                  "choiceText": "NOT PROCEDURAL",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-06-07",
+              "questionText": "7. Dogs are loyal animals that help guard homes and play with people.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-07-a",
+                  "choiceText": "PROCEDURAL",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-07-b",
+                  "choiceText": "NOT PROCEDURAL",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-06-08",
+              "questionText": "8. First, boil water. Next, put noodles into the pot. Finally, serve the noodles in a bowl.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-08-a",
+                  "choiceText": "PROCEDURAL",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-08-b",
+                  "choiceText": "NOT PROCEDURAL",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-06-09",
+              "questionText": "9. The children played basketball after class and went home happily.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-09-a",
+                  "choiceText": "PROCEDURAL",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-09-b",
+                  "choiceText": "NOT PROCEDURAL",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-06-10",
+              "questionText": "10. First, open your notebook. Next, write the date. Then, copy the lesson from the board.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-10-a",
+                  "choiceText": "PROCEDURAL",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-10-b",
+                  "choiceText": "NOT PROCEDURAL",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q2-07",
+      "orderIndex": 7,
+      "competency": "Identifying text type - recount",
+      "title": "Lesson 7: Identifying Text Type - Recount",
+      "lectureText": "What is a Recount Text?\nA recount text tells about something that already happened in the past.\nIt retells real events or experiences in the order they happened.\n\nA recount text is like someone saying:\n“Let me tell you what happened.”\n\nPurpose of a Recount Text:\n• retell past events\n• share experiences\n• tell what happened first, next, and last\n\nRecount texts are usually about real-life experiences.\nExamples: attending a wedding, going to the beach, joining a school program, celebrating a birthday.\n\nAsk these questions:\n1. Did the events already happen?\n2. Is someone retelling an experience?\n3. Are the events told in order?\nIf YES, it is probably a RECOUNT TEXT.\n\nExample of Recount text:\n“Last Sunday, my family attended a wedding. First, we went to the church. Next, we watched the ceremony. Then, we ate at the reception.”\n\nThis is a recount because:\n• it happened in the past\n• it retells an experience\n• it tells events in order",
+      "parts": [
+        {
+          "passageText": "To understand more about recount text, try to answer the mini activity below.\n\nDirections: Read each text carefully. Write:\nRECOUNT → if the text tells about a past experience or event\nNOT RECOUNT → if it does not",
+          "highlighted_words": [
+            "recount"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-07-01",
+              "questionText": "1. Last Sunday, my family went to the beach in Batangas. First, we swam in the sea. Then, we ate lunch together under the trees.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-07-01-a",
+                  "choiceText": "RECOUNT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-07-01-b",
+                  "choiceText": "NOT RECOUNT",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-07-02",
+              "questionText": "2. A mango is a sweet fruit that grows in many parts of the Philippines. It is yellow when ripe.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-07-02-a",
+                  "choiceText": "RECOUNT",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-07-02-b",
+                  "choiceText": "NOT RECOUNT",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-07-03",
+              "questionText": "3. Yesterday, our class joined the school clean-up drive. We swept the classrooms and picked up trash around the school.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-07-03-a",
+                  "choiceText": "RECOUNT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-07-03-b",
+                  "choiceText": "NOT RECOUNT",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-07-04",
+              "questionText": "4. First, boil water. Next, put the noodles into the pot. Finally, serve the noodles in a bowl.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-07-04-a",
+                  "choiceText": "RECOUNT",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-07-04-b",
+                  "choiceText": "NOT RECOUNT",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-07-05",
+              "questionText": "5. Last Saturday, we attended my cousin’s birthday party. We played games, ate spaghetti, and sang karaoke with our relatives.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-07-05-a",
+                  "choiceText": "RECOUNT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-07-05-b",
+                  "choiceText": "NOT RECOUNT",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Now that we are finished discussing how to identify the text type recount. Let’s head to the activity and try to identify recount texts on our own. Have Fun!\n\nL7 ACTIVITY\nRead the text below.\n\n“School Field Trip”\nLast Friday, Ana’s class went on a field trip to the museum in Manila.\nFirst, they rode a bus to the museum.\nWhen they arrived, they looked at old items and historical pictures.\nThe students listened carefully to the museum guide.\nAfter that, they ate lunch before going back to school.",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-07-01",
+              "questionText": "1. Where did Ana’s class go?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-01-a",
+                  "choiceText": "a. Mall",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-01-b",
+                  "choiceText": "b. Museum",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-07-01-c",
+                  "choiceText": "c. Park",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-07-01-d",
+                  "choiceText": "d. Beach",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-07-02",
+              "questionText": "2. What did they ride going to the museum?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-02-a",
+                  "choiceText": "a. Jeepney",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-02-b",
+                  "choiceText": "b. Bus",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-07-02-c",
+                  "choiceText": "c. Bicycle",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-07-02-d",
+                  "choiceText": "d. Train",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-07-03",
+              "questionText": "3. How did the students feel during the trip?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-03-a",
+                  "choiceText": "a. Bored",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-03-b",
+                  "choiceText": "b. Happy and interested",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-07-03-c",
+                  "choiceText": "c. Angry",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-07-03-d",
+                  "choiceText": "d. Scared",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-07-04",
+              "questionText": "4. Why did the students listen carefully to the museum guide?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-04-a",
+                  "choiceText": "a. They wanted to learn",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-04-b",
+                  "choiceText": "b. They wanted to sleep",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-07-04-c",
+                  "choiceText": "c. They were forced",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-07-04-d",
+                  "choiceText": "d. They were hungry",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-07-05",
+              "questionText": "5. What did they do before going back to school?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-05-a",
+                  "choiceText": "a. Played games",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-05-b",
+                  "choiceText": "b. Ate lunch",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-07-05-c",
+                  "choiceText": "c. Slept",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-07-05-d",
+                  "choiceText": "d. Cleaned the museum",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-07-06",
+              "questionText": "6. Last Sunday, we went to a birthday party. We ate spaghetti and played games with cousins.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-06-a",
+                  "choiceText": "RECOUNT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-06-b",
+                  "choiceText": "NOT RECOUNT",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-07-07",
+              "questionText": "7. Plants need sunlight and water to grow properly.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-07-a",
+                  "choiceText": "RECOUNT",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-07-b",
+                  "choiceText": "NOT RECOUNT",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-07-08",
+              "questionText": "8. Yesterday, our class joined a clean-up drive in the school. We picked up trash and cleaned the classroom.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-08-a",
+                  "choiceText": "RECOUNT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-08-b",
+                  "choiceText": "NOT RECOUNT",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-07-09",
+              "questionText": "9. First, wash your hands. Next, get soap. Then, rinse with clean water.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-09-a",
+                  "choiceText": "RECOUNT",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-09-b",
+                  "choiceText": "NOT RECOUNT",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-07-10",
+              "questionText": "10. Last Saturday, my family went to the beach. We swam in the sea and took many pictures.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-10-a",
+                  "choiceText": "RECOUNT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-10-b",
+                  "choiceText": "NOT RECOUNT",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q2-08",
+      "orderIndex": 8,
+      "competency": "Drawing conclusions",
+      "title": "Lesson 8: Drawing Conclusions",
+      "lectureText": "What is Drawing a Conclusion?\nDrawing a conclusion means using:\n• the clues from the story\n• and what you already know\nto understand something that is not directly stated.\nIt is like being a reading detective.\n\nExample Story:\nThe ground was wet. People were holding umbrellas. Dark clouds filled the sky.\nConclusion:\nIt probably rained.\nThe story did not directly say “It rained,” but the clues help us conclude it.\n\nAsk yourself:\n“What clues do I see?”\n“What does this probably mean?”",
+      "parts": [
+        {
+          "passageText": "Try to answer this mini activity to understand more about drawing conclusions.\n\nDirections: Choose the correct conclusion for the scenario.",
+          "highlighted_words": [
+            "conclusion"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-08-01",
+              "questionText": "1. Maria saw dark clouds in the sky and heard thunder. She quickly ran inside and closed all the windows.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-08-01-a",
+                  "choiceText": "Maria is preparing for a storm",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-08-01-b",
+                  "choiceText": "Maria is going to bed",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-08-02",
+              "questionText": "2. After playing basketball, Pedro was tired and sweaty. He drank a big bottle of water and sat down to rest.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-08-02-a",
+                  "choiceText": "Pedro is feeling energetic and ready to play another game.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-08-02-b",
+                  "choiceText": "Pedro is tired and needs to rest",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-08-03",
+              "questionText": "3. There was a loud noise in the classroom, and everyone turned to look at Anna, who was holding a broken glass.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-08-03-a",
+                  "choiceText": "Anna was the one who accidentally broke the glass.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-08-03-b",
+                  "choiceText": "Anna is cleaning up the mess someone else made.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Now that we are finished discussing how to draw conclusions. Let’s head to the activity and try to draw conclusions on our own. Have Fun!\n\nL8 ACTIVITY\nDirections:\nRead each situation carefully. Choose the best conclusion or inference.",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-08-01",
+              "questionText": "1. Lito brought an umbrella and wore rain boots before leaving the house. Dark clouds covered the sky. What can you conclude?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-01-a",
+                  "choiceText": "a. It is very hot outside.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-01-b",
+                  "choiceText": "b. It will probably rain.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-01-c",
+                  "choiceText": "c. Lito is going swimming.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-08-01-d",
+                  "choiceText": "d. Lito is going to sleep.",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-08-02",
+              "questionText": "2. During the fiesta, people were dancing, singing karaoke, and sharing food with visitors. What can you conclude?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-02-a",
+                  "choiceText": "a. The people were bored.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-02-b",
+                  "choiceText": "b. The celebration was lively and fun.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-02-c",
+                  "choiceText": "c. Everyone wanted to leave.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-08-02-d",
+                  "choiceText": "d. Nobody attended the fiesta.",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-08-03",
+              "questionText": "3. Ana studied her notes every night and answered many practice questions before the test. What can you conclude?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-03-a",
+                  "choiceText": "a. Ana does not care about school.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-03-b",
+                  "choiceText": "b. Ana wants to do well on the test.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-03-c",
+                  "choiceText": "c. Ana forgot about the test.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-08-03-d",
+                  "choiceText": "d. Ana stayed home to sleep.",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-08-04",
+              "questionText": "4. The basketball court was full of cheering people wearing team shirts and waving banners. What can you conclude?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-04-a",
+                  "choiceText": "a. A basketball game is happening.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-04-b",
+                  "choiceText": "b. Students are taking an exam.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-04-c",
+                  "choiceText": "c. The court is empty.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-08-04-d",
+                  "choiceText": "d. People are cleaning the court.",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-08-05",
+              "questionText": "5. Mang Ben carried many grocery bags and vegetables from the palengke. What can you conclude?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-05-a",
+                  "choiceText": "a. Mang Ben went shopping.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-05-b",
+                  "choiceText": "b. Mang Ben went swimming.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-05-c",
+                  "choiceText": "c. Mang Ben played basketball.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-08-05-d",
+                  "choiceText": "d. Mang Ben went to school.",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-08-06",
+              "questionText": "6. The classroom floor was wet, and students were using mops and brooms. What can you conclude?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-06-a",
+                  "choiceText": "a. The students are cleaning the room.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-06-b",
+                  "choiceText": "b. The students are sleeping.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-06-c",
+                  "choiceText": "c. The students are eating lunch.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-08-06-d",
+                  "choiceText": "d. The students are watching TV.",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-08-07",
+              "questionText": "7. Maria wrapped gifts and blew balloons while her mother prepared spaghetti and cake. What can you conclude?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-07-a",
+                  "choiceText": "a. They are preparing for school.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-07-b",
+                  "choiceText": "b. They are planting vegetables.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-07-c",
+                  "choiceText": "c. They are traveling.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-08-07-d",
+                  "choiceText": "d. They are preparing for a birthday party.",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-08-08",
+              "questionText": "8. The church was filled with flowers, candles, and guests wearing formal clothes. What can you conclude?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-08-a",
+                  "choiceText": "a. A wedding is happening.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-08-b",
+                  "choiceText": "b. A basketball game is happening.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-08-c",
+                  "choiceText": "c. A class lesson is starting.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-08-08-d",
+                  "choiceText": "d. A market is opening.",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-08-09",
+              "questionText": "9. Carlo wore his PE uniform and brought a water bottle and rubber shoes. What can you conclude?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-09-a",
+                  "choiceText": "a. Carlo has PE class.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-09-b",
+                  "choiceText": "b. Carlo is going to sleep.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-09-c",
+                  "choiceText": "c. Carlo is going fishing.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-08-09-d",
+                  "choiceText": "d. Carlo is going to church.",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            },
+            {
+              "id": "aq-08-10",
+              "questionText": "10. The children were carrying small flags while singing the Philippine national anthem. What can you conclude?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-10-a",
+                  "choiceText": "a. The children are taking a nap.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-10-b",
+                  "choiceText": "b. The children are inside a mall.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-10-c",
+                  "choiceText": "c. A school program or flag ceremony is happening.",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-08-10-d",
+                  "choiceText": "d. The children are cooking food.",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q2-09",
+      "orderIndex": 9,
+      "competency": "Distinguishing fact from opinion",
+      "title": "Lesson 9: Distinguishing Fact from Opinion",
+      "lectureText": "What is a fact?\nA fact is something that is true and supported by evidence.\n\nWhat is an opinion?\nAn opinion is only a belief. It is also an expression of a person’s feelings. Clue words like “think,” “believe,” “feel,” “probably,” or “seems” signal an opinion.\n\nExample: Perhaps only sons should be treated well.",
+      "parts": [
+        {
+          "passageText": "Read the passage below to understand more about fact and opinion.\n\n“A Trip to Intramuros: The Walled City”\nLast Sunday, my family and I visited Intramuros in Manila. Known as the \"Walled City,\" Intramuros was the seat of government during the Spanish colonial period. It was built by the Spaniards in the late 16th century to protect the city from foreign invasions.\nAs we entered through the massive stone gates, I felt like I had stepped back in time. We visited Fort Santiago, where our national hero, Dr. Jose Rizal, was imprisoned before his execution in 1896. I saw his preserved footsteps embedded in the ground, marking his final walk.\nI think Intramuros is the most beautiful part of Manila because of its old-fashioned charm. We took a ride in a kalesa (a horse-drawn carriage). I believe that riding a kalesa is much more exciting than riding a modern car. Our driver told us that the walls of Intramuros are about 4.5 kilometers long.\nThe weather was quite hot, but the trip was worth it. I think every Filipino student should visit this place at least once to appreciate our history. Before leaving, we saw the San Agustin Church, which is the oldest stone church in the Philippines.",
+          "highlighted_words": [
+            "fact",
+            "opinion",
+            "think",
+            "believe"
+          ],
+          "miniQuestions": [],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Here are the facts and opinions that are inside the passage:\n\nFACTS:\n1. Intramuros was built by the Spaniards in the 16th century.\n2. Dr. Jose Rizal was imprisoned in Fort Santiago.\n3. The San Agustin Church is the oldest stone church in the Philippines.\nThese are facts because it is something that really happened or are true based on evidence.\n\nOPINIONS:\n1. I think Intramuros is the most beautiful part of Manila.\n2. I believe riding a kalesa is more exciting than riding a car.\n3. I think every student should visit this place.\nThese are opinions because they are a person’s feelings. They use clue words like “I think” and “I believe”.",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "MINI ACTIVITY\nNow read the passage below and try to identify if the sentence is a fact or opinion.\n\n“Running for President”\nBy Lea E. Basquinas\n\nIn every school, there is an umbrella organization for the pupils. An example of this is the “Supreme Pupil Government” wherein the pupils are being elected to practice and hone their leadership potentials.\n“Good morning class,” greeted Ms. Villar. “The Supreme Pupil Government (SPG) election is fast approaching. There shall be two parties only. I think, for those who are interested, you may now start filing your certificate of candidacy,” she explained.\n“I want to run as SPG president,” Danny said.\n“Me, too. I want to run as president, but I’m a girl,” said Alaine.\nMs. Villar heard their conversation and explained to the class the idea of gender equality.\n“Our organization is not biased. Whether you are a boy or a girl, as long as you can perform the duties and responsibilities of being a president, you are very much welcome. So, Alaine and Danny, submit to me your documents.”",
+          "highlighted_words": [],
+          "miniQuestions": [
+            {
+              "id": "mq-09-01",
+              "questionText": "1. I believe there is gender equality in terms of choice.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-09-01-a",
+                  "choiceText": "FACT",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-09-01-b",
+                  "choiceText": "OPINION",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-09-02",
+              "questionText": "2. Our organization is not biased.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-09-02-a",
+                  "choiceText": "FACT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-09-02-b",
+                  "choiceText": "OPINION",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-09-03",
+              "questionText": "3. Whether you are a boy or a girl, as long as you can perform the duties and responsibilities of being a president, you are very much welcome.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-09-03-a",
+                  "choiceText": "FACT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-09-03-b",
+                  "choiceText": "OPINION",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-09-04",
+              "questionText": "4. The Supreme Pupil Government (SPG) election is fast approaching.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-09-04-a",
+                  "choiceText": "FACT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-09-04-b",
+                  "choiceText": "OPINION",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "mq-09-05",
+              "questionText": "5. I think, for those who are interested, you may now start filing your certificate of candidacy.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-09-05-a",
+                  "choiceText": "FACT",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-09-05-b",
+                  "choiceText": "OPINION",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Now that we are finished discussing how to identify facts and opinions. Let’s head to the activity and try to identify them on our own. Have Fun!\n\nL9 ACTIVITY\nDirections:\nRead each sentence carefully. Decide if it is a FACT or OPINION.\n\nSchool Foundation Day\nLast Monday, our school celebrated Foundation Day.\nStudents wore colorful costumes during the program.\nThe stage was beautifully decorated with balloons and ribbons.\nThe program started at 8:00 in the morning.\nThe dance presentation was the most exciting part of the event.\nTeachers prepared the program in the school gym.\nThe singing performance was loud and noisy.\nParents and guests attended the celebration.\nThe program ended in the afternoon.\nEveryone said the celebration was amazing.",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-09-01",
+              "questionText": "1. The school celebrated Foundation Day last Monday.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-01-a",
+                  "choiceText": "a. FACT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-01-b",
+                  "choiceText": "b. OPINION",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-09-02",
+              "questionText": "2. I think the stage was beautifully decorated.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-02-a",
+                  "choiceText": "a. FACT",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-02-b",
+                  "choiceText": "b. OPINION",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-09-03",
+              "questionText": "3. The program started at 8:00 in the morning.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-03-a",
+                  "choiceText": "a. FACT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-03-b",
+                  "choiceText": "b. OPINION",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-09-04",
+              "questionText": "4. I think the dance presentation was the most exciting part.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-04-a",
+                  "choiceText": "a. FACT",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-04-b",
+                  "choiceText": "b. OPINION",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-09-05",
+              "questionText": "5. Students wore colorful costumes.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-05-a",
+                  "choiceText": "a. FACT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-05-b",
+                  "choiceText": "b. OPINION",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-09-06",
+              "questionText": "6. The singing performance was loud and noisy.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-06-a",
+                  "choiceText": "a. FACT",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-06-b",
+                  "choiceText": "b. OPINION",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-09-07",
+              "questionText": "7. Teachers prepared the program in the gym.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-07-a",
+                  "choiceText": "a. FACT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-07-b",
+                  "choiceText": "b. OPINION",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-09-08",
+              "questionText": "8. Parents and guests attended the celebration.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-08-a",
+                  "choiceText": "a. FACT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-08-b",
+                  "choiceText": "b. OPINION",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-09-09",
+              "questionText": "9. The celebration was amazing.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-09-a",
+                  "choiceText": "a. FACT",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-09-b",
+                  "choiceText": "b. OPINION",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-09-10",
+              "questionText": "10. The program ended in the afternoon.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-10-a",
+                  "choiceText": "a. FACT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-10-b",
+                  "choiceText": "b. OPINION",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q2-10",
+      "orderIndex": 10,
+      "competency": "Identifying author's purpose (entertain / inform / describe)",
+      "title": "Lesson 10: Identifying the Author's Purpose",
+      "lectureText": "1. To Inform\nWhat it does: Gives you real facts and true information.\nHow to spot it: It sounds like a textbook or a news report. It uses numbers, dates, and real names.\nExample: \"The Philippines has 7,641 islands. The capital city is Manila.\"\n\n2. To Entertain\nWhat it does: Makes you feel something! It wants to make you laugh, feel scared, or wonder \"what happens next?\"\nHow to spot it: It has characters, a problem, and a story.\nExample: \"The brave kitten put on its tiny cape and jumped over the sleeping dog to save the lost yarn ball.\"\n\n3. To Describe\nWhat it does: Uses words to paint a picture in your head.\nHow to spot it: It uses your 5 Senses (Sight, Sound, Smell, Taste, Touch). It tells you exactly how something looks or feels.\nExample: \"The mango was bright yellow, soft to touch, and tasted like sweet honey.\"",
+      "parts": [
+        {
+          "passageText": "MINI ACTIVITY\nDirections: Read the short sentences below. Decide if the mission is to give facts (Inform), tell a story (Entertain), or show how something looks (Describe).",
+          "highlighted_words": [],
+          "miniQuestions": [
+            {
+              "id": "mq-10-01",
+              "questionText": "1. The mango was bright orange, slippery, and tasted as sweet as candy.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-10-01-a",
+                  "choiceText": "Inform",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-10-01-b",
+                  "choiceText": "Entertain",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-10-01-c",
+                  "choiceText": "Describe",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "mq-10-02",
+              "questionText": "2. The Philippine flag has three colors: blue, red, and white. It also has a yellow sun and three stars.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-10-02-a",
+                  "choiceText": "Inform",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-10-02-b",
+                  "choiceText": "Entertain",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-10-02-c",
+                  "choiceText": "Describe",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "mq-10-03",
+              "questionText": "3. Suddenly, the clouds turned into giant marshmallows, and it started raining chocolate syrup all over the school!",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-10-03-a",
+                  "choiceText": "Inform",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-10-03-b",
+                  "choiceText": "Entertain",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-10-03-c",
+                  "choiceText": "Describe",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "mq-10-04",
+              "questionText": "4. A spider has eight legs and uses sticky silk to build a web to catch its food.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-10-04-a",
+                  "choiceText": "Inform",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-10-04-b",
+                  "choiceText": "Entertain",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-10-04-c",
+                  "choiceText": "Describe",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "mq-10-05",
+              "questionText": "5. The old wooden door made a long, spooky creeeak and felt rough and dry like an old bone.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-10-05-a",
+                  "choiceText": "Inform",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-10-05-b",
+                  "choiceText": "Entertain",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-10-05-c",
+                  "choiceText": "Describe",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "mq-10-06",
+              "questionText": "6. \"Watch this!\" barked the dog, as he stood on two legs and began to dance the tinikling with the cat.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "mq-10-06-a",
+                  "choiceText": "Inform",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-10-06-b",
+                  "choiceText": "Entertain",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-10-06-c",
+                  "choiceText": "Describe",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Great job! Now that you've finished the warm-up, you are ready for the Activity right now. Have Fun!\n\nL10 ACTIVITY\nDirections: Read each sentence. Choose Inform, Entertain, or Describe.",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-10-01",
+              "questionText": "1. Rice is the main food for many people in the Philippines. It grows in green fields called paddies.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-01-a",
+                  "choiceText": "Inform",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-01-b",
+                  "choiceText": "Entertain",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-10-01-c",
+                  "choiceText": "Describe",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-10-02",
+              "questionText": "2. The chocolate cake was moist, dark, and covered in thick, gooey frosting that stuck to my teeth.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-02-a",
+                  "choiceText": "Inform",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-02-b",
+                  "choiceText": "Entertain",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-10-02-c",
+                  "choiceText": "Describe",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-10-03",
+              "questionText": "3. One night, the moon turned into a giant pizza, and all the children had to fly up to take a bite!",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-03-a",
+                  "choiceText": "Inform",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-03-b",
+                  "choiceText": "Entertain",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-10-03-c",
+                  "choiceText": "Describe",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-10-04",
+              "questionText": "4. Carabaos are strong animals. They help farmers plow the fields under the hot sun.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-04-a",
+                  "choiceText": "Inform",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-04-b",
+                  "choiceText": "Entertain",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-10-04-c",
+                  "choiceText": "Describe",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-10-05",
+              "questionText": "5. The ocean water was freezing cold and sparkling like blue diamonds under the bright sun.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-05-a",
+                  "choiceText": "Inform",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-05-b",
+                  "choiceText": "Entertain",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-10-05-c",
+                  "choiceText": "Describe",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-10-06",
+              "questionText": "6. \"Wait for me!\" shouted the turtle as he raced the rabbit. To everyone's surprise, the turtle pulled out a skateboard!",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-06-a",
+                  "choiceText": "Inform",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-06-b",
+                  "choiceText": "Entertain",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-10-06-c",
+                  "choiceText": "Describe",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-10-07",
+              "questionText": "7. A caterpillar builds a hard shell called a chrysalis. Inside, it changes into a beautiful butterfly.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-07-a",
+                  "choiceText": "Inform",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-07-b",
+                  "choiceText": "Entertain",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-10-07-c",
+                  "choiceText": "Describe",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-10-08",
+              "questionText": "8. The old bell tower made a loud, rusty CLANG that echoed through the quiet, dusty streets.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-08-a",
+                  "choiceText": "Inform",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-08-b",
+                  "choiceText": "Entertain",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-10-08-c",
+                  "choiceText": "Describe",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-10-09",
+              "questionText": "9. The dog tried to catch its own tail. He spun around so fast that he accidentally turned into a furry blurry circle!",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-09-a",
+                  "choiceText": "Inform",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-09-b",
+                  "choiceText": "Entertain",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-10-09-c",
+                  "choiceText": "Describe",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-10-10",
+              "questionText": "10. Mount Pulag is the highest peak in Luzon. It is famous for its \"Sea of Clouds\" that hikers love to see.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-10-a",
+                  "choiceText": "Inform",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-10-b",
+                  "choiceText": "Entertain",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-10-10-c",
+                  "choiceText": "Describe",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
