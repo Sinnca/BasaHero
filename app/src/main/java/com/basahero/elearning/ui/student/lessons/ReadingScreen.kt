@@ -35,7 +35,7 @@ import com.basahero.elearning.ui.common.LocalAppStrings
 // ReadingScreen — Multi-step lesson wizard
 // Steps: [Lecture] → [Reading+MiniActivity 1] → [Reading+MiniActivity 2] → Quiz
 // ─────────────────────────────────────────────────────────────────────────────
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ReadingScreen(
     lessonId: String,
@@ -421,6 +421,7 @@ private fun ReadingPartStepContent(
 }
 
 // ─── Mini Question Card (practice, not graded) ──────────────────────────────
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun MiniQuestionCard(
     questionNumber: Int,
@@ -533,6 +534,281 @@ private fun MiniQuestionCard(
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = if (isCorrect) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
+                    )
+                }
+            } else if (question.questionType == "FILL_IN") {
+                // 🚀 NEW: FILL_IN UI for MiniQuestionCard
+                val correctText = question.choices.firstOrNull { it.isCorrect }?.choiceText ?: ""
+                var textValue by remember(question.id) { mutableStateOf("") }
+
+                Column {
+                    Text(
+                        "Fill in the blank:",
+                        fontSize = if (isTablet) 14.sp else 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = textValue,
+                        onValueChange = { if (!showFeedback && !isReviewMode) textValue = it },
+                        modifier = Modifier.fillMaxWidth(),
+                        readOnly = showFeedback || isReviewMode,
+                        placeholder = { Text("Type here...") },
+                        shape = RoundedCornerShape(12.dp),
+                        singleLine = true,
+                        trailingIcon = {
+                            if (!showFeedback && !isReviewMode) {
+                                IconButton(onClick = { showFeedback = true }) {
+                                    Icon(Icons.Default.Check, "Check")
+                                }
+                            }
+                        }
+                    )
+
+                    if (showFeedback || isReviewMode) {
+                        val isMatch = textValue.trim().equals(correctText.trim(), ignoreCase = true)
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            if (isMatch || isReviewMode) "✓ Correct: $correctText" else "✗ Incorrect. The answer is: $correctText",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = if (isMatch || isReviewMode) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+            } else if (question.questionType == "OPEN_ENDED" || question.questionType == "REFLECTION") {
+                // 🚀 NEW: REFLECTION UI for MiniQuestionCard
+                var textValue by remember(question.id) { mutableStateOf("") }
+
+                Column {
+                    Text(
+                        "Share your thoughts:",
+                        fontSize = if (isTablet) 14.sp else 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = textValue,
+                        onValueChange = { if (!showFeedback && !isReviewMode) textValue = it },
+                        modifier = Modifier.fillMaxWidth().height(if (isTablet) 120.dp else 100.dp),
+                        readOnly = showFeedback || isReviewMode,
+                        placeholder = { Text("Type your thoughts here...") },
+                        shape = RoundedCornerShape(12.dp),
+                        trailingIcon = {
+                            if (!showFeedback && !isReviewMode) {
+                                IconButton(onClick = { showFeedback = true }) {
+                                    Icon(Icons.Default.Send, "Send")
+                                }
+                            }
+                        }
+                    )
+
+                    if (showFeedback || isReviewMode) {
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            "✓ Thoughts shared! Great reflection.",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
+                    }
+                }
+            } else if (question.questionType == "MATCHING") {
+                // 🚀 NEW: MATCHING UI for MiniQuestionCard
+                val half = question.choices.size / 2
+                val leftSide = remember(question.id) { question.choices.take(half) }
+                val rightSide = remember(question.id) { question.choices.drop(half) }
+                
+                var selectedLeftId by remember(question.id) { mutableStateOf<String?>(null) }
+                val matches = remember(question.id) { mutableStateMapOf<String, String>() }
+
+                if (!isReviewMode && !showFeedback) {
+                    Text(
+                        "Tap a word on the left, then its match on the right:",
+                        fontSize = if (isTablet) 14.sp else 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(Modifier.height(8.dp))
+                }
+
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        leftSide.forEach { item ->
+                            val isMatched = matches.containsKey(item.id) || showFeedback || isReviewMode
+                            val isSelected = selectedLeftId == item.id
+                            Surface(
+                                modifier = Modifier.fillMaxWidth().clickable(enabled = !isMatched) {
+                                    selectedLeftId = if (isSelected) null else item.id
+                                },
+                                shape = RoundedCornerShape(8.dp),
+                                color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else if (isMatched) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surface,
+                                border = BorderStroke(1.dp, if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
+                            ) {
+                                Row(Modifier.padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    Text(item.choiceText, fontSize = if (isTablet) 14.sp else 12.sp, modifier = Modifier.weight(1f))
+                                    if (isMatched) Icon(Icons.Default.CheckCircle, null, tint = Color(0xFF4CAF50), modifier = Modifier.size(14.dp))
+                                }
+                            }
+                        }
+                    }
+                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        rightSide.forEach { item ->
+                            val isMatched = matches.containsValue(item.id) || showFeedback || isReviewMode
+                            Surface(
+                                modifier = Modifier.fillMaxWidth().clickable(enabled = !isMatched && selectedLeftId != null) {
+                                    val leftId = selectedLeftId ?: return@clickable
+                                    matches[leftId] = item.id
+                                    selectedLeftId = null
+                                    if (matches.size == half) showFeedback = true
+                                },
+                                shape = RoundedCornerShape(8.dp),
+                                color = if (isMatched) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surface,
+                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
+                            ) {
+                                Row(Modifier.padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    Text(item.choiceText, fontSize = if (isTablet) 14.sp else 12.sp, modifier = Modifier.weight(1f))
+                                    if (isMatched) Icon(Icons.Default.CheckCircle, null, tint = Color(0xFF4CAF50), modifier = Modifier.size(14.dp))
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (showFeedback || isReviewMode) {
+                    var allCorrect = true
+                    leftSide.forEachIndexed { i, leftItem ->
+                        if (matches[leftItem.id] != rightSide[i].id) allCorrect = false
+                    }
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        if (allCorrect || isReviewMode) "✓ Correct Matches!" else "✗ Not quite. Try to match them correctly next time!",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = if (allCorrect || isReviewMode) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
+                    )
+                }
+            } else if (question.questionType == "IDENTIFICATION") {
+                // 🚀 NEW: IDENTIFICATION UI for MiniQuestionCard
+                var textValue by remember(question.id) { mutableStateOf("") }
+                val correctAnswer = question.choices.find { it.isCorrect }?.choiceText ?: ""
+
+                Column {
+                    Text(
+                        "Type your answer:",
+                        fontSize = if (isTablet) 14.sp else 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = textValue,
+                        onValueChange = { if (!showFeedback && !isReviewMode) textValue = it },
+                        modifier = Modifier.fillMaxWidth(),
+                        readOnly = showFeedback || isReviewMode,
+                        placeholder = { Text("Enter text...") },
+                        shape = RoundedCornerShape(12.dp),
+                        singleLine = true,
+                        trailingIcon = {
+                            if (!showFeedback && !isReviewMode) {
+                                IconButton(onClick = { showFeedback = true }) {
+                                    Icon(Icons.Default.Check, "Check")
+                                }
+                            }
+                        }
+                    )
+
+                    if (showFeedback || isReviewMode) {
+                        val isMatch = textValue.trim().equals(correctAnswer.trim(), ignoreCase = true)
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            if (isMatch || isReviewMode) "✓ Correct: $correctAnswer" else "✗ Incorrect. The answer is: $correctAnswer",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = if (isMatch || isReviewMode) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+            } else if (question.questionType == "HIGHLIGHT") {
+                // HIGHLIGHT logic for MiniQuestionCard
+                val selectedIds = remember(question.id) { mutableStateListOf<String>() }
+                val correctIds = remember(question.id) { question.choices.filter { it.isCorrect }.map { it.id }.toSet() }
+
+                if (!isReviewMode) {
+                    Text(
+                        "Tap the correct words/sentences to highlight them:",
+                        fontSize = if (isTablet) 14.sp else 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(Modifier.height(8.dp))
+                }
+
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    question.choices.forEach { choice ->
+                        val isSelected = if (isReviewMode) choice.isCorrect else selectedIds.contains(choice.id)
+                        val isCorrect = choice.isCorrect
+                        
+                        val bgColor = when {
+                            isReviewMode && isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
+                            !showFeedback -> if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
+                            isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
+                            isSelected && !isCorrect -> MaterialTheme.colorScheme.errorContainer
+                            else -> MaterialTheme.colorScheme.surface
+                        }
+
+                        Surface(
+                            modifier = Modifier
+                                .clickable(enabled = !showFeedback && !isReviewMode) {
+                                    if (selectedIds.contains(choice.id)) {
+                                        selectedIds.remove(choice.id)
+                                    } else {
+                                        selectedIds.add(choice.id)
+                                    }
+                                },
+                            shape = RoundedCornerShape(8.dp),
+                            color = bgColor,
+                            border = BorderStroke(
+                                1.dp,
+                                if (isSelected && !showFeedback) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                            )
+                        ) {
+                            Text(
+                                choice.choiceText,
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                                fontSize = if (isTablet) 16.sp else 14.sp
+                            )
+                        }
+                    }
+                }
+
+                if (!isReviewMode && !showFeedback) {
+                    Spacer(Modifier.height(12.dp))
+                    Button(
+                        onClick = { showFeedback = true },
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = selectedIds.isNotEmpty()
+                    ) {
+                        Text("Check Answer")
+                    }
+                }
+
+                if (showFeedback) {
+                    val currentSelectedSet = selectedIds.toSet()
+                    val isFullyCorrect = currentSelectedSet == correctIds
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        if (isFullyCorrect) "✓ Correct!" else "✗ Not quite. The correct highlights are shown in green.",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = if (isFullyCorrect) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
                     )
                 }
             } else {
@@ -824,6 +1100,7 @@ private fun ActivityResultScreen(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun ActivityQuestionCard(
     questionNumber: Int,
@@ -959,6 +1236,225 @@ private fun ActivityQuestionCard(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.tertiary
                     )
+                }
+            } else if (question.questionType == "HIGHLIGHT") {
+                // HIGHLIGHT logic for ActivityQuestionCard
+                val selectedIds = remember(question.id) { mutableStateListOf<String>() }
+                val correctIds = remember(question.id) { question.choices.filter { it.isCorrect }.map { it.id }.toSet() }
+
+                if (!isReviewMode) {
+                    Text(
+                        "Tap the correct words/sentences to highlight them:",
+                        fontSize = if (isTablet) 14.sp else 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(Modifier.height(8.dp))
+                }
+
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    question.choices.forEach { choice ->
+                        val isSelected = if (isReviewMode) choice.isCorrect else selectedIds.contains(choice.id)
+                        
+                        val bgColor = when {
+                            isReviewMode && choice.isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
+                            isSelected -> MaterialTheme.colorScheme.primaryContainer
+                            else -> MaterialTheme.colorScheme.surface
+                        }
+
+                        Surface(
+                            modifier = Modifier
+                                .clickable(enabled = enabled) {
+                                    if (selectedIds.contains(choice.id)) {
+                                        selectedIds.remove(choice.id)
+                                    } else {
+                                        selectedIds.add(choice.id)
+                                    }
+                                    
+                                    // Validation: Correct if ALL correct items selected AND NO incorrect items selected
+                                    val currentSelectedSet = selectedIds.toSet()
+                                    val isMatch = currentSelectedSet == correctIds
+                                    onAnswered(isMatch)
+                                },
+                            shape = RoundedCornerShape(8.dp),
+                            color = bgColor,
+                            border = BorderStroke(
+                                1.dp,
+                                if (isSelected) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                            )
+                        ) {
+                            Text(
+                                choice.choiceText,
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                                fontSize = if (isTablet) 16.sp else 14.sp
+                            )
+                        }
+                    }
+                }
+                
+                if (isReviewMode) {
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        "✓ Correct Highlights",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
+                }
+            } else if (question.questionType == "MATCHING") {
+                // 🚀 NEW: MATCHING UI (Column A | Column B)
+                val half = question.choices.size / 2
+                val leftSide = remember(question.id) { question.choices.take(half) }
+                val rightSide = remember(question.id) { question.choices.drop(half) }
+                
+                var selectedLeftId by remember(question.id) { mutableStateOf<String?>(null) }
+                val matches = remember(question.id) { mutableStateMapOf<String, String>() } // LeftId -> RightId
+
+                if (!isReviewMode) {
+                    Text(
+                        "Tap a word on the left, then its match on the right:",
+                        fontSize = if (isTablet) 14.sp else 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(Modifier.height(12.dp))
+                }
+
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    // Column A
+                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        leftSide.forEach { item ->
+                            val isMatched = matches.containsKey(item.id) || isReviewMode
+                            val isSelected = selectedLeftId == item.id
+                            
+                            Surface(
+                                modifier = Modifier.fillMaxWidth().clickable(enabled = enabled && !isMatched) {
+                                    selectedLeftId = if (isSelected) null else item.id
+                                },
+                                shape = RoundedCornerShape(8.dp),
+                                color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else if (isMatched) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surface,
+                                border = BorderStroke(1.dp, if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
+                            ) {
+                                Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    Text(item.choiceText, fontSize = if (isTablet) 15.sp else 13.sp, modifier = Modifier.weight(1f))
+                                    if (isMatched) Icon(Icons.Default.CheckCircle, null, tint = Color(0xFF4CAF50), modifier = Modifier.size(16.dp))
+                                }
+                            }
+                        }
+                    }
+
+                    // Column B
+                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        rightSide.forEach { item ->
+                            val isMatched = matches.containsValue(item.id) || isReviewMode
+                            val isSelected = false // We don't select right side alone
+
+                            Surface(
+                                modifier = Modifier.fillMaxWidth().clickable(enabled = enabled && !isMatched && selectedLeftId != null) {
+                                    val leftId = selectedLeftId ?: return@clickable
+                                    matches[leftId] = item.id
+                                    selectedLeftId = null
+                                    
+                                    // Validation
+                                    if (matches.size == half) {
+                                        var allCorrect = true
+                                        leftSide.forEachIndexed { i, leftItem ->
+                                            val matchedRightId = matches[leftItem.id]
+                                            val expectedRightId = rightSide[i].id
+                                            if (matchedRightId != expectedRightId) allCorrect = false
+                                        }
+                                        onAnswered(allCorrect)
+                                    }
+                                },
+                                shape = RoundedCornerShape(8.dp),
+                                color = if (isMatched) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surface,
+                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
+                            ) {
+                                Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    Text(item.choiceText, fontSize = if (isTablet) 15.sp else 13.sp, modifier = Modifier.weight(1f))
+                                    if (isMatched) Icon(Icons.Default.CheckCircle, null, tint = Color(0xFF4CAF50), modifier = Modifier.size(16.dp))
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                if (matches.isNotEmpty() && !isReviewMode) {
+                    TextButton(onClick = { matches.clear(); onAnswered(false) }, modifier = Modifier.padding(top = 8.dp)) {
+                        Text("Reset Matches", color = MaterialTheme.colorScheme.error)
+                    }
+                }
+            } else if (question.questionType == "OPEN_ENDED" || question.questionType == "REFLECTION") {
+                // 🚀 NEW: OPEN_ENDED UI (Free Text)
+                var textValue by remember(question.id) { mutableStateOf("") }
+
+                Column {
+                    Text(
+                        "Share your thoughts below:",
+                        fontSize = if (isTablet) 14.sp else 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = textValue,
+                        onValueChange = {
+                            if (enabled) {
+                                textValue = it
+                                onAnswered(it.length >= 5) // Valid if they typed something meaningful
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth().height(if (isTablet) 150.dp else 120.dp),
+                        readOnly = !enabled,
+                        placeholder = { Text("Type your answer here...") },
+                        shape = RoundedCornerShape(16.dp),
+                        textStyle = LocalTextStyle.current.copy(fontSize = 16.sp)
+                    )
+                }
+            } else if (question.questionType == "IDENTIFICATION") {
+                // 🚀 NEW: IDENTIFICATION UI (Type the exact answer)
+                var textValue by remember(question.id) { mutableStateOf("") }
+                val correctAnswer = question.choices.find { it.isCorrect }?.choiceText ?: ""
+
+                Column {
+                    Text(
+                        "Type your answer carefully:",
+                        fontSize = if (isTablet) 14.sp else 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = textValue,
+                        onValueChange = {
+                            if (enabled) {
+                                textValue = it
+                                // Validation: Check if it matches the correct answer (case-insensitive)
+                                onAnswered(it.trim().equals(correctAnswer.trim(), ignoreCase = true))
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        readOnly = !enabled,
+                        placeholder = { Text("Enter text...") },
+                        shape = RoundedCornerShape(12.dp),
+                        singleLine = true,
+                        textStyle = LocalTextStyle.current.copy(fontSize = 16.sp)
+                    )
+
+                    if (isReviewMode) {
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            "✓ Correct Answer: $correctAnswer",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
+                    }
                 }
             } else {
                 // MCQ choices

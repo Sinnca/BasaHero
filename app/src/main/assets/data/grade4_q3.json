@@ -1,0 +1,3555 @@
+{
+  "quarter": {
+    "id": "q-gr4-q3",
+    "gradeLevelId": 4,
+    "quarterNumber": 3,
+    "title": "Quarter 3",
+    "isActive": true
+  },
+  "lessons": [
+    {
+      "id": "l-gr4-q3-01",
+      "orderIndex": 1,
+      "competency": "Analyzing sound devices — assonance",
+      "title": "Lesson 1: Analyzing Sound Devices — Assonance",
+      "lectureText": "What is assonance\nAssonance (pronounced: ah-so-nans) is when a writer repeats the same vowel sound in a group of words that are close together.\n\nRemember your vowels? A, E, I, O, U.\n\nWhen these vowels make the same sound inside words, it creates a \"rhyme\" that isn't always at the end of the line. It makes the sentence smooth and catchy.\n\nExample: \"The rain in Spain stays mainly in the plain.\" (The \"ey\" sound repeats).\n\nExample: \"Go slow over the road.\" (The \"ow\" sound repeats).\n\nIt’s about the sound, not just the letters! \"Blue\" and \"shoe\" have assonance because they both make the \"oo\" sound.",
+      "parts": [
+        {
+          "passageText": "MINI ACTIVITY\nTry this mini activity to help understand assonance more\nDirections: Highlight the words in each sentence that have the same vowel sound.\n\n1. The rain fell on the gate. (Which sound matches? The \"ey\" sound!)\n2. I see a bee near the tree. (Which sound matches? The \"ee\" sound!)\n3. The goat wore a coat. (Which sound matches? The \"ow\" sound!)\n4. Fly high in the sky. (Which sound matches? The \"ay\" sound!)\n5. The blue bird flew to the zoo. (Which sound matches? The \"oo\" sound!)\n6. Do not hide on the slide. (Which sound matches? The \"ay\" sound!)",
+          "highlighted_words": [
+            "assonance",
+            "vowel",
+            "sound"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-01-01",
+              "questionText": "Highlight the words with the 'ey' sound: The rain fell on the gate.",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-01-a",
+                  "choiceText": "The",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-01-b",
+                  "choiceText": "rain",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-01-c",
+                  "choiceText": "fell",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-01-01-d",
+                  "choiceText": "on",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-01-01-e",
+                  "choiceText": "the",
+                  "isCorrect": false,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "mq-01-01-f",
+                  "choiceText": "gate.",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                }
+              ]
+            },
+            {
+              "id": "mq-01-02",
+              "questionText": "Highlight the words with the 'ee' sound: I see a bee near the tree.",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-02-a",
+                  "choiceText": "I",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-02-b",
+                  "choiceText": "see",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-02-c",
+                  "choiceText": "a",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-01-02-d",
+                  "choiceText": "bee",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-01-02-e",
+                  "choiceText": "near",
+                  "isCorrect": false,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "mq-01-02-f",
+                  "choiceText": "the",
+                  "isCorrect": false,
+                  "orderIndex": 6
+                },
+                {
+                  "id": "mq-01-02-g",
+                  "choiceText": "tree.",
+                  "isCorrect": true,
+                  "orderIndex": 7
+                }
+              ]
+            },
+            {
+              "id": "mq-01-03",
+              "questionText": "Highlight the words with the 'ow' sound: The goat wore a coat.",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-03-a",
+                  "choiceText": "The",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-03-b",
+                  "choiceText": "goat",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-03-c",
+                  "choiceText": "wore",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-01-03-d",
+                  "choiceText": "a",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-01-03-e",
+                  "choiceText": "coat.",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                }
+              ]
+            },
+            {
+              "id": "mq-01-04",
+              "questionText": "Highlight the words with the 'ay' sound: Fly high in the sky.",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-04-a",
+                  "choiceText": "Fly",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-04-b",
+                  "choiceText": "high",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-04-c",
+                  "choiceText": "in",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-01-04-d",
+                  "choiceText": "the",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-01-04-e",
+                  "choiceText": "sky.",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                }
+              ]
+            },
+            {
+              "id": "mq-01-05",
+              "questionText": "Highlight the words with the 'oo' sound: The blue bird flew to the zoo.",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-01-05-a",
+                  "choiceText": "The",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-01-05-b",
+                  "choiceText": "blue",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-01-05-c",
+                  "choiceText": "bird",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-01-05-d",
+                  "choiceText": "flew",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-01-05-e",
+                  "choiceText": "to",
+                  "isCorrect": false,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "mq-01-05-f",
+                  "choiceText": "the",
+                  "isCorrect": false,
+                  "orderIndex": 6
+                },
+                {
+                  "id": "mq-01-05-g",
+                  "choiceText": "zoo.",
+                  "isCorrect": true,
+                  "orderIndex": 7
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Great job! Now that you've finished the warm-up, you are ready for the Activity right now. Have Fun!\n\nL1 ACTIVITY\n\"The Final Goodbye\"\nThe room was filled with the heavy scent of lilies and melting waxed candles. My Lola Nena sat in a casket of dark wood, looking peaceful, as if she were just taking a long nap. Outside, the gray rain began to fall on the pavement.\nI sat on a wooden bench, watching my Titos and Titas share stories. We ate sopas and drank warm coffee to stay awake during the lamay (wake). Even though everyone was sad, there was a lot of love.\n\"Lola is in a better place now,\" Papa whispered. I looked at her one last time. We followed the hearse to the cemetery. The grass was green and deep near the trees. We said our last prayers, and I blew a kiss to the sky. I knew I would miss her, but her kindness would stay in my heart forever.\n\nDirections: Choose the best answer for each question based on the story \"The Final Goodbye.\"\n\nPart A: Story Elements",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-01-01",
+              "questionText": "Who is the character being remembered in the story?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-01-a",
+                  "choiceText": "a. Lito",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-01-b",
+                  "choiceText": "b. Lola Nena",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-01-c",
+                  "choiceText": "c. Tita Maria",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-01-02",
+              "questionText": "Where does the first part of the story take place?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-02-a",
+                  "choiceText": "a. At a birthday party",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-02-b",
+                  "choiceText": "b. At a school",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-02-c",
+                  "choiceText": "c. At a lamay (wake)",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-01-03",
+              "questionText": "What was the weather like outside during the funeral?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-03-a",
+                  "choiceText": "a. Hot and sunny",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-03-b",
+                  "choiceText": "b. Rainy and gray",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-03-c",
+                  "choiceText": "c. Very windy",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-01-04",
+              "questionText": "What did the family eat and drink to stay awake?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-04-a",
+                  "choiceText": "a. Pizza and soda",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-04-b",
+                  "choiceText": "b. Sopas and coffee",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-04-c",
+                  "choiceText": "c. Cake and juice",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-01-05",
+              "questionText": "How did the story end?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-05-a",
+                  "choiceText": "a. They went to the beach.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-05-b",
+                  "choiceText": "b. They said prayers at the cemetery.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-05-c",
+                  "choiceText": "c. Lola woke up.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-01-06",
+              "questionText": "Part B: Sound Devices (Assonance)\n6. In the phrase \"gray rain falls,\" which vowel sound is repeating?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-06-a",
+                  "choiceText": "a. The “ee” sound",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-06-b",
+                  "choiceText": "b. The “ey” sound",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-06-c",
+                  "choiceText": "c. The “ow” sound",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-01-07",
+              "questionText": "Which sentence from the story uses Assonance?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-07-a",
+                  "choiceText": "a. \"I sat on a wooden bench.\"",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-07-b",
+                  "choiceText": "b. \"The grass was green and deep.\"",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-07-c",
+                  "choiceText": "c. \"Papa whispered.\"",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-01-08",
+              "questionText": "In the words \"sleep\" and \"peece,\" what is the repeating sound?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-08-a",
+                  "choiceText": "a. The \"ee\" sound",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-08-b",
+                  "choiceText": "b. The \"ay\" sound",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-08-c",
+                  "choiceText": "c. The \"ah\" sound",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-01-09",
+              "questionText": "Why do authors use Assonance?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-09-a",
+                  "choiceText": "a. To make the story boring.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-09-b",
+                  "choiceText": "b. To make the words sound musical and smooth.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-09-c",
+                  "choiceText": "c. To list facts about science.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-01-10",
+              "questionText": "\"WhIte lIght brIghtens the nIght.\" This is an example of:",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-01-10-a",
+                  "choiceText": "a. Informing",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-01-10-b",
+                  "choiceText": "b. Assonance",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-01-10-c",
+                  "choiceText": "c. Instructions",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q3-02",
+      "orderIndex": 2,
+      "competency": "Analyzing sound devices - consonance",
+      "title": "Lesson 2: Analyzing Sound Devices - Consonance",
+      "lectureText": "What is Consonance?\nConsonance (pronounced: kon-so-nans) is when a writer repeats the same consonant sound in a group of words that are close together.\nRemember your consonants? They are all the letters that are NOT vowels (like B, C, D, F, G, K, L, M, N, P, S, T, R).\nUnlike alliteration (which only repeats sounds at the very beginning of words), consonance loves to hide sounds at the end or in the middle of words!\n\nExample 1: \"The big frog sat on a log.\" (The \"g\" sound at the end repeats).\nExample 2: \"Mike likes his new bike.\" (The \"k\" sound repeats).\nExample 3: \"Pitter patter.\" (The \"t\" sound in the middle repeats).\n\nJust like before, focus on the sound your mouth makes! If the tail ends of the words make the same clicking, popping, or hissing sound, you found Consonance!",
+      "parts": [
+        {
+          "passageText": "MINI ACTIVITY\nTry this mini activity to help understand consonance more\nDirections: Highlight the two words in each sentence that share the same consonant sound at the end or in the middle.\n\n1. We will fill the big hall. (Which sound matches? The \"ll\" sound!)\n2. The duck said quack by the rock. (Which sound matches? The \"k\" sound!)\n3. He is the best guest at the party. (Which sound matches? The \"st\" sound!)\n4. Please pass the glass of water. (Which sound matches? The \"s\" sound!)\n5. The clock goes tick tock. (Which sound matches? The \"k\" sound!)\n6. Sing a strong song for the crowd. (Which sound matches? The \"ng\" sound!)",
+          "highlighted_words": [
+            "Consonance",
+            "consonant"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-02-01",
+              "questionText": "Highlight the words with the 'll' sound: We will fill the big hall.",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-02-01-a",
+                  "choiceText": "We",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-02-01-b",
+                  "choiceText": "will",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-02-01-c",
+                  "choiceText": "fill",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-02-01-d",
+                  "choiceText": "the",
+                  "isCorrect": false,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-02-01-e",
+                  "choiceText": "big",
+                  "isCorrect": false,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "mq-02-01-f",
+                  "choiceText": "hall.",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                }
+              ]
+            },
+            {
+              "id": "mq-02-02",
+              "questionText": "Highlight the words with the 'k' sound: The duck said quack by the rock.",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-02-02-a",
+                  "choiceText": "The",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-02-02-b",
+                  "choiceText": "duck",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-02-02-c",
+                  "choiceText": "said",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-02-02-d",
+                  "choiceText": "quack",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-02-02-e",
+                  "choiceText": "by",
+                  "isCorrect": false,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "mq-02-02-f",
+                  "choiceText": "the",
+                  "isCorrect": false,
+                  "orderIndex": 6
+                },
+                {
+                  "id": "mq-02-02-g",
+                  "choiceText": "rock.",
+                  "isCorrect": true,
+                  "orderIndex": 7
+                }
+              ]
+            },
+            {
+              "id": "mq-02-03",
+              "questionText": "Highlight the words with the 'st' sound: He is the best guest at the party.",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-02-03-a",
+                  "choiceText": "He",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-02-03-b",
+                  "choiceText": "is",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-02-03-c",
+                  "choiceText": "the",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-02-03-d",
+                  "choiceText": "best",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-02-03-e",
+                  "choiceText": "guest",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "mq-02-03-f",
+                  "choiceText": "at",
+                  "isCorrect": false,
+                  "orderIndex": 6
+                }
+              ]
+            },
+            {
+              "id": "mq-02-04",
+              "questionText": "Highlight the words with the 'ck' sound: The clock goes tick tock.",
+              "questionType": "HIGHLIGHT",
+              "choices": [
+                {
+                  "id": "mq-02-04-a",
+                  "choiceText": "The",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-02-04-b",
+                  "choiceText": "clock",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-02-04-c",
+                  "choiceText": "goes",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-02-04-d",
+                  "choiceText": "tick",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-02-04-e",
+                  "choiceText": "tock.",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Great job! Now that you've finished the warm-up, you are ready for the Activity right now. Have Fun!\n\nL2 ACTIVITY\n\"The Big Green Meeting\"\nOur school gym was full of happy kids for the Big Green Meeting. Everyone came to talk about saving the ocean. A big sign hung on the wide board at the front.\nMy friend Leo was the best guest speaker today. He walked up to the stage. His shoes went click clock on the wooden steps. He looked at the crowd and gave a big smile.\n\"We must keep our ocean clean to help the sea turtles!\" Leo said. His brave voice sounded like a strong song that could fill the hall.\nWhen he finished, everyone clapped and cheered. The principal even gave Leo a shiny green medal. It was a great day, and we all promised to help keep the Earth clean.\n\nDirections: Choose the letter of the correct answer.\n\nPart A: The Story (Literal)",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-02-01",
+              "questionText": "1. Where did the \"Big Green Meeting\" take place?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-02-01-a",
+                  "choiceText": "a. In the school garden",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-02-01-b",
+                  "choiceText": "b. In the school gym",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-02-01-c",
+                  "choiceText": "c. At the beach",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-02-02",
+              "questionText": "2. What was the main reason for the meeting?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-02-02-a",
+                  "choiceText": "a. To talk about saving the ocean",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-02-02-b",
+                  "choiceText": "b. To learn how to play basketball",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-02-02-c",
+                  "choiceText": "c. To eat lunch together",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-02-03",
+              "questionText": "3. What was hanging at the front of the room?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-02-03-a",
+                  "choiceText": "a. A bunch of balloons",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-02-03-b",
+                  "choiceText": "b. A big sign on a board",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-02-03-c",
+                  "choiceText": "c. A clock",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-02-04",
+              "questionText": "4. Who was the speaker that gave a brave talk?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-02-04-a",
+                  "choiceText": "a. The principal",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-02-04-b",
+                  "choiceText": "b. Leo",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-02-04-c",
+                  "choiceText": "c. A sea turtle",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-02-05",
+              "questionText": "5. What prize did the speaker receive at the end?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-02-05-a",
+                  "choiceText": "a. A shiny green medal",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-02-05-b",
+                  "choiceText": "b. A new pair of shoes",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-02-05-c",
+                  "choiceText": "c. A golden trophy",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-02-06",
+              "questionText": "Part B: The Sound Device (Consonance)\n6. In the words \"best guest,\" what is the repeating consonant sound at the end?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-02-06-a",
+                  "choiceText": "a. The \"b\" and \"g\" sounds",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-02-06-b",
+                  "choiceText": "b. The \"st\" sound",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-02-06-c",
+                  "choiceText": "c. The \"e\" sound",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-02-07",
+              "questionText": "7. Which pair of words from the story shows Consonance (matching end sounds)?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-02-07-a",
+                  "choiceText": "a. school / gym",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-02-07-b",
+                  "choiceText": "b. strong / song",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-02-07-c",
+                  "choiceText": "c. green / medal",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-02-08",
+              "questionText": "8. When Leo's shoes went \"click clock,\" what is the matching consonant sound at the end?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-02-08-a",
+                  "choiceText": "a. The \"cl\" sound",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-02-08-b",
+                  "choiceText": "b. The \"i\" and \"o\" sounds",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-02-08-c",
+                  "choiceText": "c. The \"ck\" sound",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-02-09",
+              "questionText": "9. In the sentence \"It will fiLL the haLL,\" which sound repeats?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-02-09-a",
+                  "choiceText": "a. The \"f\" and \"h\" sounds",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-02-09-b",
+                  "choiceText": "b. The \"l\" sound",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-02-09-c",
+                  "choiceText": "c. The \"a\" and \"i\" sounds",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-02-10",
+              "questionText": "10. What is Consonance?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-02-10-a",
+                  "choiceText": "a. When words share the same vowel sounds like \"A-E-I-O-U.\"",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-02-10-b",
+                  "choiceText": "b. When words share the same consonant sounds (like \"ck\" or \"st\").",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-02-10-c",
+                  "choiceText": "c. When a story is very long and boring.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q3-03",
+      "orderIndex": 3,
+      "competency": "Analyzing figures of speech — metaphor",
+      "title": "Lesson 3: Analyzing Figures of Speech — Metaphor",
+      "lectureText": "What is a Metaphor?\nA Metaphor is a figure of speech where we say one thing is another thing to show they share a special quality.\nIt is different from a simile because it does not use the words \"like\" or \"as.\" Instead of saying someone is like a star, a metaphor says that person is a star!\n\nExample 1: \"The snow is a white blanket.\" (The snow isn't really a blanket, but it covers the ground just like one.)\nExample 2: \"My teacher is a superhero.\" (She doesn't wear a cape, but she is very brave and helps others.)\n\nWhy use it? Metaphors help us explain big feelings or complicated ideas by comparing them to things we already know.\n\nTry to answer the mini activity below to understand metaphors more.",
+      "parts": [
+        {
+          "passageText": "MINI ACTIVITY\nMatching Metaphors (6 Items)\nDirections: Look at the metaphors below. Can you figure out what they are trying to say?",
+          "highlighted_words": [
+            "Metaphor",
+            "figure of speech"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-03-01",
+              "questionText": "Directions: Match the metaphor in Column A to its meaning in Column B.",
+              "questionType": "MATCHING",
+              "choices": [
+                {
+                  "id": "mq-03-01-l1",
+                  "choiceText": "\"The classroom was a zoo.\"",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-03-01-l2",
+                  "choiceText": "\"The sun is a golden coin.\"",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-03-01-l3",
+                  "choiceText": "\"My baby sister is a little flower.\"",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-03-01-l4",
+                  "choiceText": "\"Laughter is the best medicine.\"",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-03-01-l5",
+                  "choiceText": "\"The computer is the brain.\"",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "mq-03-01-l6",
+                  "choiceText": "\"His stomach is a bottomless pit.\"",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                },
+                {
+                  "id": "mq-03-01-r1",
+                  "choiceText": "Noisy",
+                  "isCorrect": true,
+                  "orderIndex": 7
+                },
+                {
+                  "id": "mq-03-01-r2",
+                  "choiceText": "Round and shiny",
+                  "isCorrect": true,
+                  "orderIndex": 8
+                },
+                {
+                  "id": "mq-03-01-r3",
+                  "choiceText": "Beautiful and delicate",
+                  "isCorrect": true,
+                  "orderIndex": 9
+                },
+                {
+                  "id": "mq-03-01-r4",
+                  "choiceText": "Feel better",
+                  "isCorrect": true,
+                  "orderIndex": 10
+                },
+                {
+                  "id": "mq-03-01-r5",
+                  "choiceText": "Very smart",
+                  "isCorrect": true,
+                  "orderIndex": 11
+                },
+                {
+                  "id": "mq-03-01-r6",
+                  "choiceText": "Very hungry",
+                  "isCorrect": true,
+                  "orderIndex": 12
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Great job! Now that you've finished the warm-up, you are ready for the Activity right now. Have Fun!\n\nL3 ACTIVITY\nDirections: Use the story \"A Light in the Garden\" to answer these questions. Think about what the author really means when using these metaphors.\n\n\"A Light in the Garden\"\nToday, we say goodbye to my Grandpa. To me, Grandpa was a sturdy old narra tree. Whenever I was scared or sad, I could sit in his shadow and feel safe. He was always there, strong and tall, protecting our family from the storms of life.\nGrandpa's hands were rough tools, worn out from years of planting flowers and fixing my broken toys. He always told me that \"Life is a long road with many turns,\" and he helped me find my way when I was lost.\nEven though he is gone, Grandpa is a bright star in my heart. When I don’t know what to do, I will look at the lessons he taught me. He will always be the light that shows me the right way to go. Goodbye, Grandpa. Thank you for being my garden.",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-03-01",
+              "questionText": "1. When Marco says Grandpa was a \"sturdy old narra tree,\" he means Grandpa was:",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-03-01-a",
+                  "choiceText": "a. Made of wood and leaves",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-03-01-b",
+                  "choiceText": "b. Strong, reliable, and protective",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-03-01-c",
+                  "choiceText": "c. Very tall and green",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-03-02",
+              "questionText": "2. What does it mean that Marco felt safe in Grandpa's \"shadow\"?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-03-02-a",
+                  "choiceText": "a. It was always dark around Grandpa.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-03-02-b",
+                  "choiceText": "b. Grandpa liked to stand in the sun.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-03-02-c",
+                  "choiceText": "c. Grandpa provided comfort and protection.",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-03-03",
+              "questionText": "3. The author says Grandpa's hands were \"rough tools.\" This suggests that:",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-03-03-a",
+                  "choiceText": "a. Grandpa worked very hard with his hands.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-03-03-b",
+                  "choiceText": "b. Grandpa’s hands were made of metal.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-03-03-c",
+                  "choiceText": "c. Grandpa didn't like to wash his hands.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-03-04",
+              "questionText": "4. When Grandpa says, \"Life is a long road,\" what is he trying to teach Marco?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-03-04-a",
+                  "choiceText": "a. You have to walk everywhere you go.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-03-04-b",
+                  "choiceText": "b. Life is a journey with many experiences and changes.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-03-04-c",
+                  "choiceText": "c. Roads in the Philippines are very long.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-03-05",
+              "questionText": "5. Marco says Grandpa is a \"bright star\" in his heart. This means:",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-03-05-a",
+                  "choiceText": "a. Grandpa has turned into a star in space.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-03-05-b",
+                  "choiceText": "b. Grandpa’s memory will guide Marco and show him the way.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-03-05-c",
+                  "choiceText": "c. Grandpa was very shiny.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-03-06",
+              "questionText": "6. If Grandpa was a \"Bright Star,\" Marco would feel ______ when thinking of him.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-03-06-a",
+                  "choiceText": "a. Confused",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-03-06-b",
+                  "choiceText": "b. Guided and hopeful",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-03-06-c",
+                  "choiceText": "c. Cold",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-03-07",
+              "questionText": "7. Why did Marco call his Grandpa \"the light\" at the end of the story?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-03-07-a",
+                  "choiceText": "a. Because Grandpa liked to use flashlights.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-03-07-b",
+                  "choiceText": "b. Because Grandpa’s love helps him see clearly during sad times.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-03-07-c",
+                  "choiceText": "c. Because the room was too dark.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-03-08",
+              "questionText": "8. Marco calls Grandpa his \"garden.\" This metaphor implies that Grandpa:",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-03-08-a",
+                  "choiceText": "a. Was a place where Marco could grow and feel happy.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-03-08-b",
+                  "choiceText": "b. Only liked to eat vegetables.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-03-08-c",
+                  "choiceText": "c. Had a lot of dirt on him.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-03-09",
+              "questionText": "9. In the story, \"storms of life\" most likely means:",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-03-09-a",
+                  "choiceText": "a. Heavy rain and thunder in the province.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-03-09-b",
+                  "choiceText": "b. Hard times or problems that families face.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-03-09-c",
+                  "choiceText": "c. Going on a boat during a typhoon.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-03-10",
+              "questionText": "10. Overall, why did the author use so many metaphors in the story?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-03-10-a",
+                  "choiceText": "a. To make the story more confusing for the kids.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-03-10-b",
+                  "choiceText": "b. To show how much Grandpa meant by comparing him to big, important things.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-03-10-c",
+                  "choiceText": "c. Because he forgot Grandpa’s real name.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q3-04",
+      "orderIndex": 4,
+      "competency": "Sequencing",
+      "title": "Lesson 4: Sequencing",
+      "lectureText": "What is Sequencing?\nSequencing is putting events in the order they happened. Imagine if you tried to put your shoes on before your socks, it wouldn’t work! Stories are the same way.\n\nTo help us find the sequence, we look for Signal Words:\nBeginning: First, To start, Once upon a time.\nMiddle: Next, Then, After that, Later.\nEnd: Finally, Lastly, In the end.\n\nSequencing helps us understand how a story moves from the start to the finish. It helps us follow directions and tell better stories to our friends!\n\nTry to answer the mini activity below to understand sequencing more.",
+      "parts": [
+        {
+          "passageText": "MINI ACTIVITY\nDirections: These 6 events are mixed up! Put them in the correct order of a typical school morning.",
+          "highlighted_words": [
+            "Sequencing",
+            "Signal Words"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-04-01",
+              "questionText": "Arrange the morning routine in the correct order:",
+              "questionType": "SEQUENCING",
+              "choices": [
+                {
+                  "id": "mq-04-01-a",
+                  "choiceText": "My alarm clock rings and I wake up.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-04-01-b",
+                  "choiceText": "I brush my teeth and wash my face.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-04-01-c",
+                  "choiceText": "I eat my breakfast of fried rice and egg.",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-04-01-d",
+                  "choiceText": "I put on my clean school uniform.",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-04-01-e",
+                  "choiceText": "I grab my bag and say goodbye to my parents.",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "mq-04-01-f",
+                  "choiceText": "I walk to school or ride the jeepney.",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Great job! Now that you've finished the warm-up, you are ready for the Activity right now. Have Fun!\n\nL4 ACTIVITY\n\"A Long Goodbye for Lolo\"\nWhen my Lolo passed away, our house became very busy. First, my parents called the funeral home to help bring Lolo to the chapel. Next, we set up the lamay (the wake). We put out chairs and prepared a big pot of sopas and bread for the guests who came to visit.\nAfter a few days of sharing stories and prayers, it was time for the pasiyam or the nine days of prayer. We sat together every night to remember Lolo’s kindness. Then, on the morning of the burial, we had a final mass at the church.\nThe most important part happened next. As we walked to the cemetery, my cousins and I were lifted up to pass over Lolo’s casket. Mama said this \"pagpag\" tradition was to make sure we didn't feel heavy or scared. Finally, we reached the grave. We watched as Lolo was laid to rest and everyone threw white flowers into the ground to say their last goodbye.\n\nDirections: Based on the story \"A Long Goodbye for Lolo,\" answer the following questions.",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-04-01",
+              "questionText": "Part A: Sequencing 6 Events\nArrange the events in the order they happened in the story:",
+              "questionType": "SEQUENCING",
+              "choices": [
+                {
+                  "id": "aq-04-01-a",
+                  "choiceText": "Lolo is brought to the funeral home/chapel.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-04-01-b",
+                  "choiceText": "The family prepares sopas for the guests at the wake.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-04-01-c",
+                  "choiceText": "The family holds a final mass at the church.",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "aq-04-01-d",
+                  "choiceText": "The family walks to the cemetery together.",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "aq-04-01-e",
+                  "choiceText": "The children are lifted over the casket for the tradition.",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "aq-04-01-f",
+                  "choiceText": "Lolo is laid to rest and flowers are thrown into the grave.",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                }
+              ]
+            },
+            {
+              "id": "aq-04-07",
+              "questionText": "Part B: Multiple Choice (Literal)\n7. What happened immediately after Lolo was brought to the chapel?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-04-07-a",
+                  "choiceText": "a. They went to the cemetery.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-04-07-b",
+                  "choiceText": "b. They set up the wake (lamay) and prepared food.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-04-07-c",
+                  "choiceText": "c. They threw flowers into the grave.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-04-08",
+              "questionText": "8. When did the \"pagpag\" tradition (lifting kids over the casket) happen?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-04-08-a",
+                  "choiceText": "a. Before the wake started.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-04-08-b",
+                  "choiceText": "b. During the walk to the cemetery.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-04-08-c",
+                  "choiceText": "c. After Lolo was already buried.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-04-09",
+              "questionText": "9. Which signal word tells us that the story is ending?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-04-09-a",
+                  "choiceText": "a. First",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-04-09-b",
+                  "choiceText": "b. Next",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-04-09-c",
+                  "choiceText": "c. Finally",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-04-10",
+              "questionText": "10. What did the family do every night for nine days before the burial?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-04-10-a",
+                  "choiceText": "a. They went to the beach.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-04-10-b",
+                  "choiceText": "b. They held the pasiyam (nine days of prayer).",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-04-10-c",
+                  "choiceText": "c. They stayed at school.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q3-05",
+      "orderIndex": 5,
+      "competency": "Identifying text type(recount)",
+      "title": "Lesson 5: Identifying Text Type (Recount)",
+      "lectureText": "What is a Recount?\nA Recount is a type of text that retells events in the order they happened. Its main goal is to inform or entertain the reader by sharing a real-life experience.\n\nWhen you tell your mom what you did at school, or when you tell a friend about a party you went to, you are giving a Recount.\n\nThe 3 Parts of a Recount\nTo make a Recount easy to read, we build it like a house with three floors:\n\n1. The Beginning\nThis is where you tell the reader the \"Big 3\" details so they aren't confused: Who was there? Where did it happen? When did it happen?\nExample: \"Last Sunday (When), my family (Who) went to the park (Where).\"\n\n2. The Middle\nThis is the main part of your story. You list what happened one after the other. To keep things in order, we use words like: First, Next, Then, After that.\nExample: \"First, we ate lunch. Next, we played tag.\"\n\n3. The Ending\nThis is how you wrap everything up. You can say how the day ended or how you felt about it.\nExample: \"Finally, we went home. I was tired but very happy!\"\n\nQuick Example\n\"Yesterday, I went to the store with my Kuya. First, we bought some bread. Next, we paid the cashier. Finally, we walked home. It was a quick trip!\"\n\nWho? I and Kuya.\nWhen? Yesterday.\nWhere? The store.\nThe Events? Bought bread, then paid.\nThe Feeling? It was a quick trip.\n\nTry to answer the mini activity below to understand Recount more.",
+      "parts": [
+        {
+          "passageText": "MINI ACTIVITY\nRecount Check (5 Items)\nDirections: Read each sentence. Write YES if it sounds like part of a Recount, and NO if it does not.",
+          "highlighted_words": [
+            "Recount",
+            "Retell"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-05-01",
+              "questionText": "1. Yesterday, my family visited the National Museum in Manila.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-05-01-a",
+                  "choiceText": "YES",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-05-02",
+              "questionText": "2. How to make a paper airplane: First, fold the paper in half.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-05-02-a",
+                  "choiceText": "NO",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-05-03",
+              "questionText": "3. The meeting began with a short prayer led by the teacher.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-05-03-a",
+                  "choiceText": "YES",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-05-04",
+              "questionText": "4. A square has four equal sides and four corners.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-05-04-a",
+                  "choiceText": "NO",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-05-05",
+              "questionText": "5. After the speaker finished, the students asked many questions.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-05-05-a",
+                  "choiceText": "YES",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Great job! Now that you've finished the warm-up, you are ready for the Activity right now. Have Fun!\n\nL5 ACTIVITY\n\"The Barangay Clean-Up\"\nLast Saturday, the residents of Barangay San Jose gathered at the community hall for a meeting on Waste Management. The event started at 8:00 AM and was attended by students, parents, and local leaders.\nFirst, our Barangay Captain gave a welcoming speech. He explained that our community needs to reduce plastic waste. Next, a guest speaker from the Department of Environment showed us how to separate trash into biodegradable and non-biodegradable bins. She also taught us how to start a small compost pit in our backyards.\nAfter the talk, the youth volunteers demonstrated how to turn old plastic bottles into colorful flower pots. Finally, the meeting ended with a pledge. Everyone stood up and promised to keep our barangay clean and green.\nI felt very proud to be part of the meeting. It was an inspiring morning because I learned that even children can help protect nature.\n\nDirections: Choose the best answer based on the text \"The Barangay Clean-Up.\"",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-05-01",
+              "questionText": "Part A: The Orientation\n1. Who attended the symposium at the community hall?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-01-a",
+                  "choiceText": "a. Only the Barangay Captain",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-01-b",
+                  "choiceText": "b. Students, parents, and local leaders",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-05-01-c",
+                  "choiceText": "c. Only the guest speaker",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-05-02",
+              "questionText": "2. When and where did the event take place?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-02-a",
+                  "choiceText": "a. Last Sunday at the school",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-02-b",
+                  "choiceText": "b. Last Saturday at the community hall",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-05-02-c",
+                  "choiceText": "c. Every morning at the park",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-05-03",
+              "questionText": "Part B: The Events (The Middle)\n3. What was the very first thing that happened at the meeting?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-03-a",
+                  "choiceText": "a. The youth volunteers showed flower pots.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-03-b",
+                  "choiceText": "b. The Barangay Captain gave a welcoming speech.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-05-03-c",
+                  "choiceText": "c. Everyone made a pledge.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-05-04",
+              "questionText": "4. What did the guest speaker teach the residents to do?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-04-a",
+                  "choiceText": "a. How to plant mango trees",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-04-b",
+                  "choiceText": "b. How to separate trash and start a compost pit",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-05-04-c",
+                  "choiceText": "c. How to build a new community hall",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-05-05",
+              "questionText": "5. What did the youth volunteers do after the talk?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-05-a",
+                  "choiceText": "a. They cooked lunch for everyone.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-05-b",
+                  "choiceText": "b. They showed how to recycle plastic bottles into pots.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-05-05-c",
+                  "choiceText": "c. They cleaned the floors of the hall.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-05-06",
+              "questionText": "6. Which signal word was used to show the last event of the story?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-06-a",
+                  "choiceText": "a. First",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-06-b",
+                  "choiceText": "b. Next",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-05-06-c",
+                  "choiceText": "c. Finally",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-05-07",
+              "questionText": "Part C: Text Type Features\n7. Why is this text considered a Recount?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-07-a",
+                  "choiceText": "a. It gives instructions on how to cook.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-07-b",
+                  "choiceText": "b. It retells a real event that happened in the past.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-05-07-c",
+                  "choiceText": "c. It is a make-believe story about talking animals.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-05-08",
+              "questionText": "8. Most of the action words (verbs) like \"gathered,\" \"explained,\" and \"showed\" are in what tense?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-08-a",
+                  "choiceText": "a. Past Tense (it already happened)",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-08-b",
+                  "choiceText": "b. Present Tense (it is happening now)",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-05-08-c",
+                  "choiceText": "c. Future Tense (it will happen later)",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-05-09",
+              "questionText": "9. What is the purpose of the last paragraph?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-09-a",
+                  "choiceText": "a. To list more facts about trash.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-09-b",
+                  "choiceText": "b. To share the writer’s feelings and summarize the end.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-05-09-c",
+                  "choiceText": "c. To invite people to a birthday party.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-05-10",
+              "questionText": "10. Which part of the recount tells us \"Who, Where, and When\"?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-05-10-a",
+                  "choiceText": "a. The Middle",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-05-10-b",
+                  "choiceText": "b. The Beginning",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-05-10-c",
+                  "choiceText": "c. The Ending",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q3-06",
+      "orderIndex": 6,
+      "competency": "Drawing conclusions",
+      "title": "Lesson 6: Drawing Conclusions",
+      "lectureText": "How to Draw a Conclusion\nDrawing a Conclusion means making a smart guess about something that the writer didn't say directly.\n\nTo draw a conclusion, you need two things:\n1. Clues from the story (What the book says).\n2. What you already know (Your \"Brain Power\").\n\nExample #1:\nClue: Sarah is wearing a raincoat and holding an umbrella.\nWhat I know: People use umbrellas when it is raining.\nConclusion: It is raining outside!\n\nExample #2:\nClue: Peter prepared well and studied hard for the exam\nWhat I know: Students that study hard will have a high score in exams\nConclusion: Peter will have a high score in the exam\n\nTry to answer the mini activity below to understand Drawing conclusions more.",
+      "parts": [
+        {
+          "passageText": "MINI ACTIVITY\nDirections: Read the clues and write a short conclusion.",
+          "highlighted_words": [
+            "Conclusion",
+            "Clues"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-06-01",
+              "questionText": "Clue: The sky is turning very dark, and the birds have stopped singing.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-06-01-a",
+                  "choiceText": "Storm",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-06-02",
+              "questionText": "Clue: The girl is holding her jaw and crying after eating a hard candy.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-06-02-a",
+                  "choiceText": "Toothache",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-06-03",
+              "questionText": "Clue: The dog is wagging its tail and standing by the front door with a leash in its mouth.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-06-03-a",
+                  "choiceText": "Walk",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-06-04",
+              "questionText": "Clue: Every light in the house is turned off and the car is gone.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-06-04-a",
+                  "choiceText": "No one home",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-06-05",
+              "questionText": "Clue: A boy is wearing a tall pointed hat and holding a box wrapped in colorful paper with a ribbon.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-06-05-a",
+                  "choiceText": "Party",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Great job! Now that you've finished the warm-up, you are ready for the Activity right now. Have Fun!\n\nL6 ACTIVITY\n\"The Empty Chair\"\nThe living room was quiet, but the kitchen was full of people. My Aunties were busy packing leftovers into plastic containers. My cousin, Jojo, reached for a piece of fried chicken to take home, but Lola shook her head and pointed to a sign that said, \"No takeout.\" Jojo put the chicken back.\nNear the door, there was a small table with a white cloth. On top sat a single plate of rice and fish, but no one was sitting there. The chair stayed empty all night.\nOutside, a group of men sat under a tent. They were drinking coffee and playing cards. Even though it was 2:00 AM, no one went to sleep. They kept the lights bright and talked loudly. When I yawned, Papa whispered, \"We must stay awake to keep him company.\" I looked at the picture of my Lolo on the altar and smiled. He loved a good party.\n\nDirections: Use the story \"The Empty Chair\" to choose the best conclusion.",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-06-01",
+              "questionText": "1. Why did Jojo have to put the chicken back?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-01-a",
+                  "choiceText": "a. He wasn't hungry anymore.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-01-b",
+                  "choiceText": "b. There is a tradition that you shouldn't take food home from a wake.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-06-01-c",
+                  "choiceText": "c. The chicken was too spicy for him.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-06-02",
+              "questionText": "2. Why was there a plate of food on a table with an empty chair?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-02-a",
+                  "choiceText": "a. They forgot to clean the table.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-02-b",
+                  "choiceText": "b. The food was for a guest who was late.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-06-02-c",
+                  "choiceText": "c. The food was a symbolic offering for Lolo’s spirit.",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-06-03",
+              "questionText": "3. Why were the men outside playing cards at 2:00 AM?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-03-a",
+                  "choiceText": "a. They wanted to win a lot of money.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-03-b",
+                  "choiceText": "b. They were staying awake to honor the tradition of watching over the dead.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-06-03-c",
+                  "choiceText": "c. They forgot what time it was.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-06-04",
+              "questionText": "4. Based on the story, how does the family feel about Lolo?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-04-a",
+                  "choiceText": "a. They are happy he is gone.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-04-b",
+                  "choiceText": "b. They love him and want to respect his memory.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-06-04-c",
+                  "choiceText": "c. They are angry at him.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-06-05",
+              "questionText": "5. Why did Papa say they must \"keep him company\"?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-05-a",
+                  "choiceText": "a. Because Lolo was afraid of the dark.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-05-b",
+                  "choiceText": "b. Because they believe the spirit is still with them during the wake.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-06-05-c",
+                  "choiceText": "c. Because the house was too quiet.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-06-06",
+              "questionText": "6. If Lola shook her head at Jojo, we can conclude that Lola is:",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-06-a",
+                  "choiceText": "a. Angry and wants to fight.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-06-b",
+                  "choiceText": "b. Making sure the family follows the traditions correctly.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-06-06-c",
+                  "choiceText": "c. Feeling very dizzy.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-06-07",
+              "questionText": "7. From the description of the men drinking coffee, we can conclude that:",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-07-a",
+                  "choiceText": "a. They are trying to stay awake through the night.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-07-b",
+                  "choiceText": "b. They are very thirsty.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-06-07-c",
+                  "choiceText": "c. Coffee is the only drink in the house.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-06-08",
+              "questionText": "8. Why was the living room quiet while the kitchen was busy?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-08-a",
+                  "choiceText": "a. Everyone was sleeping in the living room.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-08-b",
+                  "choiceText": "b. The living room is where the casket is, so people are being respectful and silent.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-06-08-c",
+                  "choiceText": "c. There was no furniture in the living room.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-06-09",
+              "questionText": "9. When the author says Lolo \"loved a good party,\" we can conclude that:",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-09-a",
+                  "choiceText": "a. Lolo was a grumpy man.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-09-b",
+                  "choiceText": "b. Lolo was a cheerful person who enjoyed being around people.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-06-09-c",
+                  "choiceText": "c. Lolo was a professional dancer.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-06-10",
+              "questionText": "10. What is the overall \"big picture\" of this story?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-06-10-a",
+                  "choiceText": "a. Filipino funerals are only about eating chicken.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-06-10-b",
+                  "choiceText": "b. Traditions are a way for families to show love and respect when someone dies.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-06-10-c",
+                  "choiceText": "c. Children should not go to funerals.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q3-07",
+      "orderIndex": 7,
+      "competency": "Making predictions (character's possible decision)",
+      "title": "Lesson 7: Making Predictions",
+      "lectureText": "Making a Prediction\nMaking a Prediction is when you use what you’ve already read to guess a character's possible decision or the next event in the story.\n\nTo make a great prediction, follow this:\nWhat I Read (Clues) + What I Know (Experience) = My Prediction\n\nExample #1:\nStory Clue: Ben is standing at the starting line of a race. He is wearing running shoes and looks very focused.\nWhat I Know: When people prepare like that, they are about to run fast.\nPrediction: Ben will run as fast as he can when the whistle blows!\n\nExample #2\nStory Clue: Mr. Barry told the class to be quiet while he went out. When Mr Barry comes back the students are laughing and shouting.\nWhat I Know: Teacher will be mad if we didn't follow their instructions\nPrediction: The students will be punished\n\nTry to answer the mini activity below to understand Making Predictions more.",
+      "parts": [
+        {
+          "passageText": "MINI ACTIVITY\nDirections: Read the situation and write a prediction.",
+          "highlighted_words": [
+            "Prediction",
+            "decision"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-07-01",
+              "questionText": "Clue: Lito sees a 20-peso bill fall out of his teacher's pocket. No one else is looking. Lito is a very honest boy.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-07-01-a",
+                  "choiceText": "Return it",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-07-02",
+              "questionText": "Clue: It is 10:00 PM. Sara has a big test tomorrow, but she is very sleepy and her eyes are closing.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-07-02-a",
+                  "choiceText": "Sleep",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-07-03",
+              "questionText": "Clue: The sky is gray and it is starting to drizzle. Marco forgot his umbrella, but his friend has a very big one.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-07-03-a",
+                  "choiceText": "Share",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-07-04",
+              "questionText": "Clue: The dog smells delicious fried chicken on the table. The owner leaves the room and forgets to close the door. The dog is very hungry.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-07-04-a",
+                  "choiceText": "Eat chicken",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-07-05",
+              "questionText": "Clue: Kim loves to draw. She sees a blank piece of paper and a box of new crayons on her desk.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-07-05-a",
+                  "choiceText": "Draw",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Great job! Now that you've finished the warm-up, you are ready for the Activity right now. Have Fun!\n\nL7 ACTIVITY\n\"The Broken Project\"\nToday was the Science Competition. Maya and Sam worked for weeks on a \"Solar Powered Fan.\" It was made of delicate glass and thin wires. They placed it on a table in the crowded gym.\nSuddenly, a group of younger students ran past their table, playing tag. One boy tripped and slammed his hand onto Maya’s table. CRACK! The glass on the solar fan broke into three pieces. The younger boy looked terrified. He turned pale and his eyes filled with tears. He looked at the broken fan, then looked at the exit door.\nMaya saw the whole thing. Her face turned red, and she balled her hands into fists. She looked at her broken project that she worked so hard on, and then she looked at the crying boy who was trembling. Sam reached out to touch Maya’s shoulder and whispered, \"He’s just a little kid, Maya. He didn't mean to.\" Maya took a long, deep breath and closed her eyes for a moment.\n\nDirections: Use the story \"The Broken Project\" to predict what the characters will do.",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-07-01",
+              "questionText": "1. The little boy is crying and looking at the exit door. What is he likely thinking of doing?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-01-a",
+                  "choiceText": "a. Staying to fix the project.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-01-b",
+                  "choiceText": "b. Running away because he is scared.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-07-01-c",
+                  "choiceText": "c. Asking for a snack.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-07-02",
+              "questionText": "2. Maya’s face is red and her fists are balled. How is she feeling right now?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-02-a",
+                  "choiceText": "a. Very happy and excited.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-02-b",
+                  "choiceText": "b. Very angry and upset.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-07-02-c",
+                  "choiceText": "c. Sleepy and bored.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-07-03",
+              "questionText": "3. Based on Maya's \"long, deep breath,\" what is she likely trying to do?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-03-a",
+                  "choiceText": "a. She is trying to calm herself down.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-03-b",
+                  "choiceText": "b. She is trying to blow the project away.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-07-03-c",
+                  "choiceText": "c. She is getting ready to scream.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-07-04",
+              "questionText": "4. Sam tells Maya, \"He's just a little kid.\" What is Sam’s possible decision?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-04-a",
+                  "choiceText": "a. To blame the boy and get him in trouble.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-04-b",
+                  "choiceText": "b. To help Maya forgive the boy and stay calm.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-07-04-c",
+                  "choiceText": "c. To break the rest of the project.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-07-05",
+              "questionText": "5. What is Maya’s most likely decision after she opens her eyes?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-05-a",
+                  "choiceText": "a. She will yell at the boy and push him.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-05-b",
+                  "choiceText": "b. She will tell the boy it's okay and try to fix the fan with Sam.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-07-05-c",
+                  "choiceText": "c. She will sit on the floor and cry all day.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-07-06",
+              "questionText": "6. If the little boy decides to stay instead of running, what will he probably say?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-06-a",
+                  "choiceText": "a. \"It wasn't me!\"",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-06-b",
+                  "choiceText": "b. \"I am so sorry, I didn't mean to break it.\"",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-07-06-c",
+                  "choiceText": "c. \"Your project was ugly anyway.\"",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-07-07",
+              "questionText": "7. How will Sam likely help Maya after the accident?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-07-a",
+                  "choiceText": "a. He will leave Maya alone to clean up.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-07-b",
+                  "choiceText": "b. He will help her find glue or tape to fix the broken parts.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-07-07-c",
+                  "choiceText": "c. He will go find the boy’s teacher to complain.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-07-08",
+              "questionText": "8. If a teacher walks over to the table right now, what will Maya probably do?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-08-a",
+                  "choiceText": "a. Hide the broken project so no one sees it.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-08-b",
+                  "choiceText": "b. Explain what happened calmly.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-07-08-c",
+                  "choiceText": "c. Start playing tag with the little boys.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-07-09",
+              "questionText": "9. What can we predict will happen to the \"Solar Powered Fan\"?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-09-a",
+                  "choiceText": "a. It will never work again.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-09-b",
+                  "choiceText": "b. Maya and Sam will try their best to fix it before the judges arrive.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-07-09-c",
+                  "choiceText": "c. They will throw it in the trash immediately.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-07-10",
+              "questionText": "10. What lesson will the little boy likely learn from this?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-07-10-a",
+                  "choiceText": "a. He should never go to school again.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-07-10-b",
+                  "choiceText": "b. He should be more careful and not run inside the gym.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-07-10-c",
+                  "choiceText": "c. Breaking things is fun.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q3-08",
+      "orderIndex": 8,
+      "competency": "Distinguishing Fact from Opinion",
+      "title": "Lesson 8: Fact vs Opinion",
+      "lectureText": "Learning to tell the difference between a Fact and an Opinion is like being a judge. You have to decide if a statement is something everyone can prove, or if it is just how someone feels.\n\nWhat is a Fact?\nA Fact is something that is always true. You can prove it by looking in a book, checking the news, or watching it happen.\nExample words: Dates, numbers, names, \"it was recorded,\" \"science shows.\"\nExample: \"The sun rises in the east.\" (This happens every day and can be proven!)\n\nWhat is an Opinion?\nAn Opinion is what someone thinks, feels, or believes. Not everyone will agree with an opinion.\nExample words: I think, I feel, best, worst, beautiful, delicious, should.\nExample: \"Mangoes are the best fruit in the world.\" (Some people might prefer bananas, so this is an opinion!)\n\nTo understand more about distinguishing fact from opinion. Try to answer the mini activity below.",
+      "parts": [
+        {
+          "passageText": "MINI ACTIVITY\nDirections: Read each sentence carefully. Write if it is a FACT or an OPINION.",
+          "highlighted_words": [
+            "Fact",
+            "Opinion"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-08-01",
+              "questionText": "1. The meeting started at 9:00 AM.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-08-01-a",
+                  "choiceText": "FACT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-08-02",
+              "questionText": "2. Science is the most exciting subject in school.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-08-02-a",
+                  "choiceText": "OPINION",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-08-03",
+              "questionText": "3. There were 15 booths in the hall.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-08-03-a",
+                  "choiceText": "FACT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-08-04",
+              "questionText": "4. Lemon juice can be used to make a simple battery.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-08-04-a",
+                  "choiceText": "FACT",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-08-05",
+              "questionText": "5. The hall was too hot for the students.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-08-05-a",
+                  "choiceText": "OPINION",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Good job! Now that we finished discussing how to distinguish fact and opinion. You are ready for the Activity right now. Have Fun!\n\nL8 ACTIVITY\n\"A Day at the Science Event\"\nLast Friday, our school held the Annual Science Event in the multi-purpose hall. The event started at exactly 9:00 AM. There were 15 different booths set up by students from Grade 4 to Grade 6.\nI think the Grade 5 booth was the most interesting one because they showed how to make electricity using lemons. My teacher, Mrs. Reyes, said that the lemon juice acts as an electrolyte. According to the school records, over 200 students visited the hall that day.\nIn my opinion, the symposium was the best event of the school year. However, some students felt that the hall was too crowded and hot. The principal announced that next year, the school will provide more fans for everyone’s comfort.\n\nDirections: Choose the best answer based on the story \"A Day at the Science Event.\"",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-08-01",
+              "questionText": "1. Which of these is a FACT from the story?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-01-a",
+                  "choiceText": "a. The symposium was the best event of the year.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-01-b",
+                  "choiceText": "b. The event was held in the multi-purpose hall.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-01-c",
+                  "choiceText": "c. The lemon battery was the coolest project.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-08-02",
+              "questionText": "2. Which sentence expresses an OPINION?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-02-a",
+                  "choiceText": "a. Over 200 students visited the hall.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-02-b",
+                  "choiceText": "b. The Grade 5 booth was the most interesting one.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-02-c",
+                  "choiceText": "c. Mrs. Reyes is a teacher at the school.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-08-03",
+              "questionText": "3. \"The symposium started at 9:00 AM.\" Why is this a FACT?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-03-a",
+                  "choiceText": "a. Because it tells us what time it happened and can be proven.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-03-b",
+                  "choiceText": "b. Because everyone likes 9:00 AM.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-03-c",
+                  "choiceText": "c. Because the author thinks it's a good time.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-08-04",
+              "questionText": "4. Why is the statement \"The symposium was the best event\" an OPINION?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-04-a",
+                  "choiceText": "a. Because the principal said it.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-04-b",
+                  "choiceText": "b. Because some people might think a different event was better.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-04-c",
+                  "choiceText": "c. Because it has a date in it.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-08-05",
+              "questionText": "5. Which word in this sentence makes it an OPINION: \"The hall was too crowded and hot.\"",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-05-a",
+                  "choiceText": "a. Hall",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-05-b",
+                  "choiceText": "b. Too",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-05-c",
+                  "choiceText": "c. Crowded",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-08-06",
+              "questionText": "6. If the school records show 200 students attended, that information is a:",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-06-a",
+                  "choiceText": "a. Fact",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-06-b",
+                  "choiceText": "b. Opinion",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-06-c",
+                  "choiceText": "c. Guess",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-08-07",
+              "questionText": "7. \"The Grade 5 booth used lemons.\" This is a FACT because:",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-07-a",
+                  "choiceText": "a. Lemons are sour.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-07-b",
+                  "choiceText": "b. You could see the lemons and prove they were there.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-07-c",
+                  "choiceText": "c. Grade 5 students are very smart.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-08-08",
+              "questionText": "8. Which of the following is an OPINION word found in the text?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-08-a",
+                  "choiceText": "a. Friday",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-08-b",
+                  "choiceText": "b. Best",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-08-c",
+                  "choiceText": "c. Exactly",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-08-09",
+              "questionText": "9. True or False: \"The principal announced there will be more fans next year\" is a FACT.",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-09-a",
+                  "choiceText": "a. True (It describes an action that really happened)",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-09-b",
+                  "choiceText": "b. False (It is just a feeling)",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-08-10",
+              "questionText": "10. How can you tell if a sentence in a recount is an OPINION?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-08-10-a",
+                  "choiceText": "a. It uses numbers and dates.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-08-10-b",
+                  "choiceText": "b. It shares a person's feelings or uses words like \"I think.\"",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-08-10-c",
+                  "choiceText": "c. It tells you exactly where the event happened.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q3-09",
+      "orderIndex": 9,
+      "competency": "Making a Summary",
+      "title": "Lesson 9: Making a Summary",
+      "lectureText": "Making a Summary is like taking a big, tall tree and turning it into a small, powerful seed. You keep the most important parts and leave out the tiny details that don't matter as much.\n\nA Summary is a short way of telling what a text is about. To make a great summary of a Recount, we use the method \"5 W’s\".\n\nTo make a summary, look for:\nWho was the main person or group?\nWhat was the main event?\nWhere and When did it happen?\nWhy did it happen?\nHow did it end?\n\nA summary should be short. If you are telling your friend about a 2-hour movie in only 1 minute, you are summarizing!\n\nRead the example summary below\nThis is the whole story:\n\"The Big Water Talk\"\nLast Monday, our Barangay leaders held an event called \"Save Our Springs\" at the local covered court. The meeting was organized because our community's water supply has been getting low during the dry season.\n\nThe event began with a presentation by a water expert. He showed us that many people were wasting water by leaving their hoses running or not fixing leaky pipes. Next, he shared simple tips on how to \"harvest\" rain in big barrels to use for watering plants. He explained that if we don't save water now, our wells might go dry by next month.\n\nAfter the talk, the families in the crowd divided into small groups to plan a \"Water Patrol\" for our street. Finally, the meeting ended with everyone receiving a free bucket and a water-saving kit. We left the court feeling ready to protect our precious water.\n\nSummary of \"The Big Water Talk\":\nLast Monday, Barangay residents gathered at the covered court for a water-saving event because their water supply was running low. A water expert taught them how to fix leaks and harvest rainwater. By the end of the meeting, the community felt ready to help by forming a Water Patrol and using their new water-saving kits.\n\nChecklist:\nWho? (Barangay residents) — YES!\nWhat happened? (They had a water-saving event) — YES!\nWhen? (Last Monday) — YES!\nWhere? (The covered court) — YES!\nWhy? (Because water was running low) — YES!\n\nIf you can take a detail away and the story still makes sense, it's a detail. If you take it away and the story breaks, it's a Main Idea!\n\nTry to answer the mini activity below to understand more about making a summary.",
+      "parts": [
+        {
+          "passageText": "MINI ACTIVITY\nSummary Detective (5 Items)\nDirections: Read each statement. Choose YES if it belongs in a summary of \"The Big Water Talk\" and NO if it is a tiny detail that should be left out.",
+          "highlighted_words": [
+            "Summary",
+            "Detail",
+            "Main Idea"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-09-01",
+              "questionText": "1. The event was about saving the community's water supply.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-09-01-a",
+                  "choiceText": "YES",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-09-02",
+              "questionText": "2. The water expert wore a blue shirt and black shoes.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-09-02-a",
+                  "choiceText": "NO",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-09-03",
+              "questionText": "3. The meeting happened last Monday at the covered court.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-09-03-a",
+                  "choiceText": "YES",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-09-04",
+              "questionText": "4. The families formed a \"Water Patrol\" to help save water.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-09-04-a",
+                  "choiceText": "YES",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "mq-09-05",
+              "questionText": "5. There was a small stray dog sleeping near the back of the court.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "mq-09-05-a",
+                  "choiceText": "NO",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Good job! Now that we finished discussing how to make a summary. You are ready for the Activity right now. Have Fun!\n\nL9 ACTIVITY\n\"The Harvest Festival\"\nLast Saturday, the people of Barangay Maligaya celebrated the Pahiyas Festival in the town plaza. The festival was held to give thanks for a great harvest of rice and vegetables this year.\nFirst, the morning began with a colorful parade. Farmers decorated their carabao carts with bright flowers and giant fruits. Next, a contest was held for the \"Most Beautiful House.\" Families decorated their homes with kiping (colorful rice wafers) and hanging vegetables. It was a very busy afternoon because thousands of tourists came to take pictures.\nFinally, in the evening, the town leaders gave prizes to the winners. Everyone shared a big feast of pancit and lechon. We all felt happy and thankful for the food we have and for our hard-working farmers.\n\nDirections: Use the \"Harvest Festival\" story to answer the questions.",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-09-01",
+              "questionText": "Part A: Literal (The Facts)\n1. Who participated in the celebration?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-01-a",
+                  "choiceText": "a. Only the tourists",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-01-b",
+                  "choiceText": "b. The people and farmers of Barangay Maligaya",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-09-01-c",
+                  "choiceText": "c. People from another country",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-09-02",
+              "questionText": "2. Where did the festival take place?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-02-a",
+                  "choiceText": "a. Inside a big shopping mall",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-02-b",
+                  "choiceText": "b. In the town plaza of Barangay Maligaya",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-09-02-c",
+                  "choiceText": "c. At the school playground",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-09-03",
+              "questionText": "3. What was the main purpose (the \"Why\") of the festival?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-03-a",
+                  "choiceText": "a. To sell new cars",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-03-b",
+                  "choiceText": "b. To give thanks for a great harvest",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-09-03-c",
+                  "choiceText": "c. To celebrate a birthday",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-09-04",
+              "questionText": "4. What happened right after the morning parade?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-04-a",
+                  "choiceText": "a. Everyone went to sleep.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-04-b",
+                  "choiceText": "b. There was a contest for the \"Most Beautiful House.\"",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-09-04-c",
+                  "choiceText": "c. The farmers went back to the fields.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-09-05",
+              "questionText": "5. How did the day end?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-05-a",
+                  "choiceText": "a. With a big feast and an awarding ceremony.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-05-b",
+                  "choiceText": "b. With a heavy rainstorm.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-09-05-c",
+                  "choiceText": "c. Everyone stayed home and watched TV.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-09-06",
+              "questionText": "Part B: Inferential (Understanding More)\n6. Why did the author mention that thousands of tourists came?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-06-a",
+                  "choiceText": "a. To show that the festival was popular and beautiful.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-06-b",
+                  "choiceText": "b. To complain that the town was too crowded.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-09-06-c",
+                  "choiceText": "c. To tell us how many cameras were there.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-09-07",
+              "questionText": "7. From the text, we can infer that the people of Barangay Maligaya are:",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-07-a",
+                  "choiceText": "a. Lazy and don't like to work.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-07-b",
+                  "choiceText": "b. Proud of their culture and hard-working.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-09-07-c",
+                  "choiceText": "c. Afraid of carabaos.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-09-08",
+              "questionText": "8. Why were the farmers' carts decorated with fruits?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-08-a",
+                  "choiceText": "a. Because they had no other decorations.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-08-b",
+                  "choiceText": "b. To show off the successful harvest they were celebrating.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-09-08-c",
+                  "choiceText": "c. Because the carabaos like to eat fruit.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-09-09",
+              "questionText": "9. What is the best summary of the \"Middle\" of the story?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-09-a",
+                  "choiceText": "a. Farmers used their carts for a parade and houses were decorated for a contest.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-09-b",
+                  "choiceText": "b. People ate a lot of food.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-09-09-c",
+                  "choiceText": "c. The tourists took many pictures of the sky.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-09-10",
+              "questionText": "10. Why is \"Pancit and Lechon\" considered a detail rather than a main idea?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-09-10-a",
+                  "choiceText": "a. Because it doesn't taste good.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-09-10-b",
+                  "choiceText": "b. Because the main point is the \"Feast,\" not the specific food served.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "aq-09-10-c",
+                  "choiceText": "c. Because they aren't Filipino foods.",
+                  "isCorrect": false,
+                  "orderIndex": 3
+                }
+              ]
+            },
+            {
+              "id": "aq-09-11",
+              "questionText": "Part C: Fill in the Blank\nLast Saturday, the people of (11) ____________________ held the Pahiyas Festival.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "aq-09-11-a",
+                  "choiceText": "Barangay Maligaya",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "aq-09-12",
+              "questionText": "(12) ... held the ____________________ at the Town Plaza.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "aq-09-12-a",
+                  "choiceText": "Pahiyas Festival",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "aq-09-13",
+              "questionText": "(13) ... held the festival at the ____________________.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "aq-09-13-a",
+                  "choiceText": "Town Plaza",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "aq-09-14",
+              "questionText": "(14) They celebrated to give thanks for a good ____________________ of rice and vegetables.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "aq-09-14-a",
+                  "choiceText": "Harvest",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            },
+            {
+              "id": "aq-09-15",
+              "questionText": "(15) ... the day ended with prizes and a big ____________________ for the whole community.",
+              "questionType": "IDENTIFICATION",
+              "choices": [
+                {
+                  "id": "aq-09-15-a",
+                  "choiceText": "Feast",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-gr4-q3-10",
+      "orderIndex": 10,
+      "competency": "Schema - relating to one’s experience",
+      "title": "Lesson 10: Schema - relating to one’s experience",
+      "lectureText": "Let’s learn how to use your Schema! It sounds like a big word, but it is actually something you use every single day.\n\nYour Schema (pronounced as skima) is everything you already know in your brain.\n\nWhen you read a story, you connect it to your own life. This is called Relating to One’s Experience. It helps you understand the characters better because you can say, \"Hey, that happened to me, too!\"\n\nHow to use your Schema:\n1. Read the story.\n2. Think: \"Has this happened to me?\" or \"How would I feel if I were there?\"\n3. Connect: Use your own memories to understand the story’s feelings.\n\nTo understand more about schema, try to answer the mini activity below.",
+      "parts": [
+        {
+          "passageText": "MINI ACTIVITY\nMini Warm-Up: My Connection (5 Items)\nDirections: Match the story event in Column A to a connection you might have in your own life (Schema) in Column B.\n\n\"The Nervous Speaker\"\nThe school gym was packed with students and teachers for the Science and Environment event. My classmate, Tina, was standing backstage. She was holding her speech papers so tightly that they were starting to wrinkle. Her face was pale, and she kept tapping her foot on the floor.\n\"I can't do this,\" Tina whispered to me. \"What if I forget my words? What if everyone laughs?\"\nI remembered the time I had to recite a poem in front of the whole class. My heart had drummed against my chest just like hers. I took Tina’s hand and said, \"Just look at me in the front row. I’ll give you a thumbs up!\" When the announcer called her name, Tina took a deep breath and walked out. By the end of her speech, the whole gym was clapping loudly.",
+          "highlighted_words": [
+            "Schema",
+            "Experience",
+            "Connect"
+          ],
+          "miniQuestions": [
+            {
+              "id": "mq-10-01",
+              "questionText": "Directions: Match the story event to its connection.",
+              "questionType": "MATCHING",
+              "choices": [
+                {
+                  "id": "mq-10-01-l1",
+                  "choiceText": "Tina's face was pale and she was tapping her foot.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "mq-10-01-l2",
+                  "choiceText": "The gym was packed with many people.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                },
+                {
+                  "id": "mq-10-01-l3",
+                  "choiceText": "Tina was afraid people would laugh at her.",
+                  "isCorrect": true,
+                  "orderIndex": 3
+                },
+                {
+                  "id": "mq-10-01-l4",
+                  "choiceText": "The narrator offered a \"thumbs up\" for support.",
+                  "isCorrect": true,
+                  "orderIndex": 4
+                },
+                {
+                  "id": "mq-10-01-l5",
+                  "choiceText": "Everyone clapped loudly at the end.",
+                  "isCorrect": true,
+                  "orderIndex": 5
+                },
+                {
+                  "id": "mq-10-01-r1",
+                  "choiceText": "Having \"stage fright\" before a performance.",
+                  "isCorrect": true,
+                  "orderIndex": 6
+                },
+                {
+                  "id": "mq-10-01-r2",
+                  "choiceText": "Being at a big school assembly or event.",
+                  "isCorrect": true,
+                  "orderIndex": 7
+                },
+                {
+                  "id": "mq-10-01-r3",
+                  "choiceText": "A time I felt very nervous or scared.",
+                  "isCorrect": true,
+                  "orderIndex": 8
+                },
+                {
+                  "id": "mq-10-01-r4",
+                  "choiceText": "A time a friend helped me feel brave.",
+                  "isCorrect": true,
+                  "orderIndex": 9
+                },
+                {
+                  "id": "mq-10-01-r5",
+                  "choiceText": "A time I finished something hard and felt proud.",
+                  "isCorrect": true,
+                  "orderIndex": 10
+                }
+              ]
+            }
+          ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Good job! Now that we finished discussing what the schema is and how to relate it to one’s experience. You are ready for the Activity right now. Have Fun!\n\nL10 ACTIVITY\n\"The Last Bowl of Lugaw\"\nThe chapel was full of the smell of lilies and candle smoke. I sat on the floor with my cousins, playing a quiet game of sungka. It was the last night of my Lolo’s wake. In the corner, my Titas were busy serving warm lugaw (rice porridge) to the neighbors who came to say goodbye.\nI remembered how Lolo used to make lugaw for me whenever I had a fever. He would always put extra fried garlic on top because he knew it was my favorite. Seeing the bowl of lugaw now made me feel both sad and warm at the same time.\nSome people were crying, but others were laughing while sharing stories about Lolo. I realized that a funeral isn't just about saying goodbye; it’s about remembering all the good times we had together. Before we left, I whispered, \"Thank you, Lolo,\" and ate my lugaw, remembering his smile.\n\nDirections: Use the story and your own Schema (life experiences) to answer these questions.",
+          "highlighted_words": [],
+          "miniQuestions": [],
+          "activityQuestions": [
+            {
+              "id": "aq-10-01",
+              "questionText": "1. In the story, lugaw makes the character think of Lolo. What is a food that reminds you of someone you love?",
+              "questionType": "REFLECTION",
+              "choices": []
+            },
+            {
+              "id": "aq-10-02",
+              "questionText": "2. The character plays with cousins to pass the time. When you are at a family gathering, what do you usually do with your relatives?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-02-a",
+                  "choiceText": "a. I usually sit alone in the car.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-02-b",
+                  "choiceText": "b. I usually play games or talk with my cousins like the character did.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-10-03",
+              "questionText": "3. Why does the smell of lilies and candles remind people of a funeral?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-03-a",
+                  "choiceText": "a. Because those smells are common in many Filipino chapels and wakes.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-03-b",
+                  "choiceText": "b. Because lilies are the only flowers that exist.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-10-04",
+              "questionText": "4. The character says a funeral is about \"remembering good times.\" Based on your experience, why is it important to tell stories about people who passed away?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-04-a",
+                  "choiceText": "a. To make everyone cry more.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-04-b",
+                  "choiceText": "b. To keep their memory alive and feel happy about the time spent together.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-10-05",
+              "questionText": "5. How would you feel if you had to say goodbye to a favorite grandparent?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-05-a",
+                  "choiceText": "a. I would feel sad because I would miss them, just like the character.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-05-b",
+                  "choiceText": "b. I would feel nothing at all.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-10-06",
+              "questionText": "6. In Filipino culture, we serve food like lugaw or sopas at wakes. Why do you think we do this?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-06-a",
+                  "choiceText": "a. To show kindness and take care of the guests who are mourning.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-06-b",
+                  "choiceText": "b. Because we have too much rice in the kitchen.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-10-07",
+              "questionText": "7. Have you ever felt \"sad and warm\" at the same time? What was happening?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-07-a",
+                  "choiceText": "a. Yes, when I moved schools but my friends gave me a goodbye gift.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-07-b",
+                  "choiceText": "b. No, it is impossible to feel two things.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-10-08",
+              "questionText": "8. If you were the character in the story, would you have played games with your cousins? Why?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-08-a",
+                  "choiceText": "a. Yes, because it helps us stay together and feel less lonely.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-08-b",
+                  "choiceText": "b. No, because playing is always bad.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-10-09",
+              "questionText": "9. What is a small thing a family member does to show they love you?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-09-a",
+                  "choiceText": "a. They ignore me when I come home.",
+                  "isCorrect": false,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-09-b",
+                  "choiceText": "b. They make my favorite snack or help with my homework.",
+                  "isCorrect": true,
+                  "orderIndex": 2
+                }
+              ]
+            },
+            {
+              "id": "aq-10-10",
+              "questionText": "10. Why does using your \"Schema\" help you understand \"The Last Bowl of Lugaw\"?",
+              "questionType": "MCQ",
+              "choices": [
+                {
+                  "id": "aq-10-10-a",
+                  "choiceText": "a. It helps me see that my family’s traditions are similar to the ones in the story.",
+                  "isCorrect": true,
+                  "orderIndex": 1
+                },
+                {
+                  "id": "aq-10-10-b",
+                  "choiceText": "b. It helps me learn how to cook lugaw.",
+                  "isCorrect": false,
+                  "orderIndex": 2
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "pre_post_questions": []
+}

@@ -240,7 +240,7 @@ class DatabaseSeeder(private val context: Context) {
         )
 
         // ── 3. Seed content from JSON files ───────────────────────────────────
-        val files = listOf("grade4_q1.json", "grade5_q1.json", "grade6_q1.json")
+        val files = listOf("grade4_q1.json", "grade4_q2.json", "grade4_q3.json", "grade5_q1.json", "grade6_q1.json")
 
         files.forEach { filename ->
             try {
@@ -289,7 +289,7 @@ class DatabaseSeeder(private val context: Context) {
      * Does NOT touch student progress — their scores/status are preserved.
      */
     suspend fun reseedLessons(db: AppDatabase) {
-        val files = listOf("grade4_q1.json", "grade5_q1.json", "grade6_q1.json")
+        val files = listOf("grade4_q1.json", "grade4_q2.json", "grade4_q3.json", "grade5_q1.json", "grade6_q1.json")
 
         files.forEach { filename ->
             try {
