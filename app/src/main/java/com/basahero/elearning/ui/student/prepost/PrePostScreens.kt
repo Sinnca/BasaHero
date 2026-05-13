@@ -307,10 +307,17 @@ fun PrePostTestContent(
         )
 
         // ── Scrollable question list for this page ────────────────────────────
+        val scrollState = rememberScrollState()
+        
+        // Reset scroll to top when page changes
+        LaunchedEffect(state.currentPageIndex) {
+            scrollState.scrollTo(0)
+        }
+
         Column(
             modifier = Modifier
                 .weight(1f)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .padding(horizontal = hPad, vertical = 20.dp)
         ) {
             state.currentPageQuestions.forEachIndexed { index, question ->
