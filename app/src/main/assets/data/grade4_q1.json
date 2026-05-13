@@ -351,7 +351,7 @@
       "orderIndex": 2,
       "competency": "Author's Point of View",
       "title": "Lesson 2: Author's Point of View",
-      "lectureText": "Point of view means who is telling the story.\n\nFirst Person — The storyteller is inside the story. Uses words like I, me, we.\nExample: I walked to school.\n\nSecond Person — The storyteller is talking to you. Uses words like you, your.\nExample: You wake up early.\n\nThird Person — The storyteller is outside the story. Uses words like he, she, they.\nExample: Jo played baseball with his friends.\n\nThird Person Omniscient (All-Knowing) — The storyteller knows everything about all characters. Can tell what everyone is thinking and feeling.\nExample: Jo was excited to play, but his teacher worried he might get hurt.",
+      "lectureText": "Point of view means who is telling the story.\n\nFirst Person \u2014 The storyteller is inside the story. Uses words like I, me, we.\nExample: I walked to school.\n\nSecond Person \u2014 The storyteller is talking to you. Uses words like you, your.\nExample: You wake up early.\n\nThird Person \u2014 The storyteller is outside the story. Uses words like he, she, they.\nExample: Jo played baseball with his friends.\n\nThird Person Omniscient (All-Knowing) \u2014 The storyteller knows everything about all characters. Can tell what everyone is thinking and feeling.\nExample: Jo was excited to play, but his teacher worried he might get hurt.",
       "parts": [
         {
           "passageText": "Ana is a Grade 4 pupil at Masipag Elementary School. Her teachers always say that she is one of the most industrious pupils in their class. They also say that she is caring. Whenever someone needs help, she is always ready to lend a hand.",
@@ -529,7 +529,7 @@
           "activityQuestions": [
             {
               "id": "aq-02-01",
-              "questionText": "1. 'My biggest dream in life is to become a doctor. I love watching movies where doctors are happy about saving the lives of people.' — What is the POV?",
+              "questionText": "1. 'My biggest dream in life is to become a doctor. I love watching movies where doctors are happy about saving the lives of people.' \u2014 What is the POV?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -560,7 +560,7 @@
             },
             {
               "id": "aq-02-02",
-              "questionText": "2. 'You walk into your classroom early in the morning. You place your bag on the desk and greet your classmates with a smile.' — What is the POV?",
+              "questionText": "2. 'You walk into your classroom early in the morning. You place your bag on the desk and greet your classmates with a smile.' \u2014 What is the POV?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -591,7 +591,7 @@
             },
             {
               "id": "aq-02-03",
-              "questionText": "3. 'Mrs. Reyes is the best teacher. She always makes sure our classroom looks good. Sometimes she rewards us with chocolates.' — What is the POV?",
+              "questionText": "3. 'Mrs. Reyes is the best teacher. She always makes sure our classroom looks good. Sometimes she rewards us with chocolates.' \u2014 What is the POV?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -622,7 +622,7 @@
             },
             {
               "id": "aq-02-04",
-              "questionText": "4. 'Joseph and his friends went to Manila Zoo. They had fun watching the different animals. Joseph even made a list of animals and took pictures.' — What is the POV?",
+              "questionText": "4. 'Joseph and his friends went to Manila Zoo. They had fun watching the different animals. Joseph even made a list of animals and took pictures.' \u2014 What is the POV?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -653,7 +653,7 @@
             },
             {
               "id": "aq-02-05",
-              "questionText": "5. 'Nida is a helpful child. She always helps her mother in cooking and cleaning the house. Sometimes she helps his father in the store during her free time.' — What is the POV?",
+              "questionText": "5. 'Nida is a helpful child. She always helps her mother in cooking and cleaning the house. Sometimes she helps his father in the store during her free time.' \u2014 What is the POV?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -691,7 +691,7 @@
       "orderIndex": 3,
       "competency": "Sequencing Events",
       "title": "Lesson 3: Sequencing Events",
-      "lectureText": "When you wake up, what do you do first? Do you eat breakfast before brushing your teeth, or after?\n\nSequencing means putting events in the correct order — what happens first, next, and last. It's like following steps in cooking or playing a game.\n\nMini example:\n1. You wash your hands.\n2. You eat lunch.\n3. You go to school.\n\nStories also have a beginning, middle, and end. If we mix them up, the story is confusing. Sequencing helps us understand the story clearly.",
+      "lectureText": "When you wake up, what do you do first? Do you eat breakfast before brushing your teeth, or after?\n\nSequencing means putting events in the correct order \u2014 what happens first, next, and last. It's like following steps in cooking or playing a game.\n\nMini example:\n1. You wash your hands.\n2. You eat lunch.\n3. You go to school.\n\nStories also have a beginning, middle, and end. If we mix them up, the story is confusing. Sequencing helps us understand the story clearly.",
       "parts": [
         {
           "passageText": "Grandfather's Old Watch\nby: Syrelle France S. Paterter\n\n1. You and your sister play with cousins at your grandparents' house.\n2. Kuya Anton pushes you and Alyana on the swings.\n3. You see your grandfather looking at his old watch.\n4. You ask him why he doesn't replace it, and he smiles.\n5. When your grandfather dies, the watch is placed in his casket.\n6. Your father explains the watch was a wedding gift from your Lola.",
@@ -701,7 +701,7 @@
           "miniQuestions": [
             {
               "id": "mq-03-01",
-              "questionText": "Family Picnic — Arrange the events in the correct order:",
+              "questionText": "Family Picnic \u2014 Arrange the events in the correct order:",
               "questionType": "SEQUENCING",
               "choices": [
                 {
@@ -746,13 +746,13 @@
           "activityQuestions": []
         },
         {
-          "passageText": "Now that you know how to sequence events, let's head to the activity!\n\nL3 Activity: Arrange the passages to their correct order.\n\nMorning Routine:\n• You eat pandesal with cheese.\n• You prepare your school bag.\n• You brush your teeth.\n• You put on your uniform.\n• You wake up early.\n• You wash your face.",
+          "passageText": "Now that you know how to sequence events, let's head to the activity!\n\nL3 Activity: Arrange the passages to their correct order.\n\nMorning Routine:\n\u2022 You eat pandesal with cheese.\n\u2022 You prepare your school bag.\n\u2022 You brush your teeth.\n\u2022 You put on your uniform.\n\u2022 You wake up early.\n\u2022 You wash your face.",
           "highlighted_words": [],
           "miniQuestions": [],
           "activityQuestions": [
             {
               "id": "aq-03-01",
-              "questionText": "1. Morning Routine — Arrange in the correct order:",
+              "questionText": "1. Morning Routine \u2014 Arrange in the correct order:",
               "questionType": "SEQUENCING",
               "choices": [
                 {
@@ -795,7 +795,7 @@
             },
             {
               "id": "aq-03-02",
-              "questionText": "2. Planting a Seed — Arrange in the correct order:",
+              "questionText": "2. Planting a Seed \u2014 Arrange in the correct order:",
               "questionType": "SEQUENCING",
               "choices": [
                 {
@@ -838,7 +838,7 @@
             },
             {
               "id": "aq-03-03",
-              "questionText": "3. Riding a Jeepney — Arrange in the correct order:",
+              "questionText": "3. Riding a Jeepney \u2014 Arrange in the correct order:",
               "questionType": "SEQUENCING",
               "choices": [
                 {
@@ -881,7 +881,7 @@
             },
             {
               "id": "aq-03-04",
-              "questionText": "4. The Zoo — Arrange in the correct order:",
+              "questionText": "4. The Zoo \u2014 Arrange in the correct order:",
               "questionType": "SEQUENCING",
               "choices": [
                 {
@@ -924,7 +924,7 @@
             },
             {
               "id": "aq-03-05",
-              "questionText": "5. Cinderella — Arrange in the correct order:",
+              "questionText": "5. Cinderella \u2014 Arrange in the correct order:",
               "questionType": "SEQUENCING",
               "choices": [
                 {
@@ -974,7 +974,7 @@
       "orderIndex": 4,
       "competency": "Identifying Sequential Plot",
       "title": "Lesson 4: Sequential Plot",
-      "lectureText": "Class, have you ever told a story about your weekend? Did you notice that you usually start with what happened first, then what happened next, and finally what happened last? That's called sequencing.\n\nToday, we will learn how to identify the type of plot called sequential.\n\nA sequential plot is a story where events happen in order — beginning, middle, and end. We look at what happens first, what happens next, and what happens last. This helps us understand the story clearly.",
+      "lectureText": "Class, have you ever told a story about your weekend? Did you notice that you usually start with what happened first, then what happened next, and finally what happened last? That's called sequencing.\n\nToday, we will learn how to identify the type of plot called sequential.\n\nA sequential plot is a story where events happen in order \u2014 beginning, middle, and end. We look at what happens first, what happens next, and what happens last. This helps us understand the story clearly.",
       "parts": [
         {
           "passageText": "Our Family Bonding\nBy: Syrelle France S. Paterter\n\nEvery weekend, our family usually goes near the river for a picnic. My father always brings with him his fishing rod so we can catch and eat fresh fish. Kuya Nestor and I often help our mother in preparing the picnic mats and all the food. Sometimes, we sing our favorite songs while Kuya plays the guitar. This is how we bond and catch up after a whole week at school and work.",
@@ -1325,7 +1325,7 @@
       "orderIndex": 5,
       "competency": "Drawing Conclusions",
       "title": "Lesson 5: Drawing Conclusions",
-      "lectureText": "Class, sometimes a story doesn't tell us everything directly. We need to look at the clues in the text and use our own thinking to figure out what the author wants us to understand. This skill is called drawing conclusions. It's like solving a puzzle — we put the pieces together to see the bigger picture.\n\nDrawing conclusions means combining what the story says with what we already know. We don't just read the words; we think about what they mean.\n\nExample: If you see someone watering plants every day, what can you conclude? They care about their garden.",
+      "lectureText": "Class, sometimes a story doesn't tell us everything directly. We need to look at the clues in the text and use our own thinking to figure out what the author wants us to understand. This skill is called drawing conclusions. It's like solving a puzzle \u2014 we put the pieces together to see the bigger picture.\n\nDrawing conclusions means combining what the story says with what we already know. We don't just read the words; we think about what they mean.\n\nExample: If you see someone watering plants every day, what can you conclude? They care about their garden.",
       "parts": [
         {
           "passageText": "Home\nby: Ma. Francia N. Bulacan\n\nMy family and I live in a far but peaceful town. We live in a small hut surrounded by plants. We help each other in keeping our home neat and clean. Father and I work on our garden every morning. It is filled with green, leafy vegetables. We built a sturdy fence around it and painted it blue.\n\nMother has her garden too. Our front lawn is filled with fragrant and colorful flowers. Mother and sister have pink, clay pots. They remove the weeds that grow, water them every day, and put fertilizer too.\n\nWe feel happy looking at all these things growing around the house. It makes the surroundings look happy and lively. It feels fun helping one another in keeping our home beautiful and filling it with love too.",
@@ -1569,7 +1569,7 @@
               "choices": [
                 {
                   "id": "aq-05-03-a",
-                  "choiceText": "He was careless and disobedient — he didn't believe her.",
+                  "choiceText": "He was careless and disobedient \u2014 he didn't believe her.",
                   "isCorrect": true,
                   "orderIndex": 1
                 },
@@ -1664,7 +1664,7 @@
       "orderIndex": 6,
       "competency": "Identifying the main idea",
       "title": "Lesson 6: Identifying the Main Idea",
-      "lectureText": "Class, when we read, we don't just look at the details. We need to find the main idea — the big thought that the author wants us to understand. The details are like ingredients in a recipe, but the main idea is the finished dish.\n\nThe main idea is the most important point of the text. Supporting details give us examples, descriptions, or lists that explain the main idea.",
+      "lectureText": "Class, when we read, we don't just look at the details. We need to find the main idea \u2014 the big thought that the author wants us to understand. The details are like ingredients in a recipe, but the main idea is the finished dish.\n\nThe main idea is the most important point of the text. Supporting details give us examples, descriptions, or lists that explain the main idea.",
       "parts": [
         {
           "passageText": "Filipino food is known for its variety and flavor. One popular dish is Adobo, cooked with soy sauce, vinegar, garlic, and meat. Another favorite is Sinigang, a sour soup made with tamarind, vegetables, and either pork or shrimp. Filipinos also enjoy Lechon, a roasted pig served during fiestas. For snacks, there is Bibingka, a rice cake baked in banana leaves, and Halo-Halo, a cold dessert with ice, milk, fruits, and sweet beans. These dishes show how Filipino food is colorful, flavorful, and enjoyed by families everywhere.\n\nHow Plants Grow\nPlants need sunlight, water, and soil to grow. First, the roots take in water and nutrients from the soil. Next, the stem carries these nutrients to the leaves. The leaves use sunlight to make food through photosynthesis. Finally, flowers and fruits appear, showing that the plant is healthy and strong.\n\nPhilippine Fruits\nThe Philippines has many delicious fruits. One is Mango, which is sweet and yellow when ripe. Another is Banana, soft and filling, often eaten for breakfast. There is also Papaya, orange in color and rich in vitamins. Filipinos enjoy Coconut, which has refreshing water and white meat. Finally, Lanzones are small, round fruits that taste sweet and slightly sour.",
@@ -1843,7 +1843,7 @@
           "activityQuestions": [
             {
               "id": "aq-06-01",
-              "questionText": "Read the passage: 'The Philippines has many fruits. First, there is the mango. Second, there is the banana. Third, there is the papaya. Finally, there is the coconut.' — Enumeration or Description?",
+              "questionText": "Read the passage: 'The Philippines has many fruits. First, there is the mango. Second, there is the banana. Third, there is the papaya. Finally, there is the coconut.' \u2014 Enumeration or Description?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -1862,7 +1862,7 @@
             },
             {
               "id": "aq-06-02",
-              "questionText": "'The mango is sweet, yellow, and juicy when ripe. It has a smooth skin and a pleasant smell.' — Enumeration or Description?",
+              "questionText": "'The mango is sweet, yellow, and juicy when ripe. It has a smooth skin and a pleasant smell.' \u2014 Enumeration or Description?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -1881,7 +1881,7 @@
             },
             {
               "id": "aq-06-03",
-              "questionText": "'Filipino houses often have gardens. Some grow vegetables, others plant flowers, and many keep fruit trees.' — Enumeration or Description?",
+              "questionText": "'Filipino houses often have gardens. Some grow vegetables, others plant flowers, and many keep fruit trees.' \u2014 Enumeration or Description?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -1900,7 +1900,7 @@
             },
             {
               "id": "aq-06-04",
-              "questionText": "'The Sinigang soup tastes sour because of tamarind. It is hot, comforting, and filled with vegetables and meat. The smell is strong but delicious.' — Enumeration or Description?",
+              "questionText": "'The Sinigang soup tastes sour because of tamarind. It is hot, comforting, and filled with vegetables and meat. The smell is strong but delicious.' \u2014 Enumeration or Description?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -1919,7 +1919,7 @@
             },
             {
               "id": "aq-06-05",
-              "questionText": "'During Christmas, Filipinos prepare different foods. They cook ham, serve rice cakes, make spaghetti, and prepare fruit salad.' — Enumeration or Description?",
+              "questionText": "'During Christmas, Filipinos prepare different foods. They cook ham, serve rice cakes, make spaghetti, and prepare fruit salad.' \u2014 Enumeration or Description?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -2769,7 +2769,7 @@
           "activityQuestions": [
             {
               "id": "aq-08-01",
-              "questionText": "1. 'It seems that Jilian's thank you card is the most beautiful.' — FACT or OPINION?",
+              "questionText": "1. 'It seems that Jilian's thank you card is the most beautiful.' \u2014 FACT or OPINION?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -2788,7 +2788,7 @@
             },
             {
               "id": "aq-08-02",
-              "questionText": "2. 'I think I have plenty.' — FACT or OPINION?",
+              "questionText": "2. 'I think I have plenty.' \u2014 FACT or OPINION?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -2807,7 +2807,7 @@
             },
             {
               "id": "aq-08-03",
-              "questionText": "3. 'I believe your card is more beautiful than mine.' — FACT or OPINION?",
+              "questionText": "3. 'I believe your card is more beautiful than mine.' \u2014 FACT or OPINION?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -2826,7 +2826,7 @@
             },
             {
               "id": "aq-08-04",
-              "questionText": "4. 'Mr. Mahinay asked the class to group themselves and make a thank you card as an output.' — FACT or OPINION?",
+              "questionText": "4. 'Mr. Mahinay asked the class to group themselves and make a thank you card as an output.' \u2014 FACT or OPINION?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -2845,7 +2845,7 @@
             },
             {
               "id": "aq-08-05",
-              "questionText": "5. 'I think all of our thank you cards are beautiful.' — FACT or OPINION?",
+              "questionText": "5. 'I think all of our thank you cards are beautiful.' \u2014 FACT or OPINION?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -2897,7 +2897,7 @@
       "orderIndex": 9,
       "competency": "Identifying Author's Purpose",
       "title": "Lesson 9: Author's Purpose",
-      "lectureText": "In this lesson, you will learn to identify the text's purpose. An author usually writes to achieve one of the following main goals:\n\n1. Entertain — To make the reader enjoy reading through stories, amusing events, or vibrant characters.\n\n2. Inform — To give the reader true facts and information about a specific topic.\n\n3. Describe — To paint a picture in the reader's mind using sensory details (sight, sound, smell, touch, and taste).",
+      "lectureText": "In this lesson, you will learn to identify the text's purpose. An author usually writes to achieve one of the following main goals:\n\n1. Entertain \u2014 To make the reader enjoy reading through stories, amusing events, or vibrant characters.\n\n2. Inform \u2014 To give the reader true facts and information about a specific topic.\n\n3. Describe \u2014 To paint a picture in the reader's mind using sensory details (sight, sound, smell, touch, and taste).",
       "parts": [
         {
           "passageText": "Examples:\n\n1. ENTERTAIN: One sunny afternoon, Maya found a tiny talking turtle beside the river. 'Can you help me find my way home?' the turtle asked. Maya laughed in surprise and followed the turtle into the forest. Along the way, they met dancing monkeys and colorful birds.\n\n2. INFORM: The Philippine Eagle is one of the largest eagles in the world. It can only be found in the Philippines. This eagle lives in forests and eats small animals like monkeys and snakes. Sadly, the Philippine Eagle is endangered because many forests are being cut down.\n\n3. DESCRIBE: The tall glass of halo-halo was a beautiful masterpiece of bright purple ube, yellow sweet corn, and deep red beans. Crushed ice glistened on top like tiny diamonds, drenched in creamy, sweet milk that felt delightfully cold and refreshing.",
@@ -2909,7 +2909,7 @@
           "miniQuestions": [
             {
               "id": "mq-09-01",
-              "questionText": "'The mango tree gives sweet fruits during summer. Many Filipino families enjoy eating ripe mangoes as snacks. Mangoes are rich in vitamins.' — Text Purpose?",
+              "questionText": "'The mango tree gives sweet fruits during summer. Many Filipino families enjoy eating ripe mangoes as snacks. Mangoes are rich in vitamins.' \u2014 Text Purpose?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -2934,7 +2934,7 @@
             },
             {
               "id": "mq-09-02",
-              "questionText": "'The sand on the beach was pure white and felt warm between my toes. The clear turquoise water sparkled brightly under the golden sun.' — Text Purpose?",
+              "questionText": "'The sand on the beach was pure white and felt warm between my toes. The clear turquoise water sparkled brightly under the golden sun.' \u2014 Text Purpose?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -2959,7 +2959,7 @@
             },
             {
               "id": "mq-09-03",
-              "questionText": "'Ben tried to fly his homemade kite. Suddenly, a mischievous squirrel grabbed the kite string and tried to fly away with it!' — Text Purpose?",
+              "questionText": "'Ben tried to fly his homemade kite. Suddenly, a mischievous squirrel grabbed the kite string and tried to fly away with it!' \u2014 Text Purpose?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -2984,7 +2984,7 @@
             },
             {
               "id": "mq-09-04",
-              "questionText": "'A solar eclipse happens when the moon moves directly between the Earth and the sun. The moon blocks the sunlight, making the sky darker.' — Text Purpose?",
+              "questionText": "'A solar eclipse happens when the moon moves directly between the Earth and the sun. The moon blocks the sunlight, making the sky darker.' \u2014 Text Purpose?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -3009,7 +3009,7 @@
             },
             {
               "id": "mq-09-05",
-              "questionText": "'The traditional bahay kubo is built with textured brown bamboo. Inside, the smooth floor feels cool, and wide windows let in the fresh, earthy scent of the garden.' — Text Purpose?",
+              "questionText": "'The traditional bahay kubo is built with textured brown bamboo. Inside, the smooth floor feels cool, and wide windows let in the fresh, earthy scent of the garden.' \u2014 Text Purpose?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -3034,7 +3034,7 @@
             },
             {
               "id": "mq-09-06",
-              "questionText": "'When Carlo started writing with his magic pencil, his drawings jumped off the paper! A little paper dog began barking and chasing his eraser.' — Text Purpose?",
+              "questionText": "'When Carlo started writing with his magic pencil, his drawings jumped off the paper! A little paper dog began barking and chasing his eraser.' \u2014 Text Purpose?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -3067,7 +3067,7 @@
           "activityQuestions": [
             {
               "id": "aq-09-01",
-              "questionText": "1. 'The carabao is a helpful animal commonly found in farms in the Philippines. It is strong, hardworking, and used by farmers to plow rice fields.' — Purpose?",
+              "questionText": "1. 'The carabao is a helpful animal commonly found in farms in the Philippines. It is strong, hardworking, and used by farmers to plow rice fields.' \u2014 Purpose?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -3092,7 +3092,7 @@
             },
             {
               "id": "aq-09-02",
-              "questionText": "2. 'Last Sunday, Ben heard a strange sound outside. When he opened the door, he saw a monkey holding bananas from their kitchen basket.' — Purpose?",
+              "questionText": "2. 'Last Sunday, Ben heard a strange sound outside. When he opened the door, he saw a monkey holding bananas from their kitchen basket.' \u2014 Purpose?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -3117,7 +3117,7 @@
             },
             {
               "id": "aq-09-03",
-              "questionText": "3. 'Mayon Volcano is located in Albay. It is famous for its perfect cone shape and is one of the most active volcanoes in the Philippines.' — Purpose?",
+              "questionText": "3. 'Mayon Volcano is located in Albay. It is famous for its perfect cone shape and is one of the most active volcanoes in the Philippines.' \u2014 Purpose?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -3142,7 +3142,7 @@
             },
             {
               "id": "aq-09-04",
-              "questionText": "4. 'The beach in Batangas had soft white sand and clear blue water. Tall coconut trees swayed gently while the cool wind blew across the shore.' — Purpose?",
+              "questionText": "4. 'The beach in Batangas had soft white sand and clear blue water. Tall coconut trees swayed gently while the cool wind blew across the shore.' \u2014 Purpose?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -3167,7 +3167,7 @@
             },
             {
               "id": "aq-09-05",
-              "questionText": "5. 'The Philippine eagle is one of the largest eagles in the world. It can be found in forests in Mindanao and is considered an endangered animal.' — Purpose?",
+              "questionText": "5. 'The Philippine eagle is one of the largest eagles in the world. It can be found in forests in Mindanao and is considered an endangered animal.' \u2014 Purpose?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -3192,7 +3192,7 @@
             },
             {
               "id": "aq-09-06",
-              "questionText": "6. 'During the barangay fiesta, Carlo accidentally dropped the lechon sauce on his shirt. Everyone laughed when their dog started licking the sauce from the floor.' — Purpose?",
+              "questionText": "6. 'During the barangay fiesta, Carlo accidentally dropped the lechon sauce on his shirt. Everyone laughed when their dog started licking the sauce from the floor.' \u2014 Purpose?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -3217,7 +3217,7 @@
             },
             {
               "id": "aq-09-07",
-              "questionText": "7. 'The jeepney is a popular mode of transportation in the Philippines. It can carry many passengers and is known for its colorful decorations.' — Purpose?",
+              "questionText": "7. 'The jeepney is a popular mode of transportation in the Philippines. It can carry many passengers and is known for its colorful decorations.' \u2014 Purpose?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -3242,7 +3242,7 @@
             },
             {
               "id": "aq-09-08",
-              "questionText": "8. 'The chocolate cake was soft, sweet, and covered with thick creamy icing. Colorful sprinkles were placed on top of the cake.' — Purpose?",
+              "questionText": "8. 'The chocolate cake was soft, sweet, and covered with thick creamy icing. Colorful sprinkles were placed on top of the cake.' \u2014 Purpose?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -3267,7 +3267,7 @@
             },
             {
               "id": "aq-09-09",
-              "questionText": "9. 'One evening, Liza heard loud noises from the roof during a brownout. She discovered it was only a cat running above the house.' — Purpose?",
+              "questionText": "9. 'One evening, Liza heard loud noises from the roof during a brownout. She discovered it was only a cat running above the house.' \u2014 Purpose?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -3292,7 +3292,7 @@
             },
             {
               "id": "aq-09-10",
-              "questionText": "10. 'Rice terraces can be found in the mountains of Ifugao. They were built by ancestors many years ago and are important tourist attractions today.' — Purpose?",
+              "questionText": "10. 'Rice terraces can be found in the mountains of Ifugao. They were built by ancestors many years ago and are important tourist attractions today.' \u2014 Purpose?",
               "questionType": "MCQ",
               "choices": [
                 {
@@ -3324,7 +3324,7 @@
       "orderIndex": 10,
       "competency": "Making Predictions",
       "title": "Lesson 10: Making Predictions",
-      "lectureText": "Making a prediction means using clues from the text to guess what will happen next.\n\nExample: Sara's dad opens the fridge and grabs bread, slices of turkey, cheese, and mustard. He also grabs a napkin and a small plastic bag. What probably happened next?\n\nThe answer is: Sara's dad made her a sandwich — because those are the clues in the paragraph.\n\nRemember: We use clues from the story to make our prediction, not just a guess!",
+      "lectureText": "Making a prediction means using clues from the text to guess what will happen next.\n\nExample: Sara's dad opens the fridge and grabs bread, slices of turkey, cheese, and mustard. He also grabs a napkin and a small plastic bag. What probably happened next?\n\nThe answer is: Sara's dad made her a sandwich \u2014 because those are the clues in the paragraph.\n\nRemember: We use clues from the story to make our prediction, not just a guess!",
       "parts": [
         {
           "passageText": "Example 1: Everyone was having fun at the magic show. Then the magician said, 'I need a volunteer for this next amazing act of magic.' Lots of kids jumped up and raised their hands. The magician pointed to Cindy. 'You, there,' he said.\nWhat probably happened next?\na. Cindy went up on the stage.\nb. Cindy sat back down.\nc. The magician took a bow.\nd. The magician pulled a rabbit out of a hat.\nAnswer: a. Cindy went up on the stage.\n\nExample 2: The school play ended. Everyone had remembered their lines. The audience had laughed at all the right places. The lights came on and the students all came back on stage and took a bow.\n\nKim woke up on Saturday morning. She remembered she had a few chores to do before she went out to play, but she didn't feel so good. She still felt tired, and her stomach hurt. 'I don't feel so good, Mom,' she said. 'Oh,' said Mom. 'I don't think you'll be doing chores or going out to play today.'",
@@ -3570,29 +3570,29 @@
       "orderIndex": 1,
       "questionType": "MCQ",
       "pointsValue": 1,
-      "questionText": "Which word is a SYNONYM for 'large'?",
+      "questionText": "Which part of the story tells us where and when it takes place?",
       "choices": [
         {
           "id": "ppc-gr4-q1-pre-01-a",
-          "choiceText": "Small",
+          "choiceText": "Characters",
           "isCorrect": false,
           "orderIndex": 1
         },
         {
           "id": "ppc-gr4-q1-pre-01-b",
-          "choiceText": "Big",
+          "choiceText": "Setting",
           "isCorrect": true,
           "orderIndex": 2
         },
         {
           "id": "ppc-gr4-q1-pre-01-c",
-          "choiceText": "Tiny",
+          "choiceText": "Problem",
           "isCorrect": false,
           "orderIndex": 3
         },
         {
           "id": "ppc-gr4-q1-pre-01-d",
-          "choiceText": "Fast",
+          "choiceText": "Resolution",
           "isCorrect": false,
           "orderIndex": 4
         }
@@ -3602,15 +3602,33 @@
       "id": "ppq-gr4-q1-pre-02",
       "testType": "PRE",
       "orderIndex": 2,
-      "questionType": "FILL_IN",
+      "questionType": "MCQ",
       "pointsValue": 1,
-      "questionText": "An action word is called a ________.",
+      "questionText": "In the sentence, \"I felt very nervous before the big game,\" what is the point of view?",
       "choices": [
         {
           "id": "ppc-gr4-q1-pre-02-a",
-          "choiceText": "verb",
+          "choiceText": "First Person",
           "isCorrect": true,
           "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-02-b",
+          "choiceText": "Second Person",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-02-c",
+          "choiceText": "Third Person",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-02-d",
+          "choiceText": "Objective",
+          "isCorrect": false,
+          "orderIndex": 4
         }
       ]
     },
@@ -3620,29 +3638,947 @@
       "orderIndex": 3,
       "questionType": "MCQ",
       "pointsValue": 1,
-      "questionText": "What does sequencing mean?",
+      "questionText": "Which story element describes the main struggle or challenge?",
       "choices": [
         {
           "id": "ppc-gr4-q1-pre-03-a",
-          "choiceText": "Putting events in alphabetical order",
+          "choiceText": "Plot",
           "isCorrect": false,
           "orderIndex": 1
         },
         {
           "id": "ppc-gr4-q1-pre-03-b",
-          "choiceText": "Putting events in the order they happened",
-          "isCorrect": true,
+          "choiceText": "Resolution",
+          "isCorrect": false,
           "orderIndex": 2
         },
         {
           "id": "ppc-gr4-q1-pre-03-c",
-          "choiceText": "Mixing up the events",
-          "isCorrect": false,
+          "choiceText": "Conflict/Problem",
+          "isCorrect": true,
           "orderIndex": 3
         },
         {
           "id": "ppc-gr4-q1-pre-03-d",
-          "choiceText": "Deleting the last event",
+          "choiceText": "Climax",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-04",
+      "testType": "PRE",
+      "orderIndex": 4,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "When a narrator uses the word \"You\" and talks to the reader, they are using:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-04-a",
+          "choiceText": "First Person",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-04-b",
+          "choiceText": "Second Person",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-04-c",
+          "choiceText": "Third Person",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-04-d",
+          "choiceText": "Omniscient",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-05",
+      "testType": "PRE",
+      "orderIndex": 5,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "The Resolution of a story is the part where:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-05-a",
+          "choiceText": "The characters are introduced",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-05-b",
+          "choiceText": "The problem is solved",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-05-c",
+          "choiceText": "The climax happens",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-05-d",
+          "choiceText": "The author is named",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-06",
+      "testType": "PRE",
+      "orderIndex": 6,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "What is the purpose of Sequencing?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-06-a",
+          "choiceText": "To count the words in a story",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-06-b",
+          "choiceText": "To put events in the correct order",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-06-c",
+          "choiceText": "To find the main character",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-06-d",
+          "choiceText": "To check for spelling errors",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-07",
+      "testType": "PRE",
+      "orderIndex": 7,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Which signal word is used to show the start of a process?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-07-a",
+          "choiceText": "Next",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-07-b",
+          "choiceText": "Then",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-07-c",
+          "choiceText": "First",
+          "isCorrect": true,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-07-d",
+          "choiceText": "Finally",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-08",
+      "testType": "PRE",
+      "orderIndex": 8,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Which word signals that the final step is happening?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-08-a",
+          "choiceText": "Second",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-08-b",
+          "choiceText": "Lastly",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-08-c",
+          "choiceText": "After",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-08-d",
+          "choiceText": "Also",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-09",
+      "testType": "PRE",
+      "orderIndex": 9,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "A Sequential Plot is a story that moves:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-09-a",
+          "choiceText": "From the end back to the beginning",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-09-b",
+          "choiceText": "From the start to the end in time order",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-09-c",
+          "choiceText": "In a circle",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-09-d",
+          "choiceText": "Randomly",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-10",
+      "testType": "PRE",
+      "orderIndex": 10,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "If you are following a recipe to bake a cake, you are reading a:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-10-a",
+          "choiceText": "Narrative",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-10-b",
+          "choiceText": "Procedural text",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-10-c",
+          "choiceText": "Poem",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-10-d",
+          "choiceText": "Description",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-11",
+      "testType": "PRE",
+      "orderIndex": 11,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "\"The moon was a silver coin in the sky.\" This is a:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-11-a",
+          "choiceText": "Simile",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-11-b",
+          "choiceText": "Metaphor",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-11-c",
+          "choiceText": "Fact",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-11-d",
+          "choiceText": "Rhyme",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-12",
+      "testType": "PRE",
+      "orderIndex": 12,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "A metaphor is a comparison that:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-12-a",
+          "choiceText": "Uses \"like\" or \"as\"",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-12-b",
+          "choiceText": "Says one thing is another thing",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-12-c",
+          "choiceText": "Is only about animals",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-12-d",
+          "choiceText": "Is a scientific fact",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-13",
+      "testType": "PRE",
+      "orderIndex": 13,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Which word is an example of Onomatopoeia (sound word)?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-13-a",
+          "choiceText": "Running",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-13-b",
+          "choiceText": "Splash",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-13-c",
+          "choiceText": "Happy",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-13-d",
+          "choiceText": "Large",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-14",
+      "testType": "PRE",
+      "orderIndex": 14,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "The phrase \"Peter Piper picked a peck\" uses which sound device?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-14-a",
+          "choiceText": "Rhyme",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-14-b",
+          "choiceText": "Alliteration/Consonance",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-14-c",
+          "choiceText": "Onomatopoeia",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-14-d",
+          "choiceText": "Rhythm",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-15",
+      "testType": "PRE",
+      "orderIndex": 15,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Why do authors use Rhyme in poetry?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-15-a",
+          "choiceText": "To make it harder to read",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-15-b",
+          "choiceText": "To create a musical pattern and rhythm",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-15-c",
+          "choiceText": "To give instructions",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-15-d",
+          "choiceText": "To provide facts",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-16",
+      "testType": "PRE",
+      "orderIndex": 16,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "If a character is wearing a swimsuit and carrying a towel, you can conclude:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-16-a",
+          "choiceText": "They are going to school.",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-16-b",
+          "choiceText": "They are going to the beach or pool.",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-16-c",
+          "choiceText": "They are feeling very cold.",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-16-d",
+          "choiceText": "They are going to sleep.",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-17",
+      "testType": "PRE",
+      "orderIndex": 17,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "To draw a conclusion, you use clues from the text plus your:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-17-a",
+          "choiceText": "Calculator",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-17-b",
+          "choiceText": "Schema (Prior Knowledge)",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-17-c",
+          "choiceText": "Ruler",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-17-d",
+          "choiceText": "Map",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-18",
+      "testType": "PRE",
+      "orderIndex": 18,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "A prediction is a guess about:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-18-a",
+          "choiceText": "What happened in the past",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-18-b",
+          "choiceText": "What will happen next in the story",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-18-c",
+          "choiceText": "The author's middle name",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-18-d",
+          "choiceText": "The price of the book",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-19",
+      "testType": "PRE",
+      "orderIndex": 19,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "If a dark cloud covers the sun and the wind picks up, what do you predict?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-19-a",
+          "choiceText": "It will snow.",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-19-b",
+          "choiceText": "It will rain.",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-19-c",
+          "choiceText": "It will be a hot day.",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-19-d",
+          "choiceText": "The birds will sing louder.",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-20",
+      "testType": "PRE",
+      "orderIndex": 20,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Conclusions are often:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-20-a",
+          "choiceText": "Written directly in the first sentence",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-20-b",
+          "choiceText": "Not stated directly; you have to figure them out",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-20-c",
+          "choiceText": "Always about the characters' names",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-20-d",
+          "choiceText": "Found only in the title",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-21",
+      "testType": "PRE",
+      "orderIndex": 21,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Which of the following is a Fact?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-21-a",
+          "choiceText": "\"Math is the most fun subject.\"",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-21-b",
+          "choiceText": "\"Water boils at 100 degrees Celsius.\"",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-21-c",
+          "choiceText": "\"Yellow is a better color than red.\"",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-21-d",
+          "choiceText": "\"Everyone should be a doctor.\"",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-22",
+      "testType": "PRE",
+      "orderIndex": 22,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Which word usually signals an Opinion?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-22-a",
+          "choiceText": "Recorded",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-22-b",
+          "choiceText": "Believe",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-22-c",
+          "choiceText": "Dates",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-22-d",
+          "choiceText": "Scientific",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-23",
+      "testType": "PRE",
+      "orderIndex": 23,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "An Informational Recount is used to:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-23-a",
+          "choiceText": "Tell a fairytale",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-23-b",
+          "choiceText": "Retell real events that happened",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-23-c",
+          "choiceText": "Make someone laugh",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-23-d",
+          "choiceText": "Predict the future",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-24",
+      "testType": "PRE",
+      "orderIndex": 24,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Which text type uses many adjectives to tell how something looks or feels?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-24-a",
+          "choiceText": "Sequence",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-24-b",
+          "choiceText": "Description",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-24-c",
+          "choiceText": "Fact",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-24-d",
+          "choiceText": "Procedural",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-25",
+      "testType": "PRE",
+      "orderIndex": 25,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "In an Enumeration text, the author:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-25-a",
+          "choiceText": "Tells a story about a hero",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-25-b",
+          "choiceText": "Lists items or parts of a whole",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-25-c",
+          "choiceText": "Argues about a topic",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-25-d",
+          "choiceText": "Writes a poem",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-26",
+      "testType": "PRE",
+      "orderIndex": 26,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "A Summary should be:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-26-a",
+          "choiceText": "Longer than the original story",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-26-b",
+          "choiceText": "A short version with only the main points",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-26-c",
+          "choiceText": "A list of all the adjectives used",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-26-d",
+          "choiceText": "Just the last sentence of the story",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-27",
+      "testType": "PRE",
+      "orderIndex": 27,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "When an author writes to Inform, they provide:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-27-a",
+          "choiceText": "Jokes and riddles",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-27-b",
+          "choiceText": "Facts and information",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-27-c",
+          "choiceText": "Arguments and opinions",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-27-d",
+          "choiceText": "Scary stories",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-28",
+      "testType": "PRE",
+      "orderIndex": 28,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "If an author writes a story to make you laugh, their purpose is to:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-28-a",
+          "choiceText": "Persuade",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-28-b",
+          "choiceText": "Inform",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-28-c",
+          "choiceText": "Entertain",
+          "isCorrect": true,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-28-d",
+          "choiceText": "Describe",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-29",
+      "testType": "PRE",
+      "orderIndex": 29,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "To summarize, we often look for the 5 W's: Who, What, Where, When, and:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-29-a",
+          "choiceText": "Which",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-29-b",
+          "choiceText": "Why",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-29-c",
+          "choiceText": "Wish",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-29-d",
+          "choiceText": "Weather",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-pre-30",
+      "testType": "PRE",
+      "orderIndex": 30,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Identifying the Author's Purpose helps us:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-pre-30-a",
+          "choiceText": "Read faster",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-pre-30-b",
+          "choiceText": "Understand why the text was written",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-pre-30-c",
+          "choiceText": "Count the number of pages",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-pre-30-d",
+          "choiceText": "Check for grammar errors",
           "isCorrect": false,
           "orderIndex": 4
         }
@@ -3654,29 +4590,29 @@
       "orderIndex": 1,
       "questionType": "MCQ",
       "pointsValue": 1,
-      "questionText": "Which word is an ANTONYM for 'brave'?",
+      "questionText": "Which element refers to the people, animals, or creatures that take part in the action of a story?",
       "choices": [
         {
           "id": "ppc-gr4-q1-post-01-a",
-          "choiceText": "Strong",
+          "choiceText": "Setting",
           "isCorrect": false,
           "orderIndex": 1
         },
         {
           "id": "ppc-gr4-q1-post-01-b",
-          "choiceText": "Cowardly",
-          "isCorrect": true,
+          "choiceText": "Plot",
+          "isCorrect": false,
           "orderIndex": 2
         },
         {
           "id": "ppc-gr4-q1-post-01-c",
-          "choiceText": "Fearless",
-          "isCorrect": false,
+          "choiceText": "Characters",
+          "isCorrect": true,
           "orderIndex": 3
         },
         {
           "id": "ppc-gr4-q1-post-01-d",
-          "choiceText": "Smart",
+          "choiceText": "Theme",
           "isCorrect": false,
           "orderIndex": 4
         }
@@ -3686,15 +4622,33 @@
       "id": "ppq-gr4-q1-post-02",
       "testType": "POST",
       "orderIndex": 2,
-      "questionType": "FILL_IN",
+      "questionType": "MCQ",
       "pointsValue": 1,
-      "questionText": "A word that describes a noun is called an ________.",
+      "questionText": "The \"Resolution\" of a story is the part where:",
       "choices": [
         {
           "id": "ppc-gr4-q1-post-02-a",
-          "choiceText": "adjective",
-          "isCorrect": true,
+          "choiceText": "The characters are first introduced",
+          "isCorrect": false,
           "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-02-b",
+          "choiceText": "The story reaches its scariest part",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-02-c",
+          "choiceText": "The main problem is finally solved",
+          "isCorrect": true,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-02-d",
+          "choiceText": "The story moves to a new location",
+          "isCorrect": false,
+          "orderIndex": 4
         }
       ]
     },
@@ -3704,29 +4658,947 @@
       "orderIndex": 3,
       "questionType": "MCQ",
       "pointsValue": 1,
-      "questionText": "Why are visual elements like graphs and diagrams important?",
+      "questionText": "Which point of view uses pronouns like \"I,\" \"me,\" \"we,\" and \"us\"?",
       "choices": [
         {
           "id": "ppc-gr4-q1-post-03-a",
-          "choiceText": "They make the page look pretty",
-          "isCorrect": false,
+          "choiceText": "First Person",
+          "isCorrect": true,
           "orderIndex": 1
         },
         {
           "id": "ppc-gr4-q1-post-03-b",
-          "choiceText": "They give important information to help you understand",
-          "isCorrect": true,
+          "choiceText": "Second Person",
+          "isCorrect": false,
           "orderIndex": 2
         },
         {
           "id": "ppc-gr4-q1-post-03-c",
-          "choiceText": "They replace the text",
+          "choiceText": "Third Person",
           "isCorrect": false,
           "orderIndex": 3
         },
         {
           "id": "ppc-gr4-q1-post-03-d",
-          "choiceText": "They tell you when to stop reading",
+          "choiceText": "Omniscient",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-04",
+      "testType": "POST",
+      "orderIndex": 4,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "If a narrator talks directly to you using the word \"You,\" which point of view is being used?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-04-a",
+          "choiceText": "First Person",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-04-b",
+          "choiceText": "Second Person",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-04-c",
+          "choiceText": "Third Person Limited",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-04-d",
+          "choiceText": "Third Person Omniscient",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-05",
+      "testType": "POST",
+      "orderIndex": 5,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "\"The king was sad, but the queen felt hopeful.\" If the narrator knows the feelings of all characters, it is:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-05-a",
+          "choiceText": "First Person",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-05-b",
+          "choiceText": "Second Person",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-05-c",
+          "choiceText": "Third Person Omniscient",
+          "isCorrect": true,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-05-d",
+          "choiceText": "Third Person Limited",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-06",
+      "testType": "POST",
+      "orderIndex": 6,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "What do we call the logical order of events in a story?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-06-a",
+          "choiceText": "Characterization",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-06-b",
+          "choiceText": "Sequencing",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-06-c",
+          "choiceText": "Description",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-06-d",
+          "choiceText": "Personification",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-07",
+      "testType": "POST",
+      "orderIndex": 7,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Which signal word is most likely to be found in the Middle of a sequence?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-07-a",
+          "choiceText": "Once upon a time",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-07-b",
+          "choiceText": "To start",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-07-c",
+          "choiceText": "Next",
+          "isCorrect": true,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-07-d",
+          "choiceText": "Finally",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-08",
+      "testType": "POST",
+      "orderIndex": 8,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "In a Sequential Plot, how do events move?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-08-a",
+          "choiceText": "They jump around in time",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-08-b",
+          "choiceText": "They follow a clear timeline from start to finish",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-08-c",
+          "choiceText": "They only show the ending first",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-08-d",
+          "choiceText": "They repeat the same event over and over",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-09",
+      "testType": "POST",
+      "orderIndex": 9,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Which of these is the first step in a sequence?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-09-a",
+          "choiceText": "Finally, we arrived at the beach.",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-09-b",
+          "choiceText": "To begin with, we packed our bags.",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-09-c",
+          "choiceText": "After that, we drove for two hours.",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-09-d",
+          "choiceText": "Then, we saw the ocean.",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-10",
+      "testType": "POST",
+      "orderIndex": 10,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Why are signal words important in a procedural text?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-10-a",
+          "choiceText": "They make the sentences longer.",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-10-b",
+          "choiceText": "They help the reader follow steps in the right order.",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-10-c",
+          "choiceText": "They describe what the characters look like.",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-10-d",
+          "choiceText": "They tell us the author's name.",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-11",
+      "testType": "POST",
+      "orderIndex": 11,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "\"The stars were small diamonds in the dark sky.\" This is a:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-11-a",
+          "choiceText": "Simile",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-11-b",
+          "choiceText": "Metaphor",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-11-c",
+          "choiceText": "Fact",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-11-d",
+          "choiceText": "Onomatopoeia",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-12",
+      "testType": "POST",
+      "orderIndex": 12,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "A metaphor is a comparison that DOES NOT use which words?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-12-a",
+          "choiceText": "Is / Was",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-12-b",
+          "choiceText": "Like / As",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-12-c",
+          "choiceText": "The / An",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-12-d",
+          "choiceText": "Are / Were",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-13",
+      "testType": "POST",
+      "orderIndex": 13,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Which sound device is used in the phrase: \"The pitter-patter of pink petals\"?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-13-a",
+          "choiceText": "Rhyme",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-13-b",
+          "choiceText": "Alliteration/Consonance",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-13-c",
+          "choiceText": "Onomatopoeia",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-13-d",
+          "choiceText": "Metaphor",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-14",
+      "testType": "POST",
+      "orderIndex": 14,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Which of these is an example of Onomatopoeia?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-14-a",
+          "choiceText": "Beautiful",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-14-b",
+          "choiceText": "Quickly",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-14-c",
+          "choiceText": "Crash",
+          "isCorrect": true,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-14-d",
+          "choiceText": "Running",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-15",
+      "testType": "POST",
+      "orderIndex": 15,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "What is the effect of Repetition in a poem?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-15-a",
+          "choiceText": "It makes the poem confusing.",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-15-b",
+          "choiceText": "It emphasizes a certain feeling or idea.",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-15-c",
+          "choiceText": "It provides a list of facts.",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-15-d",
+          "choiceText": "It changes the point of view.",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-16",
+      "testType": "POST",
+      "orderIndex": 16,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "If you see a student crying while looking at a broken toy, what can you conclude?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-16-a",
+          "choiceText": "They are happy it broke.",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-16-b",
+          "choiceText": "They are upset because the toy is special to them.",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-16-c",
+          "choiceText": "They are going to buy a new car.",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-16-d",
+          "choiceText": "They are sleepy.",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-17",
+      "testType": "POST",
+      "orderIndex": 17,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Drawing a conclusion is often called:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-17-a",
+          "choiceText": "Reading between the lines",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-17-b",
+          "choiceText": "Reading only the first word",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-17-c",
+          "choiceText": "Skimming for dates",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-17-d",
+          "choiceText": "Counting the characters",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-18",
+      "testType": "POST",
+      "orderIndex": 18,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "A prediction is a guess about:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-18-a",
+          "choiceText": "Why the author wrote the book",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-18-b",
+          "choiceText": "What will happen next based on clues",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-18-c",
+          "choiceText": "The setting of the story",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-18-d",
+          "choiceText": "The meaning of a metaphor",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-19",
+      "testType": "POST",
+      "orderIndex": 19,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "A character puts on a helmet and gets on a bicycle. What do you predict?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-19-a",
+          "choiceText": "They will go for a swim.",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-19-b",
+          "choiceText": "They will go for a bike ride.",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-19-c",
+          "choiceText": "They will go to sleep.",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-19-d",
+          "choiceText": "They will cook dinner.",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-20",
+      "testType": "POST",
+      "orderIndex": 20,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "To make a good prediction, you need:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-20-a",
+          "choiceText": "Clues from the story + your own experiences (Schema)",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-20-b",
+          "choiceText": "A dictionary + a ruler",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-20-c",
+          "choiceText": "The page number + the title",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-20-d",
+          "choiceText": "The price of the book + the author\u2019s name",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-21",
+      "testType": "POST",
+      "orderIndex": 21,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Which sentence is an Opinion?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-21-a",
+          "choiceText": "The Philippines has many islands.",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-21-b",
+          "choiceText": "Ice cream is the best dessert in the world.",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-21-c",
+          "choiceText": "Dogs are mammals.",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-21-d",
+          "choiceText": "Manila is a city.",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-22",
+      "testType": "POST",
+      "orderIndex": 22,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Which word is a clue that a sentence is an Opinion?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-22-a",
+          "choiceText": "Discovered",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-22-b",
+          "choiceText": "Think",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-22-c",
+          "choiceText": "Proven",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-22-d",
+          "choiceText": "Date",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-23",
+      "testType": "POST",
+      "orderIndex": 23,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "A Description text type uses many:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-23-a",
+          "choiceText": "Numbers",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-23-b",
+          "choiceText": "Adjectives (describing words)",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-23-c",
+          "choiceText": "Verbs (action words)",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-23-d",
+          "choiceText": "Dates",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-24",
+      "testType": "POST",
+      "orderIndex": 24,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "What is the purpose of an Informational Recount?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-24-a",
+          "choiceText": "To tell a story about talking animals",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-24-b",
+          "choiceText": "To retell a real event that happened in the past",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-24-c",
+          "choiceText": "To persuade you to buy something",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-24-d",
+          "choiceText": "To teach you how to draw",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-25",
+      "testType": "POST",
+      "orderIndex": 25,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "An Enumeration text type:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-25-a",
+          "choiceText": "Lists items, parts, or examples",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-25-b",
+          "choiceText": "Tells a story with a problem",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-25-c",
+          "choiceText": "Uses rhyming words",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-25-d",
+          "choiceText": "Compares two things using \"like\"",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-26",
+      "testType": "POST",
+      "orderIndex": 26,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Which of the following should NOT be in a summary?",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-26-a",
+          "choiceText": "The main character",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-26-b",
+          "choiceText": "The main idea",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-26-c",
+          "choiceText": "Tiny, unimportant details",
+          "isCorrect": true,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-26-d",
+          "choiceText": "The big events",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-27",
+      "testType": "POST",
+      "orderIndex": 27,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "The \"5 W's\" used in summarizing are Who, What, Where, When, and:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-27-a",
+          "choiceText": "Wish",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-27-b",
+          "choiceText": "Why",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-27-c",
+          "choiceText": "Work",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-27-d",
+          "choiceText": "Which",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-28",
+      "testType": "POST",
+      "orderIndex": 28,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "If an author writes a brochure about \"How to stay safe during a typhoon,\" their purpose is to:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-28-a",
+          "choiceText": "Entertain",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-28-b",
+          "choiceText": "Inform/Instruct",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-28-c",
+          "choiceText": "Describe",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-28-d",
+          "choiceText": "Persuade",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-29",
+      "testType": "POST",
+      "orderIndex": 29,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "If an author writes a story about a dragon and a knight, their purpose is to:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-29-a",
+          "choiceText": "Inform",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-29-b",
+          "choiceText": "Entertain",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-29-c",
+          "choiceText": "Describe",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-29-d",
+          "choiceText": "Explain",
+          "isCorrect": false,
+          "orderIndex": 4
+        }
+      ]
+    },
+    {
+      "id": "ppq-gr4-q1-post-30",
+      "testType": "POST",
+      "orderIndex": 30,
+      "questionType": "MCQ",
+      "pointsValue": 1,
+      "questionText": "Understanding the Author\u2019s Purpose helps the reader:",
+      "choices": [
+        {
+          "id": "ppc-gr4-q1-post-30-a",
+          "choiceText": "Know if the information is a fact or just for fun",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "id": "ppc-gr4-q1-post-30-b",
+          "choiceText": "Find the setting faster",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "id": "ppc-gr4-q1-post-30-c",
+          "choiceText": "Learn the character's name",
+          "isCorrect": false,
+          "orderIndex": 3
+        },
+        {
+          "id": "ppc-gr4-q1-post-30-d",
+          "choiceText": "Count the number of chapters",
           "isCorrect": false,
           "orderIndex": 4
         }

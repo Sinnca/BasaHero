@@ -262,10 +262,33 @@ fun WordPronunciationSheet(
     var partialText by remember { mutableStateOf("") }
     var hasHandledResult by remember { mutableStateOf(false) }
 
+    // Read the feedback aloud automatically using TTS
+    LaunchedEffect(feedbackResult) {
+        feedbackResult?.let { feedback ->
+            if (isTtsReady && tts != null) {
+                val spokenMsg = when {
+                    feedback.isCorrect && attemptCount == 1 -> "Wow! Perfect on your first try!"
+                    feedback.isCorrect -> "Great pronunciation!"
+                    feedback.heard == "Model is still loading, please wait..." -> feedback.heard
+                    feedback.heard.contains("Failed to start") -> feedback.heard
+                    feedback.heard.contains("Mic Error") -> feedback.heard
+                    feedback.heard.contains("didn't hear") -> feedback.heard
+                    feedback.heard.isEmpty() -> "I didn't catch that clearly, let's try again!"
+                    !feedback.isCorrect && feedback.confidence in 0.01f..0.6f -> "I didn't hear that clearly, let's try again. You said: ${feedback.heard}"
+                    attemptCount == 1 -> "Almost there! Keep trying! You said: ${feedback.heard}"
+                    attemptCount == 2 -> "Don't give up! Try listening to it again. You said: ${feedback.heard}"
+                    else -> "Practice makes perfect! Take your time. You said: ${feedback.heard}"
+                }
+                tts.speak(spokenMsg, TextToSpeech.QUEUE_FLUSH, null, "feedback_audio")
+            }
+        }
+    }
+
     // ── Speech engine (our custom AudioRecord + DSP pipeline) ─────────────────
     val isVoskReady by VoskManager.isReady.collectAsState()
     val engine = remember { SpeechRecognitionEngine() }
     val rmsLevel by engine.rmsLevel.collectAsState()
+
 
     DisposableEffect(Unit) {
         onDispose { engine.release() }
@@ -281,14 +304,14 @@ fun WordPronunciationSheet(
         }
     )
 
-    fun handleRecognizedText(heard: String) {
+    fun handleRecognizedText(heard: String, confidence: Float) {
         if (hasHandledResult) return  // guard against duplicate callbacks
         hasHandledResult = true
         isListening = false
         partialText = ""
         
-        if (heard.isEmpty()) {
-            feedbackResult = WordFeedback(word, "I didn't hear anything clearly, try again!", false, 0f)
+        if (heard.isEmpty() || heard.trim() == "[unk]") {
+            feedbackResult = WordFeedback(word, "", false, 0f)
             return
         }
         
@@ -298,16 +321,19 @@ fun WordPronunciationSheet(
         val cleanWord  = word.lowercase().replace(Regex("[^a-z]"), "")
         val cleanHeard = heard.lowercase().replace(Regex("[^a-z]"), "")
         
-        val isCorrect = cleanWord == cleanHeard || cleanHeard.contains(cleanWord)
-        feedbackResult = WordFeedback(word, heard, isCorrect, 1f)
+        val isExactMatch = cleanWord == cleanHeard || cleanHeard.contains(cleanWord)
+        val similarityScore = cleanWord.similarity(cleanHeard)
+        val isCorrect = isExactMatch || similarityScore >= 0.7f
+        
+        feedbackResult = WordFeedback(word, heard, isCorrect, confidence)
         onPronunciationAttempt(word, heard, isCorrect, attemptCount)
     }
 
     fun stopListening() {
         isListening = false
         partialText = ""
-        engine.stopListening { finalText ->
-            if (finalText.isNotEmpty()) handleRecognizedText(finalText)
+        engine.stopListening { finalText, conf ->
+            if (finalText.isNotEmpty()) handleRecognizedText(finalText, conf)
         }
     }
 
@@ -340,13 +366,31 @@ fun WordPronunciationSheet(
 
         engine.startListening(
             targetWords = listOf(word),
-            onPartial = { partial -> partialText = partial },
-            onResult  = { text   -> handleRecognizedText(text) },
+            onPartial = { partial -> partialText = partial.replace("[unk]", "").trim() },
+            onResult  = { text, conf -> handleRecognizedText(text.replace("[unk]", "").trim(), conf) },
             onError   = { msg    ->
                 isListening = false
                 feedbackResult = WordFeedback(word, "Mic Error: $msg", false, 0f)
             }
         )
+    }
+
+    var silenceStartTime by remember { mutableStateOf(0L) }
+
+    // Auto-stop VAD logic
+    LaunchedEffect(rmsLevel) {
+        if (isListening && partialText.isNotEmpty()) {
+            if (rmsLevel < 0.05f) { // Silence threshold
+                if (silenceStartTime == 0L) silenceStartTime = System.currentTimeMillis()
+                if (System.currentTimeMillis() - silenceStartTime > 1500L) { // 1.5 seconds of silence
+                    stopListening()
+                }
+            } else {
+                silenceStartTime = 0L
+            }
+        } else {
+            silenceStartTime = 0L
+        }
     }
 
     ModalBottomSheet(
@@ -495,12 +539,17 @@ fun WordPronunciationSheet(
                                 Spacer(Modifier.height(8.dp))
                                 Text(
                                     text = when {
+                                        feedback.isCorrect && attemptCount == 1 -> "Wow! Perfect on your first try! 🎉"
                                         feedback.isCorrect -> "Great pronunciation! ✓"
                                         feedback.heard == "Model is still loading, please wait..." -> feedback.heard
                                         feedback.heard.contains("Failed to start") -> feedback.heard
                                         feedback.heard.contains("Mic Error") -> feedback.heard
                                         feedback.heard.contains("didn't hear") -> feedback.heard
-                                        else -> "Keep trying! You said: \"${feedback.heard}\""
+                                        feedback.heard.isEmpty() -> "I didn't catch that clearly, let's try again! 🎙️"
+                                        !feedback.isCorrect && feedback.confidence in 0.01f..0.6f -> "I didn't hear that clearly, let's try again. You said: \"${feedback.heard}\""
+                                        attemptCount == 1 -> "Almost there! Keep trying! You said: \"${feedback.heard}\""
+                                        attemptCount == 2 -> "Don't give up! Try listening to it again. You said: \"${feedback.heard}\""
+                                        else -> "Practice makes perfect! Take your time. You said: \"${feedback.heard}\""
                                     },
                                     fontSize = 14.sp,
                                     fontWeight = FontWeight.Medium,
@@ -538,3 +587,36 @@ data class WordFeedback(
     val isCorrect: Boolean,
     val confidence: Float
 )
+
+// ── String Similarity Helpers ─────────────────────────────────────────────────
+
+fun String.levenshtein(other: String): Int {
+    val lhs = this.lowercase()
+    val rhs = other.lowercase()
+    if (lhs == rhs) return 0
+    if (lhs.isEmpty()) return rhs.length
+    if (rhs.isEmpty()) return lhs.length
+
+    var cost = IntArray(rhs.length + 1) { it }
+    var newCost = IntArray(rhs.length + 1)
+
+    for (i in 1..lhs.length) {
+        newCost[0] = i
+        for (j in 1..rhs.length) {
+            val match = if (lhs[i - 1] == rhs[j - 1]) 0 else 1
+            val costReplace = cost[j - 1] + match
+            val costInsert  = cost[j] + 1
+            val costDelete  = newCost[j - 1] + 1
+            newCost[j] = minOf(costInsert, costDelete, costReplace)
+        }
+        val swap = cost; cost = newCost; newCost = swap
+    }
+    return cost[rhs.length]
+}
+
+fun String.similarity(other: String): Float {
+    val maxLen = maxOf(this.length, other.length)
+    if (maxLen == 0) return 1f
+    val dist = this.levenshtein(other)
+    return 1f - (dist.toFloat() / maxLen)
+}

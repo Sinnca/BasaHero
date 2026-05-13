@@ -13,10 +13,8 @@ package com.basahero.elearning.audio
 object AudioDsp {
 
     // ── Noise Gate ────────────────────────────────────────────────────────────
-    // Samples whose RMS energy (over the whole buffer) falls below this fraction
-    // of max amplitude are considered silence and zeroed out.
-    // 0.03f (3%) effectively kills most room noise and computer fan hums
-    private const val NOISE_GATE_RMS_THRESHOLD = 0.03f
+    // 0.01f (1%) is more sensitive for human speech vs room noise
+    private const val NOISE_GATE_RMS_THRESHOLD = 0.01f
 
     // ── High-Pass Filter ─────────────────────────────────────────────────────
     // 1st-order IIR high-pass: y[n] = α * (y[n-1] + x[n] - x[n-1])
@@ -24,8 +22,8 @@ object AudioDsp {
     private const val HP_ALPHA = 0.97f
 
     // ── Normalization ─────────────────────────────────────────────────────────
-    // After filtering, scale so the peak sample reaches this fraction of max.
-    private const val NORM_TARGET = 0.9f
+    // After filtering, scale so the peak sample reaches the maximum range.
+    private const val NORM_TARGET = 1.0f
 
     // ── Persistent filter state ───────────────────────────────────────────────
     // These survive across calls so the filter is continuous between buffers.
@@ -77,8 +75,8 @@ object AudioDsp {
         if (peak > 0f) {
             val gain = (NORM_TARGET * Short.MAX_VALUE) / peak
             // Only apply gain if it would actually change something meaningful
-            // and avoid clipping (cap gain at 8× to prevent over-amplifying silence)
-            val clampedGain = gain.coerceAtMost(8f)
+            // and avoid clipping (cap gain at 16× to boost quiet voices significantly)
+            val clampedGain = gain.coerceAtMost(16f)
             if (clampedGain != 1f) {
                 for (i in 0 until length) {
                     buffer[i] = (buffer[i] * clampedGain)

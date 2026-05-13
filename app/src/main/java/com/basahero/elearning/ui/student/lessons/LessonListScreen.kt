@@ -174,7 +174,7 @@ fun LessonListScreen(
                                     color = Color.White
                                 )
                                 Text(
-                                    text = "Post-Test unlocks after all lessons",
+                                    text = "Post-Test unlocks after Pre-Test",
                                     fontSize = if (isTablet) 14.sp else 12.sp,
                                     color = Color.White.copy(0.85f)
                                 )
@@ -243,12 +243,12 @@ fun LessonListScreen(
                     Box(modifier = Modifier.padding(horizontal = contentPad)) {
                         PrePostCard(
                             title = strings.postTest,
-                            subtitle = if (uiState.isPostTestDone) "Completed" else "Unlock by finishing all lessons",
+                            subtitle = if (uiState.isPostTestDone) "Completed" else "Ready to take",
                             isDone = uiState.isPostTestDone,
-                            isLocked = !uiState.allLessonsDone,
+                            isLocked = !uiState.isPreTestDone,
                             icon = Icons.Default.EmojiEvents,
                             isTablet = isTablet,
-                            onClick = { if (uiState.allLessonsDone) onPostTestClick() },
+                            onClick = { if (uiState.isPreTestDone) onPostTestClick() },
                             isPreTest = false
                         )
                     }

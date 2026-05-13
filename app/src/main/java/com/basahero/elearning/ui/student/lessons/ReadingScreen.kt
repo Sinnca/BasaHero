@@ -106,6 +106,9 @@ fun ReadingScreen(
     val currentStep = steps.getOrNull(currentStepIndex)
     val isLastStep = currentStepIndex >= steps.lastIndex
     val isReviewMode = lesson.isDone // 👈 NEW: TRUE if lesson already finished
+    
+    // Track answered mini-questions to enforce completion
+    val answeredMiniQuestions = remember { mutableStateMapOf<String, Boolean>() }
     val scrollState = rememberScrollState()
 
     // Activity result full-page state
@@ -191,6 +194,16 @@ fun ReadingScreen(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
+                        val isNextEnabled = remember(currentStep, answeredMiniQuestions.size, isReviewMode) {
+                            if (isReviewMode) true
+                            else if (currentStep is LessonStep.ReadingPart) {
+                                // All mini questions in this part must be answered
+                                currentStep.part.miniQuestions.all { answeredMiniQuestions.containsKey(it.id) }
+                            } else {
+                                true
+                            }
+                        }
+
                         Button(
                             onClick = {
                                 if (isLastStep) {
@@ -199,6 +212,7 @@ fun ReadingScreen(
                                     currentStepIndex++
                                 }
                             },
+                            enabled = isNextEnabled,
                             modifier = Modifier
                                 .then(if (isTablet) Modifier.width(480.dp) else Modifier.fillMaxWidth())
                                 .padding(16.dp)
@@ -255,6 +269,7 @@ fun ReadingScreen(
                             part = step.part,
                             isTablet = isTablet,
                             isReviewMode = isReviewMode,
+                            onQuestionAnswered = { qId -> answeredMiniQuestions[qId] = true },
                             onPronunciationAttempt = { word, heard, isCorrect, _ ->
                                 if (!isReviewMode) {
                                     val score = if (isCorrect) 100 else 0
@@ -347,6 +362,7 @@ private fun ReadingPartStepContent(
     part: LessonPart,
     isTablet: Boolean,
     isReviewMode: Boolean,
+    onQuestionAnswered: (String) -> Unit,
     onPronunciationAttempt: (String, String, Boolean, Int) -> Unit
 ) {
     // Header
@@ -409,7 +425,8 @@ private fun ReadingPartStepContent(
                 questionNumber = index + 1,
                 question = question,
                 isTablet = isTablet,
-                isReviewMode = isReviewMode
+                isReviewMode = isReviewMode,
+                onAnswered = { onQuestionAnswered(question.id) }
             )
             if (index < part.miniQuestions.lastIndex) {
                 Spacer(Modifier.height(12.dp))
@@ -427,10 +444,15 @@ private fun MiniQuestionCard(
     questionNumber: Int,
     question: MiniQuestion,
     isTablet: Boolean,
-    isReviewMode: Boolean
+    isReviewMode: Boolean,
+    onAnswered: () -> Unit
 ) {
     var selectedChoiceId by remember(question.id) { mutableStateOf<String?>(null) }
     var showFeedback by remember(question.id) { mutableStateOf(false) }
+
+    LaunchedEffect(showFeedback) {
+        if (showFeedback) onAnswered()
+    }
 
     Card(
         modifier = Modifier.fillMaxWidth(),

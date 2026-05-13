@@ -292,11 +292,8 @@ class LessonRepository(private val db: AppDatabase) {
 
                 val status = when {
                     progress != null -> progress.status
-                    previousLessonDone -> DbLessonStatus.IN_PROGRESS
-                    else -> DbLessonStatus.LOCKED
+                    else -> DbLessonStatus.IN_PROGRESS
                 }
-
-                previousLessonDone = (progress?.status == DbLessonStatus.DONE)
 
                 Lesson(
                     id = lesson.id,
