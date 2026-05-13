@@ -153,14 +153,23 @@ fun PhilIRIApp() {
     val languageCode by sessionManager.language.collectAsState(initial = "en")
     val appStrings = remember(languageCode) { getStrings(languageCode) }
 
+    // Determine the starting screen based on the App Flavor
+    val flavorStartDestination = remember {
+        when (BuildConfig.FLAVOR) {
+            "student" -> Routes.GRADE_SELECT
+            "teacher" -> Routes.TEACHER_LOGIN
+            else -> Routes.ROLE_SELECT
+        }
+    }
+
     LaunchedEffect(currentSession, isTeacherLoggedIn) {
         if (currentSession != null) {
             navController.navigate(Routes.STUDENT_HOME) {
-                popUpTo(Routes.ROLE_SELECT) { inclusive = true }
+                popUpTo(flavorStartDestination) { inclusive = true }
             }
         } else if (isTeacherLoggedIn) {
             navController.navigate(Routes.TEACHER_DASHBOARD) {
-                popUpTo(Routes.ROLE_SELECT) { inclusive = true }
+                popUpTo(flavorStartDestination) { inclusive = true }
             }
         }
     }
@@ -177,7 +186,7 @@ fun PhilIRIApp() {
 
     NavHost(
         navController = navController,
-        startDestination = Routes.ROLE_SELECT
+        startDestination = flavorStartDestination
     ) {
         composable(Routes.ROLE_SELECT) {
             RoleSelectScreen(
@@ -270,7 +279,7 @@ fun PhilIRIApp() {
                 onJoinGameClick = { navController.navigate(Routes.GAME_JOIN) },
                 onLogout = {
                     coroutineScope.launch { sessionManager.clearStudentSession() }
-                    navController.navigate(Routes.ROLE_SELECT) { popUpTo(0) }
+                    navController.navigate(flavorStartDestination) { popUpTo(0) }
                 }
             )
         }
@@ -424,7 +433,7 @@ fun PhilIRIApp() {
             )
             TeacherLoginScreen(
                 viewModel = viewModel,
-                onLoginSuccess = { navController.navigate(Routes.TEACHER_DASHBOARD) { popUpTo(Routes.ROLE_SELECT) { inclusive = true } } },
+                onLoginSuccess = { navController.navigate(Routes.TEACHER_DASHBOARD) { popUpTo(flavorStartDestination) { inclusive = true } } },
                 onBack = { navController.popBackStack() }
             )
         }
@@ -449,7 +458,7 @@ fun PhilIRIApp() {
                 },
                 onLogout = {
                     coroutineScope.launch { sessionManager.setTeacherLoggedIn(false) }
-                    navController.navigate(Routes.ROLE_SELECT) { popUpTo(0) }
+                    navController.navigate(flavorStartDestination) { popUpTo(0) }
                 }
             )
         }

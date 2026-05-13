@@ -114,6 +114,22 @@ android {
         }
     }
 
+    flavorDimensions += "userRole"
+    productFlavors {
+        create("student") {
+            dimension = "userRole"
+            applicationId = "com.basahero.student"
+            versionNameSuffix = "-student"
+            manifestPlaceholders["appName"] = "BasaHero Student"
+        }
+        create("teacher") {
+            dimension = "userRole"
+            applicationId = "com.basahero.teacher"
+            versionNameSuffix = "-teacher"
+            manifestPlaceholders["appName"] = "BasaHero Teacher"
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
