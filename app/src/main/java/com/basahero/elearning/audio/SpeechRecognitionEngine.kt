@@ -34,7 +34,7 @@ class SpeechRecognitionEngine {
     sealed class RecognitionState {
         object Idle      : RecognitionState()
         object Listening : RecognitionState()
-        data class Result(val text: String, val isFinal: Boolean) : RecognitionState()
+        data class Result(val text: String, val confidence: Float, val isFinal: Boolean) : RecognitionState()
         data class Error(val message: String) : RecognitionState()
     }
 
@@ -69,7 +69,7 @@ class SpeechRecognitionEngine {
     fun startListening(
         targetWords: List<String> = emptyList(),
         onPartial : (String) -> Unit = {},
-        onResult  : (String) -> Unit,
+        onResult  : (String, Float) -> Unit,
         onError   : (String) -> Unit
     ) {
         if (_state.value is RecognitionState.Listening) return
@@ -108,19 +108,19 @@ class SpeechRecognitionEngine {
                 try {
                     if (rec.acceptWaveForm(buffer, length)) {
                         // Full sentence result ready
-                        val text = parseVoskJson(rec.result)
-                        Log.d(TAG, "Result: $text")
-                        if (text.isNotEmpty() && resultDelivered.compareAndSet(false, true)) {
+                        val parsed = parseVoskJson(rec.result)
+                        Log.d(TAG, "Result: ${parsed.text} conf=${parsed.confidence}")
+                        if (parsed.text.isNotEmpty() && resultDelivered.compareAndSet(false, true)) {
                             // Stop capture immediately so no further chunks are processed
                             capture.stop()
-                            _state.value = RecognitionState.Result(text, isFinal = false)
-                            CoroutineScope(Dispatchers.Main).launch { onResult(text) }
+                            _state.value = RecognitionState.Result(parsed.text, parsed.confidence, isFinal = false)
+                            CoroutineScope(Dispatchers.Main).launch { onResult(parsed.text, parsed.confidence) }
                         }
                     } else {
                         // Partial result
-                        val partial = parseVoskJson(rec.partialResult, key = "partial")
-                        if (partial.isNotEmpty()) {
-                            CoroutineScope(Dispatchers.Main).launch { onPartial(partial) }
+                        val parsed = parseVoskJson(rec.partialResult, key = "partial")
+                        if (parsed.text.isNotEmpty()) {
+                            CoroutineScope(Dispatchers.Main).launch { onPartial(parsed.text) }
                         }
                     }
                 } catch (e: Exception) {
@@ -138,7 +138,7 @@ class SpeechRecognitionEngine {
      *
      * @param onFinalResult  Receives the last recognised utterance (may be empty).
      */
-    fun stopListening(onFinalResult: (String) -> Unit = {}) {
+    fun stopListening(onFinalResult: (String, Float) -> Unit = { _, _ -> }) {
         // If already stopped (by auto-stop or double-tap), do nothing
         if (!isActive.compareAndSet(true, false)) return
 
@@ -147,21 +147,21 @@ class SpeechRecognitionEngine {
 
         synchronized(recLock) {
             // Only call finalResult if recognizer is still alive and resultDelivered hasn't fired
-            val finalText = if (!resultDelivered.get()) {
+            val finalParsed = if (!resultDelivered.get()) {
                 try {
                     parseVoskJson(recognizer?.finalResult)
                 } catch (e: Exception) {
                     Log.w(TAG, "finalResult error: ${e.message}")
-                    ""
+                    VoskParsedResult("", 0f)
                 }
             } else {
                 // Result was already delivered via onResult callback; don't call finalResult again
-                ""
+                VoskParsedResult("", 0f)
             }
 
-            Log.d(TAG, "stopListening final=$finalText")
-            _state.value = RecognitionState.Result(finalText, isFinal = true)
-            CoroutineScope(Dispatchers.Main).launch { onFinalResult(finalText) }
+            Log.d(TAG, "stopListening final=${finalParsed.text}")
+            _state.value = RecognitionState.Result(finalParsed.text, finalParsed.confidence, isFinal = true)
+            CoroutineScope(Dispatchers.Main).launch { onFinalResult(finalParsed.text, finalParsed.confidence) }
 
             releaseRecognizer()
         }
@@ -190,16 +190,36 @@ class SpeechRecognitionEngine {
         recognizer = null
     }
 
+    data class VoskParsedResult(val text: String, val confidence: Float)
+
     /**
      * Safely parse Vosk's JSON hypothesis.
      * {"text": "hello world"} or {"partial": "hel"}
      */
-    private fun parseVoskJson(json: String?, key: String = "text"): String {
-        if (json.isNullOrBlank()) return ""
+    private fun parseVoskJson(json: String?, key: String = "text"): VoskParsedResult {
+        if (json.isNullOrBlank()) return VoskParsedResult("", 0f)
         return try {
-            JSONObject(json).optString(key, "").trim()
+            val obj = JSONObject(json)
+            val text = obj.optString(key, "").trim()
+            
+            var avgConf = 0f
+            if (obj.has("result")) {
+                val results = obj.getJSONArray("result")
+                var totalConf = 0.0
+                var count = 0
+                for (i in 0 until results.length()) {
+                    val wordObj = results.getJSONObject(i)
+                    if (wordObj.has("conf")) {
+                        totalConf += wordObj.getDouble("conf")
+                        count++
+                    }
+                }
+                if (count > 0) avgConf = (totalConf / count).toFloat()
+            }
+            
+            VoskParsedResult(text, avgConf)
         } catch (_: Exception) {
-            ""
+            VoskParsedResult("", 0f)
         }
     }
 }
