@@ -3,6 +3,7 @@ package com.basahero.elearning.ui.student.prepost
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import com.basahero.elearning.domain.SyncPrePostUseCase
@@ -58,15 +60,21 @@ class PrePostViewModel(
         object NoContent : PrePostUiState()
         data class Ready(
             val questions: List<QuizQuestion>,
-            val currentIndex: Int = 0,
+            val currentPageIndex: Int = 0,
             val answers: Map<String, QuizScoringUseCase.StudentAnswer> = emptyMap(),
             val isSubmitted: Boolean = false,
             val score: Int = 0,
             val total: Int = 0
         ) : PrePostUiState() {
-            val currentQuestion get() = questions.getOrNull(currentIndex)
-            val isLastQuestion get() = currentIndex == questions.size - 1
-            val progressFraction get() = if (questions.isEmpty()) 0f else (currentIndex + 1).toFloat() / questions.size
+            val questionsPerPage = 10
+            val totalPages = (questions.size + questionsPerPage - 1) / questionsPerPage
+            val currentPageQuestions get() = questions.drop(currentPageIndex * questionsPerPage).take(questionsPerPage)
+            val isLastPage get() = currentPageIndex == totalPages - 1
+            val progressFraction get() = if (questions.isEmpty()) 0f else (answers.size).toFloat() / questions.size
+            
+            fun isPageComplete(): Boolean {
+                return currentPageQuestions.all { answers.containsKey(it.id) }
+            }
         }
     }
 
@@ -93,12 +101,16 @@ class PrePostViewModel(
 
     fun next() {
         val current = _uiState.value as? PrePostUiState.Ready ?: return
-        _uiState.value = current.copy(currentIndex = current.currentIndex + 1)
+        if (!current.isLastPage) {
+            _uiState.value = current.copy(currentPageIndex = current.currentPageIndex + 1)
+        }
     }
 
     fun previous() {
         val current = _uiState.value as? PrePostUiState.Ready ?: return
-        if (current.currentIndex > 0) _uiState.value = current.copy(currentIndex = current.currentIndex - 1)
+        if (current.currentPageIndex > 0) {
+            _uiState.value = current.copy(currentPageIndex = current.currentPageIndex - 1)
+        }
     }
 
     fun submit(context: android.content.Context, studentId: String, quarterId: String, testType: String) {
@@ -252,17 +264,8 @@ fun PrePostTestContent(
     onPrevious: () -> Unit,
     onSubmit: () -> Unit
 ) {
-    val question = state.currentQuestion ?: return
-    val currentAnswer = state.answers[question.id]
     val isTablet = LocalConfiguration.current.screenWidthDp >= 600
     val hPad = if (isTablet) 32.dp else 16.dp
-
-    // Animate question transitions
-    val alpha by animateFloatAsState(
-        targetValue = 1f,
-        animationSpec = tween(300),
-        label = "q_alpha"
-    )
 
     Column(modifier = modifier.fillMaxSize()) {
 
@@ -284,9 +287,9 @@ fun PrePostTestContent(
                 Spacer(Modifier.width(10.dp))
                 Text(
                     text = if (testType == TestType.PRE)
-                        "Answer every question to unlock lessons!"
+                        "Answer every question to unlock lessons! (Page ${state.currentPageIndex + 1} of ${state.totalPages})"
                     else
-                        "Show what you've learned — do your best!",
+                        "Show what you've learned! (Page ${state.currentPageIndex + 1} of ${state.totalPages})",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -303,95 +306,82 @@ fun PrePostTestContent(
             trackColor = MaterialTheme.colorScheme.surfaceVariant
         )
 
-        // ── Scrollable question body ──────────────────────────────────────────
+        // ── Scrollable question list for this page ────────────────────────────
         Column(
             modifier = Modifier
                 .weight(1f)
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = hPad, vertical = 20.dp)
         ) {
-            // Question number badge
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary)
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
+            state.currentPageQuestions.forEachIndexed { index, question ->
+                val qNumber = (state.currentPageIndex * state.questionsPerPage) + index + 1
+                val currentAnswer = state.answers[question.id]
+
+                Card(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                    ),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
                 ) {
-                    Text(
-                        text = "Q ${state.currentIndex + 1} / ${state.questions.size}",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
+                    Column(Modifier.padding(if (isTablet) 20.dp else 16.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.primary)
+                                    .padding(horizontal = 10.dp, vertical = 2.dp)
+                            ) {
+                                Text(
+                                    text = "Q $qNumber",
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onPrimary
+                                )
+                            }
+                            if (state.answers.containsKey(question.id)) {
+                                Spacer(Modifier.width(8.dp))
+                                Icon(Icons.Default.CheckCircle, null, tint = Color(0xFF4CAF50), modifier = Modifier.size(16.dp))
+                            }
+                        }
+
+                        Spacer(Modifier.height(12.dp))
+
+                        Text(
+                            text = question.questionText,
+                            fontSize = if (isTablet) 18.sp else 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            lineHeight = 24.sp
+                        )
+
+                        Spacer(Modifier.height(16.dp))
+
+                        // ── Question component router ─────────────────────────────────────
+                        when (question.questionType) {
+                            QuestionType.MCQ -> AnimatedMcqQuestion(
+                                question = question,
+                                selectedChoiceId = currentAnswer?.answer,
+                                isSubmitted = false,
+                                onChoiceSelected = { choiceId ->
+                                    onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, choiceId))
+                                }
+                            )
+                            QuestionType.FILL_IN -> AnimatedFillInQuestion(
+                                question = question,
+                                currentText = currentAnswer?.answer ?: "",
+                                isSubmitted = false,
+                                onTextChanged = { text ->
+                                    onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, text))
+                                }
+                            )
+                            else -> Text("Unsupported type in paginated view")
+                        }
+                    }
                 }
-                Spacer(Modifier.width(10.dp))
-                Text(
-                    text = question.questionType.lowercase().replace("_", " ").replaceFirstChar { it.uppercase() },
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
             }
-
-            Spacer(Modifier.height(16.dp))
-
-            // Question text — large for kids
-            Text(
-                text = question.questionText,
-                fontSize = if (isTablet) 20.sp else 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                lineHeight = if (isTablet) 30.sp else 27.sp,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
-            Spacer(Modifier.height(28.dp))
-
-            // ── Question component router ─────────────────────────────────────
-            when (question.questionType) {
-                QuestionType.MCQ -> AnimatedMcqQuestion(
-                    question = question,
-                    selectedChoiceId = currentAnswer?.answer,
-                    isSubmitted = false,
-                    onChoiceSelected = { choiceId ->
-                        onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, choiceId))
-                    }
-                )
-                QuestionType.FILL_IN -> AnimatedFillInQuestion(
-                    question = question,
-                    currentText = currentAnswer?.answer ?: "",
-                    isSubmitted = false,
-                    onTextChanged = { text ->
-                        onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, text))
-                    }
-                )
-                QuestionType.SEQUENCING -> DragDropSequencingQuestion(
-                    question = question,
-                    currentOrder = currentAnswer?.selectedChoiceIds
-                        ?: remember(question.id) { question.choices.map { it.id }.shuffled() },
-                    isSubmitted = false,
-                    onOrderChanged = { newOrder ->
-                        onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, "", newOrder))
-                    }
-                )
-                QuestionType.MATCHING -> CanvasMatchingQuestion(
-                    question = question,
-                    connections = currentAnswer?.selectedChoiceIds ?: emptyList(),
-                    isSubmitted = false,
-                    onConnectionMade = { ids ->
-                        onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, "", ids))
-                    }
-                )
-                QuestionType.PASSAGE -> PassageQuestion(
-                    question = question,
-                    selectedWordIds = currentAnswer?.selectedChoiceIds ?: emptyList(),
-                    isSubmitted = false,
-                    onSelectionChanged = { ids ->
-                        onAnswer(question.id, QuizScoringUseCase.StudentAnswer(question.id, "", ids))
-                    }
-                )
-            }
-
-            Spacer(Modifier.height(16.dp))
+            
+            Spacer(Modifier.height(32.dp))
         }
 
         // ── Navigation bar ────────────────────────────────────────────────────
@@ -408,7 +398,7 @@ fun PrePostTestContent(
             ) {
                 OutlinedButton(
                     onClick = onPrevious,
-                    enabled = state.currentIndex > 0,
+                    enabled = state.currentPageIndex > 0,
                     modifier = Modifier.height(52.dp),
                     shape = RoundedCornerShape(14.dp)
                 ) {
@@ -417,26 +407,7 @@ fun PrePostTestContent(
                     Text("Back", fontWeight = FontWeight.Medium)
                 }
 
-                // Step dots — phone only (too wide for many questions on tablet)
-                if (!isTablet && state.questions.size <= 8) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                        repeat(state.questions.size) { i ->
-                            Box(
-                                modifier = Modifier
-                                    .size(if (i == state.currentIndex) 10.dp else 7.dp)
-                                    .clip(CircleShape)
-                                    .background(
-                                        if (i == state.currentIndex) MaterialTheme.colorScheme.primary
-                                        else if (state.answers.containsKey(state.questions[i].id))
-                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
-                                        else MaterialTheme.colorScheme.surfaceVariant
-                                    )
-                            )
-                        }
-                    }
-                }
-
-                if (state.isLastQuestion) {
+                if (state.isLastPage) {
                     Button(
                         onClick = onSubmit,
                         enabled = state.answers.size == state.questions.size,
@@ -448,16 +419,16 @@ fun PrePostTestContent(
                     ) {
                         Icon(Icons.Default.Check, null, modifier = Modifier.size(18.dp))
                         Spacer(Modifier.width(6.dp))
-                        Text("Submit ✓", fontWeight = FontWeight.Bold)
+                        Text("Submit Pre-Test ✓", fontWeight = FontWeight.Bold)
                     }
                 } else {
                     Button(
                         onClick = onNext,
-                        enabled = state.answers.containsKey(question.id),
+                        enabled = state.isPageComplete(),
                         modifier = Modifier.height(52.dp),
                         shape = RoundedCornerShape(14.dp)
                     ) {
-                        Text("Next", fontWeight = FontWeight.Bold)
+                        Text("Next Page", fontWeight = FontWeight.Bold)
                         Spacer(Modifier.width(6.dp))
                         Icon(Icons.Default.ArrowForward, null, modifier = Modifier.size(18.dp))
                     }
