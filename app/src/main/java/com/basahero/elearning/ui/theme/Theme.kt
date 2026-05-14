@@ -11,32 +11,46 @@ val Gray50=Color(0xFFFAFAFA);val ErrorRed=Color(0xFFE53935);val ErrorLight=Color
 
 // Grade 4 — Blue
 val Grade4ColorScheme = lightColorScheme(
-    primary=Color(0xFF1565C0), onPrimary=Color.White, primaryContainer=Color(0xFFBBDEFB), onPrimaryContainer=Color(0xFF1565C0),
-    secondary=Color(0xFFFFB300), onSecondary=Color.White, secondaryContainer=Color(0xFFFFECB3), onSecondaryContainer=Color(0xFF5F4200),
-    tertiary=Color(0xFF43A047), onTertiary=Color.White, tertiaryContainer=Color(0xFFC8E6C9), onTertiaryContainer=Color(0xFF1B4620),
-    error=ErrorRed, onError=Color.White, errorContainer=ErrorLight, onErrorContainer=ErrorRed,
-    background=Gray50, onBackground=Gray900, surface=Color.White, onSurface=Gray900,
-    surfaceVariant=Gray200, onSurfaceVariant=Gray600, outline=Gray600
+    primary = PrimaryBlue,
+    onPrimary = Color.White,
+    primaryContainer = PrimaryBlue.copy(alpha = 0.2f),
+    onPrimaryContainer = PrimaryBlue,
+    secondary = SecondaryMint,
+    onSecondary = Color.White,
+    secondaryContainer = SecondaryMint.copy(alpha = 0.2f),
+    onSecondaryContainer = Color(0xFF004D40),
+    tertiary = AccentOrange,
+    onTertiary = Color.White,
+    tertiaryContainer = AccentOrange.copy(alpha = 0.2f),
+    onTertiaryContainer = Color(0xFFE65100),
+    background = SoftWhite,
+    onBackground = Color(0xFF1E293B),
+    surface = SurfaceWhite,
+    onSurface = Color(0xFF1E293B)
 )
 
-// Grade 5 — Green
+// Grade 5 — Orange
 val Grade5ColorScheme = lightColorScheme(
-    primary=Color(0xFF2E7D32), onPrimary=Color.White, primaryContainer=Color(0xFFA5D6A7), onPrimaryContainer=Color(0xFF1B5E20),
-    secondary=Color(0xFF00897B), onSecondary=Color.White, secondaryContainer=Color(0xFFB2DFDB), onSecondaryContainer=Color(0xFF00332E),
-    tertiary=Color(0xFF7CB342), onTertiary=Color.White, tertiaryContainer=Color(0xFFDCEDC8), onTertiaryContainer=Color(0xFF2D4A00),
-    error=ErrorRed, onError=Color.White, errorContainer=ErrorLight, onErrorContainer=ErrorRed,
-    background=Color(0xFFF1F8F1), onBackground=Gray900, surface=Color.White, onSurface=Gray900,
-    surfaceVariant=Color(0xFFE0EEE0), onSurfaceVariant=Color(0xFF3A5A3A), outline=Color(0xFF5A7A5A)
+    primary = AccentOrange,
+    onPrimary = Color.White,
+    primaryContainer = AccentOrange.copy(alpha = 0.2f),
+    onPrimaryContainer = Color(0xFFE65100),
+    secondary = PrimaryBlue,
+    onSecondary = Color.White,
+    background = Color(0xFFFFF8F5),
+    surface = SurfaceWhite
 )
 
-// Grade 6 — Orange
+// Grade 6 — Red
 val Grade6ColorScheme = lightColorScheme(
-    primary=Color(0xFFE65100), onPrimary=Color.White, primaryContainer=Color(0xFFFFCCBC), onPrimaryContainer=Color(0xFFBF360C),
-    secondary=Color(0xFFFF8F00), onSecondary=Color.White, secondaryContainer=Color(0xFFFFECB3), onSecondaryContainer=Color(0xFF3E2000),
-    tertiary=Color(0xFFEF5350), onTertiary=Color.White, tertiaryContainer=Color(0xFFFFCDD2), onTertiaryContainer=Color(0xFF5C0011),
-    error=ErrorRed, onError=Color.White, errorContainer=ErrorLight, onErrorContainer=ErrorRed,
-    background=Color(0xFFFFF8F5), onBackground=Gray900, surface=Color.White, onSurface=Gray900,
-    surfaceVariant=Color(0xFFF5E6E0), onSurfaceVariant=Color(0xFF5A3A2A), outline=Color(0xFF8A5A4A)
+    primary = AccentRed,
+    onPrimary = Color.White,
+    primaryContainer = AccentRed.copy(alpha = 0.2f),
+    onPrimaryContainer = Color(0xFFB71C1C),
+    secondary = PrimaryBlue,
+    onSecondary = Color.White,
+    background = Color(0xFFFFF5F5),
+    surface = SurfaceWhite
 )
 
 fun colorSchemeForGrade(gradeLevel: Int): ColorScheme = when (gradeLevel) {
@@ -46,13 +60,12 @@ fun colorSchemeForGrade(gradeLevel: Int): ColorScheme = when (gradeLevel) {
 }
 
 @Composable
-fun PhilIRITheme(gradeLevel: Int = 0, content: @Composable () -> Unit) {
+fun BasaHeroTheme(gradeLevel: Int = 0, content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = colorSchemeForGrade(gradeLevel),
-        typography  = PhilIRITypography,
+        typography  = BasaHeroTypography,
         content     = content
     )
 }
 
-// Wire Fredoka One (defined in Type.kt) as the global app typography
-val PhilIRITypography = Typography
+val BasaHeroTypography = Typography

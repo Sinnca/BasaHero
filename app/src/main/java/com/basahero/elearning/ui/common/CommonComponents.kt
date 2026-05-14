@@ -7,6 +7,7 @@ import androidx.compose.foundation.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -20,7 +21,13 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.SpanStyle
+import com.basahero.elearning.ui.theme.fredokaFontFamily
 import com.airbnb.lottie.compose.*
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 
 // ─────────────────────────────────────────────────────────────────────────────
 // STEP 9 — SafeLottieAnimation
@@ -590,3 +597,318 @@ fun AnimatedScrollIndicator(
         }
     }
 }
+// ─────────────────────────────────────────────────────────────────────────────
+// BasaHero Greeting Banner
+// Shows a friendly greeting + student avatar in a circular frame.
+// Optimized for tablet portrait top section.
+// ─────────────────────────────────────────────────────────────────────────────
+
+@Composable
+fun BasaHeroGreetingBanner(
+    studentName: String,
+    gradeLevel: Int,
+    avatarUrl: String? = null,
+    modifier: Modifier = Modifier
+) {
+    val bannerGradient = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFFFFE0B2).copy(alpha = 0.4f), // Soft Orange
+            Color(0xFFC8E6C9).copy(alpha = 0.4f), // Soft Green
+            Color(0xFFB3E5FC).copy(alpha = 0.4f)  // Soft Blue
+        )
+    )
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 32.dp)
+            .clip(RoundedCornerShape(32.dp))
+            .background(bannerGradient)
+            .border(2.dp, Color.White.copy(alpha = 0.6f), RoundedCornerShape(32.dp))
+            .padding(horizontal = 32.dp, vertical = 32.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(color = Color(0xFF4A90E2), fontWeight = FontWeight.Bold)) {
+                            append("Welcome back, ")
+                        }
+                        withStyle(style = SpanStyle(color = Color(0xFFE67E22), fontWeight = FontWeight.Black)) {
+                            append("Hero!")
+                        }
+                    },
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontFamily = fredokaFontFamily
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = "Ready for a new adventure?",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color(0xFF475569),
+                    fontWeight = FontWeight.Medium
+                )
+            }
+
+            Spacer(Modifier.width(24.dp))
+
+            StudentProfileAvatar(
+                imageUrl = avatarUrl,
+                gradeLevel = gradeLevel,
+                size = 90.dp
+            )
+        }
+    }
+}
+
+@Composable
+fun StudentProfileAvatar(
+    imageUrl: String?,
+    gradeLevel: Int,
+    size: Dp = 64.dp
+) {
+    val borderColor = when (gradeLevel) {
+        5 -> Color(0xFF4CAF50)
+        6 -> Color(0xFFFF9800)
+        else -> Color(0xFF2196F3)
+    }
+
+    Box(
+        modifier = Modifier
+            .size(size)
+            .border(4.dp, borderColor, CircleShape)
+            .padding(4.dp)
+            .clip(CircleShape)
+            .background(Color.White),
+        contentAlignment = Alignment.Center
+    ) {
+        if (imageUrl != null) {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(imageUrl)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = "Student Avatar",
+                modifier = Modifier.fillMaxSize()
+            )
+        } else {
+            // Default playful hero icon/emoji
+            Text(
+                text = "🦸",
+                fontSize = (size.value * 0.5f).sp
+            )
+        }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BasaHero Bottom Navigation
+// Premium colorful bottom navigation with rounded icons.
+// ─────────────────────────────────────────────────────────────────────────────
+
+@Composable
+fun BasaHeroBottomNavigation(
+    selectedRoute: String,
+    onNavigate: (String) -> Unit
+) {
+    val items = listOf(
+        NavigationItem("Home", "student_home", "🏠", Color(0xFF4A90E2)),
+        NavigationItem("Lessons", "lesson_list/current", "📚", Color(0xFF50E3C2)),
+        NavigationItem("Games", "game_join", "🎮", Color(0xFFFFAB40)),
+        NavigationItem("Profile", "profile", "👤", Color(0xFFB39DDB))
+    )
+
+    NavigationBar(
+        containerColor = Color.White,
+        tonalElevation = 0.dp,
+        modifier = Modifier.clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+    ) {
+        items.forEach { item ->
+            val isSelected = selectedRoute.startsWith(item.route)
+            NavigationBarItem(
+                selected = isSelected,
+                onClick = { onNavigate(item.route) },
+                icon = {
+                    Box(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(if (isSelected) item.color.copy(alpha = 0.2f) else Color.Transparent),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = item.icon,
+                            fontSize = 24.sp
+                        )
+                    }
+                },
+                label = {
+                    Text(
+                        text = item.label,
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                        color = if (isSelected) item.color else Color.Gray
+                    )
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    indicatorColor = Color.Transparent
+                )
+            )
+        }
+    }
+}
+
+private data class NavigationItem(
+    val label: String,
+    val route: String,
+    val icon: String,
+    val color: Color
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PlayfulBackground
+// Animated floating shapes (circles/stars) for a dynamic, non-minimalist feel.
+// ─────────────────────────────────────────────────────────────────────────────
+
+@Composable
+fun PlayfulBackground(modifier: Modifier = Modifier) {
+    val infiniteTransition = rememberInfiniteTransition(label = "floating_shapes")
+    val config = LocalConfiguration.current
+    val screenWidth = config.screenWidthDp
+    val screenHeight = config.screenHeightDp
+    
+    // ── Animated Shifting Gradient (Stronger Colors) ──
+    val color1 by infiniteTransition.animateColor(
+        initialValue = Color(0xFFE0F2FE), // Light Blue
+        targetValue = Color(0xFFBAE6FD), // Sky Blue (Stronger)
+        animationSpec = infiniteRepeatable(tween(4000, easing = LinearEasing), RepeatMode.Reverse),
+        label = "c1"
+    )
+    val color2 by infiniteTransition.animateColor(
+        initialValue = Color(0xFFF1F5F9), // Slate
+        targetValue = Color(0xFFE2E8F0), // Stronger Slate
+        animationSpec = infiniteRepeatable(tween(5000, easing = LinearEasing), RepeatMode.Reverse),
+        label = "c2"
+    )
+    val color3 by infiniteTransition.animateColor(
+        initialValue = Color(0xFFDBEAFE), // Soft Blue
+        targetValue = Color(0xFFBFDBFE), // Stronger Blue
+        animationSpec = infiniteRepeatable(tween(6000, easing = LinearEasing), RepeatMode.Reverse),
+        label = "c3"
+    )
+
+    // Configuration for floating shapes and letters (Scaled for responsiveness)
+    val isTablet = screenWidth >= 600
+    val itemScale = if (isTablet) 1f else 0.6f
+    val shapeCount = if (isTablet) 15 else 8
+    val letterCount = if (isTablet) 40 else 20
+    
+    val items = remember(screenWidth, screenHeight) {
+        val list = mutableListOf<FloatingItem>()
+        // Banner area height estimate (220dp for tablet, 160dp for phone)
+        val bannerPadding = if (isTablet) 220 else 160
+        
+        // Add Shapes
+        repeat(shapeCount) {
+            list.add(FloatingItem(
+                type = ItemType.SHAPE,
+                initialX = (0..screenWidth).random().toFloat(),
+                initialY = (bannerPadding..screenHeight).random().toFloat(),
+                size = ((30..100).random() * itemScale).dp,
+                color = listOf(
+                    Color(0xFF60A5FA), Color(0xFF4ADE80), Color(0xFFFBBF24), Color(0xFFF472B6)
+                ).random().copy(alpha = 0.5f), // Stronger opacity
+                duration = (5000..10000).random()
+            ))
+        }
+        // Add Letters (Equally scattered left and right)
+        val alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        val vibrantColors = listOf(
+            Color(0xFF2563EB), Color(0xFF16A34A), Color(0xFFD97706), 
+            Color(0xFFDB2777), Color(0xFF7C3AED), Color(0xFFEAB308)
+        )
+        val midPoint = screenWidth / 2
+        
+        repeat(letterCount) { i ->
+            val isLeftSide = i < (letterCount / 2)
+            val xRange = if (isLeftSide) (0..midPoint) else (midPoint..screenWidth)
+            
+            list.add(FloatingItem(
+                type = ItemType.LETTER,
+                text = alphabet.random().toString(),
+                initialX = xRange.random().toFloat(),
+                initialY = (bannerPadding..screenHeight).random().toFloat(),
+                size = ((40..80).random() * itemScale).dp,
+                color = vibrantColors.random().copy(alpha = 0.6f), // Stronger opacity
+                duration = (8000..18000).random()
+            ))
+        }
+        list
+    }
+
+    Box(modifier = modifier.fillMaxSize().background(Brush.verticalGradient(listOf(color1, color2, color3)))) {
+        items.forEach { item ->
+            val floatAnim by infiniteTransition.animateFloat(
+                initialValue = 0f,
+                targetValue = 120f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(item.duration, easing = LinearEasing),
+                    repeatMode = RepeatMode.Reverse
+                ),
+                label = "floating"
+            )
+            
+            val rotateAnim by infiniteTransition.animateFloat(
+                initialValue = 0f,
+                targetValue = 360f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(item.duration * 3, easing = LinearEasing),
+                    repeatMode = RepeatMode.Restart
+                ),
+                label = "rotate"
+            )
+
+            Box(
+                modifier = Modifier
+                    .offset(
+                        x = item.initialX.dp,
+                        y = item.initialY.dp + floatAnim.dp
+                    )
+                    .graphicsLayer(rotationZ = rotateAnim),
+                contentAlignment = Alignment.Center
+            ) {
+                if (item.type == ItemType.SHAPE) {
+                    Box(
+                        modifier = Modifier
+                            .size(item.size)
+                            .background(item.color, RoundedCornerShape(item.size / 4))
+                    )
+                } else {
+                    Text(
+                        text = item.text ?: "",
+                        fontSize = item.size.value.sp,
+                        fontWeight = FontWeight.Black,
+                        color = item.color,
+                        fontFamily = fredokaFontFamily
+                    )
+                }
+            }
+        }
+    }
+}
+
+private enum class ItemType { SHAPE, LETTER }
+
+private data class FloatingItem(
+    val type: ItemType,
+    val initialX: Float,
+    val initialY: Float,
+    val size: Dp,
+    val color: Color,
+    val duration: Int,
+    val text: String? = null
+)

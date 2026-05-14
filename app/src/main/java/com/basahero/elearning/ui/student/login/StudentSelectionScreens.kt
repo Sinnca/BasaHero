@@ -4,11 +4,15 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.foundation.ExperimentalFoundationApi
 
+import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
@@ -31,10 +35,16 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.painterResource
 import kotlinx.coroutines.launch
 import com.basahero.elearning.data.model.Student
-import com.basahero.elearning.ui.common.LocalAppStrings
 import com.basahero.elearning.ui.theme.fredokaFontFamily
+import com.basahero.elearning.R
+import com.basahero.elearning.ui.theme.PrimaryBlue
+import com.basahero.elearning.ui.theme.SecondaryMint
+import com.basahero.elearning.ui.theme.AccentOrange
+import com.basahero.elearning.ui.theme.SoftWhite
+import com.basahero.elearning.ui.common.*
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 1. StudentGradeSelectScreen
@@ -53,144 +63,118 @@ fun StudentGradeSelectScreen(
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val isTablet = screenWidth >= 600
 
-    // We show grades 4, 5, 6 with their sections
     val grades = listOf(
-        GradeInfo(4, Color(0xFF2177DA), "The Beginning!"),
-        GradeInfo(5, Color(0xFF379F3B), "Getting Stronger!"),
-        GradeInfo(6, Color(0xFFE65100), "The Masters!")
+        GradeInfo(4, PrimaryBlue, "Explore & Discover", "🎒"),
+        GradeInfo(5, AccentOrange, "Investigate & Create", "🚀"),
+        GradeInfo(6, Color(0xFFE53935), "Launch & Learn", "👑")
     )
 
-    // Blue gradient background colors
-    val bgTop = Color(0xFF2563EB)
-    val bgBottom = Color(0xFF1E3A8A)
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Dynamic Animated Background (Floating shapes)
+        PlayfulBackground()
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                Brush.verticalGradient(listOf(bgTop, bgBottom))
-            )
-    ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {},
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.White
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent
-                )
-            )
-        },
-        containerColor = Color.Transparent
-    ) { padding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
-            contentAlignment = Alignment.TopCenter
-        ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(1),
+        Scaffold(
+            containerColor = Color.Transparent
+        ) { padding ->
+            Column(
                 modifier = Modifier
-                    .then(
-                        if (isTablet) Modifier.widthIn(max = 800.dp) else Modifier.fillMaxWidth()
-                    )
-                    .padding(horizontal = if (isTablet) 32.dp else 16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                    .fillMaxSize()
+                    .padding(padding)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                item {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "\uD83C\uDF1F", // star emoji
-                            fontSize = 40.sp
-                        )
-                        Spacer(Modifier.height(8.dp))
-                        Text(
-                            text = strings.selectYourGrade,
-                            modifier = Modifier.padding(horizontal = 20.dp),
-                            fontSize = if (isTablet) 26.sp else 22.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = Color.White,
-                            textAlign = TextAlign.Center,
-                            style = TextStyle(fontFamily = fredokaFontFamily)
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        Text(
-                            text = if (strings == com.basahero.elearning.ui.common.getStrings("fil"))
-                                "Pumili ng iyong baitang para magsimula"
-                            else
-                                "Choose your grade level to get started",
-                            fontSize = if (isTablet) 15.sp else 13.sp,
-                            color = Color.White.copy(alpha = 0.7f),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-
-                // Each grade with its card
-                grades.forEach { grade ->
-                    item {
-                        Spacer(Modifier.height(12.dp))
-                    }
-
-                    item {
-                        Spacer(Modifier.height(8.dp))
-                    }
-
-                    // Grade card — tappable
-                    item {
-                        GradeSelectionCard(
-                            grade = grade.level,
-                            subtitle = grade.subtitle,
-                            color = grade.color,
-                            isTablet = isTablet,
-                            onClick = { onGradeSelected(grade.level) }
-                        )
-                    }
-                }
-
-                // Manual login link
-                item {
-                    Spacer(Modifier.height(24.dp))
-                    TextButton(
-                        onClick = onManualLoginClick,
+                // Top Section: Greeting Banner with entrance animation
+                var bannerVisible by remember { mutableStateOf(false) }
+                LaunchedEffect(Unit) { bannerVisible = true }
+                
+                AnimatedVisibility(
+                    visible = bannerVisible,
+                    enter = slideInVertically(initialOffsetY = { -it }) + fadeIn(tween(1000))
+                ) {
+                    BasaHeroGreetingBanner(
+                        studentName = "Future Hero!",
+                        gradeLevel = 4,
                         modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = strings.alreadyHaveAccount + " " + strings.loginHere,
-                            fontSize = 16.sp,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Spacer(Modifier.height(32.dp))
+
+                Text(
+                    text = "Choose Your Grade",
+                    fontSize = if (isTablet) 36.sp else 28.sp,
+                    fontWeight = FontWeight.Black,
+                    color = Color(0xFF1E293B),
+                    style = TextStyle(fontFamily = fredokaFontFamily),
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(Modifier.height(40.dp))
+
+                Column(
+                    modifier = Modifier
+                        .then(
+                            if (isTablet) Modifier.widthIn(max = 600.dp) else Modifier.fillMaxWidth()
+                        )
+                        .padding(horizontal = 24.dp),
+                    verticalArrangement = Arrangement.spacedBy(32.dp)
+                ) {
+                    grades.forEachIndexed { index, grade ->
+                        AnimatedGradeCard(
+                            index = index,
+                            grade = grade,
+                            isTablet = isTablet,
+                            onGradeSelected = onGradeSelected
                         )
                     }
-                    Spacer(Modifier.height(16.dp))
                 }
+
+                Spacer(Modifier.height(64.dp))
             }
         }
     }
-    } // end outer Box
 }
+private data class GradeInfo(
+    val level: Int, 
+    val color: Color, 
+    val subtitle: String,
+    val emoji: String
+)
 
-private data class GradeInfo(val level: Int, val color: Color, val subtitle: String)
+@Composable
+private fun AnimatedGradeCard(
+    index: Int,
+    grade: GradeInfo,
+    isTablet: Boolean,
+    onGradeSelected: (Int) -> Unit
+) {
+    var cardVisible by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(index * 200L)
+        cardVisible = true
+    }
+    
+    AnimatedVisibility(
+        visible = cardVisible,
+        enter = slideInHorizontally(initialOffsetX = { if (index % 2 == 0) -it else it }) + fadeIn(tween(800))
+    ) {
+        GradeSelectionCard(
+            grade = grade.level,
+            subtitle = grade.subtitle,
+            color = grade.color,
+            emoji = grade.emoji,
+            isTablet = isTablet,
+            onClick = { onGradeSelected(grade.level) }
+        )
+    }
+}
 
 @Composable
 private fun GradeSelectionCard(
     grade: Int,
     subtitle: String,
     color: Color,
+    emoji: String,
     isTablet: Boolean,
     onClick: () -> Unit
 ) {
@@ -198,24 +182,35 @@ private fun GradeSelectionCard(
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.95f else 1f,
+        targetValue = if (isPressed) 0.97f else 1f,
         animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
         label = "scale"
     )
 
-    // Calculate a darker shade of the color for the 3D bottom edge
-    val darkColor = Color(
-        red = color.red * 0.8f,
-        green = color.green * 0.8f,
-        blue = color.blue * 0.8f,
-        alpha = 1f
+    val infiniteTransition = rememberInfiniteTransition(label = "card_float")
+    val floatOffset by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 8f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2500, easing = EaseInOutSine),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "float"
     )
 
-    val emoji = when(grade) {
-        4 -> "🎒"
-        5 -> "🚀"
-        6 -> "👑"
-        else -> "📚"
+    // Vibrant Gradients for cards (Slightly stronger)
+    val cardGradient = when (grade) {
+        4 -> Brush.linearGradient(listOf(Color(0xFF90CAF9), Color(0xFF64B5F6))) // Blue
+        5 -> Brush.linearGradient(listOf(Color(0xFFFFCC80), Color(0xFFFFB74D))) // Orange (Moved from G6)
+        6 -> Brush.linearGradient(listOf(Color(0xFFEF9A9A), Color(0xFFE57373))) // New Red Gradient
+        else -> Brush.linearGradient(listOf(color.copy(alpha = 0.5f), color.copy(alpha = 0.7f)))
+    }
+    
+    val accentColor = when (grade) {
+        4 -> Color(0xFF4A90E2)
+        5 -> Color(0xFFE67E22) // Orange Accent
+        6 -> Color(0xFFC62828) // Strong Red Accent
+        else -> color
     }
 
     Box(
@@ -224,6 +219,7 @@ private fun GradeSelectionCard(
             .graphicsLayer {
                 scaleX = scale
                 scaleY = scale
+                translationY = floatOffset
             }
             .clickable(
                 interactionSource = interactionSource,
@@ -231,68 +227,82 @@ private fun GradeSelectionCard(
                 onClick = onClick
             )
     ) {
-        // Bottom shadow (3D edge)
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .padding(top = 8.dp) // Offset downwards
-                .background(darkColor, RoundedCornerShape(24.dp))
-        )
-        
         // Main front face
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 8.dp) // Push upwards relative to shadow
-                .background(color, RoundedCornerShape(24.dp))
-                .padding(
-                    horizontal = if (isTablet) 32.dp else 24.dp,
-                    vertical = if (isTablet) 32.dp else 24.dp
-                ),
+                .background(cardGradient, RoundedCornerShape(if (isTablet) 40.dp else 32.dp))
+                .border(3.dp, Color.White.copy(alpha = 0.8f), RoundedCornerShape(if (isTablet) 40.dp else 32.dp))
+                .padding(if (isTablet) 40.dp else 28.dp),
             contentAlignment = Alignment.CenterStart
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Playful Badge
+                // Left Section: Large Illustration Slot (Responsive Size)
                 Box(
                     modifier = Modifier
-                        .size(if (isTablet) 72.dp else 56.dp)
-                        .clip(CircleShape)
-                        .background(Color.White.copy(alpha = 0.25f)),
+                        .size(if (isTablet) 180.dp else 110.dp)
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(Color.White.copy(alpha = 0.2f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = emoji,
-                        fontSize = if (isTablet) 36.sp else 28.sp
+                    val imageRes = when(grade) {
+                        4 -> R.drawable.ill_grade4
+                        5 -> R.drawable.ill_grade5
+                        6 -> R.drawable.ill_grade6
+                        else -> R.drawable.ic_launcher_foreground
+                    }
+                    Image(
+                        painter = painterResource(id = imageRes),
+                        contentDescription = "Grade $grade Illustration",
+                        modifier = Modifier.fillMaxSize().padding(8.dp)
                     )
                 }
 
-                Spacer(Modifier.width(24.dp))
+                Spacer(Modifier.width(if (isTablet) 40.dp else 24.dp))
 
-                Column(modifier = Modifier.weight(1f)) {
-                    val strings = LocalAppStrings.current
+                // Right Section: Content
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.Start
+                ) {
                     Text(
-                        text = strings.grade(grade),
-                        fontSize = if (isTablet) 32.sp else 24.sp,
+                        text = "Grade $grade",
+                        fontSize = if (isTablet) 44.sp else 32.sp,
                         fontWeight = FontWeight.Black,
-                        color = Color.White
+                        color = Color(0xFF0F172A), 
+                        fontFamily = fredokaFontFamily
                     )
                     Text(
                         text = subtitle,
-                        fontSize = if (isTablet) 18.sp else 14.sp,
-                        color = Color.White.copy(alpha = 0.9f),
-                        fontWeight = FontWeight.Medium
+                        fontSize = if (isTablet) 22.sp else 16.sp,
+                        color = Color(0xFF334155),
+                        fontWeight = FontWeight.ExtraBold,
+                        modifier = Modifier.padding(bottom = if (isTablet) 24.dp else 16.dp)
                     )
-                }
 
-                Icon(
-                    Icons.Default.ChevronRight,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(if (isTablet) 40.dp else 32.dp)
-                )
+                    // "Start Learning!" Pill Button (Bigger)
+                    Surface(
+                        color = accentColor,
+                        shape = RoundedCornerShape(50),
+                        shadowElevation = 8.dp, // Re-added shadow for pop
+                        tonalElevation = 4.dp
+                    ) {
+                        Text(
+                            text = "Start Learning!",
+                            modifier = Modifier.padding(
+                                horizontal = if (isTablet) 32.dp else 24.dp,
+                                vertical = if (isTablet) 12.dp else 8.dp
+                            ),
+                            color = Color.White,
+                            fontSize = if (isTablet) 20.sp else 14.sp,
+                            fontWeight = FontWeight.Black
+                        )
+                    }
+                }
             }
         }
     }
@@ -337,15 +347,15 @@ fun StudentNameSelectScreen(
     }
 
     val gradeColor = when (gradeLevel) {
-        4 -> Color(0xFF2177DA)
-        5 -> Color(0xFF379F3B)
-        6 -> Color(0xFFE65100)
+        4 -> Color(0xFF2177DA) // Blue
+        5 -> Color(0xFFE67E22) // Orange (Moved from G6)
+        6 -> Color(0xFFC62828) // New Red
         else -> Color(0xFF1340A0)
     }
     val gradeDark = when (gradeLevel) {
         4 -> Color(0xFF1E3A8A)
-        5 -> Color(0xFF1B5E20)
-        6 -> Color(0xFFBF360C)
+        5 -> Color(0xFF935116) // Darker Orange
+        6 -> Color(0xFF8B0000) // Darker Red
         else -> Color(0xFF07153A)
     }
 
@@ -849,10 +859,16 @@ fun StudentNameCard(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GradeCard(grade: Int, color: Color, subtitle: String, onClick: () -> Unit) {
+    val emoji = when(grade) {
+        5 -> "🚀"
+        6 -> "👑"
+        else -> "🎒"
+    }
     GradeSelectionCard(
         grade = grade,
         subtitle = subtitle,
         color = color,
+        emoji = emoji,
         isTablet = false,
         onClick = onClick
     )
