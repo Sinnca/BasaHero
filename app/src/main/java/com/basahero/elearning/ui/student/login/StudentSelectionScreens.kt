@@ -2,6 +2,9 @@ package com.basahero.elearning.ui.student.login
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.foundation.ExperimentalFoundationApi
 
 import androidx.compose.animation.*
@@ -27,11 +30,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -359,30 +365,35 @@ fun StudentNameSelectScreen(
         else -> Color(0xFF07153A)
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                Brush.verticalGradient(listOf(gradeColor, gradeDark))
-            )
-    ) {
-    Scaffold(
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Dynamic Animated Background (Floating shapes/letters)
+        PlayfulBackground()
+
+        Scaffold(
         topBar = {
             TopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(onClick = {
-                        if (selectedSection != null) {
-                            selectedSection = null
-                            searchQuery = ""
-                        } else {
-                            onBack()
-                        }
-                    }) {
+                    IconButton(
+                        onClick = {
+                            if (selectedSection != null) {
+                                selectedSection = null
+                                searchQuery = ""
+                            } else {
+                                onBack()
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(if (isTablet) 56.dp else 48.dp)
+                            .shadow(4.dp, CircleShape)
+                            .background(Color.White, CircleShape)
+                    ) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color.White
+                            tint = Color(0xFF1E293B), // Visible dark slate
+                            modifier = Modifier.size(if (isTablet) 32.dp else 24.dp)
                         )
                     }
                 },
@@ -414,25 +425,59 @@ fun StudentNameSelectScreen(
                             vertical = 8.dp
                         )
                 ) {
-                    // Title
-                    Text(
-                        text = if (selectedSection == null) {
-                            if (strings == com.basahero.elearning.ui.common.getStrings("fil"))
-                                "Pumili ng iyong seksyon"
-                            else
-                                "Select your section"
+                    // Title: Grade X Heroes!
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Grade $gradeLevel Heroes!",
+                            fontSize = if (isTablet) 48.sp else 30.sp, // Slightly smaller for mobile
+                            fontWeight = FontWeight.Black,
+                            color = Color(0xFF2C6BBF),
+                            fontFamily = fredokaFontFamily,
+                            textAlign = TextAlign.Center,
+                            lineHeight = if (isTablet) 56.sp else 36.sp
+                        )
+                        
+                        // Subtitle: Select your section to find your name
+                        val subtitle = if (selectedSection == null) {
+                            buildAnnotatedString {
+                                append("Select your ")
+                                withStyle(style = SpanStyle(color = Color(0xFF4CAF50), fontWeight = FontWeight.Bold)) {
+                                    append("section")
+                                }
+                                append(" to find your ")
+                                withStyle(style = SpanStyle(color = Color(0xFFFBC02D), fontWeight = FontWeight.Bold)) {
+                                    append("name")
+                                }
+                            }
                         } else {
-                            "Who are you?"
-                        },
-                        fontSize = if (isTablet) 24.sp else 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                        style = TextStyle(fontFamily = fredokaFontFamily)
-                    )
+                            buildAnnotatedString {
+                                append("Find your ")
+                                withStyle(style = SpanStyle(color = Color(0xFFFBC02D), fontWeight = FontWeight.Bold)) {
+                                    append("name")
+                                }
+                                append(" in ")
+                                withStyle(style = SpanStyle(color = Color(0xFF4CAF50), fontWeight = FontWeight.Bold)) {
+                                    append(selectedSection!!)
+                                }
+                            }
+                        }
+                        
+                        Text(
+                            text = subtitle,
+                            fontSize = if (isTablet) 20.sp else 16.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF475569),
+                            fontFamily = fredokaFontFamily,
+                            textAlign = TextAlign.Center
+                        )
+                    }
 
                     Spacer(Modifier.height(12.dp))
 
-                    // Search bar
+                    // Search bar - clean and white
                     OutlinedTextField(
                         value = searchQuery,
                         onValueChange = { searchQuery = it },
@@ -440,27 +485,27 @@ fun StudentNameSelectScreen(
                             Text(
                                 if (selectedSection == null) "Search sections..."
                                 else "Search names...",
-                                color = Color.White.copy(alpha = 0.5f)
+                                color = Color(0xFF94A3B8)
                             )
                         },
                         leadingIcon = {
                             Icon(
                                 Icons.Default.Search,
                                 contentDescription = null,
-                                tint = Color.White.copy(alpha = 0.7f)
+                                tint = Color(0xFF64748B)
                             )
                         },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier.fillMaxWidth().height(if (isTablet) 64.dp else 56.dp),
+                        shape = RoundedCornerShape(20.dp),
                         singleLine = true,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
-                            cursorColor = Color.White,
-                            focusedBorderColor = Color.White.copy(alpha = 0.5f),
-                            unfocusedBorderColor = Color.White.copy(alpha = 0.25f),
-                            focusedContainerColor = Color.White.copy(alpha = 0.1f),
-                            unfocusedContainerColor = Color.White.copy(alpha = 0.1f)
+                            focusedTextColor = Color(0xFF1E293B),
+                            unfocusedTextColor = Color(0xFF1E293B),
+                            cursorColor = Color(0xFF2C6BBF),
+                            focusedBorderColor = Color(0xFF2C6BBF),
+                            unfocusedBorderColor = Color(0xFFE2E8F0),
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White
                         )
                     )
 
@@ -491,32 +536,40 @@ fun StudentNameSelectScreen(
                             )
                         }
                     } else {
-                        if (selectedSection == null) {
-                            // ── Section Grid ────────────────────────────────
-                            SectionGrid(
-                                uiState = uiState,
-                                searchQuery = searchQuery,
-                                gradeColor = gradeColor,
-                                gridColumns = gridColumns,
-                                isTablet = isTablet,
-                                onSelect = {
-                                    selectedSection = it
-                                    searchQuery = ""
-                                }
-                            )
-                        } else {
-                            // ── Name Grid ───────────────────────────────────
-                            NameGrid(
-                                uiState = uiState,
-                                selectedSection = selectedSection!!,
-                                searchQuery = searchQuery,
-                                gradeColor = gradeColor,
-                                gridColumns = gridColumns,
-                                isTablet = isTablet,
-                                onSelect = { student ->
-                                    viewModel.loginStudent(student, onStudentSelected)
-                                }
-                            )
+                        AnimatedContent(
+                            targetState = selectedSection,
+                            transitionSpec = {
+                                fadeIn(tween(400)) togetherWith fadeOut(tween(400))
+                            },
+                            label = "content_transition"
+                        ) { targetSection ->
+                            if (targetSection == null) {
+                                // ── Section Grid ────────────────────────────────
+                                SectionGrid(
+                                    uiState = uiState,
+                                    searchQuery = searchQuery,
+                                    gradeColor = gradeColor,
+                                    gridColumns = gridColumns,
+                                    isTablet = isTablet,
+                                    onSelect = {
+                                        selectedSection = it
+                                        searchQuery = ""
+                                    }
+                                )
+                            } else {
+                                // ── Name Grid ───────────────────────────────────
+                                NameGrid(
+                                    uiState = uiState,
+                                    selectedSection = targetSection,
+                                    searchQuery = searchQuery,
+                                    gradeColor = gradeColor,
+                                    gridColumns = gridColumns,
+                                    isTablet = isTablet,
+                                    onSelect = { student ->
+                                        viewModel.loginStudent(student, onStudentSelected)
+                                    }
+                                )
+                            }
                         }
                     }
                 }
@@ -551,22 +604,26 @@ private fun SectionGrid(
             columns = GridCells.Fixed(gridColumns),
             contentPadding = PaddingValues(
                 horizontal = if (isTablet) 32.dp else 16.dp,
-                vertical = 8.dp
+                vertical = 24.dp // More vertical breathing room
             ),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxSize()
         ) {
             items(sections.size) { index ->
                 val section = sections[index]
                 val count = uiState.students.count { it.section == section }
-                SectionCard(
-                    section = section,
-                    studentCount = count,
-                    color = gradeColor,
-                    isTablet = isTablet,
-                    onClick = { onSelect(section) }
-                )
+                
+                // ── Animated Wrapper for Staggered Entrance ──
+                AnimatedSectionCard(index = index) {
+                    SectionCard(
+                        section = section,
+                        studentCount = count,
+                        color = gradeColor,
+                        isTablet = isTablet,
+                        onClick = { onSelect(section) }
+                    )
+                }
             }
         }
     }
@@ -597,52 +654,60 @@ private fun NameGrid(
             columns = GridCells.Fixed(gridColumns),
             contentPadding = PaddingValues(
                 horizontal = if (isTablet) 32.dp else 16.dp,
-                vertical = 8.dp
+                vertical = 24.dp
             ),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxSize()
         ) {
             items(filteredStudents.size) { index ->
                 val student = filteredStudents[index]
-                StudentNameCard(
-                    student = student,
-                    gradeColor = gradeColor,
-                    isTablet = isTablet,
-                    onClick = { onSelect(student) }
-                )
+                
+                // ── Animated Wrapper for Staggered Entrance ──
+                AnimatedStudentCard(index = index) {
+                    StudentNameCard(
+                        student = student,
+                        gradeColor = gradeColor,
+                        isTablet = isTablet,
+                        onClick = { onSelect(student) }
+                    )
+                }
             }
         }
     }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Empty state
-// ─────────────────────────────────────────────────────────────────────────────
+// ── Animated Wrappers for Staggered Entrance ──
+
 @Composable
-private fun EmptyState(message: String) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp),
-        contentAlignment = Alignment.Center
+private fun AnimatedSectionCard(index: Int, content: @Composable () -> Unit) {
+    var visible by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(index * 100L)
+        visible = true
+    }
+    AnimatedVisibility(
+        visible = visible,
+        enter = slideInVertically(initialOffsetY = { it / 2 }) + fadeIn(tween(500)),
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(
-                Icons.Default.SearchOff,
-                contentDescription = null,
-                modifier = Modifier.size(48.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
-            )
-            Spacer(Modifier.height(12.dp))
-            Text(
-                text = message,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
-            )
-        }
+        content()
+    }
+}
+
+@Composable
+private fun AnimatedStudentCard(index: Int, content: @Composable () -> Unit) {
+    var visible by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(index * 60L)
+        visible = true
+    }
+    AnimatedVisibility(
+        visible = visible,
+        enter = slideInVertically(initialOffsetY = { it / 3 }) + fadeIn(tween(400)),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        content()
     }
 }
 
@@ -659,93 +724,106 @@ fun SectionCard(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
-
     val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.95f else 1f,
+        targetValue = if (isPressed) 0.96f else 1f,
         animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
         label = "scale"
     )
 
-    // Darker shade for the 3D bottom edge
-    val shadowColor = Color(
-        red = color.red * 0.85f,
-        green = color.green * 0.85f,
-        blue = color.blue * 0.85f,
-        alpha = 1f
+    val cardColors = listOf(
+        Color(0xFF4CAF50), Color(0xFF2196F3), Color(0xFF9C27B0),
+        Color(0xFFFF9800), Color(0xFFE91E63), Color(0xFF00BCD4)
     )
+    val circleColor = cardColors[section.length % cardColors.size]
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .height(if (isTablet) 280.dp else 190.dp) // Optimized mobile height
             .graphicsLayer {
                 scaleX = scale
                 scaleY = scale
             }
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = onClick
-            )
+            .clickable(interactionSource = interactionSource, indication = null, onClick = onClick)
     ) {
-        // Bottom shadow (3D edge)
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .padding(top = 6.dp) // Offset downwards
-                .background(shadowColor, RoundedCornerShape(20.dp))
-        )
-        
-        // Main front face
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 6.dp) // Push upwards relative to shadow
-                .background(Color.White, RoundedCornerShape(20.dp))
-                .padding(if (isTablet) 24.dp else 16.dp),
-            contentAlignment = Alignment.Center
+        Card(
+            modifier = Modifier.fillMaxSize(),
+            shape = RoundedCornerShape(32.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                // Section initial badge
-                Box(
+            Box(modifier = Modifier.fillMaxSize()) {
+                // ── Corner Decorations ──
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = null,
                     modifier = Modifier
-                        .size(if (isTablet) 64.dp else 56.dp)
-                        .clip(CircleShape)
-                        .background(
-                            Brush.linearGradient(
-                                listOf(color, color.copy(alpha = 0.7f))
-                            )
-                        ),
-                    contentAlignment = Alignment.Center
+                        .align(Alignment.TopEnd)
+                        .padding(16.dp)
+                        .size(if (isTablet) 24.dp else 18.dp)
+                        .graphicsLayer { rotationZ = 15f },
+                    tint = circleColor.copy(alpha = 0.15f)
+                )
+                
+                androidx.compose.foundation.Canvas(
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(16.dp)
+                        .size(if (isTablet) 32.dp else 24.dp)
                 ) {
-                    Text(
-                        text = section.take(1).uppercase(),
-                        color = Color.White,
-                        fontSize = if (isTablet) 28.sp else 24.sp,
-                        fontWeight = FontWeight.Black
-                    )
+                    val spacing = 8.dp.toPx()
+                    for (i in 0..2) {
+                        for (j in 0..2) {
+                            drawCircle(
+                                color = circleColor.copy(alpha = 0.1f),
+                                radius = 2.dp.toPx(),
+                                center = Offset(i * spacing, size.height - (j * spacing))
+                            )
+                        }
+                    }
                 }
 
-                Spacer(Modifier.height(12.dp))
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(if (isTablet) 32.dp else 24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(if (isTablet) 90.dp else 60.dp) // Optimized mobile icon size
+                            .clip(CircleShape)
+                            .background(Brush.linearGradient(listOf(circleColor, circleColor.copy(alpha = 0.8f)))),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = section.take(1).uppercase(),
+                            color = Color.White,
+                            fontSize = if (isTablet) 40.sp else 28.sp, // Optimized font size
+                            fontWeight = FontWeight.Black,
+                            fontFamily = fredokaFontFamily
+                        )
+                    }
 
-                Text(
-                    text = section,
-                    fontSize = if (isTablet) 20.sp else 16.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = Color(0xFF1E293B), // Dark slate
-                    textAlign = TextAlign.Center,
-                    maxLines = 1
-                )
-                Text(
-                    text = "$studentCount student${if (studentCount != 1) "s" else ""}",
-                    fontSize = if (isTablet) 14.sp else 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color(0xFF64748B), // Slate gray
-                    textAlign = TextAlign.Center
-                )
+                    Spacer(Modifier.height(if (isTablet) 20.dp else 12.dp))
+
+                    Text(
+                        text = section,
+                        fontSize = if (isTablet) 28.sp else 22.sp,
+                        fontWeight = FontWeight.Black,
+                        color = Color(0xFF1E293B),
+                        fontFamily = fredokaFontFamily,
+                        textAlign = TextAlign.Center
+                    )
+                    
+                    Text(
+                        text = "$studentCount Students",
+                        fontSize = if (isTablet) 16.sp else 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF64748B),
+                        fontFamily = fredokaFontFamily,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }
@@ -763,9 +841,8 @@ fun StudentNameCard(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
-
     val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.95f else 1f,
+        targetValue = if (isPressed) 0.96f else 1f,
         animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
         label = "scale"
     )
@@ -775,80 +852,147 @@ fun StudentNameCard(
         .take(2)
         .joinToString("") { it.take(1).uppercase() }
 
-    val shadowColor = Color(
-        red = gradeColor.red * 0.85f,
-        green = gradeColor.green * 0.85f,
-        blue = gradeColor.blue * 0.85f,
-        alpha = 1f
-    )
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .height(if (isTablet) 200.dp else 145.dp) // Optimized mobile height
             .graphicsLayer {
                 scaleX = scale
                 scaleY = scale
             }
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = onClick
-            )
+            .clickable(interactionSource = interactionSource, indication = null, onClick = onClick)
     ) {
-        // Bottom shadow (3D edge)
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .padding(top = 6.dp)
-                .background(shadowColor, RoundedCornerShape(20.dp))
-        )
-        
-        // Main front face
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 6.dp)
-                .background(Color.White, RoundedCornerShape(20.dp))
-                .padding(if (isTablet) 24.dp else 16.dp),
-            contentAlignment = Alignment.Center
+        Card(
+            modifier = Modifier.fillMaxSize(),
+            shape = RoundedCornerShape(24.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                // Initials avatar
+            Box(modifier = Modifier.fillMaxSize()) {
+                // ── More Design Elements ──
+                // Top-Right: Sparkle
+                Icon(
+                    imageVector = Icons.Default.AutoAwesome,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(12.dp)
+                        .size(18.dp),
+                    tint = gradeColor.copy(alpha = 0.2f)
+                )
+                
+                // Bottom-Right: Subtle Shield Pattern
+                Icon(
+                    imageVector = Icons.Default.Shield,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(8.dp)
+                        .size(32.dp)
+                        .graphicsLayer { alpha = 0.05f },
+                    tint = gradeColor
+                )
+
+                // Decorative Bottom Stripe
                 Box(
                     modifier = Modifier
-                        .size(if (isTablet) 64.dp else 56.dp)
-                        .clip(CircleShape)
+                        .fillMaxWidth()
+                        .height(6.dp)
+                        .align(Alignment.BottomCenter)
                         .background(
-                            Brush.linearGradient(
-                                listOf(gradeColor, gradeColor.copy(alpha = 0.7f))
+                            Brush.horizontalGradient(
+                                listOf(gradeColor.copy(alpha = 0.3f), gradeColor.copy(alpha = 0.1f))
                             )
-                        ),
-                    contentAlignment = Alignment.Center
+                        )
+                )
+
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(if (isTablet) 24.dp else 12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
+                    // Fun "Bubble Squircle" initials
+                    Box(
+                        modifier = Modifier
+                            .size(if (isTablet) 85.dp else 56.dp)
+                            .graphicsLayer {
+                                shadowElevation = if (isTablet) 8f else 4f
+                                shape = RoundedCornerShape(percent = 35)
+                                clip = true
+                            }
+                            .background(
+                                Brush.verticalGradient(
+                                    listOf(gradeColor, gradeColor.copy(alpha = 0.7f))
+                                )
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        // Subtle Background Pattern (Stars)
+                        Icon(
+                            imageVector = Icons.Default.Stars,
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize().padding(if (isTablet) 12.dp else 8.dp).graphicsLayer { alpha = 0.1f },
+                            tint = Color.White
+                        )
+                        
+                        Text(
+                            text = initials,
+                            color = Color.White,
+                            fontWeight = FontWeight.Black,
+                            fontSize = if (isTablet) 28.sp else 18.sp,
+                            fontFamily = fredokaFontFamily,
+                            style = TextStyle(
+                                shadow = Shadow(
+                                    color = Color.Black.copy(alpha = 0.3f),
+                                    offset = Offset(2f, 2f),
+                                    blurRadius = 4f
+                                )
+                            )
+                        )
+                    }
+
+                    Spacer(Modifier.height(if (isTablet) 14.dp else 8.dp))
+
                     Text(
-                        text = initials,
-                        color = Color.White,
-                        fontWeight = FontWeight.Black,
-                        fontSize = if (isTablet) 24.sp else 20.sp
+                        text = student.fullName,
+                        fontSize = if (isTablet) 18.sp else 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF1E293B),
+                        fontFamily = fredokaFontFamily,
+                        textAlign = TextAlign.Center,
+                        maxLines = 2,
+                        lineHeight = if (isTablet) 22.sp else 16.sp
                     )
                 }
-
-                Spacer(Modifier.height(12.dp))
-
-                Text(
-                    text = student.fullName,
-                    fontSize = if (isTablet) 16.sp else 14.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = Color(0xFF1E293B),
-                    textAlign = TextAlign.Center,
-                    maxLines = 2,
-                    lineHeight = if (isTablet) 22.sp else 18.sp
-                )
             }
+        }
+    }
+}
+
+@Composable
+private fun EmptyState(message: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(
+                Icons.Default.SearchOff,
+                contentDescription = null,
+                modifier = Modifier.size(64.dp),
+                tint = Color.White.copy(alpha = 0.3f)
+            )
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text = message,
+                color = Color.White.copy(alpha = 0.7f),
+                textAlign = TextAlign.Center,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = fredokaFontFamily
+            )
         }
     }
 }
