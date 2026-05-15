@@ -62,7 +62,7 @@ fun ReadingScreen(
     // Build steps list dynamically
     val steps = remember(lesson) {
         buildList {
-            if (lesson.hasLecture) add(LessonStep.Lecture(lesson.lectureText))
+            if (lesson.hasLecture) add(LessonStep.Lecture(lesson.lectureText, lesson.imagePath))
             if (lesson.hasParts) {
                 lesson.parts.forEachIndexed { i, part ->
                     val isShortIntro = part.miniQuestions.isEmpty() &&
@@ -263,7 +263,7 @@ fun ReadingScreen(
                         .padding(contentPadding)
                 ) {
                     when (val step = currentStep) {
-                        is LessonStep.Lecture -> LectureStepContent(step.text, isTablet)
+                        is LessonStep.Lecture -> LectureStepContent(step.text, step.imagePath, isTablet)
                         is LessonStep.ReadingPart -> ReadingPartStepContent(
                             partNumber = step.partNumber,
                             part = step.part,
@@ -313,35 +313,48 @@ fun ReadingScreen(
 
 // ─── Step types ──────────────────────────────────────────────────────────────
 sealed class LessonStep {
-    data class Lecture(val text: String) : LessonStep()
+    data class Lecture(val text: String, val imagePath: String? = null) : LessonStep()
     data class ReadingPart(val partNumber: Int, val part: LessonPart) : LessonStep()
     data class Activity(val partNumber: Int, val questions: List<MiniQuestion>, val introText: String? = null) : LessonStep()
 }
 
 // ─── Lecture Step ─────────────────────────────────────────────────────────────
 @Composable
-private fun LectureStepContent(text: String, isTablet: Boolean) {
-    // Header icon
+private fun LectureStepContent(text: String, imagePath: String?, isTablet: Boolean) {
+    // Header icon / Image Holder
     Box(
-        modifier = Modifier.fillMaxWidth().height(if (isTablet) 180.dp else 120.dp)
+        modifier = Modifier.fillMaxWidth().height(if (isTablet) 240.dp else 160.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.primaryContainer),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(
-                Icons.Default.School,
-                contentDescription = "Lecture",
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier.size(if (isTablet) 64.dp else 48.dp)
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                "Lecture",
-                fontSize = if (isTablet) 20.sp else 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
+        if (!imagePath.isNullOrBlank()) {
+            // Display actual image if provided
+            androidx.compose.ui.layout.ContentScale.let { _ ->
+                coil.compose.AsyncImage(
+                    model = imagePath,
+                    contentDescription = "Lesson Illustration",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = androidx.compose.ui.layout.ContentScale.Crop
+                )
+            }
+        } else {
+            // Fallback to Icon placeholder
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(
+                    Icons.Default.School,
+                    contentDescription = "Lecture",
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(if (isTablet) 80.dp else 56.dp)
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    "Lecture",
+                    fontSize = if (isTablet) 20.sp else 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
         }
     }
 
@@ -365,27 +378,36 @@ private fun ReadingPartStepContent(
     onQuestionAnswered: (String) -> Unit,
     onPronunciationAttempt: (String, String, Boolean, Int) -> Unit
 ) {
-    // Header
+    // Header / Image Holder
     Box(
-        modifier = Modifier.fillMaxWidth().height(if (isTablet) 140.dp else 100.dp)
+        modifier = Modifier.fillMaxWidth().height(if (isTablet) 240.dp else 160.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.secondaryContainer),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(
-                Icons.Default.Book,
-                contentDescription = "Reading",
-                tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                modifier = Modifier.size(if (isTablet) 48.dp else 36.dp)
+        if (!part.imagePath.isNullOrBlank()) {
+            coil.compose.AsyncImage(
+                model = part.imagePath,
+                contentDescription = "Reading Illustration",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop
             )
-            Spacer(Modifier.height(4.dp))
-            Text(
-                "Reading Passage $partNumber",
-                fontSize = if (isTablet) 18.sp else 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
-            )
+        } else {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(
+                    Icons.Default.Book,
+                    contentDescription = "Reading",
+                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                    modifier = Modifier.size(if (isTablet) 64.dp else 48.dp)
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    "Reading Passage $partNumber",
+                    fontSize = if (isTablet) 20.sp else 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+            }
         }
     }
 
@@ -910,28 +932,24 @@ private fun ActivityStepContent(
     isReviewMode: Boolean,
     onSubmit: (correct: Int, total: Int) -> Unit
 ) {
-    // Header
-    Box(
-        modifier = Modifier.fillMaxWidth().height(if (isTablet) 140.dp else 100.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.tertiaryContainer),
-        contentAlignment = Alignment.Center
+    // Simplified Title (Holder Removed as requested)
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(
-                Icons.Default.Assignment,
-                contentDescription = "Activity",
-                tint = MaterialTheme.colorScheme.onTertiaryContainer,
-                modifier = Modifier.size(if (isTablet) 48.dp else 36.dp)
-            )
-            Spacer(Modifier.height(4.dp))
-            Text(
-                "Activity $partNumber",
-                fontSize = if (isTablet) 18.sp else 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onTertiaryContainer
-            )
-        }
+        Text(
+            "Activity $partNumber",
+            fontSize = if (isTablet) 28.sp else 22.sp,
+            fontWeight = FontWeight.ExtraBold,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Box(
+            modifier = Modifier
+                .width(60.dp)
+                .height(4.dp)
+                .clip(RoundedCornerShape(2.dp))
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
+        )
     }
 
     Spacer(Modifier.height(24.dp))

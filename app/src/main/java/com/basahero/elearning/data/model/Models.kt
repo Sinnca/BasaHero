@@ -53,6 +53,7 @@ data class Lesson(
  */
 data class LessonPart(
     val passageText: String,
+    val imagePath: String? = null,
     val highlightedWords: List<String> = emptyList(),
     val miniQuestions: List<MiniQuestion> = emptyList(),
     val activityQuestions: List<MiniQuestion> = emptyList() // Graded assessment per passage

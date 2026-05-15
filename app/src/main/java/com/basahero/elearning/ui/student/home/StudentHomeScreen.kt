@@ -588,13 +588,30 @@ fun QuarterCard(
                         val trackColor = if (isActive) Color.White.copy(alpha = 0.2f)
                         else primaryColor.copy(alpha = 0.12f)
 
-                        ProgressRing(
-                            progress = quarter.progressPercent,
-                            size = if (isTablet) 72.dp else 56.dp,
-                            strokeWidth = if (isTablet) 8.dp else 5.dp,
-                            color = progressColor,
-                            trackColor = trackColor
-                        )
+                        Box(contentAlignment = Alignment.Center) {
+                            ProgressRing(
+                                progress = quarter.progressPercent,
+                                size = if (isTablet) 72.dp else 56.dp,
+                                strokeWidth = if (isTablet) 8.dp else 5.dp,
+                                color = progressColor,
+                                trackColor = trackColor
+                            )
+                            if (quarter.progressPercent >= 1f) {
+                                Icon(
+                                    imageVector = Icons.Default.Check,
+                                    contentDescription = null,
+                                    tint = progressColor,
+                                    modifier = Modifier.size(if (isTablet) 28.dp else 22.dp)
+                                )
+                            } else {
+                                Text(
+                                    text = "${(quarter.progressPercent * 100).toInt()}%",
+                                    fontSize = if (isTablet) 15.sp else 12.sp,
+                                    fontWeight = FontWeight.Black,
+                                    color = progressColor
+                                )
+                            }
+                        }
                     }
                 }
 
@@ -899,13 +916,21 @@ fun QuartersListContent(
                             horizontalArrangement = Arrangement.spacedBy(20.dp)
                         ) {
                             // Big progress ring
-                            ProgressRing(
-                                progress = overallProgress,
-                                size = if (isTablet) 110.dp else 90.dp,
-                                strokeWidth = if (isTablet) 10.dp else 8.dp,
-                                color = Color.White,
-                                trackColor = Color.White.copy(alpha = 0.20f)
-                            )
+                            Box(contentAlignment = Alignment.Center) {
+                                ProgressRing(
+                                    progress = overallProgress,
+                                    size = if (isTablet) 110.dp else 90.dp,
+                                    strokeWidth = if (isTablet) 10.dp else 8.dp,
+                                    color = Color.White,
+                                    trackColor = Color.White.copy(alpha = 0.20f)
+                                )
+                                Text(
+                                    text = "${(overallProgress * 100).toInt()}%",
+                                    fontSize = if (isTablet) 24.sp else 18.sp,
+                                    fontWeight = FontWeight.Black,
+                                    color = Color.White
+                                )
+                            }
 
                             // Stats column
                             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(10.dp)) {

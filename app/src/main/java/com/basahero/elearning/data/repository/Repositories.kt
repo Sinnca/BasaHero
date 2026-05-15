@@ -358,6 +358,7 @@ class LessonRepository(private val db: AppDatabase) {
                     }
                 LessonPart(
                     passageText = sp.passageText,
+                    imagePath = sp.imagePath,
                     highlightedWords = sp.highlighted_words,
                     miniQuestions = mapQuestions(sp.miniQuestions),
                     activityQuestions = mapQuestions(sp.activityQuestions)

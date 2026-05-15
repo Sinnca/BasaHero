@@ -387,6 +387,7 @@ data class SeedLesson(
 @Serializable
 data class SeedLessonPart(
     val passageText: String,
+    val imagePath: String? = null,
     val highlighted_words: List<String> = emptyList(),
     val miniQuestions: List<SeedMiniQuestion> = emptyList(),
     val activityQuestions: List<SeedMiniQuestion> = emptyList()
