@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
@@ -133,271 +134,303 @@ fun StudentHomeScreen(
                 .padding(padding),
             contentAlignment = Alignment.TopCenter
         ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(0.dp)
+            // Background Mascot Image at the very top (takes up ~35% of height)
+            // TODO: Picture Holder for Header - Replace 'R.drawable.header_mascot' with your new picture
+            androidx.compose.foundation.Image(
+                painter = androidx.compose.ui.res.painterResource(id = com.basahero.elearning.R.drawable.header_mascot),
+                contentDescription = "Header Mascot",
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                alignment = BiasAlignment(0f, -0.7f), // Slightly above center focus
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.35f)
+            )
+
+            // Main Content Card (Holding Profile, Play, and Progress)
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.65f) // Reduced to 65% to avoid overlapping the 35% mascot area
+                    .align(Alignment.BottomCenter),
+                shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp),
+                colors = CardDefaults.cardColors(containerColor = primaryColor.copy(alpha = 0.08f)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
-                item {
-                    // ── Profile header card with gradient + bubbles ──
-                    Box(
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = if (isTablet) 32.dp else 20.dp, vertical = if (isTablet) 20.dp else 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(if (isTablet) 16.dp else 12.dp)
+                ) {
+                    // User Info Card (At the top of the stack)
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(24.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(if (isTablet) 24.dp else 16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(if (isTablet) 72.dp else 56.dp)
+                                    .background(primaryColor.copy(alpha = 0.2f), CircleShape)
+                                    .padding(4.dp)
+                                    .clip(CircleShape)
+                                    .background(Color.White),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Person,
+                                    contentDescription = "Profile Picture Holder",
+                                    tint = primaryColor,
+                                    modifier = Modifier.fillMaxSize(0.8f)
+                                )
+                            }
+                            
+                            Spacer(Modifier.width(16.dp))
+                            
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "👋 ${if (languageCode == "fil") "Kamusta" else "Hi"}, ${student.fullName.split(" ").first()}",
+                                    fontSize = if (isTablet) 26.sp else 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = primaryColor // Themed greeting
+                                )
+                                Text(
+                                    text = if (languageCode == "fil") "Baitang ${student.gradeLevel} Student" else "Grade ${student.gradeLevel} Student",
+                                    fontSize = if (isTablet) 18.sp else 14.sp,
+                                    color = Color(0xFF64748B)
+                                )
+                            }
+                        }
+                    }
+                    
+                    Text(
+                        text = if (languageCode == "fil") "Tayo'y Maglaro!" else "Let's Play!",
+                        fontSize = if (isTablet) 28.sp else 22.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = primaryColor // Themed section header
+                    )
+
+                    // Let's Play Card (Orange)
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(if (isTablet) 320.dp else 260.dp)
-                            .clip(RoundedCornerShape(bottomStart = 36.dp, bottomEnd = 36.dp))
+                            .weight(1f), // Flexible height
+                        shape = RoundedCornerShape(24.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFAB40)),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
                     ) {
-                        // Layer 1: radial gradient background
                         Box(
-                            modifier = Modifier
-                                .matchParentSize()
-                                .background(
-                                    Brush.radialGradient(
-                                        colors = listOf(
-                                            primaryColor.copy(alpha = 0.85f),
-                                            primaryColor,
-                                            Color(primaryColor.red * 0.6f, primaryColor.green * 0.6f, primaryColor.blue * 0.8f)
-                                        ),
-                                        radius = 1200f
-                                    )
-                                )
-                        )
-
-                        // Layer 2: decorative bubbles drawn on Canvas
-                        Canvas(
-                            modifier = Modifier
-                                .matchParentSize()
+                            modifier = Modifier.fillMaxSize()
                         ) {
-                            val bubbleColor = Color.White.copy(alpha = 0.08f)
-                            val bubbleColorMid = Color.White.copy(alpha = 0.05f)
-                            // Large bubble top-right
-                            drawCircle(color = bubbleColor, radius = size.width * 0.42f,
-                                center = androidx.compose.ui.geometry.Offset(size.width * 1.05f, -size.height * 0.25f))
-                            // Medium bubble top-left
-                            drawCircle(color = bubbleColorMid, radius = size.width * 0.28f,
-                                center = androidx.compose.ui.geometry.Offset(-size.width * 0.06f, size.height * 0.15f))
-                            // Small bubble bottom-right
-                            drawCircle(color = bubbleColor, radius = size.width * 0.18f,
-                                center = androidx.compose.ui.geometry.Offset(size.width * 0.88f, size.height * 1.05f))
-                            // Tiny bubble center-top
-                            drawCircle(color = bubbleColor, radius = size.width * 0.10f,
-                                center = androidx.compose.ui.geometry.Offset(size.width * 0.65f, size.height * 0.08f))
-                            // Tiny bubble bottom-left
-                            drawCircle(color = bubbleColorMid, radius = size.width * 0.12f,
-                                center = androidx.compose.ui.geometry.Offset(size.width * 0.12f, size.height * 1.0f))
-                        }
-
-                        // Layer 3: content
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(
-                                    start = if (isTablet) 32.dp else 20.dp,
-                                    end = if (isTablet) 32.dp else 20.dp,
-                                    top = if (isTablet) 36.dp else 24.dp,
-                                    bottom = if (isTablet) 36.dp else 28.dp
-                                )
-                        ) {
+                            // Image as background layer
+                            androidx.compose.foundation.Image(
+                                painter = androidx.compose.ui.res.painterResource(id = com.basahero.elearning.R.drawable.kids),
+                                contentDescription = "Kids Play",
+                                contentScale = androidx.compose.ui.layout.ContentScale.Fit,
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .wrapContentWidth()
+                                    .align(Alignment.CenterStart)
+                                    .padding(start = 30.dp, top = 8.dp, bottom = 8.dp) // Added start margin
+                            )
+                            
+                            // Mission text + Play now button grouped together, moved right
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .padding(start = if (isTablet) 240.dp else 90.dp), // Moved right by 30dp
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(if (isTablet) 32.dp else 20.dp)
                             ) {
-                                // Avatar circle with white border
-                                Box(
-                                    modifier = Modifier
-                                        .size(if (isTablet) 76.dp else 60.dp)
-                                        .background(Color.White.copy(alpha = 0.25f), CircleShape)
-                                        .padding(3.dp)
-                                        .clip(CircleShape)
-                                        .background(Color.White.copy(alpha = 0.15f), CircleShape),
-                                    contentAlignment = Alignment.Center
+                                // Text on the Left of the group
+                                Column(
+                                    horizontalAlignment = Alignment.Start
                                 ) {
-                                    val initials = student.fullName.split(" ")
-                                        .filter { it.isNotBlank() }
-                                        .take(2)
-                                        .joinToString("") { it.take(1).uppercase() }
                                     Text(
-                                        text = initials,
+                                        text = if (languageCode == "fil") "Simulan ang\nMisyon!" else "Mission\nStart!",
                                         color = Color.White,
+                                        fontWeight = FontWeight.ExtraBold,
+                                        fontSize = if (isTablet) 45.sp else 34.sp,
+                                        lineHeight = if (isTablet) 46.sp else 38.sp,
+                                        textAlign = TextAlign.Start
+                                    )
+                                    Text(
+                                        text = if (languageCode == "fil") "Maglaro at matuto!" else "Play and learn!",
+                                        color = Color.White.copy(alpha = 0.85f),
                                         fontWeight = FontWeight.Bold,
-                                        fontSize = if (isTablet) 24.sp else 20.sp
+                                        fontSize = if (isTablet) 20.sp else 16.sp,
+                                        textAlign = TextAlign.Start
                                     )
                                 }
 
-                                Spacer(Modifier.width(16.dp))
-
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = greetingTime,
-                                        fontSize = if (isTablet) 18.sp else 15.sp,
-                                        color = Color.White.copy(alpha = 0.85f)
-                                    )
-                                    Text(
-                                        text = student.fullName,
-                                        fontSize = if (isTablet) 30.sp else 24.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color.White
-                                    )
-                                    Text(
-                                        text = if (languageCode == "fil") "Baitang ${student.gradeLevel} · ${student.section}" else "Grade ${student.gradeLevel} · ${student.section}",
-                                        fontSize = if (isTablet) 15.sp else 13.sp,
-                                        color = Color.White.copy(alpha = 0.75f)
-                                    )
-                                }
-
-                                // Settings button
+                                // Button on the Right of the group
                                 Box(
                                     modifier = Modifier
-                                        .size(if (isTablet) 52.dp else 44.dp)
-                                        .background(Color.White.copy(alpha = 0.18f), CircleShape)
-                                        .clickable { selectedTab = 3 },
-                                    contentAlignment = Alignment.Center
+                                        .clip(CircleShape)
+                                        .background(Color(0xFF2196F3))
+                                        .clickable { onJoinGameClick() }
+                                        .padding(horizontal = if (isTablet) 32.dp else 24.dp, vertical = 12.dp)
                                 ) {
-                                    Icon(
-                                        Icons.Default.Settings,
-                                        contentDescription = null,
-                                        tint = Color.White,
-                                        modifier = Modifier.size(if (isTablet) 26.dp else 22.dp)
+                                    Text(
+                                        text = if (languageCode == "fil") "Maglaro na" else "Play now",
+                                        color = Color.White,
+                                        fontWeight = FontWeight.ExtraBold,
+                                        fontSize = if (isTablet) 18.sp else 16.sp
                                     )
                                 }
-                            }
-
-                            Spacer(Modifier.weight(1f))
-
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                StatBadge(
-                                    icon = Icons.Default.Whatshot,
-                                    iconColor = Color(0xFFFF6B35),
-                                    value = "$completedLessons",
-                                    label = if (languageCode == "fil") "Aralin\ntapos" else "Lessons\ndone",
-                                    isTablet = isTablet,
-                                    modifier = Modifier.weight(1f)
-                                )
-                                StatBadge(
-                                    icon = Icons.Default.Star,
-                                    iconColor = Color(0xFFFFD700),
-                                    value = "${(uiState.overallProgress * 100).toInt()}%",
-                                    label = if (languageCode == "fil") "Progreso" else "Progress",
-                                    isTablet = isTablet,
-                                    modifier = Modifier.weight(1f)
-                                )
-                                StatBadge(
-                                    icon = Icons.Default.School,
-                                    iconColor = Color.White,
-                                    value = "Gr.${student.gradeLevel}",
-                                    label = if (languageCode == "fil") "Baitang" else "Grade\nlevel",
-                                    isTablet = isTablet,
-                                    modifier = Modifier.weight(1f)
-                                )
                             }
                         }
                     }
-                }
-
-                item {
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Column(
+                    
+                    // Progress and Stats Row
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1.2f), // Reduced from 1.5f to fit in 65% height
+                        horizontalArrangement = Arrangement.spacedBy(if (isTablet) 24.dp else 16.dp)
+                    ) {
+                        // Current Progress Card
+                        Card(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = if (isTablet) 32.dp else 20.dp, vertical = 24.dp)
+                                .weight(1f)
+                                .fillMaxHeight(),
+                            shape = RoundedCornerShape(24.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color(0xFFE53935)), // Red
+                            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
                         ) {
-                            Card(
-                                modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(24.dp),
-                                colors = CardDefaults.cardColors(containerColor = primaryColor.copy(alpha = 0.08f)),
-                                border = BorderStroke(2.dp, primaryColor.copy(alpha = 0.15f)),
-                                elevation = CardDefaults.cardElevation(0.dp)
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(if (isTablet) 24.dp else 16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Column(modifier = Modifier.padding(if (isTablet) 24.dp else 20.dp)) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Row(verticalAlignment = Alignment.CenterVertically) {
-                                            Box(
-                                                modifier = Modifier
-                                                    .size(48.dp)
-                                                    .background(Color.White, CircleShape),
-                                                contentAlignment = Alignment.Center
-                                            ) {
-                                                Text("🌟", fontSize = 24.sp)
-                                            }
-                                            Spacer(Modifier.width(12.dp))
-                                            Column {
-                                                Text(
-                                                    text = if (languageCode == "fil") "Kabuuang Progreso" else "Overall Progress",
-                                                    fontSize = if (isTablet) 20.sp else 16.sp,
-                                                    fontWeight = FontWeight.ExtraBold,
-                                                    color = Color(0xFF1E293B)
-                                                )
-                                                Text(
-                                                    text = "$completedLessons/$totalLessons ${if (languageCode == "fil") "tapos" else "done"}",
-                                                    fontSize = if (isTablet) 16.sp else 14.sp,
-                                                    color = Color(0xFF64748B),
-                                                    fontWeight = FontWeight.Bold
-                                                )
-                                            }
-                                        }
-                                        Text(
-                                            text = "${(uiState.overallProgress * 100).toInt()}%",
-                                            fontSize = if (isTablet) 24.sp else 20.sp,
-                                            fontWeight = FontWeight.Black,
-                                            color = primaryColor
+                                Text(
+                                    text = if (languageCode == "fil") "Progreso" else "Progress",
+                                    color = Color.White,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    fontSize = if (isTablet) 24.sp else 18.sp,
+                                    textAlign = TextAlign.Center
+                                )
+                                
+                                // Progress Ring and Percentage side-by-side
+                                Row(
+                                    modifier = Modifier.weight(1f).fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    Box(contentAlignment = Alignment.Center) {
+                                        ProgressRing(
+                                            progress = uiState.overallProgress,
+                                            size = if (isTablet) 90.dp else 70.dp,
+                                            strokeWidth = 8.dp,
+                                            color = Color(0xFFFFD700),
+                                            trackColor = Color.White.copy(alpha = 0.2f)
+                                        )
+                                        Icon(
+                                            imageVector = Icons.Default.EmojiEvents,
+                                            contentDescription = "Trophy Progress",
+                                            tint = Color(0xFFFFD700),
+                                            modifier = Modifier.size(if (isTablet) 45.dp else 35.dp)
                                         )
                                     }
-                                    Spacer(Modifier.height(16.dp))
-                                    LinearProgressIndicator(
-                                        progress = { uiState.overallProgress },
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(if (isTablet) 20.dp else 16.dp)
-                                            .clip(RoundedCornerShape(10.dp)),
-                                        color = primaryColor,
-                                        trackColor = Color.White,
-                                        strokeCap = StrokeCap.Round
+                                    
+                                    Spacer(Modifier.width(if (isTablet) 16.dp else 12.dp))
+                                    
+                                    Text(
+                                        text = "${(uiState.overallProgress * 100).toInt()}%",
+                                        color = Color.White,
+                                        fontWeight = FontWeight.ExtraBold,
+                                        fontSize = if (isTablet) 32.sp else 26.sp
+                                    )
+                                }
+                                
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(16.dp))
+                                        .background(Color.White.copy(alpha = 0.2f))
+                                        .clickable { 
+                                            // Find first active quarter to continue
+                                            val activeQ = uiState.quarters.firstOrNull { it.isActive && it.progressPercent < 1f }
+                                            if (activeQ != null) {
+                                                onQuarterClick(activeQ.id, student.gradeLevel)
+                                            } else {
+                                                selectedTab = 1 // Go to quarters tab if done
+                                            }
+                                        }
+                                        .padding(vertical = if (isTablet) 14.dp else 10.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = if (languageCode == "fil") "Ipagpatuloy" else "Continue",
+                                        color = Color.White,
+                                        fontWeight = FontWeight.ExtraBold,
+                                        fontSize = if (isTablet) 20.sp else 16.sp
+                                    )
+                                }
+                            }
+                        }
+
+                        // Quick Stats Card
+                        Card(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight(),
+                            shape = RoundedCornerShape(24.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color(0xFF673AB7)), // Purple
+                            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(if (isTablet) 24.dp else 16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = if (languageCode == "fil") "Istatistika" else "Stats",
+                                    color = Color.White,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    fontSize = if (isTablet) 24.sp else 18.sp,
+                                    textAlign = TextAlign.Center
+                                )
+                                
+                                Box(contentAlignment = Alignment.Center, modifier = Modifier.weight(1f)) {
+                                    // TODO: Picture Holder for Stats - Replace 'R.drawable.pie' with your new picture
+                                    androidx.compose.foundation.Image(
+                                        painter = androidx.compose.ui.res.painterResource(id = com.basahero.elearning.R.drawable.pie),
+                                        contentDescription = "Quick Stats",
+                                        modifier = Modifier.size(if (isTablet) 100.dp else 80.dp),
+                                        contentScale = androidx.compose.ui.layout.ContentScale.Fit
+                                    )
+                                }
+                                
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Text(
+                                        text = "$completedLessons/$totalLessons",
+                                        color = Color(0xFFFFD700),
+                                        fontWeight = FontWeight.ExtraBold,
+                                        fontSize = if (isTablet) 30.sp else 24.sp
+                                    )
+                                    Text(
+                                        text = if (languageCode == "fil") "Aralin tapos" else "Lessons done",
+                                        color = Color.White.copy(alpha = 0.9f),
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = if (isTablet) 18.sp else 15.sp
                                     )
                                 }
                             }
                         }
                     }
                 }
-
-                item {
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = if (isTablet) 32.dp else 20.dp)
-                        ) {
-                            Text(
-                                text = strings.myQuarters,
-                                fontSize = if (isTablet) 24.sp else 20.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = Color(0xFF1E293B)
-                            )
-                            Spacer(Modifier.height(8.dp))
-                        }
-                    }
-                }
-
-                items(uiState.quarters) { quarter ->
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        QuarterCard(
-                            quarter = quarter,
-                            isTablet = isTablet,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = if (isTablet) 32.dp else 20.dp, vertical = 8.dp),
-                            onClick = {
-                                if (quarter.isActive) onQuarterClick(quarter.id, student.gradeLevel)
-                            }
-                        )
-                    }
-                }
-
-                item { Spacer(Modifier.height(16.dp)) }
             }
         }
     }

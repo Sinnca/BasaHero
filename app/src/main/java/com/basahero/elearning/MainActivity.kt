@@ -48,7 +48,7 @@ import com.basahero.elearning.ui.student.lessons.ReadingScreen
 import com.basahero.elearning.ui.student.lessons.ReadingViewModel
 import com.basahero.elearning.ui.student.quiz.QuizScreen
 import com.basahero.elearning.ui.student.quiz.QuizViewModel
-import com.basahero.elearning.ui.theme.PhilIRITheme
+import com.basahero.elearning.ui.theme.BasaHeroTheme
 import com.basahero.elearning.data.local.SessionManager
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -86,7 +86,7 @@ class MainActivity : ComponentActivity() {
         androidx.core.view.WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            PhilIRIApp()
+            BasaHeroApp()
         }
     }
 }
@@ -117,7 +117,7 @@ object Routes {
 }
 
 @Composable
-fun PhilIRIApp() {
+fun BasaHeroApp() {
     val navController = rememberNavController()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -175,7 +175,7 @@ fun PhilIRIApp() {
     }
 
     // ── Apply the grade-level colour scheme to the entire app ─────────────
-    PhilIRITheme(gradeLevel = gradeLevel) {
+    BasaHeroTheme(gradeLevel = gradeLevel) {
         CompositionLocalProvider(LocalAppStrings provides appStrings) {
         Surface(
             modifier = Modifier

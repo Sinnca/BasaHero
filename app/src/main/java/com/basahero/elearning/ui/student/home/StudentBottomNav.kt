@@ -8,9 +8,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -33,46 +34,55 @@ fun StudentBottomNavBar(
     val primaryColor = MaterialTheme.colorScheme.primary
     val strings = LocalAppStrings.current
 
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        color = Color.White,
-        shadowElevation = 16.dp
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Transparent)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(bottom = 8.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = primaryColor,
+            shape = RoundedCornerShape(32.dp),
+            shadowElevation = 12.dp
         ) {
-            GamifiedNavItem(
-                selected = selectedTab == 0,
-                icon = Icons.Default.Home,
-                label = "Home",
-                primaryColor = primaryColor,
-                onClick = { onTabSelected(0) }
-            )
-            GamifiedNavItem(
-                selected = selectedTab == 1,
-                icon = Icons.Default.Widgets,
-                label = "Quarters",
-                primaryColor = primaryColor,
-                onClick = { onTabSelected(1) }
-            )
-            GamifiedNavItem(
-                selected = selectedTab == 2,
-                icon = Icons.Default.SportsEsports,
-                label = "Game",
-                primaryColor = primaryColor,
-                onClick = { onTabSelected(2) }
-            )
-            GamifiedNavItem(
-                selected = selectedTab == 3,
-                icon = Icons.Default.Person,
-                label = "Profile",
-                primaryColor = primaryColor,
-                onClick = { onTabSelected(3) }
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 10.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                GamifiedNavItem(
+                    selected = selectedTab == 0,
+                    icon = Icons.Rounded.Cottage,
+                    label = "Home",
+                    primaryColor = primaryColor,
+                    onClick = { onTabSelected(0) }
+                )
+                GamifiedNavItem(
+                    selected = selectedTab == 1,
+                    icon = Icons.Rounded.Extension,
+                    label = "Quarters",
+                    primaryColor = primaryColor,
+                    onClick = { onTabSelected(1) }
+                )
+                GamifiedNavItem(
+                    selected = selectedTab == 2,
+                    icon = Icons.Rounded.VideogameAsset,
+                    label = "Game",
+                    primaryColor = primaryColor,
+                    onClick = { onTabSelected(2) }
+                )
+                GamifiedNavItem(
+                    selected = selectedTab == 3,
+                    icon = Icons.Rounded.Face,
+                    label = "Profile",
+                    primaryColor = primaryColor,
+                    onClick = { onTabSelected(3) }
+                )
+            }
         }
     }
 }
@@ -88,19 +98,19 @@ private fun GamifiedNavItem(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
     
-    val targetScale = if (isPressed) 0.85f else if (selected) 1.05f else 1f
+    val targetScale = if (isPressed) 0.85f else if (selected) 1.1f else 1f
     val scale by animateFloatAsState(
         targetValue = targetScale,
-        animationSpec = spring(dampingRatio = 0.6f, stiffness = 400f),
+        animationSpec = spring(dampingRatio = 0.5f, stiffness = 400f),
         label = "nav_scale"
     )
     
     val bgColor by animateColorAsState(
-        targetValue = if (selected) primaryColor.copy(alpha = 0.15f) else Color.Transparent,
+        targetValue = if (selected) Color.White.copy(alpha = 0.35f) else Color.Transparent,
         label = "nav_bg"
     )
     
-    val contentColor = if (selected) primaryColor else Color(0xFF94A3B8)
+    val contentColor = if (selected) Color.White else Color.White.copy(alpha = 0.8f)
     
     Box(
         modifier = Modifier
@@ -108,28 +118,26 @@ private fun GamifiedNavItem(
                 scaleX = scale
                 scaleY = scale
             }
-            .clip(RoundedCornerShape(24.dp))
+            .clip(RoundedCornerShape(20.dp))
             .background(bgColor)
             .clickable(interactionSource = interactionSource, indication = null, onClick = onClick)
-            .padding(horizontal = if (selected) 20.dp else 16.dp, vertical = 12.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         contentAlignment = Alignment.Center
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
                 icon,
                 contentDescription = label,
                 tint = contentColor,
                 modifier = Modifier.size(28.dp)
             )
-            if (selected) {
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = label,
-                    color = contentColor,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 15.sp
-                )
-            }
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = label,
+                color = contentColor,
+                fontSize = 11.sp,
+                fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Bold
+            )
         }
     }
 }
