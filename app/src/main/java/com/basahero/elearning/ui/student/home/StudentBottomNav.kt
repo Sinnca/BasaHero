@@ -112,6 +112,9 @@ private fun GamifiedNavItem(
     
     val contentColor = if (selected) Color.White else Color.White.copy(alpha = 0.8f)
     
+    val screenWidth = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp
+    val isTablet = screenWidth >= 600
+
     Box(
         modifier = Modifier
             .graphicsLayer {
@@ -121,7 +124,7 @@ private fun GamifiedNavItem(
             .clip(RoundedCornerShape(20.dp))
             .background(bgColor)
             .clickable(interactionSource = interactionSource, indication = null, onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = if (isTablet) 16.dp else 12.dp, vertical = if (isTablet) 8.dp else 6.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -129,13 +132,13 @@ private fun GamifiedNavItem(
                 icon,
                 contentDescription = label,
                 tint = contentColor,
-                modifier = Modifier.size(28.dp)
+                modifier = Modifier.size(if (isTablet) 28.dp else 24.dp)
             )
-            Spacer(Modifier.height(4.dp))
+            Spacer(Modifier.height(if (isTablet) 4.dp else 2.dp))
             Text(
                 text = label,
                 color = contentColor,
-                fontSize = 11.sp,
+                fontSize = if (isTablet) 11.sp else 10.sp,
                 fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Bold
             )
         }

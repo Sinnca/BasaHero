@@ -1,5 +1,6 @@
 package com.basahero.elearning.ui.student.home
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -39,6 +40,7 @@ import com.basahero.elearning.ui.common.LocalAppStrings
 import kotlinx.coroutines.launch
 import kotlin.math.min
 
+@SuppressLint("Range")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudentHomeScreen(
@@ -159,8 +161,8 @@ fun StudentHomeScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = if (isTablet) 32.dp else 20.dp, vertical = if (isTablet) 20.dp else 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(if (isTablet) 16.dp else 12.dp)
+                        .padding(horizontal = if (isTablet) 32.dp else 16.dp, vertical = if (isTablet) 20.dp else 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(if (isTablet) 16.dp else 10.dp)
                 ) {
                     // User Info Card (At the top of the stack)
                     Card(
@@ -172,12 +174,12 @@ fun StudentHomeScreen(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(if (isTablet) 24.dp else 16.dp),
+                                .padding(if (isTablet) 24.dp else 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(if (isTablet) 72.dp else 56.dp)
+                                    .size(if (isTablet) 72.dp else 48.dp)
                                     .background(primaryColor.copy(alpha = 0.2f), CircleShape)
                                     .padding(4.dp)
                                     .clip(CircleShape)
@@ -197,13 +199,13 @@ fun StudentHomeScreen(
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
                                     text = "👋 ${if (languageCode == "fil") "Kamusta" else "Hi"}, ${student.fullName.split(" ").first()}",
-                                    fontSize = if (isTablet) 26.sp else 20.sp,
+                                    fontSize = if (isTablet) 26.sp else 18.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = primaryColor // Themed greeting
                                 )
                                 Text(
                                     text = if (languageCode == "fil") "Baitang ${student.gradeLevel} Student" else "Grade ${student.gradeLevel} Student",
-                                    fontSize = if (isTablet) 18.sp else 14.sp,
+                                    fontSize = if (isTablet) 18.sp else 12.sp,
                                     color = Color(0xFF64748B)
                                 )
                             }
@@ -212,7 +214,7 @@ fun StudentHomeScreen(
                     
                     Text(
                         text = if (languageCode == "fil") "Tayo'y Maglaro!" else "Let's Play!",
-                        fontSize = if (isTablet) 28.sp else 22.sp,
+                        fontSize = if (isTablet) 28.sp else 18.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = primaryColor // Themed section header
                     )
@@ -235,19 +237,19 @@ fun StudentHomeScreen(
                                 contentDescription = "Kids Play",
                                 contentScale = androidx.compose.ui.layout.ContentScale.Fit,
                                 modifier = Modifier
-                                    .fillMaxHeight()
+                                    .fillMaxHeight(if (isTablet) 1f else 1.1f) // Shrunk for mobile
                                     .wrapContentWidth()
                                     .align(Alignment.CenterStart)
-                                    .padding(start = 30.dp, top = 8.dp, bottom = 8.dp) // Added start margin
+                                    .padding(start = if (isTablet) 30.dp else 10.dp, top = 8.dp, bottom = 8.dp)
                             )
                             
                             // Mission text + Play now button grouped together, moved right
                             Row(
                                 modifier = Modifier
                                     .align(Alignment.Center)
-                                    .padding(start = if (isTablet) 240.dp else 90.dp), // Moved right by 30dp
+                                    .padding(start = if (isTablet) 240.dp else 140.dp), // Set to 140dp for mobile as requested
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(if (isTablet) 32.dp else 20.dp)
+                                horizontalArrangement = Arrangement.spacedBy(if (isTablet) 32.dp else 4.dp)
                             ) {
                                 // Text on the Left of the group
                                 Column(
@@ -257,15 +259,15 @@ fun StudentHomeScreen(
                                         text = if (languageCode == "fil") "Simulan ang\nMisyon!" else "Mission\nStart!",
                                         color = Color.White,
                                         fontWeight = FontWeight.ExtraBold,
-                                        fontSize = if (isTablet) 45.sp else 34.sp,
-                                        lineHeight = if (isTablet) 46.sp else 38.sp,
+                                        fontSize = if (isTablet) 45.sp else 22.sp,
+                                        lineHeight = if (isTablet) 46.sp else 24.sp,
                                         textAlign = TextAlign.Start
                                     )
                                     Text(
                                         text = if (languageCode == "fil") "Maglaro at matuto!" else "Play and learn!",
                                         color = Color.White.copy(alpha = 0.85f),
                                         fontWeight = FontWeight.Bold,
-                                        fontSize = if (isTablet) 20.sp else 16.sp,
+                                        fontSize = if (isTablet) 20.sp else 12.sp,
                                         textAlign = TextAlign.Start
                                     )
                                 }
@@ -276,13 +278,13 @@ fun StudentHomeScreen(
                                         .clip(CircleShape)
                                         .background(Color(0xFF2196F3))
                                         .clickable { onJoinGameClick() }
-                                        .padding(horizontal = if (isTablet) 32.dp else 24.dp, vertical = 12.dp)
+                                        .padding(horizontal = if (isTablet) 32.dp else 12.dp, vertical = if (isTablet) 12.dp else 6.dp)
                                 ) {
                                     Text(
                                         text = if (languageCode == "fil") "Maglaro na" else "Play now",
                                         color = Color.White,
                                         fontWeight = FontWeight.ExtraBold,
-                                        fontSize = if (isTablet) 18.sp else 16.sp
+                                        fontSize = if (isTablet) 18.sp else 12.sp
                                     )
                                 }
                             }
@@ -308,7 +310,7 @@ fun StudentHomeScreen(
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(if (isTablet) 24.dp else 16.dp),
+                                    .padding(if (isTablet) 24.dp else 12.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.SpaceBetween
                             ) {
@@ -316,7 +318,7 @@ fun StudentHomeScreen(
                                     text = if (languageCode == "fil") "Progreso" else "Progress",
                                     color = Color.White,
                                     fontWeight = FontWeight.ExtraBold,
-                                    fontSize = if (isTablet) 24.sp else 18.sp,
+                                    fontSize = if (isTablet) 24.sp else 16.sp,
                                     textAlign = TextAlign.Center
                                 )
                                 
@@ -330,7 +332,7 @@ fun StudentHomeScreen(
                                         ProgressRing(
                                             progress = uiState.overallProgress,
                                             size = if (isTablet) 90.dp else 70.dp,
-                                            strokeWidth = 8.dp,
+                                            strokeWidth = if (isTablet) 8.dp else 6.dp,
                                             color = Color(0xFFFFD700),
                                             trackColor = Color.White.copy(alpha = 0.2f)
                                         )
@@ -338,7 +340,7 @@ fun StudentHomeScreen(
                                             imageVector = Icons.Default.EmojiEvents,
                                             contentDescription = "Trophy Progress",
                                             tint = Color(0xFFFFD700),
-                                            modifier = Modifier.size(if (isTablet) 45.dp else 35.dp)
+                                            modifier = Modifier.size(if (isTablet) 45.dp else 30.dp)
                                         )
                                     }
                                     
@@ -348,13 +350,14 @@ fun StudentHomeScreen(
                                         text = "${(uiState.overallProgress * 100).toInt()}%",
                                         color = Color.White,
                                         fontWeight = FontWeight.ExtraBold,
-                                        fontSize = if (isTablet) 32.sp else 26.sp
+                                        fontSize = if (isTablet) 32.sp else 22.sp
                                     )
                                 }
-                                
+                                if (!isTablet) Spacer(Modifier.height(10.dp))
+
                                 Box(
                                     modifier = Modifier
-                                        .fillMaxWidth()
+                                        .fillMaxWidth(if (isTablet) 1f else 0.75f) // Even smaller width on mobile
                                         .clip(RoundedCornerShape(16.dp))
                                         .background(Color.White.copy(alpha = 0.2f))
                                         .clickable { 
@@ -366,14 +369,14 @@ fun StudentHomeScreen(
                                                 selectedTab = 1 // Go to quarters tab if done
                                             }
                                         }
-                                        .padding(vertical = if (isTablet) 14.dp else 10.dp),
+                                        .padding(vertical = if (isTablet) 14.dp else 4.dp), // Thinner on mobile
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Text(
                                         text = if (languageCode == "fil") "Ipagpatuloy" else "Continue",
                                         color = Color.White,
                                         fontWeight = FontWeight.ExtraBold,
-                                        fontSize = if (isTablet) 20.sp else 16.sp
+                                        fontSize = if (isTablet) 20.sp else 11.sp
                                     )
                                 }
                             }
@@ -399,7 +402,7 @@ fun StudentHomeScreen(
                                     text = if (languageCode == "fil") "Istatistika" else "Stats",
                                     color = Color.White,
                                     fontWeight = FontWeight.ExtraBold,
-                                    fontSize = if (isTablet) 24.sp else 18.sp,
+                                    fontSize = if (isTablet) 24.sp else 16.sp,
                                     textAlign = TextAlign.Center
                                 )
                                 
@@ -408,7 +411,7 @@ fun StudentHomeScreen(
                                     androidx.compose.foundation.Image(
                                         painter = androidx.compose.ui.res.painterResource(id = com.basahero.elearning.R.drawable.pie),
                                         contentDescription = "Quick Stats",
-                                        modifier = Modifier.size(if (isTablet) 100.dp else 80.dp),
+                                        modifier = Modifier.size(if (isTablet) 100.dp else 60.dp),
                                         contentScale = androidx.compose.ui.layout.ContentScale.Fit
                                     )
                                 }
@@ -418,13 +421,13 @@ fun StudentHomeScreen(
                                         text = "$completedLessons/$totalLessons",
                                         color = Color(0xFFFFD700),
                                         fontWeight = FontWeight.ExtraBold,
-                                        fontSize = if (isTablet) 30.sp else 24.sp
+                                        fontSize = if (isTablet) 30.sp else 20.sp
                                     )
                                     Text(
                                         text = if (languageCode == "fil") "Aralin tapos" else "Lessons done",
                                         color = Color.White.copy(alpha = 0.9f),
                                         fontWeight = FontWeight.Bold,
-                                        fontSize = if (isTablet) 18.sp else 15.sp
+                                        fontSize = if (isTablet) 18.sp else 12.sp
                                     )
                                 }
                             }
@@ -789,14 +792,6 @@ fun ProgressRing(progress: Float, size: Dp, strokeWidth: Dp, color: Color, track
             val arcSize = androidx.compose.ui.geometry.Size(diameter, diameter)
             drawArc(trackColor, -90f, 360f, false, topLeft = topLeft, size = arcSize, style = Stroke(strokePx, cap = StrokeCap.Round))
             drawArc(color, -90f, 360f * animProg, false, topLeft = topLeft, size = arcSize, style = Stroke(strokePx, cap = StrokeCap.Round))
-        }
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                "${(animProg * 100).toInt()}%",
-                fontSize = (size.value * 0.22f).sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = color
-            )
         }
     }
 }

@@ -86,8 +86,9 @@ fun StudentGradeSelectScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .then(if (isTablet) Modifier.verticalScroll(rememberScrollState()) else Modifier), // Non-scrollable on mobile
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = if (isTablet) Arrangement.Top else Arrangement.SpaceEvenly // Use spacing to fit screen
             ) {
                 // Top Section: Greeting Banner with entrance animation
                 var bannerVisible by remember { mutableStateOf(false) }
@@ -104,26 +105,26 @@ fun StudentGradeSelectScreen(
                     )
                 }
 
-                Spacer(Modifier.height(32.dp))
+                Spacer(Modifier.height(if (isTablet) 32.dp else 8.dp))
 
                 Text(
                     text = "Choose Your Grade",
-                    fontSize = if (isTablet) 36.sp else 28.sp,
+                    fontSize = if (isTablet) 36.sp else 24.sp,
                     fontWeight = FontWeight.Black,
                     color = Color(0xFF1E293B),
                     style = TextStyle(fontFamily = fredokaFontFamily),
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(Modifier.height(40.dp))
+                Spacer(Modifier.height(if (isTablet) 40.dp else 12.dp))
 
                 Column(
                     modifier = Modifier
                         .then(
                             if (isTablet) Modifier.widthIn(max = 600.dp) else Modifier.fillMaxWidth()
                         )
-                        .padding(horizontal = 24.dp),
-                    verticalArrangement = Arrangement.spacedBy(32.dp)
+                        .padding(horizontal = if (isTablet) 24.dp else 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(if (isTablet) 32.dp else 12.dp)
                 ) {
                     grades.forEachIndexed { index, grade ->
                         AnimatedGradeCard(
@@ -237,9 +238,9 @@ private fun GradeSelectionCard(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(cardGradient, RoundedCornerShape(if (isTablet) 40.dp else 32.dp))
-                .border(3.dp, Color.White.copy(alpha = 0.8f), RoundedCornerShape(if (isTablet) 40.dp else 32.dp))
-                .padding(if (isTablet) 40.dp else 28.dp),
+                .background(cardGradient, RoundedCornerShape(if (isTablet) 40.dp else 24.dp))
+                .border(if (isTablet) 3.dp else 2.dp, Color.White.copy(alpha = 0.8f), RoundedCornerShape(if (isTablet) 40.dp else 24.dp))
+                .padding(if (isTablet) 40.dp else 14.dp),
             contentAlignment = Alignment.CenterStart
         ) {
             Row(
@@ -250,8 +251,8 @@ private fun GradeSelectionCard(
                 // Left Section: Large Illustration Slot (Responsive Size)
                 Box(
                     modifier = Modifier
-                        .size(if (isTablet) 180.dp else 110.dp)
-                        .clip(RoundedCornerShape(24.dp))
+                        .size(if (isTablet) 180.dp else 80.dp)
+                        .clip(RoundedCornerShape(if (isTablet) 24.dp else 16.dp))
                         .background(Color.White.copy(alpha = 0.2f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -277,17 +278,17 @@ private fun GradeSelectionCard(
                 ) {
                     Text(
                         text = "Grade $grade",
-                        fontSize = if (isTablet) 44.sp else 32.sp,
+                        fontSize = if (isTablet) 44.sp else 26.sp,
                         fontWeight = FontWeight.Black,
                         color = Color(0xFF0F172A), 
                         fontFamily = fredokaFontFamily
                     )
                     Text(
                         text = subtitle,
-                        fontSize = if (isTablet) 22.sp else 16.sp,
+                        fontSize = if (isTablet) 22.sp else 12.sp,
                         color = Color(0xFF334155),
                         fontWeight = FontWeight.ExtraBold,
-                        modifier = Modifier.padding(bottom = if (isTablet) 24.dp else 16.dp)
+                        modifier = Modifier.padding(bottom = if (isTablet) 24.dp else 8.dp)
                     )
 
                     // "Start Learning!" Pill Button (Bigger)
@@ -300,11 +301,11 @@ private fun GradeSelectionCard(
                         Text(
                             text = "Start Learning!",
                             modifier = Modifier.padding(
-                                horizontal = if (isTablet) 32.dp else 24.dp,
-                                vertical = if (isTablet) 12.dp else 8.dp
+                                horizontal = if (isTablet) 32.dp else 16.dp,
+                                vertical = if (isTablet) 12.dp else 6.dp
                             ),
                             color = Color.White,
-                            fontSize = if (isTablet) 20.sp else 14.sp,
+                            fontSize = if (isTablet) 20.sp else 12.sp,
                             fontWeight = FontWeight.Black
                         )
                     }
@@ -434,7 +435,7 @@ fun StudentNameSelectScreen(
                             text = "Grade $gradeLevel Heroes!",
                             fontSize = if (isTablet) 48.sp else 30.sp, // Slightly smaller for mobile
                             fontWeight = FontWeight.Black,
-                            color = Color(0xFF2C6BBF),
+                            color = gradeColor,
                             fontFamily = fredokaFontFamily,
                             textAlign = TextAlign.Center,
                             lineHeight = if (isTablet) 56.sp else 36.sp
@@ -501,8 +502,8 @@ fun StudentNameSelectScreen(
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedTextColor = Color(0xFF1E293B),
                             unfocusedTextColor = Color(0xFF1E293B),
-                            cursorColor = Color(0xFF2C6BBF),
-                            focusedBorderColor = Color(0xFF2C6BBF),
+                            cursorColor = gradeColor,
+                            focusedBorderColor = gradeColor,
                             unfocusedBorderColor = Color(0xFFE2E8F0),
                             focusedContainerColor = Color.White,
                             unfocusedContainerColor = Color.White
@@ -730,11 +731,7 @@ fun SectionCard(
         label = "scale"
     )
 
-    val cardColors = listOf(
-        Color(0xFF4CAF50), Color(0xFF2196F3), Color(0xFF9C27B0),
-        Color(0xFFFF9800), Color(0xFFE91E63), Color(0xFF00BCD4)
-    )
-    val circleColor = cardColors[section.length % cardColors.size]
+    val circleColor = color
 
     Box(
         modifier = Modifier
