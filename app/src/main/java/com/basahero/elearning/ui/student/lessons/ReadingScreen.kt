@@ -62,7 +62,7 @@ fun ReadingScreen(
     // Build steps list dynamically
     val steps = remember(lesson) {
         buildList {
-            if (lesson.hasLecture) add(LessonStep.Lecture(lesson.lectureText))
+            if (lesson.hasLecture) add(LessonStep.Lecture(lesson.lectureText, lesson.imagePath))
             if (lesson.hasParts) {
                 lesson.parts.forEachIndexed { i, part ->
                     val isShortIntro = part.miniQuestions.isEmpty() &&
@@ -148,8 +148,12 @@ fun ReadingScreen(
         return
     }
 
-    Scaffold(
-        topBar = {
+    Box(modifier = Modifier.fillMaxSize()) {
+        com.basahero.elearning.ui.common.PlayfulBackground(densityMultiplier = 2f)
+
+        Scaffold(
+            containerColor = Color.Transparent,
+            topBar = {
             Column {
                 TopAppBar(
                     title = {
@@ -166,10 +170,8 @@ fun ReadingScreen(
                         }
                     },
                     actions = {
-                        if (isReviewMode) {
-                            IconButton(onClick = onBack) {
-                                Icon(Icons.Default.Close, contentDescription = "Exit Review")
-                            }
+                        IconButton(onClick = onBack) {
+                            Icon(Icons.Default.Close, contentDescription = "Exit")
                         }
                     }
                 )
@@ -240,7 +242,6 @@ fun ReadingScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                 .padding(padding),
             contentAlignment = Alignment.TopCenter
         ) {
@@ -250,11 +251,11 @@ fun ReadingScreen(
                 modifier = Modifier
                     .then(
                         if (isTablet) Modifier.widthIn(max = 720.dp).padding(vertical = 24.dp)
-                        else Modifier.fillMaxWidth()
+                        else Modifier.fillMaxWidth().padding(16.dp)
                     ),
-                shape = if (isTablet) RoundedCornerShape(24.dp) else RoundedCornerShape(0.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = if (isTablet) 4.dp else 0.dp)
+                shape = if (isTablet) RoundedCornerShape(24.dp) else RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)),
+                elevation = CardDefaults.cardElevation(defaultElevation = if (isTablet) 4.dp else 4.dp)
             ) {
                 Column(
                     modifier = Modifier
@@ -263,7 +264,7 @@ fun ReadingScreen(
                         .padding(contentPadding)
                 ) {
                     when (val step = currentStep) {
-                        is LessonStep.Lecture -> LectureStepContent(step.text, isTablet)
+                        is LessonStep.Lecture -> LectureStepContent(step.text, step.imagePath, isTablet)
                         is LessonStep.ReadingPart -> ReadingPartStepContent(
                             partNumber = step.partNumber,
                             part = step.part,
@@ -309,49 +310,101 @@ fun ReadingScreen(
             }
         }
     }
+    }
 }
 
 // ─── Step types ──────────────────────────────────────────────────────────────
 sealed class LessonStep {
-    data class Lecture(val text: String) : LessonStep()
+    data class Lecture(val text: String, val imagePath: String? = null) : LessonStep()
     data class ReadingPart(val partNumber: Int, val part: LessonPart) : LessonStep()
     data class Activity(val partNumber: Int, val questions: List<MiniQuestion>, val introText: String? = null) : LessonStep()
 }
 
 // ─── Lecture Step ─────────────────────────────────────────────────────────────
 @Composable
-private fun LectureStepContent(text: String, isTablet: Boolean) {
-    // Header icon
+private fun LectureStepContent(text: String, imagePath: String?, isTablet: Boolean) {
+    // Playful Notebook-style Header for Lecture
     Box(
-        modifier = Modifier.fillMaxWidth().height(if (isTablet) 180.dp else 120.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.primaryContainer),
-        contentAlignment = Alignment.Center
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(if (isTablet) 260.dp else 180.dp)
+            .padding(vertical = 8.dp)
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(
-                Icons.Default.School,
-                contentDescription = "Lecture",
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier.size(if (isTablet) 64.dp else 48.dp)
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                "Lecture",
-                fontSize = if (isTablet) 20.sp else 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
+        // Decorative shadow/offset background for 3D effect
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .offset(x = 4.dp, y = 4.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+        )
+
+        // Main Container
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(24.dp))
+                .background(
+                    androidx.compose.ui.graphics.Brush.linearGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.primaryContainer,
+                            MaterialTheme.colorScheme.surfaceVariant
+                        )
+                    )
+                )
+                .border(
+                    width = 3.dp,
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                    shape = RoundedCornerShape(24.dp)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            if (!imagePath.isNullOrBlank()) {
+                coil.compose.AsyncImage(
+                    model = imagePath,
+                    contentDescription = "Lesson Illustration",
+                    modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(24.dp)),
+                    contentScale = androidx.compose.ui.layout.ContentScale.Crop
+                )
+            } else {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    // Larger, more playful icon
+                    Surface(
+                        shape = androidx.compose.foundation.shape.CircleShape,
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                        modifier = Modifier.size(if (isTablet) 100.dp else 72.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                Icons.Default.Lightbulb,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(if (isTablet) 56.dp else 40.dp)
+                            )
+                        }
+                    }
+                    Spacer(Modifier.height(12.dp))
+                    Text(
+                        "Learn Something New!",
+                        fontSize = if (isTablet) 22.sp else 18.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontFamily = com.basahero.elearning.ui.theme.fredokaFontFamily,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
         }
     }
 
     Spacer(Modifier.height(24.dp))
 
     Text(
-        text = text,
-        fontSize = if (isTablet) 18.sp else 15.sp,
-        lineHeight = if (isTablet) 32.sp else 26.sp,
-        color = MaterialTheme.colorScheme.onSurface
+        text = com.basahero.elearning.util.TextUtil.parseBoldText(text),
+        fontSize = if (isTablet) 20.sp else 16.sp,
+        lineHeight = if (isTablet) 32.sp else 28.sp,
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
+        fontFamily = com.basahero.elearning.ui.theme.fredokaFontFamily,
+        textAlign = TextAlign.Start
     )
 }
 
@@ -365,27 +418,75 @@ private fun ReadingPartStepContent(
     onQuestionAnswered: (String) -> Unit,
     onPronunciationAttempt: (String, String, Boolean, Int) -> Unit
 ) {
-    // Header
+    // Playful Reading Holder
     Box(
-        modifier = Modifier.fillMaxWidth().height(if (isTablet) 140.dp else 100.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.secondaryContainer),
-        contentAlignment = Alignment.Center
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(if (isTablet) 260.dp else 180.dp)
+            .padding(vertical = 8.dp)
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(
-                Icons.Default.Book,
-                contentDescription = "Reading",
-                tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                modifier = Modifier.size(if (isTablet) 48.dp else 36.dp)
-            )
-            Spacer(Modifier.height(4.dp))
-            Text(
-                "Reading Passage $partNumber",
-                fontSize = if (isTablet) 18.sp else 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
-            )
+        // Decorative shadow/offset
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .offset(x = (-4).dp, y = 4.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f))
+        )
+
+        // Main Container
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(24.dp))
+                .background(
+                    androidx.compose.ui.graphics.Brush.linearGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.secondaryContainer,
+                            MaterialTheme.colorScheme.surface
+                        )
+                    )
+                )
+                .border(
+                    width = 3.dp,
+                    color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f),
+                    shape = RoundedCornerShape(24.dp)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            if (!part.imagePath.isNullOrBlank()) {
+                coil.compose.AsyncImage(
+                    model = part.imagePath,
+                    contentDescription = "Reading Illustration",
+                    modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(24.dp)),
+                    contentScale = androidx.compose.ui.layout.ContentScale.Crop
+                )
+            } else {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Surface(
+                        shape = androidx.compose.foundation.shape.CircleShape,
+                        color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f),
+                        modifier = Modifier.size(if (isTablet) 100.dp else 72.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                Icons.Default.MenuBook,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.size(if (isTablet) 56.dp else 40.dp)
+                            )
+                        }
+                    }
+                    Spacer(Modifier.height(12.dp))
+                    Text(
+                        "Reading Time!",
+                        fontSize = if (isTablet) 22.sp else 18.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontFamily = com.basahero.elearning.ui.theme.fredokaFontFamily,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
+            }
         }
     }
 
@@ -404,6 +505,7 @@ private fun ReadingPartStepContent(
         passageText = part.passageText,
         highlightedWords = highlightedWordObjects,
         modifier = Modifier.fillMaxWidth(),
+        isTablet = isTablet,
         onPronunciationAttempt = onPronunciationAttempt
     )
 
@@ -416,7 +518,7 @@ private fun ReadingPartStepContent(
             "Mini Activity",
             fontSize = if (isTablet) 20.sp else 16.sp,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.tertiary
+            color = MaterialTheme.colorScheme.primary
         )
         Spacer(Modifier.height(12.dp))
 
@@ -461,19 +563,19 @@ private fun MiniQuestionCard(
         ),
         shape = RoundedCornerShape(12.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(if (isTablet) 16.dp else 12.dp)) {
             val cleanQuestionText = question.questionText
                 .replace(Regex("^Q\\d+[:.]?\\s*", RegexOption.IGNORE_CASE), "")
                 .replace(Regex("^\\d+[:.]?\\s*"), "")
 
             Text(
-                "Q$questionNumber: $cleanQuestionText",
+                text = com.basahero.elearning.util.TextUtil.parseBoldText("Q$questionNumber: $cleanQuestionText"),
                 fontSize = if (isTablet) 16.sp else 14.sp,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(if (isTablet) 8.dp else 4.dp))
 
             if (question.questionType == "SEQUENCING") {
                 // Drag to reorder for MiniQuestionCard
@@ -500,38 +602,21 @@ private fun MiniQuestionCard(
                     state = state.listState,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(max = (currentChoices.size * 110).dp) // Increased multiplier for text wrapping
+                        .heightIn(max = (currentChoices.size * 110).dp)
                         .reorderable(state)
                         .then(if (isReviewMode) Modifier else Modifier.detectReorderAfterLongPress(state)),
                     userScrollEnabled = false
                 ) {
                     items(currentChoices, { it.id }) { choice ->
                         ReorderableItem(state, key = choice.id) { isDragging ->
-                            val elevation = if (isDragging) 8.dp else 0.dp
-                            Surface(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 4.dp),
-                                shape = RoundedCornerShape(8.dp),
-                                color = MaterialTheme.colorScheme.surface,
-                                shadowElevation = elevation,
-                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
-                            ) {
-                                Row(
-                                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    if (!isReviewMode) {
-                                        Icon(Icons.Default.DragHandle, contentDescription = "Drag")
-                                        Spacer(Modifier.width(12.dp))
-                                    }
-                                    Text(
-                                        choice.choiceText,
-                                        fontSize = if (isTablet) 16.sp else 14.sp,
-                                        modifier = Modifier.weight(1f)
-                                    )
-                                }
-                            }
+                            val index = currentChoices.indexOf(choice) + 1
+                            SequencingItemCard(
+                                index = index,
+                                text = choice.choiceText,
+                                isDragging = isDragging,
+                                isTablet = isTablet,
+                                enabled = !isReviewMode
+                            )
                         }
                     }
                 }
@@ -550,13 +635,47 @@ private fun MiniQuestionCard(
                     val correctOrder = question.choices.sortedBy { it.orderIndex }.map { it.id }
                     val currentOrder = currentChoices.map { it.id }
                     val isCorrect = correctOrder == currentOrder
-                    Spacer(Modifier.height(8.dp))
-                    Text(
-                        if (isCorrect) "✓ Correct!" else "✗ Incorrect. The right order is: \n" + question.choices.sortedBy { it.orderIndex }.joinToString("\n") { it.choiceText },
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = if (isCorrect) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
-                    )
+                    
+                    Spacer(Modifier.height(12.dp))
+                    
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                        color = if (isCorrect) Color(0xFFE8F5E9) else Color(0xFFFFEBEE),
+                        border = BorderStroke(1.dp, if (isCorrect) Color(0xFF2E7D32) else Color(0xFFD32F2F))
+                    ) {
+                        Column(Modifier.padding(12.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    if (isCorrect) Icons.Default.CheckCircle else Icons.Default.Error,
+                                    contentDescription = null,
+                                    tint = if (isCorrect) Color(0xFF2E7D32) else Color(0xFFD32F2F)
+                                )
+                                Spacer(Modifier.width(8.dp))
+                                Text(
+                                    if (isCorrect) "Excellent!" else "Wait, not quite...",
+                                    fontWeight = FontWeight.Bold,
+                                    color = if (isCorrect) Color(0xFF2E7D32) else Color(0xFFD32F2F)
+                                )
+                            }
+                            
+                            if (!isCorrect) {
+                                Spacer(Modifier.height(4.dp))
+                                Text(
+                                    "The correct order is:",
+                                    fontSize = 13.sp,
+                                    color = Color(0xFFD32F2F).copy(alpha = 0.8f)
+                                )
+                                Text(
+                                    question.choices.sortedBy { it.orderIndex }.joinToString("\n") { "• ${it.choiceText}" },
+                                    fontSize = 14.sp,
+                                    lineHeight = 20.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color(0xFFD32F2F)
+                                )
+                            }
+                        }
+                    }
                 }
             } else if (question.questionType == "FILL_IN") {
                 // 🚀 NEW: FILL_IN UI for MiniQuestionCard
@@ -595,7 +714,7 @@ private fun MiniQuestionCard(
                             if (isMatch || isReviewMode) "✓ Correct: $correctText" else "✗ Incorrect. The answer is: $correctText",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = if (isMatch || isReviewMode) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
+                            color = if (isMatch || isReviewMode) Color(0xFF2E7D32) else Color(0xFFD32F2F)
                         )
                     }
                 }
@@ -633,22 +752,15 @@ private fun MiniQuestionCard(
                             "✓ Thoughts shared! Great reflection.",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.tertiary
+                            color = Color(0xFF2E7D32)
                         )
                     }
                 }
             } else if (question.questionType == "MATCHING") {
-                // 🚀 NEW: MATCHING UI for MiniQuestionCard
-                val half = question.choices.size / 2
-                val leftSide = remember(question.id) { question.choices.take(half) }
-                val rightSide = remember(question.id) { question.choices.drop(half) }
-                
-                var selectedLeftId by remember(question.id) { mutableStateOf<String?>(null) }
-                val matches = remember(question.id) { mutableStateMapOf<String, String>() }
-
+                // 🚀 NEW: DRAG & DROP MATCHING UI for MiniQuestionCard
                 if (!isReviewMode && !showFeedback) {
                     Text(
-                        "Tap a word on the left, then its match on the right:",
+                        "Drag a colored rope from the left to its match on the right:",
                         fontSize = if (isTablet) 14.sp else 12.sp,
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold
@@ -656,61 +768,71 @@ private fun MiniQuestionCard(
                     Spacer(Modifier.height(8.dp))
                 }
 
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        leftSide.forEach { item ->
-                            val isMatched = matches.containsKey(item.id) || showFeedback || isReviewMode
-                            val isSelected = selectedLeftId == item.id
-                            Surface(
-                                modifier = Modifier.fillMaxWidth().clickable(enabled = !isMatched) {
-                                    selectedLeftId = if (isSelected) null else item.id
-                                },
-                                shape = RoundedCornerShape(8.dp),
-                                color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else if (isMatched) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surface,
-                                border = BorderStroke(1.dp, if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
-                            ) {
-                                Row(Modifier.padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                                    Text(item.choiceText, fontSize = if (isTablet) 14.sp else 12.sp, modifier = Modifier.weight(1f))
-                                    if (isMatched) Icon(Icons.Default.CheckCircle, null, tint = Color(0xFF4CAF50), modifier = Modifier.size(14.dp))
-                                }
-                            }
+                var currentMatches by remember { mutableStateOf(mapOf<String, String>()) }
+
+                MatchingDragAndDropUI(
+                    question = question,
+                    isTablet = isTablet,
+                    isReviewMode = isReviewMode,
+                    showFeedback = showFeedback,
+                    onMatchesChanged = { m ->
+                        currentMatches = m
+                        val half = question.choices.size / 2
+                        if (m.size == half && !showFeedback && !isReviewMode) {
+                            showFeedback = true
                         }
                     }
-                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        rightSide.forEach { item ->
-                            val isMatched = matches.containsValue(item.id) || showFeedback || isReviewMode
-                            Surface(
-                                modifier = Modifier.fillMaxWidth().clickable(enabled = !isMatched && selectedLeftId != null) {
-                                    val leftId = selectedLeftId ?: return@clickable
-                                    matches[leftId] = item.id
-                                    selectedLeftId = null
-                                    if (matches.size == half) showFeedback = true
-                                },
-                                shape = RoundedCornerShape(8.dp),
-                                color = if (isMatched) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surface,
-                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
-                            ) {
-                                Row(Modifier.padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                                    Text(item.choiceText, fontSize = if (isTablet) 14.sp else 12.sp, modifier = Modifier.weight(1f))
-                                    if (isMatched) Icon(Icons.Default.CheckCircle, null, tint = Color(0xFF4CAF50), modifier = Modifier.size(14.dp))
-                                }
-                            }
-                        }
-                    }
-                }
+                )
 
                 if (showFeedback || isReviewMode) {
+                    val half = question.choices.size / 2
+                    val leftSide = question.choices.take(half)
+                    val rightSide = question.choices.drop(half)
                     var allCorrect = true
                     leftSide.forEachIndexed { i, leftItem ->
-                        if (matches[leftItem.id] != rightSide[i].id) allCorrect = false
+                        if (currentMatches[leftItem.id] != rightSide[i].id) allCorrect = false
                     }
-                    Spacer(Modifier.height(8.dp))
-                    Text(
-                        if (allCorrect || isReviewMode) "✓ Correct Matches!" else "✗ Not quite. Try to match them correctly next time!",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = if (allCorrect || isReviewMode) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
-                    )
+                    val isCorrect = allCorrect || isReviewMode
+                    Surface(
+                        modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
+                        color = if (isCorrect) Color(0xFFE8F5E9) else Color(0xFFFFEBEE),
+                        shape = RoundedCornerShape(8.dp),
+                        border = BorderStroke(1.dp, if (isCorrect) Color(0xFF81C784) else Color(0xFFE57373))
+                    ) {
+                        Column(Modifier.padding(16.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    if (isCorrect) Icons.Default.CheckCircle else Icons.Default.Cancel,
+                                    contentDescription = null,
+                                    tint = if (isCorrect) Color(0xFF2E7D32) else Color(0xFFD32F2F)
+                                )
+                                Spacer(Modifier.width(8.dp))
+                                Text(
+                                    if (isCorrect) "Excellent!" else "Wait, not quite...",
+                                    fontWeight = FontWeight.Bold,
+                                    color = if (isCorrect) Color(0xFF2E7D32) else Color(0xFFD32F2F)
+                                )
+                            }
+                            
+                            if (!isCorrect) {
+                                Spacer(Modifier.height(4.dp))
+                                Text(
+                                    "The correct matches are:",
+                                    fontSize = 13.sp,
+                                    color = Color(0xFFD32F2F).copy(alpha = 0.8f)
+                                )
+                                Text(
+                                    leftSide.mapIndexed { index, miniChoice -> 
+                                        "• ${miniChoice.choiceText} → ${rightSide[index].choiceText}" 
+                                    }.joinToString("\n"),
+                                    fontSize = 14.sp,
+                                    lineHeight = 20.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color(0xFFD32F2F)
+                                )
+                            }
+                        }
+                    }
                 }
             } else if (question.questionType == "IDENTIFICATION") {
                 // 🚀 NEW: IDENTIFICATION UI for MiniQuestionCard
@@ -749,7 +871,7 @@ private fun MiniQuestionCard(
                             if (isMatch || isReviewMode) "✓ Correct: $correctAnswer" else "✗ Incorrect. The answer is: $correctAnswer",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = if (isMatch || isReviewMode) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
+                            color = if (isMatch || isReviewMode) Color(0xFF2E7D32) else Color(0xFFD32F2F)
                         )
                     }
                 }
@@ -778,15 +900,16 @@ private fun MiniQuestionCard(
                         val isCorrect = choice.isCorrect
                         
                         val bgColor = when {
-                            isReviewMode && isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
+                            isReviewMode && isCorrect -> Color(0xFFE8F5E9)
                             !showFeedback -> if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
-                            isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
-                            isSelected && !isCorrect -> MaterialTheme.colorScheme.errorContainer
+                            isCorrect -> Color(0xFFE8F5E9) // Light Green
+                            isSelected && !isCorrect -> Color(0xFFFFEBEE) // Light Red
                             else -> MaterialTheme.colorScheme.surface
                         }
 
                         Surface(
                             modifier = Modifier
+                                .then(if (question.id.contains("-04-")) Modifier.fillMaxWidth() else Modifier)
                                 .clickable(enabled = !showFeedback && !isReviewMode) {
                                     if (selectedIds.contains(choice.id)) {
                                         selectedIds.remove(choice.id)
@@ -803,7 +926,7 @@ private fun MiniQuestionCard(
                             )
                         ) {
                             Text(
-                                choice.choiceText,
+                                text = com.basahero.elearning.util.TextUtil.parseBoldText(choice.choiceText),
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
                                 fontSize = if (isTablet) 16.sp else 14.sp
                             )
@@ -830,7 +953,7 @@ private fun MiniQuestionCard(
                         if (isFullyCorrect) "✓ Correct!" else "✗ Not quite. The correct highlights are shown in green.",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = if (isFullyCorrect) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
+                        color = if (isFullyCorrect) Color(0xFF2E7D32) else Color(0xFFD32F2F)
                     )
                 }
             } else {
@@ -842,10 +965,10 @@ private fun MiniQuestionCard(
                 displayChoices.forEach { choice ->
                     val isSelected = if (isReviewMode) choice.isCorrect else selectedChoiceId == choice.id
                     val bgColor = when {
-                        isReviewMode && choice.isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
+                        isReviewMode && choice.isCorrect -> Color(0xFFE8F5E9)
                         !showFeedback -> if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
-                        choice.isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
-                        isSelected && !choice.isCorrect -> MaterialTheme.colorScheme.errorContainer
+                        choice.isCorrect -> Color(0xFFE8F5E9)
+                        isSelected && !choice.isCorrect -> Color(0xFFFFEBEE)
                         else -> MaterialTheme.colorScheme.surface
                     }
 
@@ -870,15 +993,15 @@ private fun MiniQuestionCard(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                choice.choiceText,
+                                text = com.basahero.elearning.util.TextUtil.parseBoldText(choice.choiceText),
                                 fontSize = if (isTablet) 14.sp else 12.sp,
                                 modifier = Modifier.weight(1f)
                             )
                             if (showFeedback && choice.isCorrect) {
-                                Icon(Icons.Default.CheckCircle, null, tint = MaterialTheme.colorScheme.tertiary, modifier = Modifier.size(18.dp))
+                                Icon(Icons.Default.CheckCircle, null, tint = Color(0xFF2E7D32), modifier = Modifier.size(18.dp))
                             }
                             if (showFeedback && isSelected && !choice.isCorrect) {
-                                Icon(Icons.Default.Cancel, null, tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(18.dp))
+                                Icon(Icons.Default.Cancel, null, tint = Color(0xFFD32F2F), modifier = Modifier.size(18.dp))
                             }
                         }
                     }
@@ -892,7 +1015,7 @@ private fun MiniQuestionCard(
                         if (correct) "✓ Correct!" else "✗ Not quite. The correct answer is shown above.",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = if (correct) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
+                        color = if (correct) Color(0xFF2E7D32) else Color(0xFFD32F2F)
                     )
                 }
             }
@@ -910,35 +1033,31 @@ private fun ActivityStepContent(
     isReviewMode: Boolean,
     onSubmit: (correct: Int, total: Int) -> Unit
 ) {
-    // Header
-    Box(
-        modifier = Modifier.fillMaxWidth().height(if (isTablet) 140.dp else 100.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.tertiaryContainer),
-        contentAlignment = Alignment.Center
+    // Simplified Title (Holder Removed as requested)
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(
-                Icons.Default.Assignment,
-                contentDescription = "Activity",
-                tint = MaterialTheme.colorScheme.onTertiaryContainer,
-                modifier = Modifier.size(if (isTablet) 48.dp else 36.dp)
-            )
-            Spacer(Modifier.height(4.dp))
-            Text(
-                "Activity $partNumber",
-                fontSize = if (isTablet) 18.sp else 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onTertiaryContainer
-            )
-        }
+        Text(
+            "Activity $partNumber",
+            fontSize = if (isTablet) 28.sp else 22.sp,
+            fontWeight = FontWeight.ExtraBold,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Box(
+            modifier = Modifier
+                .width(60.dp)
+                .height(4.dp)
+                .clip(RoundedCornerShape(2.dp))
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
+        )
     }
 
-    Spacer(Modifier.height(24.dp))
+    Spacer(Modifier.height(if (isTablet) 24.dp else 16.dp))
 
     if (!introText.isNullOrBlank()) {
         Text(
-            text = introText,
+            text = com.basahero.elearning.util.TextUtil.parseBoldText(introText),
             fontSize = if (isTablet) 18.sp else 16.sp,
             lineHeight = if (isTablet) 28.sp else 24.sp,
             color = MaterialTheme.colorScheme.onSurface,
@@ -953,7 +1072,7 @@ private fun ActivityStepContent(
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(if (isTablet) 24.dp else 16.dp))
     }
 
     val shuffledQuestions = remember(questions) {
@@ -1031,7 +1150,7 @@ private fun ActivityResultScreen(
             // Emoji header
             Text(
                 text = if (passed) "🌟" else "💪",
-                fontSize = 64.sp
+                fontSize = if (isTablet) 64.sp else 48.sp
             )
 
             Spacer(Modifier.height(16.dp))
@@ -1057,16 +1176,16 @@ private fun ActivityResultScreen(
             // Score Circle
             Box(
                 modifier = Modifier
-                    .size(if (isTablet) 200.dp else 160.dp)
+                    .size(if (isTablet) 200.dp else 140.dp)
                     .clip(CircleShape)
                     .background(circleColor.copy(alpha = 0.12f))
-                    .border(6.dp, circleColor, CircleShape),
+                    .border(if (isTablet) 6.dp else 4.dp, circleColor, CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         text = "$pct%",
-                        fontSize = if (isTablet) 48.sp else 38.sp,
+                        fontSize = if (isTablet) 48.sp else 32.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = circleColor
                     )
@@ -1142,19 +1261,19 @@ private fun ActivityQuestionCard(
         border = if (selectedChoiceId != null) BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)) else null
     ) {
         val enabled = !isReviewMode
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(if (isTablet) 16.dp else 12.dp)) {
             val cleanQuestionText = question.questionText
                 .replace(Regex("^Q\\d+[:.]?\\s*", RegexOption.IGNORE_CASE), "")
                 .replace(Regex("^\\d+[:.]?\\s*"), "")
 
             Text(
-                "Q$questionNumber: $cleanQuestionText",
+                text = com.basahero.elearning.util.TextUtil.parseBoldText("Q$questionNumber: $cleanQuestionText"),
                 fontSize = if (isTablet) 18.sp else 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(if (isTablet) 12.dp else 8.dp))
 
             if (question.questionType == "FILL_IN") {
                 // FILL_IN UI
@@ -1207,38 +1326,21 @@ private fun ActivityQuestionCard(
                     state = state.listState,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(max = (currentChoices.size * 110).dp) // Increased multiplier for text wrapping
+                        .heightIn(max = (currentChoices.size * 110).dp)
                         .reorderable(state)
                         .then(if (enabled) Modifier.detectReorderAfterLongPress(state) else Modifier),
                     userScrollEnabled = false
                 ) {
                     items(currentChoices, { it.id }) { choice ->
                         ReorderableItem(state, key = choice.id) { isDragging ->
-                            val elevation = if (isDragging) 8.dp else 0.dp
-                            Surface(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 4.dp),
-                                shape = RoundedCornerShape(8.dp),
-                                color = MaterialTheme.colorScheme.surface,
-                                shadowElevation = elevation,
-                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
-                            ) {
-                                Row(
-                                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    if (enabled) {
-                                        Icon(Icons.Default.DragHandle, contentDescription = "Drag")
-                                        Spacer(Modifier.width(12.dp))
-                                    }
-                                    Text(
-                                        choice.choiceText,
-                                        fontSize = if (isTablet) 16.sp else 14.sp,
-                                        modifier = Modifier.weight(1f)
-                                    )
-                                }
-                            }
+                            val index = currentChoices.indexOf(choice) + 1
+                            SequencingItemCard(
+                                index = index,
+                                text = choice.choiceText,
+                                isDragging = isDragging,
+                                isTablet = isTablet,
+                                enabled = enabled
+                            )
                         }
                     }
                 }
@@ -1256,7 +1358,7 @@ private fun ActivityQuestionCard(
                         "✓ Correct Order",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.tertiary
+                        color = Color(0xFF2E7D32)
                     )
                 }
             } else if (question.questionType == "HIGHLIGHT") {
@@ -1283,13 +1385,14 @@ private fun ActivityQuestionCard(
                         val isSelected = if (isReviewMode) choice.isCorrect else selectedIds.contains(choice.id)
                         
                         val bgColor = when {
-                            isReviewMode && choice.isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
+                            isReviewMode && choice.isCorrect -> Color(0xFFE8F5E9)
                             isSelected -> MaterialTheme.colorScheme.primaryContainer
                             else -> MaterialTheme.colorScheme.surface
                         }
 
                         Surface(
                             modifier = Modifier
+                                .then(if (question.id.contains("-04-")) Modifier.fillMaxWidth() else Modifier)
                                 .clickable(enabled = enabled) {
                                     if (selectedIds.contains(choice.id)) {
                                         selectedIds.remove(choice.id)
@@ -1311,7 +1414,7 @@ private fun ActivityQuestionCard(
                             )
                         ) {
                             Text(
-                                choice.choiceText,
+                                text = com.basahero.elearning.util.TextUtil.parseBoldText(choice.choiceText),
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
                                 fontSize = if (isTablet) 16.sp else 14.sp
                             )
@@ -1325,21 +1428,17 @@ private fun ActivityQuestionCard(
                         "✓ Correct Highlights",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.tertiary
+                        color = Color(0xFF2E7D32)
                     )
                 }
             } else if (question.questionType == "MATCHING") {
-                // 🚀 NEW: MATCHING UI (Column A | Column B)
-                val half = question.choices.size / 2
-                val leftSide = remember(question.id) { question.choices.take(half) }
-                val rightSide = remember(question.id) { question.choices.drop(half) }
+                // 🚀 NEW: DRAG & DROP MATCHING UI (Column A | Column B)
+                var currentMatches by remember { mutableStateOf(mapOf<String, String>()) }
+                var resetKey by remember { mutableIntStateOf(0) }
                 
-                var selectedLeftId by remember(question.id) { mutableStateOf<String?>(null) }
-                val matches = remember(question.id) { mutableStateMapOf<String, String>() } // LeftId -> RightId
-
                 if (!isReviewMode) {
                     Text(
-                        "Tap a word on the left, then its match on the right:",
+                        "Drag a colored rope from the left to its match on the right:",
                         fontSize = if (isTablet) 14.sp else 12.sp,
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold
@@ -1347,68 +1446,35 @@ private fun ActivityQuestionCard(
                     Spacer(Modifier.height(12.dp))
                 }
 
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    // Column A
-                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        leftSide.forEach { item ->
-                            val isMatched = matches.containsKey(item.id) || isReviewMode
-                            val isSelected = selectedLeftId == item.id
-                            
-                            Surface(
-                                modifier = Modifier.fillMaxWidth().clickable(enabled = enabled && !isMatched) {
-                                    selectedLeftId = if (isSelected) null else item.id
-                                },
-                                shape = RoundedCornerShape(8.dp),
-                                color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else if (isMatched) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surface,
-                                border = BorderStroke(1.dp, if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
-                            ) {
-                                Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                                    Text(item.choiceText, fontSize = if (isTablet) 15.sp else 13.sp, modifier = Modifier.weight(1f))
-                                    if (isMatched) Icon(Icons.Default.CheckCircle, null, tint = Color(0xFF4CAF50), modifier = Modifier.size(16.dp))
+                key(resetKey) {
+                    MatchingDragAndDropUI(
+                        question = question,
+                        isTablet = isTablet,
+                        isReviewMode = isReviewMode,
+                        showFeedback = false,
+                        onMatchesChanged = { m ->
+                            currentMatches = m
+                            val half = question.choices.size / 2
+                            if (m.size == half && !isReviewMode) {
+                                val leftSide = question.choices.take(half)
+                                val rightSide = question.choices.drop(half)
+                                var allCorrect = true
+                                leftSide.forEachIndexed { i, leftItem ->
+                                    if (m[leftItem.id] != rightSide[i].id) allCorrect = false
                                 }
+                                onAnswered(allCorrect)
                             }
                         }
-                    }
-
-                    // Column B
-                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        rightSide.forEach { item ->
-                            val isMatched = matches.containsValue(item.id) || isReviewMode
-                            val isSelected = false // We don't select right side alone
-
-                            Surface(
-                                modifier = Modifier.fillMaxWidth().clickable(enabled = enabled && !isMatched && selectedLeftId != null) {
-                                    val leftId = selectedLeftId ?: return@clickable
-                                    matches[leftId] = item.id
-                                    selectedLeftId = null
-                                    
-                                    // Validation
-                                    if (matches.size == half) {
-                                        var allCorrect = true
-                                        leftSide.forEachIndexed { i, leftItem ->
-                                            val matchedRightId = matches[leftItem.id]
-                                            val expectedRightId = rightSide[i].id
-                                            if (matchedRightId != expectedRightId) allCorrect = false
-                                        }
-                                        onAnswered(allCorrect)
-                                    }
-                                },
-                                shape = RoundedCornerShape(8.dp),
-                                color = if (isMatched) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surface,
-                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
-                            ) {
-                                Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                                    Text(item.choiceText, fontSize = if (isTablet) 15.sp else 13.sp, modifier = Modifier.weight(1f))
-                                    if (isMatched) Icon(Icons.Default.CheckCircle, null, tint = Color(0xFF4CAF50), modifier = Modifier.size(16.dp))
-                                }
-                            }
-                        }
-                    }
+                    )
                 }
                 
-                if (matches.isNotEmpty() && !isReviewMode) {
-                    TextButton(onClick = { matches.clear(); onAnswered(false) }, modifier = Modifier.padding(top = 8.dp)) {
-                        Text("Reset Matches", color = MaterialTheme.colorScheme.error)
+                if (currentMatches.isNotEmpty() && !isReviewMode) {
+                    TextButton(onClick = { 
+                        currentMatches = emptyMap()
+                        resetKey++
+                        onAnswered(false) 
+                    }, modifier = Modifier.padding(top = 8.dp)) {
+                        Text("Reset Matches", color = Color(0xFFD32F2F))
                     }
                 }
             } else if (question.questionType == "OPEN_ENDED" || question.questionType == "REFLECTION") {
@@ -1474,7 +1540,7 @@ private fun ActivityQuestionCard(
                             "✓ Correct Answer: $correctAnswer",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.tertiary
+                            color = Color(0xFF2E7D32)
                         )
                     }
                 }
@@ -1487,7 +1553,7 @@ private fun ActivityQuestionCard(
                 displayChoices.forEach { choice ->
                     val isSelected = if (isReviewMode) choice.isCorrect else selectedChoiceId == choice.id
                     val bgColor = when {
-                        isReviewMode && choice.isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
+                        isReviewMode && choice.isCorrect -> Color(0xFFE8F5E9)
                         isSelected -> MaterialTheme.colorScheme.primaryContainer
                         else -> MaterialTheme.colorScheme.surface
                     }
@@ -1495,7 +1561,7 @@ private fun ActivityQuestionCard(
                     Surface(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 4.dp)
+                            .padding(vertical = if (isTablet) 4.dp else 2.dp)
                             .clickable(enabled = enabled) {
                                 selectedChoiceId = choice.id
                                 onAnswered(choice.isCorrect)
@@ -1508,18 +1574,18 @@ private fun ActivityQuestionCard(
                         )
                     ) {
                         Row(
-                            modifier = Modifier.padding(14.dp),
+                            modifier = Modifier.padding(if (isTablet) 14.dp else 10.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             RadioButton(
                                 selected = isSelected,
                                 onClick = null, // handled by Surface click
                                 modifier = Modifier.size(20.dp),
-                                colors = if (isReviewMode && choice.isCorrect) RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.tertiary) else RadioButtonDefaults.colors()
+                                colors = if (isReviewMode && choice.isCorrect) RadioButtonDefaults.colors(selectedColor = Color(0xFF2E7D32)) else RadioButtonDefaults.colors()
                             )
                             Spacer(Modifier.width(12.dp))
                             Text(
-                                choice.choiceText,
+                                text = com.basahero.elearning.util.TextUtil.parseBoldText(choice.choiceText),
                                 fontSize = if (isTablet) 16.sp else 14.sp,
                                 modifier = Modifier.weight(1f) // Ensure text wraps nicely
                             )
@@ -1529,4 +1595,67 @@ private fun ActivityQuestionCard(
             }
         }
     }
+}
+@Composable
+private fun SequencingItemCard(
+    index: Int,
+    text: String,
+    isDragging: Boolean,
+    isTablet: Boolean,
+    enabled: Boolean
+) {
+    val elevation = if (isDragging) 8.dp else 2.dp
+    val bgColor = if (isDragging) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface
+    
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        shape = RoundedCornerShape(12.dp),
+        color = bgColor,
+        shadowElevation = elevation,
+        border = BorderStroke(
+            width = if (isDragging) 2.dp else 1.dp,
+            color = if (isDragging) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+        )
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = if (isTablet) 12.dp else 10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Number Badge
+            Surface(
+                modifier = Modifier.size(if (isTablet) 32.dp else 28.dp),
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.primaryContainer
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Text(
+                        text = index.toString(),
+                        fontSize = if (isTablet) 16.sp else 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+            
+            Spacer(Modifier.width(12.dp))
+            
+            Text(
+                text = com.basahero.elearning.util.TextUtil.parseBoldText(text),
+                fontSize = if (isTablet) 16.sp else 14.sp,
+                modifier = Modifier.weight(1f),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            
+            if (enabled) {
+                Spacer(Modifier.width(8.dp))
+                Icon(
+                    Icons.Default.DragHandle,
+                    contentDescription = "Drag",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                )
+ }
+ }
+ }
 }

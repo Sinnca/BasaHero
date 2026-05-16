@@ -12,10 +12,10 @@
       "orderIndex": 1,
       "competency": "Noting story grammar",
       "title": "Lesson 1: Noting Story Grammar",
-      "lectureText": "Today we will learn about the parts of a story. Every story has characters, a setting, a problem, events, and a resolution. Let's read a short passage about Mang Berto and talk about its story elements.",
+      "lectureText": "Today we will learn about the <b>parts of a story</b>. Every story has <b>characters, a setting, a problem, events, and a resolution</b>. Let's read a short passage about Mang Berto and talk about its story elements.",
       "parts": [
         {
-          "passageText": "Mang Berto's Story\n\nMang Berto is a factory worker. He works in a candy factory in Laguna. He wakes up early and walks every morning to go to work. How hard Mang Berto works in the factory!\n\nThen, he walks back to his house to eat dinner with his family. Why does he walk every day? Mang Berto wants to save money for his family. What a great man! Do you also save money like Mang Berto?",
+          "passageText": "<b>Mang Berto's Story</b>\n\nMang Berto is a <b>factory worker</b>. He works in a <b>candy factory</b> in <b>Laguna</b>. He wakes up early and walks every morning to go to work. How hard Mang Berto works in the factory!\n\nThen, he walks back to his house to eat dinner with his family. Why does he walk every day? Mang Berto wants to <b>save money</b> for his family. What a great man! Do you also save money like Mang Berto?",
           "highlighted_words": [
             "factory",
             "Laguna"
@@ -186,7 +186,7 @@
           "activityQuestions": []
         },
         {
-          "passageText": "Map Me Out! Activity\n\nAt the School Grounds\n\nJo and his friends were playing baseball at the school grounds. They were having so much fun. When the ball was hit, it flew into the air, and Jo ran to catch it.\n\nInstead of catching the ball, it hit his head. He fell to the ground. \"My head really hurts,\" he told his teacher. His teacher brought him to the school nurse. She gave him an ice pack for his head. Soon, his head began to feel better.",
+          "passageText": "Now that we've discussed the story elements in Mang Berto's story, let's read another passage and practice identifying the story grammar on our own.\n\n<b>L1 ACTIVITY: Map Me Out!</b>\n\n<b>At the School Grounds</b>\n\nJo and his friends were playing <b>baseball</b> at the school grounds. They were having so much fun. When the ball was hit, it flew into the air, and Jo ran to catch it.\n\nInstead of catching the ball, it hit his head. He fell to the ground. \"My head really hurts,\" he told his teacher. His teacher brought him to the <b>school nurse</b>. She gave him an <b>ice pack</b> for his head. Soon, his head began to feel better.",
           "highlighted_words": [
             "baseball",
             "nurse"
@@ -351,10 +351,10 @@
       "orderIndex": 2,
       "competency": "Author's Point of View",
       "title": "Lesson 2: Author's Point of View",
-      "lectureText": "Point of view means who is telling the story.\n\nFirst Person \u2014 The storyteller is inside the story. Uses words like I, me, we.\nExample: I walked to school.\n\nSecond Person \u2014 The storyteller is talking to you. Uses words like you, your.\nExample: You wake up early.\n\nThird Person \u2014 The storyteller is outside the story. Uses words like he, she, they.\nExample: Jo played baseball with his friends.\n\nThird Person Omniscient (All-Knowing) \u2014 The storyteller knows everything about all characters. Can tell what everyone is thinking and feeling.\nExample: Jo was excited to play, but his teacher worried he might get hurt.",
+      "lectureText": "<b>Point of view</b> means who is telling the story.\n\n<b>First Person</b> \u2014 The storyteller is inside the story. Uses words like <b>I, me, we, my</b>.\nExample: <b>I</b> walked to school.\n\n<b>Second Person</b> \u2014 The storyteller is talking to you. Uses words like <b>you, your</b>.\nExample: <b>You</b> wake up early.\n\n<b>Third Person</b> \u2014 The storyteller is outside the story. Uses words like <b>he, she, they, their</b>.\nExample: <b>Jo</b> played baseball with <b>his</b> friends.\n\n<b>Third Person Omniscient (All-Knowing)</b> \u2014 The storyteller knows everything about all characters. Can tell what everyone is thinking and feeling.\nExample: <b>Jo</b> was excited to play, but <b>his teacher</b> worried he might get hurt.",
       "parts": [
         {
-          "passageText": "Ana is a Grade 4 pupil at Masipag Elementary School. Her teachers always say that she is one of the most industrious pupils in their class. They also say that she is caring. Whenever someone needs help, she is always ready to lend a hand.",
+          "passageText": "<b>Ana</b> is a Grade 4 pupil at <b>Masipag Elementary School</b>. <b>Her teachers</b> always say that <b>she</b> is one of the most <b>industrious</b> pupils in <b>their</b> class. <b>They</b> also say that <b>she</b> is <b>caring</b>. Whenever someone needs help, <b>she</b> is always ready to lend a hand.",
           "highlighted_words": [
             "industrious",
             "caring"
@@ -426,7 +426,7 @@
           "activityQuestions": []
         },
         {
-          "passageText": "My favorite subjects are English, Mathematics, and Science. English is one of my favorite subjects because I love reading stories and writing stories about fairy tales. Next is Mathematics because when I was still young, my mother taught me about adding, subtracting, multiplying, and even dividing. My interest in science began when we had a field trip in a zoo where I have had a lot of 'why' questions about the animals. I always top the class in these subjects, and I really work hard to love the other subjects as well.\n\n---\n\nYou wake up early because today is the town fiesta. You hear the sound of drums outside your house. You quickly put on your best clothes and run to the plaza. At the plaza, you see colorful banderitas hanging above you.",
+          "passageText": "<b>My favorite subjects</b> are <b>English, Mathematics, and Science</b>. English is one of <b>my</b> favorite subjects because <b>I</b> love <b>reading stories</b> and <b>writing stories</b> about fairy tales. Next is Mathematics because when <b>I</b> was still young, <b>my mother</b> taught <b>me</b> about adding, subtracting, multiplying, and even dividing. <b>My interest</b> in science began when <b>we</b> had a <b>field trip in a zoo</b> where <b>I</b> have had a lot of 'why' questions about the animals. <b>I</b> always top the class in these subjects, and <b>I</b> really work hard to love the other subjects as well.\n\n---\n\n<b>You</b> wake up early because today is the <b>town fiesta</b>. <b>You</b> hear the sound of drums outside <b>your</b> house. <b>You</b> quickly put on <b>your</b> best clothes and run to the <b>plaza</b>. At the plaza, <b>you</b> see colorful <b>banderitas</b> hanging above <b>you</b>.",
           "highlighted_words": [
             "industrious",
             "banderitas"
@@ -691,10 +691,10 @@
       "orderIndex": 3,
       "competency": "Sequencing Events",
       "title": "Lesson 3: Sequencing Events",
-      "lectureText": "When you wake up, what do you do first? Do you eat breakfast before brushing your teeth, or after?\n\nSequencing means putting events in the correct order \u2014 what happens first, next, and last. It's like following steps in cooking or playing a game.\n\nMini example:\n1. You wash your hands.\n2. You eat lunch.\n3. You go to school.\n\nStories also have a beginning, middle, and end. If we mix them up, the story is confusing. Sequencing helps us understand the story clearly.",
+      "lectureText": "When you wake up, what do you do <b>first</b>? Do you eat breakfast before brushing your teeth, or after?\n\n<b>Sequencing</b> means putting events in the <b>correct order</b> \u2014 what happens <b>first, next, and last</b>. It's like following steps in cooking or playing a game.\n\nMini example:\n1. You wash your hands.\n2. You eat lunch.\n3. You go to school.\n\nStories also have a <b>beginning, middle, and end</b>. If we mix them up, the story is confusing. Sequencing helps us understand the story clearly.",
       "parts": [
         {
-          "passageText": "Grandfather's Old Watch\nby: Syrelle France S. Paterter\n\n1. You and your sister play with cousins at your grandparents' house.\n2. Kuya Anton pushes you and Alyana on the swings.\n3. You see your grandfather looking at his old watch.\n4. You ask him why he doesn't replace it, and he smiles.\n5. When your grandfather dies, the watch is placed in his casket.\n6. Your father explains the watch was a wedding gift from your Lola.",
+          "passageText": "<b>Grandfather's Old Watch</b>\nby: <b>Syrelle France S. Paterter</b>\n\n1. You and your sister play with cousins at your grandparents' house.\n2. Kuya Anton pushes you and Alyana on the swings.\n3. You see your grandfather looking at his <b>old watch</b>.\n4. You ask him why he doesn't replace it, and he smiles.\n5. When your grandfather dies, the watch is placed in his casket.\n6. Your father explains the watch was a <b>wedding gift from your Lola</b>.",
           "highlighted_words": [
             "sequencing"
           ],
@@ -746,7 +746,7 @@
           "activityQuestions": []
         },
         {
-          "passageText": "Now that you know how to sequence events, let's head to the activity!\n\nL3 Activity: Arrange the passages to their correct order.\n\nMorning Routine:\n\u2022 You eat pandesal with cheese.\n\u2022 You prepare your school bag.\n\u2022 You brush your teeth.\n\u2022 You put on your uniform.\n\u2022 You wake up early.\n\u2022 You wash your face.",
+          "passageText": "Now that you know how to sequence events, let's head to the activity!\n\n<b>L3 ACTIVITY: Arrange the passages to their correct order</b>\n\n<b>Morning Routine:</b>\n\u2022 You eat pandesal with cheese.\n\u2022 You prepare your school bag.\n\u2022 You brush your teeth.\n\u2022 You put on your uniform.\n\u2022 You wake up early.\n\u2022 You wash your face.",
           "highlighted_words": [],
           "miniQuestions": [],
           "activityQuestions": [
@@ -974,10 +974,10 @@
       "orderIndex": 4,
       "competency": "Identifying Sequential Plot",
       "title": "Lesson 4: Sequential Plot",
-      "lectureText": "Class, have you ever told a story about your weekend? Did you notice that you usually start with what happened first, then what happened next, and finally what happened last? That's called sequencing.\n\nToday, we will learn how to identify the type of plot called sequential.\n\nA sequential plot is a story where events happen in order \u2014 beginning, middle, and end. We look at what happens first, what happens next, and what happens last. This helps us understand the story clearly.",
+      "lectureText": "Class, have you ever told a story about your weekend? Did you notice that you usually start with what happened <b>first</b>, then what happened <b>next</b>, and finally what happened <b>last</b>? That's called <b>sequencing</b>.\n\nToday, we will learn how to identify the type of plot called <b>sequential</b>.\n\nA <b>sequential plot</b> is a story where events happen in order \u2014 <b>beginning, middle, and end</b>. We look at what happens <b>first, next, and last</b>. This helps us understand the story clearly.",
       "parts": [
         {
-          "passageText": "Our Family Bonding\nBy: Syrelle France S. Paterter\n\nEvery weekend, our family usually goes near the river for a picnic. My father always brings with him his fishing rod so we can catch and eat fresh fish. Kuya Nestor and I often help our mother in preparing the picnic mats and all the food. Sometimes, we sing our favorite songs while Kuya plays the guitar. This is how we bond and catch up after a whole week at school and work.",
+          "passageText": "<b>Our Family Bonding</b>\nBy: <b>Syrelle France S. Paterter</b>\n\nEvery weekend, our family usually goes near the <b>river</b> for a <b>picnic</b>. My father always brings with him his fishing rod so we can catch and eat fresh fish. Kuya Nestor and I often help our mother in preparing the picnic mats and all the food. Sometimes, we sing our favorite songs while Kuya plays the guitar. This is how we <b>bond</b> and catch up after a whole week at school and work.",
           "highlighted_words": [
             "sequential",
             "bonding"
@@ -1142,7 +1142,7 @@
           "activityQuestions": []
         },
         {
-          "passageText": "L4 Activity: The Real Champion\nBy: Syrelle France S. Paterter\n\nAya Shanelle is a graceful dancer. She loves to join events such as dancing competitions. There are times that she ends up being the loser of the event. But that didn't stop her from becoming more passionate about her craft.\n\nShe continuously joins more exciting dance competitions. Win or lose, it didn't matter. What matters for her the most are the lessons learned and friends gained in every contest. That is the true essence of being a real champion.",
+          "passageText": "Today we learned that a <b>sequential plot</b> shows events in order. The picnic story is sequential because it starts with going to the river, then catching fish, preparing food, singing songs, and ends with family bonding. Remember: <b>sequencing</b> helps us understand stories better.\n\n<b>L4 ACTIVITY: The Real Champion</b>\nBy: <b>Syrelle France S. Paterter</b>\n\nAya Shanelle is a <b>graceful dancer</b>. She loves to join events such as <b>dancing competitions</b>. There are times that she ends up being the loser of the event. But that didn't stop her from becoming more <b>passionate</b> about her craft.\n\nShe continuously joins more exciting dance competitions. Win or lose, it didn't matter. What matters for her the most are the <b>lessons learned and friends gained</b> in every contest. That is the true essence of being a <b>real champion</b>.",
           "highlighted_words": [
             "passionate",
             "champion"
@@ -1325,10 +1325,10 @@
       "orderIndex": 5,
       "competency": "Drawing Conclusions",
       "title": "Lesson 5: Drawing Conclusions",
-      "lectureText": "Class, sometimes a story doesn't tell us everything directly. We need to look at the clues in the text and use our own thinking to figure out what the author wants us to understand. This skill is called drawing conclusions. It's like solving a puzzle \u2014 we put the pieces together to see the bigger picture.\n\nDrawing conclusions means combining what the story says with what we already know. We don't just read the words; we think about what they mean.\n\nExample: If you see someone watering plants every day, what can you conclude? They care about their garden.",
+      "lectureText": "Class, sometimes a story doesn't tell us everything directly. We need to look at the <b>clues in the text</b> and use our own thinking to figure out what the author wants us to understand. This skill is called <b>drawing conclusions</b>. It's like solving a puzzle \u2014 we put the pieces together to see the <b>bigger picture</b>.\n\n<b>Drawing conclusions</b> means combining what the story says with what we already know. We don't just read the words; we <b>think about what they mean</b>.\n\nExample: If you see someone <b>watering plants every day</b>, what can you conclude? They <b>care about their garden</b>.",
       "parts": [
         {
-          "passageText": "Home\nby: Ma. Francia N. Bulacan\n\nMy family and I live in a far but peaceful town. We live in a small hut surrounded by plants. We help each other in keeping our home neat and clean. Father and I work on our garden every morning. It is filled with green, leafy vegetables. We built a sturdy fence around it and painted it blue.\n\nMother has her garden too. Our front lawn is filled with fragrant and colorful flowers. Mother and sister have pink, clay pots. They remove the weeds that grow, water them every day, and put fertilizer too.\n\nWe feel happy looking at all these things growing around the house. It makes the surroundings look happy and lively. It feels fun helping one another in keeping our home beautiful and filling it with love too.",
+          "passageText": "<b>Home</b>\nby: <b>Ma. Francia N. Bulacan</b>\n\nMy family and I live in a far but <b>peaceful</b> town. We live in a small hut surrounded by plants. We help each other in keeping our home neat and clean. Father and I work on our <b>garden</b> every morning. It is filled with green, leafy vegetables. We built a <b>sturdy fence</b> around it and painted it blue.\n\nMother has her garden too. Our front lawn is filled with <b>fragrant</b> and colorful flowers. Mother and sister have pink, clay pots. They remove the weeds that grow, water them every day, and put fertilizer too.\n\nWe feel happy looking at all these things growing around the house. It makes the surroundings look <b>happy and lively</b>. It feels fun helping one another in keeping our home beautiful and filling it with <b>love</b> too.",
           "highlighted_words": [
             "conclude",
             "peaceful",
@@ -1494,7 +1494,7 @@
           "activityQuestions": []
         },
         {
-          "passageText": "L5 Activity: Buddy and the Cat\n\nLittle Buddy Cockroach is a house bug. Mother Cockroach always tells him to stay in dark places and hide. He listens to her with half an ear not believing in what she says. \"How could they not like me? I have beautiful, shiny wings, and long antenna. Surely, they would love me,\" he thought.\n\nOne day, Buddy saw a black cat and said, \"I will show Mother Cockroach that she is wrong.\" But when the cat saw him, it immediately jumped and started running after him with its sharp claws. Buddy ran as fast as he could to the dark place under the cabinet and never came out.",
+          "passageText": "We learned that <b>drawing conclusions</b> means looking at the clues in the story and thinking about what they mean. In this story, the family's actions show us they value love, cooperation, and caring for nature. That's the conclusion we can draw.\n\n<b>L5 ACTIVITY: Buddy and the Cat</b>\n\n<b>Little Buddy Cockroach</b> is a house bug. <b>Mother Cockroach</b> always tells him to stay in dark places and hide. He listens to her with half an ear not believing in what she says. \"How could they not like me? I have beautiful, <b>shiny wings</b>, and long <b>antenna</b>. Surely, they would love me,\" he thought.\n\nOne day, Buddy saw a <b>black cat</b> and said, \"I will show Mother Cockroach that she is wrong.\" But when the cat saw him, it immediately jumped and started running after him with its <b>sharp claws</b>. Buddy ran as fast as he could to the <b>dark place under the cabinet</b> and never came out.",
           "highlighted_words": [
             "antenna"
           ],
@@ -1664,10 +1664,10 @@
       "orderIndex": 6,
       "competency": "Identifying the main idea",
       "title": "Lesson 6: Identifying the Main Idea",
-      "lectureText": "Class, when we read, we don't just look at the details. We need to find the main idea \u2014 the big thought that the author wants us to understand. The details are like ingredients in a recipe, but the main idea is the finished dish.\n\nThe main idea is the most important point of the text. Supporting details give us examples, descriptions, or lists that explain the main idea.",
+      "lectureText": "Class, when we read, we don't just look at the details. We need to find the <b>main idea</b> \u2014 the <b>big thought</b> that the author wants us to understand. The details are like ingredients in a recipe, but the <b>main idea is the finished dish</b>. Today, we'll learn how to identify the main idea in <b>informational texts</b>.\n\nThe <b>main idea</b> is the most important point of the text. <b>Supporting details</b> give us examples, descriptions, or lists that explain the main idea.",
       "parts": [
         {
-          "passageText": "Filipino food is known for its variety and flavor. One popular dish is Adobo, cooked with soy sauce, vinegar, garlic, and meat. Another favorite is Sinigang, a sour soup made with tamarind, vegetables, and either pork or shrimp. Filipinos also enjoy Lechon, a roasted pig served during fiestas. For snacks, there is Bibingka, a rice cake baked in banana leaves, and Halo-Halo, a cold dessert with ice, milk, fruits, and sweet beans. These dishes show how Filipino food is colorful, flavorful, and enjoyed by families everywhere.\n\nHow Plants Grow\nPlants need sunlight, water, and soil to grow. First, the roots take in water and nutrients from the soil. Next, the stem carries these nutrients to the leaves. The leaves use sunlight to make food through photosynthesis. Finally, flowers and fruits appear, showing that the plant is healthy and strong.\n\nPhilippine Fruits\nThe Philippines has many delicious fruits. One is Mango, which is sweet and yellow when ripe. Another is Banana, soft and filling, often eaten for breakfast. There is also Papaya, orange in color and rich in vitamins. Filipinos enjoy Coconut, which has refreshing water and white meat. Finally, Lanzones are small, round fruits that taste sweet and slightly sour.",
+          "passageText": "<b>Filipino food</b> is known for its variety and flavor. One popular dish is <b>Adobo</b>, cooked with soy sauce, vinegar, garlic, and meat. Another favorite is <b>Sinigang</b>, a sour soup made with tamarind, vegetables, and either pork or shrimp. Filipinos also enjoy <b>Lechon</b>, a roasted pig served during fiestas. For snacks, there is <b>Bibingka</b>, a rice cake baked in banana leaves, and <b>Halo-Halo</b>, a cold dessert with ice, milk, fruits, and sweet beans. These dishes show how Filipino food is colorful, flavorful, and enjoyed by families everywhere.\n\nNow that we've learned how to find the main idea in an informational text, we will discuss what is <b>informational text</b>.\n\n<b>What is Informational Text?</b>\nInformational text is <b>non-fiction writing</b>. It gives facts, explanations, or descriptions about real things, people, places, or events. It is not a made-up story; instead, it <b>teaches or informs</b> the reader.\n\n<b>Examples of Informational Texts:</b>\n\n<b>How Plants Grow</b>\nPlants need sunlight, water, and soil to grow. First, the <b>roots</b> take in water and nutrients from the soil. Next, the <b>stem</b> carries these nutrients to the leaves. The leaves use sunlight to make food through <b>photosynthesis</b>. Finally, flowers and fruits appear, showing that the plant is healthy and strong.\n<b>Main Idea:</b> Plants grow by using water, soil, and sunlight to make food.\n\n<b>Philippine Fruits</b>\nThe Philippines has many delicious fruits. One is <b>Mango</b>, which is sweet and yellow when ripe. Another is <b>Banana</b>, soft and filling, often eaten for breakfast. There is also <b>Papaya</b>, orange in color and rich in vitamins. Filipinos enjoy <b>Coconut</b>, which has refreshing water and white meat. Finally, <b>Lanzones</b> are small, round fruits that taste sweet and slightly sour.\n<b>Main Idea:</b> The Philippines has many kinds of tasty fruits.\n\n<b>Types of Informational Text:</b>\n\n<b>1. Enumeration:</b> means listing details one by one. It uses words like <b>first, second, next, also, another</b>. It helps readers see the information clearly in order.\n\n<b>2. Description:</b> means explaining how something looks, tastes, smells, or feels. It uses <b>adjectives</b> (describing words) to give details.",
           "highlighted_words": [
             "enumeration",
             "description",
@@ -1833,7 +1833,7 @@
           "activityQuestions": []
         },
         {
-          "passageText": "The Filipino people are very fond of festivals and celebrations. The Panagbenga Festival in Baguio City is celebrated in February. People from far and near visit the place to see the parade of floats that are decorated with fragrant and multi-colored flowers. The Pampanga's Hot Air Balloon Festival is also a fun and colorful activity. It happens yearly between January and February at the Clark Freeport Zone.",
+          "passageText": "Now that you've discussed how to find the main idea and the types of informational texts, let's head to the activity and try it on our own. Have Fun!\n\n<b>L6 ACTIVITY</b>\nRead each short passage. Then decide: Is it <b>Enumeration</b> (listing things one by one) or <b>Description</b> (explaining how something looks, tastes, smells, or feels)?\n\n<b>The Filipino people</b> are very fond of <b>festivals and celebrations</b>. The <b>Panagbenga Festival</b> in <b>Baguio City</b> is celebrated in <b>February</b>. People from far and near visit the place to see the <b>parade of floats</b> that are decorated with <b>fragrant and multi-colored flowers</b>. The <b>Pampanga's Hot Air Balloon Festival</b> is also a fun and colorful activity. It happens yearly between <b>January and February</b> at the <b>Clark Freeport Zone</b>.",
           "highlighted_words": [
             "Panagbenga",
             "enumeration",
@@ -2100,10 +2100,10 @@
       "orderIndex": 7,
       "competency": "Making a Summary",
       "title": "Lesson 7: Making a Summary",
-      "lectureText": "Class, when we read, we see many details. But sometimes we only need the most important points. This skill is called making a summary.\n\nA summary is a short version of the text that tells the big idea and the most important details. It leaves out extra words and examples.\n\nExample: 'If I tell you: Maria bought balloons, cake, and gifts for her party, how can we summarize it? We can say: Maria prepared for her party. That's the summary.'\n\nSummary = short version of the text. It includes the main idea and the most important details. It does not include every single word or minor detail.",
+      "lectureText": "Class, when we read, we see many details. But sometimes we only need the most important points. This skill is called <b>making a summary</b>.\n\nA <b>summary</b> is a <b>short version</b> of the text that tells the big idea and the most important details. It leaves out extra words and examples.\n\nExample: 'If I tell you: <b>Maria bought balloons, cake, and gifts for her party</b>, how can we summarize it? We can say: <b>Maria prepared for her party</b>. That's the summary.'\n\n<b>Summary</b> = short version of the text. It includes the <b>main idea</b> and the <b>most important details</b>. It does not include every single word or minor detail.",
       "parts": [
         {
-          "passageText": "Birthdays are special celebrations in many places. In the Philippines, families prepare food like pancit, spaghetti, and fried chicken. Children often receive gifts such as toys and clothes. Homes are decorated with balloons and colorful banners. A birthday cake with candles is placed at the center of the table. Friends and relatives gather to sing, eat, and enjoy games together. These traditions make birthdays joyful and memorable.",
+          "passageText": "<b>Birthdays</b> are special celebrations in many places. In the Philippines, families prepare food like <b>pancit</b>, spaghetti, and fried chicken. Children often receive gifts such as toys and clothes. Homes are decorated with <b>balloons</b> and colorful banners. A <b>birthday cake with candles</b> is placed at the center of the table. Friends and relatives gather to <b>sing, eat, and enjoy games</b> together. These traditions make birthdays <b>joyful and memorable</b>.",
           "highlighted_words": [
             "summary",
             "traditions"
@@ -2268,7 +2268,7 @@
           "activityQuestions": []
         },
         {
-          "passageText": "One sunny morning at Mabuti Elementary School, Zarie was the only pupil who comes to school the earliest. She saw the canteen manager, Aling Nena, cleaning the canteen. She helped Aling Nena clean the canteen. As Zarie is sweeping the floor, she found a one hundred peso bill and gave it to Aling Nena who thanked her for the honest deed she did. As a reward, Aling Nena gave Zarie a pouch of chocolates. She thanked Aling Nena for the reward she received.\n\n---\n\nIt was Carlo's 10th birthday. His family decorated their home with balloons and colorful streamers. On the table, there was pancit for long life, fried chicken, and a big chocolate cake with ten candles. Carlo's cousins brought gifts wrapped in bright paper. After singing 'Happy Birthday,' Carlo blew out the candles and made a wish. Everyone clapped, ate together, and played games. The celebration was filled with laughter and joy.",
+          "passageText": "We learned that <b>making a summary</b> means telling the big idea and the most important details in a shorter way. In our passage, the details about food, gifts, decorations, cake, and family gatherings all point to one summary: <b>Birthdays are joyful celebrations filled with traditions</b>.\n\n<b>L7 ACTIVITY: Map Me Out!</b>\n\n<b>One sunny morning</b> at <b>Mabuti Elementary School</b>, <b>Zarie</b> was the only pupil who comes to school the earliest. She saw the canteen manager, <b>Aling Nena</b>, cleaning the canteen. She helped Aling Nena clean the canteen. As Zarie is sweeping the floor, she found a <b>one hundred peso bill</b> and gave it to Aling Nena who thanked her for the <b>honest deed</b> she did. As a reward, Aling Nena gave Zarie a <b>pouch of chocolates</b>. She thanked Aling Nena for the reward she received.\n\n---\n\nIt was <b>Carlo's 10th birthday</b>. His family decorated their home with <b>balloons and colorful streamers</b>. On the table, there was <b>pancit</b> for long life, fried chicken, and a big <b>chocolate cake</b> with ten candles. Carlo's cousins brought <b>gifts wrapped in bright paper</b>. After singing 'Happy Birthday,' Carlo blew out the candles and <b>made a wish</b>. Everyone clapped, ate together, and played games. The celebration was filled with <b>laughter and joy</b>.",
           "highlighted_words": [
             "summary"
           ],
@@ -2593,10 +2593,10 @@
       "orderIndex": 8,
       "competency": "Fact and Opinion",
       "title": "Lesson 8: Fact and Opinion",
-      "lectureText": "Narrative texts are stories. These are the stories that your mother and father read or tell you. This lesson will teach you how to distinguish fact from opinion in a narrative.\n\nWhat is a fact?\nA fact is something that is true and supported by evidence.\n\nWhat is an opinion?\nAn opinion is only a belief. It is also an expression of a person's feelings. Clue words like 'think,' 'believe,' 'feel,' 'probably,' or 'seems' signal an opinion.",
+      "lectureText": "<b>Narrative texts</b> are stories. These are the stories that your mother and father read or tell you. This lesson will teach you how to <b>distinguish fact from opinion</b> in a narrative.\n\nWhat is a <b>fact</b>?\nA fact is something that is <b>true and supported by evidence</b>. It speaks about something that is true and based on evidence.\n\nWhat is an <b>opinion</b>?\nAn opinion is only a <b>belief</b>. It is also an expression of a <b>person's feelings</b> or point of view. Clue words like <b>'think,' 'believe,' 'feel,' 'probably,'</b> or <b>'seems'</b> signal an opinion.\n\nExample: <b>Perhaps</b> only sons should be treated well.",
       "parts": [
         {
-          "passageText": "Simple Celebration\nLea E. Basquinas\n\n\"Hello, Kumareng Connie and Kumpareng Kardo. Good morning!\" said Aling Myrna. \"How are your children?\"\n\"Oh, hi there Mareng Myrna. Good morning too,\" replied Aling Connie.\n\"Our children are okay. Ric is now in the army. Ana is now studying education and our youngest Ada is in grade 4,\" said Mang Kardo.\n\"I came here to invite your family personally, Mareng Connie,\" said Aling Myrna. \"There will be a thanksgiving party in our house tomorrow evening, just a simple celebration because I am promoted as supervisor of the LEBB Corporation.\"\n\"Congratulations Mareng Myrna! I believe you are really fit in that position,\" greeted Aling Connie.\n\"Thank you, Mareng Connie and Pareng Kardo. I think my children will be glad to see you with your children,\" replied Aling Myrna.",
+          "passageText": "<b>Simple Celebration</b>\nLea E. Basquinas\n\n\"Hello, Kumareng Connie and Kumpareng Kardo. Good morning!\" said Aling Myrna. \"How are your children?\"\n\"Oh, hi there Mareng Myrna. Good morning too,\" replied Aling Connie.\n\"Our children are okay. Ric is now in the <b>army</b>. Ana is now studying <b>education</b> and our youngest Ada is in <b>grade 4</b>,\" said Mang Kardo.\n\"I came here to invite your family personally, Mareng Connie,\" said Aling Myrna. \"There will be a <b>thanksgiving party</b> in our house tomorrow evening, just a simple celebration because I am promoted as <b>supervisor</b> of the <b>LEBB Corporation</b>.\"\n\"Congratulations Mareng Myrna! I <b>believe</b> you are really fit in that position,\" greeted Aling Connie.\n\"Thank you, Mareng Connie and Pareng Kardo. I <b>think</b> my children will be glad to see you with your children,\" replied Aling Myrna.",
           "highlighted_words": [
             "fact",
             "opinion",
@@ -2763,7 +2763,7 @@
           "activityQuestions": []
         },
         {
-          "passageText": "Boys and Girls\nLea E. Basquinas\n\nAt school, during English class, Mr. Mahinay asked the class to group themselves and make a thank you card as an output. All the groups were busy doing their output.\n\"Jilian, do you have another bond paper? May I ask for 2 pieces please,\" asked Zaira.\n\"I think I have plenty. Here, take 3 pieces,\" said Jilian.\n\"I believe your card is more beautiful than mine,\" said Zaira.\n\"Perhaps Jilian's thank you card is the most beautiful,\" replied Zarie.\n\"I don't think so,\" said Jilian. \"I think all of our thank-you cards are beautiful.\"\n\"Jilian is right,\" declared Mr. Mahinay. \"Every artwork is unique. Just like you little girls, you are all beautiful.\"",
+          "passageText": "Sentences like 'There will be a thanksgiving party' or 'Aling Myrna was promoted' express <b>FACT</b> because they actually happened in the story. Sentences with words like <b>believe</b> or <b>think</b> express <b>OPINION</b> because they signal a point of view.\n\n<b>L8 ACTIVITY: Boys and Girls</b>\nBy: <b>Lea E. Basquinas</b>\n\nAt school, during English class, <b>Mr. Mahinay</b> asked the class to group themselves and make a <b>thank you card</b> as an output. All the groups were busy doing their output.\n\"Jilian, do you have another bond paper? May I ask for 2 pieces please,\" asked Zaira.\n\"I <b>think</b> I have plenty. Here, take 3 pieces,\" said Jilian.\n\"I <b>believe</b> your card is more beautiful than mine,\" said Zaira.\n\"<b>Perhaps</b> Jilian's thank you card is the most beautiful,\" replied Zarie.\n\"I don't think so,\" said Jilian. \"I <b>think</b> all of our thank-you cards are beautiful.\"\n\"Jilian is right,\" declared Mr. Mahinay. \"Every artwork is <b>unique</b>. Just like you little girls, you are all beautiful.\"\n\n<b>L8 REVIEW</b>\nFill in the blanks with the correct answers: <b>fact, true, opinion, believe, seems</b>.\nA <b>fact</b> is something that is <b>true</b> and supported by evidence. An <b>opinion</b> is only a belief. It may contain clue words like <b>'think,' 'believe,' 'feel,' 'probably,' or 'seems.'</b>",
           "highlighted_words": [],
           "miniQuestions": [],
           "activityQuestions": [
@@ -2897,10 +2897,10 @@
       "orderIndex": 9,
       "competency": "Identifying Author's Purpose",
       "title": "Lesson 9: Author's Purpose",
-      "lectureText": "In this lesson, you will learn to identify the text's purpose. An author usually writes to achieve one of the following main goals:\n\n1. Entertain \u2014 To make the reader enjoy reading through stories, amusing events, or vibrant characters.\n\n2. Inform \u2014 To give the reader true facts and information about a specific topic.\n\n3. Describe \u2014 To paint a picture in the reader's mind using sensory details (sight, sound, smell, touch, and taste).",
+      "lectureText": "In this lesson, you will learn to identify the <b>text's purpose</b>. An author usually writes to achieve one of the following main goals:\n\n1. <b>Entertain</b> \u2014 To make the reader enjoy reading through stories, amusing events, or vibrant characters.\n\n2. <b>Inform</b> \u2014 To give the reader true facts and information about a specific topic.\n\n3. <b>Describe</b> \u2014 To paint a picture in the reader's mind using <b>sensory details</b> (sight, sound, smell, touch, and taste).",
       "parts": [
         {
-          "passageText": "Examples:\n\n1. ENTERTAIN: One sunny afternoon, Maya found a tiny talking turtle beside the river. 'Can you help me find my way home?' the turtle asked. Maya laughed in surprise and followed the turtle into the forest. Along the way, they met dancing monkeys and colorful birds.\n\n2. INFORM: The Philippine Eagle is one of the largest eagles in the world. It can only be found in the Philippines. This eagle lives in forests and eats small animals like monkeys and snakes. Sadly, the Philippine Eagle is endangered because many forests are being cut down.\n\n3. DESCRIBE: The tall glass of halo-halo was a beautiful masterpiece of bright purple ube, yellow sweet corn, and deep red beans. Crushed ice glistened on top like tiny diamonds, drenched in creamy, sweet milk that felt delightfully cold and refreshing.",
+          "passageText": "<b>Examples:</b>\n\n1. <b>ENTERTAIN:</b> One sunny afternoon, <b>Maya</b> found a <b>tiny talking turtle</b> beside the river. 'Can you help me find my way home?' the turtle asked. Maya laughed in surprise and followed the turtle into the forest. Along the way, they met <b>dancing monkeys</b> and colorful birds.\n\n2. <b>INFORM:</b> The <b>Philippine Eagle</b> is one of the largest eagles in the world. It can only be found in the Philippines. This eagle lives in forests and eats small animals like monkeys and snakes. Sadly, the Philippine Eagle is <b>endangered</b> because many forests are being cut down.\n\n3. <b>DESCRIBE:</b> The tall glass of <b>halo-halo</b> was a beautiful masterpiece of bright purple <b>ube</b>, yellow <b>sweet corn</b>, and deep red <b>beans</b>. Crushed ice glistened on top like tiny diamonds, drenched in creamy, sweet milk that felt delightfully cold and refreshing.",
           "highlighted_words": [
             "entertain",
             "inform",
@@ -3061,7 +3061,7 @@
           "activityQuestions": []
         },
         {
-          "passageText": "L9 Activity: Identify the purpose of each passage.",
+          "passageText": "Now that we've discussed the three main purposes of an author (Entertain, Inform, Describe), let's head to the activity and identify the purpose of each passage on our own.\n\n<b>L9 ACTIVITY</b>",
           "highlighted_words": [],
           "miniQuestions": [],
           "activityQuestions": [
@@ -3324,10 +3324,10 @@
       "orderIndex": 10,
       "competency": "Making Predictions",
       "title": "Lesson 10: Making Predictions",
-      "lectureText": "Making a prediction means using clues from the text to guess what will happen next.\n\nExample: Sara's dad opens the fridge and grabs bread, slices of turkey, cheese, and mustard. He also grabs a napkin and a small plastic bag. What probably happened next?\n\nThe answer is: Sara's dad made her a sandwich \u2014 because those are the clues in the paragraph.\n\nRemember: We use clues from the story to make our prediction, not just a guess!",
+      "lectureText": "<b>Making a prediction</b> means using <b>clues from the text</b> to guess <b>what will happen next</b>.\n\nExample: Sara's dad opens the fridge and grabs bread, slices of turkey, cheese, and mustard. He also grabs a napkin and a small plastic bag. What probably happened next?\n\nThe answer is: <b>Sara's dad made her a sandwich</b> \u2014 because those are the <b>clues</b> in the paragraph.\n\nRemember: We use <b>clues from the story</b> to make our prediction, not just a guess!",
       "parts": [
         {
-          "passageText": "Example 1: Everyone was having fun at the magic show. Then the magician said, 'I need a volunteer for this next amazing act of magic.' Lots of kids jumped up and raised their hands. The magician pointed to Cindy. 'You, there,' he said.\nWhat probably happened next?\na. Cindy went up on the stage.\nb. Cindy sat back down.\nc. The magician took a bow.\nd. The magician pulled a rabbit out of a hat.\nAnswer: a. Cindy went up on the stage.\n\nExample 2: The school play ended. Everyone had remembered their lines. The audience had laughed at all the right places. The lights came on and the students all came back on stage and took a bow.\n\nKim woke up on Saturday morning. She remembered she had a few chores to do before she went out to play, but she didn't feel so good. She still felt tired, and her stomach hurt. 'I don't feel so good, Mom,' she said. 'Oh,' said Mom. 'I don't think you'll be doing chores or going out to play today.'",
+          "passageText": "<b>Example 1:</b> Everyone was having fun at the <b>magic show</b>. Then the <b>magician</b> said, 'I need a volunteer for this next amazing act of magic.' Lots of kids jumped up and raised their hands. The magician pointed to <b>Cindy</b>. 'You, there,' he said.\nWhat probably happened next?\na. Cindy went up on the stage.\nb. Cindy sat back down.\nc. The magician took a bow.\nd. The magician pulled a rabbit out of a hat.\nAnswer: <b>a. Cindy went up on the stage.</b>\n\n<b>Example 2:</b> The <b>school play</b> ended. Everyone had remembered their lines. The audience had laughed at all the right places. The lights came on and the students all came back on stage and <b>took a bow</b>.\n\n<b>Kim</b> woke up on Saturday morning. She remembered she had a few chores to do before she went out to play, but she didn't feel so good. She still felt <b>tired</b>, and her <b>stomach hurt</b>. 'I don't feel so good, Mom,' she said. 'Oh,' said Mom. 'I don't think you'll be doing chores or going out to play today.'",
           "highlighted_words": [
             "prediction",
             "clues"
@@ -3399,7 +3399,7 @@
           "activityQuestions": []
         },
         {
-          "passageText": "L10 Activity: Choose the correct prediction based on the clues in each passage.",
+          "passageText": "Great job! Now that you've finished the warm-up, you are ready for the Activity right? Let's go!\n\n<b>L10 ACTIVITY</b>",
           "highlighted_words": [],
           "miniQuestions": [],
           "activityQuestions": [

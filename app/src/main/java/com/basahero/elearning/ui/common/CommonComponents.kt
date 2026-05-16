@@ -610,6 +610,7 @@ fun BasaHeroGreetingBanner(
     avatarUrl: String? = null,
     modifier: Modifier = Modifier
 ) {
+    val isTablet = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp >= 600
     val bannerGradient = Brush.linearGradient(
         colors = listOf(
             Color(0xFFFFE0B2).copy(alpha = 0.4f), // Soft Orange
@@ -621,11 +622,11 @@ fun BasaHeroGreetingBanner(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 32.dp)
-            .clip(RoundedCornerShape(32.dp))
+            .padding(horizontal = if (isTablet) 24.dp else 16.dp, vertical = if (isTablet) 32.dp else 12.dp)
+            .clip(RoundedCornerShape(if (isTablet) 32.dp else 24.dp))
             .background(bannerGradient)
-            .border(2.dp, Color.White.copy(alpha = 0.6f), RoundedCornerShape(32.dp))
-            .padding(horizontal = 32.dp, vertical = 32.dp)
+            .border(2.dp, Color.White.copy(alpha = 0.6f), RoundedCornerShape(if (isTablet) 32.dp else 24.dp))
+            .padding(horizontal = if (isTablet) 32.dp else 20.dp, vertical = if (isTablet) 32.dp else 16.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -642,14 +643,16 @@ fun BasaHeroGreetingBanner(
                             append("Hero!")
                         }
                     },
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontFamily = fredokaFontFamily
+                    style = if (isTablet) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.titleLarge,
+                    fontFamily = fredokaFontFamily,
+                    fontSize = if (isTablet) 28.sp else 20.sp
                 )
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(if (isTablet) 8.dp else 4.dp))
                 Text(
                     text = "Ready for a new adventure?",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Color(0xFF475569),
+                    style = if (isTablet) MaterialTheme.typography.bodyLarge else MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFF546E7A),
+                    fontSize = if (isTablet) 18.sp else 14.sp,
                     fontWeight = FontWeight.Medium
                 )
             }
@@ -775,7 +778,7 @@ private data class NavigationItem(
 // ─────────────────────────────────────────────────────────────────────────────
 
 @Composable
-fun PlayfulBackground(modifier: Modifier = Modifier) {
+fun PlayfulBackground(modifier: Modifier = Modifier, densityMultiplier: Float = 1f) {
     val infiniteTransition = rememberInfiniteTransition(label = "floating_shapes")
     val config = LocalConfiguration.current
     val screenWidth = config.screenWidthDp
@@ -804,8 +807,8 @@ fun PlayfulBackground(modifier: Modifier = Modifier) {
     // Configuration for floating shapes and letters (Scaled for responsiveness)
     val isTablet = screenWidth >= 600
     val itemScale = if (isTablet) 1f else 0.6f
-    val shapeCount = if (isTablet) 15 else 8
-    val letterCount = if (isTablet) 40 else 20
+    val shapeCount = ((if (isTablet) 15 else 8) * densityMultiplier).toInt()
+    val letterCount = ((if (isTablet) 40 else 20) * densityMultiplier).toInt()
     
     val items = remember(screenWidth, screenHeight) {
         val list = mutableListOf<FloatingItem>()

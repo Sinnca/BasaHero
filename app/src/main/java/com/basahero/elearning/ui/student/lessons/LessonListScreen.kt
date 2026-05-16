@@ -66,23 +66,26 @@ fun LessonListScreen(
     val doneLessons = uiState.lessons.count { it.status == LessonStatus.DONE }
     val progressPercent = if (totalLessons == 0) 0f else doneLessons.toFloat() / totalLessons
 
-    Scaffold(
-        bottomBar = {
-            StudentBottomNavBar(
-                selectedTab = 1,
-                onTabSelected = { tab ->
-                    when (tab) {
-                        0 -> onNavigateHome()
-                        1 -> onBack()
-                        2 -> onNavigateGame()
-                        3 -> onNavigateProfile()
+    Box(modifier = Modifier.fillMaxSize()) {
+        com.basahero.elearning.ui.common.PlayfulBackground()
+
+        Scaffold(
+            bottomBar = {
+                StudentBottomNavBar(
+                    selectedTab = 1,
+                    onTabSelected = { tab ->
+                        when (tab) {
+                            0 -> onNavigateHome()
+                            1 -> onBack()
+                            2 -> onNavigateGame()
+                            3 -> onNavigateProfile()
+                        }
                     }
-                }
-            )
-        },
-        containerColor = MaterialTheme.colorScheme.surface
-    ) { padding ->
-        if (uiState.isLoading) {
+                )
+            },
+            containerColor = Color.Transparent
+        ) { padding ->
+            if (uiState.isLoading) {
             Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
@@ -257,6 +260,7 @@ fun LessonListScreen(
             }
         }
     }
+    }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -378,7 +382,7 @@ fun LessonCard(
     val containerColor = when {
         isLocked -> Color(0xFFF8FAFC)
         isInProgress -> inProgressBg
-        else -> primaryColor.copy(alpha = 0.08f)
+        else -> androidx.compose.ui.graphics.lerp(Color.White, primaryColor, 0.08f)
     }
     
     val borderColor = when {
