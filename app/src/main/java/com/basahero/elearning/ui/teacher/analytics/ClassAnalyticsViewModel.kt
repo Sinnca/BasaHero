@@ -10,14 +10,22 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
+data class QuarterAnalyticsSummary(
+    val quarterId: String,
+    val quarterTitle: String,
+    val isExpanded: Boolean = false,
+    val lessons: List<LessonPerformance>
+)
 
 enum class AnalyticsSortOrder { SCORE_ASC, SCORE_DESC, NAME_ASC }
 
 data class ClassAnalyticsUiState(
     val isLoading: Boolean = false,
-    val lessonPerformance: List<LessonPerformance> = emptyList(),
+    val quarterPerformanceList: List<QuarterAnalyticsSummary> = emptyList(),
     val atRiskStudents: List<StudentInfo> = emptyList(),
     val errorMessage: String? = null,
     val selectedTab: Int = 0,                           // 0 = Lessons, 1 = Students
@@ -26,7 +34,8 @@ data class ClassAnalyticsUiState(
 
 class ClassAnalyticsViewModel(
     private val repo: ProgressMonitorRepository,
-    private val lessonRepo: LessonRepository
+    private val lessonRepo: LessonRepository,
+    private val gradeLevel: Int
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ClassAnalyticsUiState())
@@ -42,16 +51,37 @@ class ClassAnalyticsViewModel(
                 val lessons  = lessonsDeferred.await()
                 val atRisk   = atRiskDeferred.await()
                 
-                // Map lessonId to actual lesson title using LessonRepository
+                val allQuarters = lessonRepo.getQuartersWithProgress(gradeLevel, "").first()
+                
+                // Map lessonId to actual lesson title and get quarterId
                 val resolvedLessons = lessons.map { lesson ->
                     val actualLesson = lessonRepo.getLessonById(lesson.lessonId)
-                    lesson.copy(lessonTitle = actualLesson?.title ?: lesson.lessonId)
+                    val quarterId = actualLesson?.quarterId ?: "unknown"
+                    val quarterTitle = lessonRepo.getQuarterById(quarterId)?.title ?: "Unknown Quarter"
+                    
+                    object {
+                        val performance = lesson.copy(lessonTitle = actualLesson?.title ?: lesson.lessonId)
+                        val qId = quarterId
+                        val qTitle = quarterTitle
+                    }
                 }
+                
+                val grouped = resolvedLessons.groupBy { it.qId }
+                
+                val quarterList = allQuarters.map { q ->
+                    val quarterLessons = grouped[q.id]?.map { it.performance } ?: emptyList()
+                    QuarterAnalyticsSummary(
+                        quarterId = q.id,
+                        quarterTitle = q.title,
+                        isExpanded = false,
+                        lessons = quarterLessons
+                    )
+                }.sortedBy { it.quarterId }
 
                 _uiState.update {
                     it.copy(
                         isLoading        = false,
-                        lessonPerformance = resolvedLessons,
+                        quarterPerformanceList = quarterList,
                         atRiskStudents    = atRisk
                     )
                 }
@@ -65,11 +95,20 @@ class ClassAnalyticsViewModel(
 
     fun setSortOrder(order: AnalyticsSortOrder) = _uiState.update { it.copy(sortOrder = order) }
 
-    // Sorted lesson list — memoised by sort order
-    fun sortedLessons(state: ClassAnalyticsUiState): List<LessonPerformance> =
+    fun toggleQuarter(quarterId: String) {
+        _uiState.update { state ->
+            val updatedList = state.quarterPerformanceList.map { q ->
+                if (q.quarterId == quarterId) q.copy(isExpanded = !q.isExpanded) else q
+            }
+            state.copy(quarterPerformanceList = updatedList)
+        }
+    }
+
+    // Sorted lesson list for a specific quarter — memoised by sort order
+    fun sortedLessons(lessons: List<LessonPerformance>, state: ClassAnalyticsUiState): List<LessonPerformance> =
         when (state.sortOrder) {
-            AnalyticsSortOrder.SCORE_ASC  -> state.lessonPerformance.sortedBy  { it.averageScore }
-            AnalyticsSortOrder.SCORE_DESC -> state.lessonPerformance.sortedByDescending { it.averageScore }
-            AnalyticsSortOrder.NAME_ASC   -> state.lessonPerformance.sortedBy  { it.lessonTitle }
+            AnalyticsSortOrder.SCORE_ASC  -> lessons.sortedBy  { it.averageScore }
+            AnalyticsSortOrder.SCORE_DESC -> lessons.sortedByDescending { it.averageScore }
+            AnalyticsSortOrder.NAME_ASC   -> lessons.sortedBy  { it.lessonTitle }
         }
 }

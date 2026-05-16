@@ -2,6 +2,7 @@ package com.basahero.elearning.ui.teacher.game
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,6 +21,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.StrokeCap
+import com.basahero.elearning.ui.theme.fredokaFontFamily
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.basahero.elearning.data.model.QuizQuestion
@@ -240,40 +246,71 @@ fun GameHostScreen(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Color(0xFF511D89) // Deep Purple Background
+        color = Color(0xFF1C122B) // Matched Student Join Dark Slate
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize().padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Header
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Column {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.VideogameAsset, contentDescription = null, tint = Color(0xFFB39DDB), modifier = Modifier.size(28.dp))
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Game Mode", fontSize = 24.sp, fontWeight = FontWeight.Black, color = Color.White)
-                    }
-                    if (uiState.titleText.isNotEmpty()) {
-                        Text(uiState.titleText, fontSize = 14.sp, color = Color(0xFFD1C4E9), modifier = Modifier.padding(start = 36.dp))
-                    }
-                }
-                IconButton(onClick = onBack) {
-                    Icon(Icons.Default.Close, "Close", tint = Color.White)
-                }
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Subtle star background simulation (Matched from Student)
+            androidx.compose.foundation.Canvas(modifier = Modifier.matchParentSize()) {
+                drawCircle(Color.White.copy(0.1f), 4f, androidx.compose.ui.geometry.Offset(size.width * 0.1f, size.height * 0.15f))
+                drawCircle(Color.White.copy(0.15f), 6f, androidx.compose.ui.geometry.Offset(size.width * 0.85f, size.height * 0.2f))
+                drawCircle(Color.White.copy(0.08f), 3f, androidx.compose.ui.geometry.Offset(size.width * 0.2f, size.height * 0.35f))
+                drawCircle(Color.White.copy(0.12f), 5f, androidx.compose.ui.geometry.Offset(size.width * 0.7f, size.height * 0.6f))
+                drawCircle(Color.White.copy(0.09f), 4f, androidx.compose.ui.geometry.Offset(size.width * 0.3f, size.height * 0.8f))
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Column(
+                modifier = Modifier.fillMaxSize().padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // Header
+                Row(
+                    modifier = Modifier.fillMaxWidth().statusBarsPadding(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                Icons.Default.VideogameAsset, 
+                                contentDescription = null, 
+                                tint = Color(0xFF8B5CF6), // Neon Violet
+                                modifier = Modifier.size(32.dp)
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = "GAME HOST", 
+                                fontSize = 28.sp, 
+                                fontWeight = FontWeight.Black, 
+                                color = Color.White,
+                                fontFamily = fredokaFontFamily
+                            )
+                        }
+                        if (uiState.titleText.isNotEmpty()) {
+                            Text(
+                                text = uiState.titleText, 
+                                fontSize = 14.sp, 
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFFA090B0), 
+                                modifier = Modifier.padding(start = 44.dp)
+                            )
+                        }
+                    }
+                    IconButton(
+                        onClick = onBack,
+                        modifier = Modifier.background(Color.White.copy(alpha = 0.1f), CircleShape)
+                    ) {
+                        Icon(Icons.Default.Close, "Close", tint = Color.White)
+                    }
+                }
 
-            when (uiState.phase) {
-                GamePhase.LOBBY -> LobbyPhase(uiState, onStart = { viewModel.nextQuestion() })
-                GamePhase.QUESTION -> QuestionPhase(uiState, onReveal = { viewModel.revealAnswer() })
-                GamePhase.REVEAL -> RevealPhase(uiState, onNext = { viewModel.nextQuestion() })
-                GamePhase.DONE -> DonePhase(uiState, onBack = onBack)
+                Spacer(modifier = Modifier.height(32.dp))
+
+                when (uiState.phase) {
+                    GamePhase.LOBBY -> LobbyPhase(uiState, onStart = { viewModel.nextQuestion() })
+                    GamePhase.QUESTION -> QuestionPhase(uiState, onReveal = { viewModel.revealAnswer() })
+                    GamePhase.REVEAL -> RevealPhase(uiState, onNext = { viewModel.nextQuestion() })
+                    GamePhase.DONE -> DonePhase(uiState, onBack = onBack)
+                }
             }
         }
     }
@@ -281,33 +318,67 @@ fun GameHostScreen(
 
 @Composable
 fun ColumnScope.LobbyPhase(uiState: GameHostUiState, onStart: () -> Unit) {
+    val isTablet = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp >= 600
     val totalExpectedStudents = 32 // Hardcoded for demo, normally from class details
 
-    // PIN Card
-    Surface(
-        modifier = Modifier.fillMaxWidth().wrapContentHeight(),
-        color = Color(0xFF6A35A3),
-        shape = RoundedCornerShape(20.dp)
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(vertical = 32.dp, horizontal = 16.dp)
-        ) {
-            Text("Join Code", fontSize = 16.sp, color = Color(0xFFD1C4E9))
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = (uiState.session?.joinCode ?: "----").toList().joinToString(" "), 
-                fontSize = 72.sp, 
-                fontWeight = FontWeight.Black, 
-                color = Color(0xFFFFEB3B), // Bright Yellow
-                letterSpacing = 8.sp
+    // glowing title
+    Text(
+        text = "GAME TIME!",
+        fontSize = if (isTablet) 48.sp else 36.sp,
+        fontWeight = FontWeight.Black,
+        color = Color.White,
+        style = androidx.compose.ui.text.TextStyle(
+            fontFamily = fredokaFontFamily,
+            shadow = androidx.compose.ui.graphics.Shadow(
+                color = Color.White.copy(alpha = 0.5f),
+                offset = androidx.compose.ui.geometry.Offset(0f, 0f),
+                blurRadius = 30f
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text("Students enter this code to join", fontSize = 14.sp, color = Color(0xFFD1C4E9))
+        )
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+    Text(
+        "Instruct students to enter this code", 
+        fontSize = if (isTablet) 18.sp else 14.sp, 
+        color = Color(0xFFA090B0),
+        textAlign = TextAlign.Center
+    )
+
+    Spacer(modifier = Modifier.height(48.dp))
+
+    // PIN Display (Matched to Student Input Boxes)
+    val joinCode = uiState.session?.joinCode ?: "----"
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(if (isTablet) 24.dp else 12.dp),
+        modifier = Modifier.wrapContentSize()
+    ) {
+        for (i in 0..3) {
+            val char = joinCode.getOrNull(i)?.toString() ?: "-"
+            Box(
+                modifier = Modifier
+                    .width(if (isTablet) 80.dp else 48.dp)
+                    .height(if (isTablet) 110.dp else 64.dp)
+                    .background(Color(0xFF251A35), RoundedCornerShape(16.dp))
+                    .border(
+                        width = 3.dp,
+                        color = Color(0xFF8B5CF6), // Neon Violet
+                        shape = RoundedCornerShape(16.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = char,
+                    fontFamily = fredokaFontFamily,
+                    textAlign = TextAlign.Center,
+                    fontSize = if (isTablet) 48.sp else 28.sp,
+                    fontWeight = FontWeight.Black,
+                    color = Color(0xFFFFD700) // Gold
+                )
+            }
         }
     }
 
-    Spacer(modifier = Modifier.height(32.dp))
+    Spacer(modifier = Modifier.height(48.dp))
 
     // Students Joined Progress
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -362,27 +433,29 @@ fun ColumnScope.LobbyPhase(uiState: GameHostUiState, onStart: () -> Unit) {
     Button(
         onClick = onStart,
         enabled = uiState.connectedStudents.isNotEmpty(),
-        modifier = Modifier.fillMaxWidth().height(64.dp),
+        modifier = Modifier.fillMaxWidth(if (isTablet) 0.5f else 1f).height(64.dp),
         shape = RoundedCornerShape(16.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFFFD700), // Yellow
-            contentColor = Color.Black,
-            disabledContainerColor = Color(0xFF5E35B1),
-            disabledContentColor = Color(0xFF9575CD)
+            containerColor = Color(0xFF8B5CF6), // Neon Violet
+            contentColor = Color.White,
+            disabledContainerColor = Color(0xFF4B3A65),
+            disabledContentColor = Color(0xFFA090B0)
         )
     ) {
         Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(24.dp))
         Spacer(modifier = Modifier.width(8.dp))
-        Text("Start Game", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+        Text("Start Game", fontSize = 22.sp, fontWeight = FontWeight.Bold, fontFamily = fredokaFontFamily)
     }
 
     Spacer(modifier = Modifier.height(16.dp))
-    Text("Live via Supabase Realtime • Internet required", fontSize = 12.sp, color = Color(0xFFB39DDB), modifier = Modifier.align(Alignment.CenterHorizontally))
+    Text("Live via Supabase Realtime • Internet required", fontSize = 12.sp, color = Color(0xFFA090B0), modifier = Modifier.align(Alignment.CenterHorizontally))
     Spacer(modifier = Modifier.height(16.dp))
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ColumnScope.QuestionPhase(uiState: GameHostUiState, onReveal: () -> Unit) {
+    val isTablet = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp >= 600
     val answersForCurrentQ = uiState.answers.count { it.questionId == uiState.currentQuestion?.id }
     val totalStudents = uiState.connectedStudents.size
 
@@ -395,48 +468,151 @@ fun ColumnScope.QuestionPhase(uiState: GameHostUiState, onReveal: () -> Unit) {
             kotlinx.coroutines.delay(100)
             timeLeft -= 0.1f
         }
-        onReveal() // Auto-reveal when timer hits 0
+        onReveal()
     }
 
-    Text("Question ${uiState.session?.questionIndex?.plus(1) ?: 1}", fontSize = 20.sp, color = Color.Gray)
-    Spacer(modifier = Modifier.height(16.dp))
-    Text(uiState.currentQuestion?.questionText ?: "", fontSize = 32.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
+    // Circular Timer (Same as Student Side)
+    Box(modifier = Modifier.size(if (isTablet) 120.dp else 80.dp), contentAlignment = Alignment.Center) {
+        androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
+            drawArc(
+                color = Color.White.copy(alpha = 0.1f),
+                startAngle = -90f,
+                sweepAngle = 360f,
+                useCenter = false,
+                style = androidx.compose.ui.graphics.drawscope.Stroke(width = if (isTablet) 12.dp.toPx() else 8.dp.toPx(), cap = androidx.compose.ui.graphics.StrokeCap.Round)
+            )
+            drawArc(
+                color = if (timeLeft > 5) Color(0xFF64B5F6) else Color(0xFFEF5350),
+                startAngle = -90f,
+                sweepAngle = 360f * animatedProgress,
+                useCenter = false,
+                style = androidx.compose.ui.graphics.drawscope.Stroke(width = if (isTablet) 12.dp.toPx() else 8.dp.toPx(), cap = androidx.compose.ui.graphics.StrokeCap.Round)
+            )
+        }
+        Text(
+            text = timeLeft.toInt().toString(), 
+            fontSize = if (isTablet) 48.sp else 32.sp, 
+            fontWeight = FontWeight.Black, 
+            color = Color.White,
+            fontFamily = fredokaFontFamily
+        )
+    }
+
+    Spacer(modifier = Modifier.height(48.dp))
+
+    Text(
+        text = uiState.currentQuestion?.questionText ?: "", 
+        fontSize = if (isTablet) 42.sp else 28.sp, 
+        fontWeight = FontWeight.Bold, 
+        color = Color.White,
+        textAlign = TextAlign.Center,
+        fontFamily = fredokaFontFamily,
+        lineHeight = 48.sp
+    )
+    
+    Spacer(modifier = Modifier.height(64.dp))
+    
+    // Colorful Choice Blocks (Helping students identify options)
+    val colors = listOf(
+        Color(0xFFE21B3C), // Red
+        Color(0xFF1368CE), // Blue
+        Color(0xFFD89E00), // Yellow
+        Color(0xFF26890C)  // Green
+    )
+
+    FlowRow(
+        maxItemsInEachRow = if (isTablet) 2 else 1,
+        modifier = Modifier.fillMaxWidth().weight(1f),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        uiState.currentQuestion?.choices?.forEachIndexed { index, choice ->
+            val baseColor = colors.getOrElse(index % colors.size) { Color.Gray }
+            Surface(
+                modifier = Modifier.weight(1f).height(if (isTablet) 100.dp else 72.dp),
+                color = baseColor,
+                shape = RoundedCornerShape(20.dp),
+                shadowElevation = 8.dp
+            ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = choice.choiceText,
+                        fontSize = if (isTablet) 24.sp else 18.sp,
+                        fontWeight = FontWeight.Black,
+                        color = Color.White,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+        }
+    }
     
     Spacer(modifier = Modifier.height(32.dp))
     
-    LinearProgressIndicator(progress = { animatedProgress }, modifier = Modifier.fillMaxWidth().height(16.dp).clip(RoundedCornerShape(8.dp)))
-    
-    Spacer(modifier = Modifier.weight(1f))
-    
-    Text("$answersForCurrentQ of $totalStudents answered", fontSize = 24.sp, fontWeight = FontWeight.SemiBold)
+    Surface(
+        color = Color.White.copy(alpha = 0.1f),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Text(
+            text = "$answersForCurrentQ of $totalStudents Answered", 
+            fontSize = if (isTablet) 24.sp else 18.sp, 
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
+        )
+    }
     
     Spacer(modifier = Modifier.height(32.dp))
 }
 
 @Composable
 fun ColumnScope.RevealPhase(uiState: GameHostUiState, onNext: () -> Unit) {
+    val isTablet = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp >= 600
     LaunchedEffect(uiState.currentQuestion) {
-        kotlinx.coroutines.delay(5000) // Show leaderboard for 5 seconds
-        onNext() // Auto-advance to next question or end game
+        kotlinx.coroutines.delay(5000)
+        onNext()
     }
 
-    Text("Correct Answer", fontSize = 24.sp, color = Color(0xFFD1C4E9))
-    Spacer(modifier = Modifier.height(16.dp))
-    
-    Text(uiState.currentQuestion?.questionText ?: "", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color.White, textAlign = TextAlign.Center)
+    Text(
+        "CORRECT ANSWER", 
+        fontSize = if (isTablet) 18.sp else 14.sp, 
+        fontWeight = FontWeight.Black,
+        color = Color(0xFFFFEB3B),
+        letterSpacing = 2.sp
+    )
     Spacer(modifier = Modifier.height(24.dp))
     
+    val correctChoice = uiState.currentQuestion?.choices?.find { it.isCorrect }
+    
     Surface(
-        color = Color(0xFF6A35A3),
-        shape = RoundedCornerShape(16.dp),
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp)
+        color = Color(0xFF4CAF50), // Success Green
+        shape = RoundedCornerShape(32.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp),
+        shadowElevation = 16.dp
     ) {
-        Text("Answer revealed on student devices", fontSize = 18.sp, color = Color(0xFFFFEB3B), textAlign = TextAlign.Center, modifier = Modifier.padding(16.dp))
+        Column(
+            modifier = Modifier.padding(if (isTablet) 32.dp else 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = correctChoice?.choiceText ?: "---", 
+                fontSize = if (isTablet) 48.sp else 32.sp, 
+                fontWeight = FontWeight.Black, 
+                color = Color.White, 
+                textAlign = TextAlign.Center
+            )
+        }
     }
     
     Spacer(modifier = Modifier.height(48.dp))
     
-    Text("Current Top 5", fontSize = 32.sp, fontWeight = FontWeight.Black, color = Color(0xFFFFD700))
+    Text(
+        "Current Leaderboard", 
+        fontSize = if (isTablet) 32.sp else 24.sp, 
+        fontWeight = FontWeight.Black, 
+        color = Color.White,
+        fontFamily = fredokaFontFamily
+    )
     LazyColumn(
         modifier = Modifier.weight(1f).padding(vertical = 16.dp).widthIn(max = 600.dp)
     ) {
@@ -446,15 +622,15 @@ fun ColumnScope.RevealPhase(uiState: GameHostUiState, onNext: () -> Unit) {
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
                     .background(Color.White.copy(alpha = 0.1f), RoundedCornerShape(12.dp))
-                    .padding(16.dp), 
+                    .padding(if (isTablet) 16.dp else 12.dp), 
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("#${index + 1}", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFFEB3B), modifier = Modifier.width(40.dp))
-                    Text(entry.studentName, fontSize = 20.sp, fontWeight = FontWeight.Medium, color = Color.White)
+                    Text("#${index + 1}", fontSize = if (isTablet) 20.sp else 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFFEB3B), modifier = Modifier.width(32.dp))
+                    Text(entry.studentName, fontSize = if (isTablet) 20.sp else 16.sp, fontWeight = FontWeight.Medium, color = Color.White)
                 }
-                Text("${entry.correctCount} pts", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                Text("${entry.correctCount} pts", fontSize = if (isTablet) 20.sp else 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
             }
         }
     }
@@ -462,7 +638,8 @@ fun ColumnScope.RevealPhase(uiState: GameHostUiState, onNext: () -> Unit) {
 
 @Composable
 fun ColumnScope.DonePhase(uiState: GameHostUiState, onBack: () -> Unit) {
-    Text("Final Leaderboard", fontSize = 48.sp, fontWeight = FontWeight.Black, color = Color(0xFFFFD700))
+    val isTablet = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp >= 600
+    Text("Final Leaderboard", fontSize = if (isTablet) 48.sp else 32.sp, fontWeight = FontWeight.Black, color = Color(0xFFFFD700))
     Spacer(modifier = Modifier.height(32.dp))
     
     LazyColumn(
@@ -483,28 +660,28 @@ fun ColumnScope.DonePhase(uiState: GameHostUiState, onBack: () -> Unit) {
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
                     .background(bgColor, RoundedCornerShape(16.dp))
-                    .padding(20.dp),
+                    .padding(if (isTablet) 20.dp else 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         modifier = Modifier
-                            .size(48.dp)
+                            .size(if (isTablet) 48.dp else 36.dp)
                             .background(if (isTop3) badgeColor else Color.Transparent, androidx.compose.foundation.shape.CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             "#${index + 1}", 
-                            fontSize = 24.sp, 
+                            fontSize = if (isTablet) 24.sp else 18.sp, 
                             fontWeight = FontWeight.Black, 
                             color = if (isTop3) Color(0xFF511D89) else Color(0xFFB39DDB)
                         )
                     }
                     Spacer(modifier = Modifier.width(16.dp))
-                    Text(entry.studentName, fontSize = 24.sp, fontWeight = FontWeight.Bold, color = textColor)
+                    Text(entry.studentName, fontSize = if (isTablet) 24.sp else 18.sp, fontWeight = FontWeight.Bold, color = textColor)
                 }
-                Text("${entry.correctCount} pts", fontSize = 28.sp, fontWeight = FontWeight.Black, color = textColor)
+                Text("${entry.correctCount} pts", fontSize = if (isTablet) 28.sp else 20.sp, fontWeight = FontWeight.Black, color = textColor)
             }
         }
     }

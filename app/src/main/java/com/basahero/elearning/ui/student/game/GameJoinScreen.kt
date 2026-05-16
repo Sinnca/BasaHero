@@ -3,6 +3,7 @@ package com.basahero.elearning.ui.student.game
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,6 +20,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.VideogameAsset
 import androidx.compose.ui.text.font.FontWeight
@@ -51,8 +54,7 @@ data class GameJoinUiState(
     val studentId: String? = null,
     val studentName: String? = null,
     val section: String? = null,
-    val classId: String? = null,
-    val joinedPlayers: List<Student> = emptyList()
+    val classId: String? = null
 )
 
 class GameJoinViewModel(
@@ -62,8 +64,6 @@ class GameJoinViewModel(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(GameJoinUiState())
     val uiState: StateFlow<GameJoinUiState> = _uiState.asStateFlow()
-
-    private var answersJob: kotlinx.coroutines.Job? = null
 
     init {
         viewModelScope.launch {
@@ -116,33 +116,12 @@ class GameJoinViewModel(
                     }
                     Log.d(TAG, "joinGame: JOIN answer submitted successfully")
                     _uiState.update { it.copy(isLoading = false, session = session) }
-                    startObservingPlayers(session.id)
                 } else {
                     Log.w(TAG, "joinGame: studentId is NULL - not logged in")
                     _uiState.update { it.copy(isLoading = false, error = "Not logged in") }
                 }
             }
         }
-    }
-
-    private fun startObservingPlayers(sessionId: String) {
-        answersJob?.cancel()
-        answersJob = viewModelScope.launch {
-            gameRepo.observeAnswers(sessionId).collect { answers ->
-                val joiners = answers.filter { it.questionId == GameRepository.JOIN_MARKER_ID }
-                val studentIds = joiners.map { it.studentId }.distinct()
-                
-                val students = studentIds.mapNotNull { id ->
-                    studentRepo.getStudentById(id)
-                }
-                _uiState.update { it.copy(joinedPlayers = students) }
-            }
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        answersJob?.cancel()
     }
 
     companion object {
@@ -158,6 +137,7 @@ fun GameJoinScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val focusRequesters = remember { List(4) { FocusRequester() } }
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(uiState.session, uiState.studentId) {
         val session = uiState.session
@@ -184,7 +164,8 @@ fun GameJoinScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(vertical = 48.dp, horizontal = 24.dp),
+                    .verticalScroll(scrollState)
+                    .padding(vertical = if (isTablet) 64.dp else 48.dp, horizontal = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -195,7 +176,7 @@ fun GameJoinScreen(
                     letterSpacing = 2.sp
                 )
 
-                Spacer(modifier = Modifier.height(64.dp))
+                Spacer(modifier = Modifier.height(if (isTablet) 80.dp else 48.dp))
 
                 // Gamepad Icon with glow effect
                 Box(contentAlignment = Alignment.Center) {
@@ -231,85 +212,132 @@ fun GameJoinScreen(
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(48.dp))
+                Spacer(modifier = Modifier.height(if (isTablet) 64.dp else 40.dp))
 
-                // PIN INPUT
-                Row(horizontalArrangement = Arrangement.spacedBy(if (isTablet) 24.dp else 16.dp)) {
-                    for (i in 0..3) {
-                        val digit = uiState.codeDigits[i]
-                        val isFocused = focusRequesters[i] == focusRequesters.firstOrNull { 
-                            it.hashCode() == focusRequesters[uiState.codeDigits.indexOfFirst { d -> d.isEmpty() }.let { idx -> if (idx == -1) 3 else idx }].hashCode() 
-                        } // Simple heuristic for focus
-
-                        // Use BasicTextField so we have complete design freedom
-                        Box(
-                            modifier = Modifier
-                                .width(if (isTablet) 80.dp else 64.dp)
-                                .height(if (isTablet) 110.dp else 88.dp)
-                                .background(Color(0xFF251A35), RoundedCornerShape(16.dp))
-                                .border(
-                                    width = if (digit.isNotEmpty()) 3.dp else if (uiState.codeDigits.indexOfFirst { it.isEmpty() } == i) 2.dp else 2.dp,
-                                    color = if (digit.isNotEmpty()) Color(0xFFFFD700) else if (uiState.codeDigits.indexOfFirst { it.isEmpty() } == i) Color(0xFF8B5CF6) else Color.Transparent,
-                                    shape = RoundedCornerShape(16.dp)
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            if (digit.isEmpty() && uiState.codeDigits.indexOfFirst { it.isEmpty() } != i) {
-                                // Dashed border effect for empty inactive boxes
-                                Canvas(modifier = Modifier.matchParentSize()) {
-                                    drawRoundRect(
-                                        color = Color(0xFF4B3A65),
-                                        style = androidx.compose.ui.graphics.drawscope.Stroke(
-                                            width = 4f,
-                                            pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(15f, 15f))
-                                        ),
-                                        cornerRadius = androidx.compose.ui.geometry.CornerRadius(16.dp.toPx())
-                                    )
-                                }
-                            }
-
-                            BasicTextField(
-                                value = digit,
-                                onValueChange = { newValue ->
-                                    if (newValue.length <= 1) {
-                                        viewModel.updateDigit(i, newValue)
-                                        if (newValue.isNotEmpty() && i < 3) {
-                                            focusRequesters[i + 1].requestFocus()
-                                        }
-                                    }
-                                },
+                if (uiState.session == null) {
+                    // PIN INPUT
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(if (isTablet) 24.dp else 16.dp),
+                        modifier = Modifier.wrapContentSize()
+                    ) {
+                        for (i in 0..3) {
+                            val digit = uiState.codeDigits[i]
+                            
+                            Box(
                                 modifier = Modifier
-                                    .fillMaxSize()
-                                    .focusRequester(focusRequesters[i])
-                                    .onKeyEvent { keyEvent ->
-                                        if (keyEvent.key == Key.Backspace && digit.isEmpty() && i > 0) {
-                                            focusRequesters[i - 1].requestFocus()
-                                            true
-                                        } else false
-                                    },
-                                textStyle = TextStyle(
-                                    fontFamily = fredokaFontFamily,
-                                    textAlign = TextAlign.Center,
-                                    fontSize = if (isTablet) 48.sp else 36.sp,
-                                    fontWeight = FontWeight.Black,
-                                    color = Color(0xFFFFD700)
-                                ),
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                singleLine = true,
-                                decorationBox = { innerTextField ->
-                                    Box(contentAlignment = Alignment.Center) {
-                                        if (digit.isEmpty() && uiState.codeDigits.indexOfFirst { it.isEmpty() } == i) {
-                                            // Optional blinking cursor could go here
-                                        }
-                                        innerTextField()
+                                    .width(if (isTablet) 80.dp else 64.dp)
+                                    .height(if (isTablet) 110.dp else 88.dp)
+                                    .background(Color(0xFF251A35), RoundedCornerShape(16.dp))
+                                    .border(
+                                        width = if (digit.isNotEmpty()) 3.dp else if (uiState.codeDigits.indexOfFirst { it.isEmpty() } == i) 2.dp else 2.dp,
+                                        color = if (digit.isNotEmpty()) Color(0xFFFFD700) else if (uiState.codeDigits.indexOfFirst { it.isEmpty() } == i) Color(0xFF8B5CF6) else Color.Transparent,
+                                        shape = RoundedCornerShape(16.dp)
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                if (digit.isEmpty() && uiState.codeDigits.indexOfFirst { it.isEmpty() } != i) {
+                                    Canvas(modifier = Modifier.matchParentSize()) {
+                                        drawRoundRect(
+                                            color = Color(0xFF4B3A65),
+                                            style = androidx.compose.ui.graphics.drawscope.Stroke(
+                                                width = 4f,
+                                                pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(15f, 15f))
+                                            ),
+                                            cornerRadius = androidx.compose.ui.geometry.CornerRadius(16.dp.toPx())
+                                        )
                                     }
                                 }
+
+                                BasicTextField(
+                                    value = digit,
+                                    onValueChange = { newValue ->
+                                        if (newValue.length <= 1) {
+                                            viewModel.updateDigit(i, newValue)
+                                            if (newValue.isNotEmpty() && i < 3) {
+                                                focusRequesters[i + 1].requestFocus()
+                                            }
+                                        }
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .focusRequester(focusRequesters[i])
+                                        .onKeyEvent { keyEvent ->
+                                            if (keyEvent.key == Key.Backspace && digit.isEmpty() && i > 0) {
+                                                focusRequesters[i - 1].requestFocus()
+                                                true
+                                            } else false
+                                        },
+                                    textStyle = TextStyle(
+                                        fontFamily = fredokaFontFamily,
+                                        textAlign = TextAlign.Center,
+                                        fontSize = if (isTablet) 48.sp else 36.sp,
+                                        fontWeight = FontWeight.Black,
+                                        color = Color(0xFFFFD700)
+                                    ),
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                    singleLine = true,
+                                    decorationBox = { innerTextField ->
+                                        Box(contentAlignment = Alignment.Center) {
+                                            innerTextField()
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    }
+                } else {
+                    // Success State
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Surface(
+                            color = Color(0xFF22C55E).copy(alpha = 0.1f),
+                            shape = RoundedCornerShape(16.dp),
+                            border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF22C55E).copy(alpha = 0.5f))
+                        ) {
+                            Text(
+                                text = "SUCCESSFULLY JOINED!",
+                                color = Color(0xFF22C55E),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp,
+                                modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
+                                letterSpacing = 1.sp
+                            )
+                        }
+                        
+                        Spacer(modifier = Modifier.height(24.dp))
+                        
+                        val infiniteTransition = rememberInfiniteTransition(label = "pulse")
+                        val pulseScale by infiniteTransition.animateFloat(
+                            initialValue = 0.7f,
+                            targetValue = 1.3f,
+                            animationSpec = infiniteRepeatable(
+                                animation = tween(1000, easing = FastOutSlowInEasing),
+                                repeatMode = RepeatMode.Reverse
+                            ),
+                            label = "pulseAnim"
+                        )
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                modifier = Modifier
+                                    .size(10.dp)
+                                    .graphicsLayer {
+                                        scaleX = pulseScale
+                                        scaleY = pulseScale
+                                    }
+                                    .background(Color(0xFF22C55E), CircleShape)
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = "Waiting for teacher to start...", 
+                                color = Color.White, 
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium
                             )
                         }
                     }
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(32.dp))
                 
                 Text(
                     text = "Playing as: ",
@@ -323,90 +351,16 @@ fun GameJoinScreen(
                     color = Color.White
                 )
 
-                Spacer(modifier = Modifier.weight(1f))
-
-                // Players Joined Card
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color(0xFF2A1C40), RoundedCornerShape(24.dp))
-                        .padding(24.dp)
-                ) {
-                    Column {
-                        Text(
-                            text = "PLAYERS JOINED (${uiState.joinedPlayers.size})",
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White.copy(alpha = 0.6f),
-                            letterSpacing = 1.sp
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            // Actual detected players
-                            val colors = listOf(Color(0xFF3B82F6), Color(0xFF22C55E), Color(0xFFF97316), Color(0xFFD946EF), Color(0xFF2563EB))
-                            
-                            uiState.joinedPlayers.take(5).forEachIndexed { index, student ->
-                                val initials = student.fullName.split(" ").mapNotNull { it.firstOrNull()?.toString() }.joinToString("").take(2).uppercase()
-                                Box(
-                                    modifier = Modifier
-                                        .size(48.dp)
-                                        .background(colors[index % colors.size], RoundedCornerShape(12.dp)),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(initials, color = Color.White, fontWeight = FontWeight.Black)
-                                }
-                            }
-                            
-                            if (uiState.joinedPlayers.size > 5) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(48.dp)
-                                        .background(Color.White.copy(alpha = 0.1f), RoundedCornerShape(12.dp)),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text("+${uiState.joinedPlayers.size - 5}", color = Color.White.copy(alpha = 0.6f), fontWeight = FontWeight.Bold)
-                                }
-                            }
-                            
-                            if (uiState.joinedPlayers.isEmpty()) {
-                                Text("Waiting for friends to join...", color = Color.White.copy(alpha = 0.4f), fontSize = 14.sp)
-                            }
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(48.dp))
 
                 if (uiState.isLoading) {
                     CircularProgressIndicator(color = Color(0xFFFFD700))
                 } else if (uiState.error != null) {
                     Text(uiState.error!!, color = Color.Red, fontWeight = FontWeight.Bold)
-                } else {
-                    val infiniteTransition = rememberInfiniteTransition(label = "pulse")
-                    val pulseScale by infiniteTransition.animateFloat(
-                        initialValue = 0.7f,
-                        targetValue = 1.3f,
-                        animationSpec = infiniteRepeatable(
-                            animation = tween(1000, easing = FastOutSlowInEasing),
-                            repeatMode = RepeatMode.Reverse
-                        ),
-                        label = "pulseAnim"
-                    )
-
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(
-                            modifier = Modifier
-                                .size(8.dp)
-                                .graphicsLayer {
-                                    scaleX = pulseScale
-                                    scaleY = pulseScale
-                                }
-                                .background(Color(0xFF22C55E), RoundedCornerShape(4.dp))
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Waiting for teacher to start...", color = Color.White.copy(alpha = 0.6f), fontSize = 14.sp)
-                    }
                 }
+                
+                // Bottom padding for scrollability
+                Spacer(modifier = Modifier.height(48.dp))
             }
         }
     }

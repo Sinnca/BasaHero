@@ -39,7 +39,8 @@ import com.basahero.elearning.data.local.SessionManager
 import com.basahero.elearning.data.model.Quarter
 import com.basahero.elearning.ui.common.LocalAppStrings
 import kotlinx.coroutines.launch
-import kotlin.math.min
+import kotlin.math.*
+import androidx.compose.ui.geometry.Offset
 
 @SuppressLint("Range")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -115,6 +116,8 @@ fun StudentHomeScreen(
                     coroutineScope.launch { sessionManager.setLanguage(newLang) }
                 },
                 onLogout = onLogout,
+                skillStats = uiState.skillStats,
+                isTablet = isTablet,
                 modifier = Modifier.padding(padding)
             )
             return@Scaffold
@@ -884,132 +887,208 @@ private fun ProfileContent(
     languageCode: String,
     onToggleLanguage: () -> Unit,
     onLogout: () -> Unit,
+    skillStats: List<Float>,
+    isTablet: Boolean,
     modifier: Modifier = Modifier
 ) {
     val strings = LocalAppStrings.current
     val primaryColor = MaterialTheme.colorScheme.primary
+    val cardBackground = if (isSystemInDarkTheme()) Color(0xFF2A2A2A) else Color.White
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(24.dp),
+            .padding(if (isTablet) 32.dp else 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(Modifier.height(24.dp))
-
-        Box(
-            modifier = Modifier
-                .size(80.dp)
-                .clip(CircleShape)
-                .background(
-                    Brush.linearGradient(listOf(primaryColor, primaryColor.copy(alpha = 0.7f)))
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            val initials = student.fullName.split(" ")
-                .filter { it.isNotBlank() }
-                .take(2)
-                .joinToString("") { it.take(1).uppercase() }
-            Text(
-                text = initials,
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 28.sp
-            )
-        }
-
-        Spacer(Modifier.height(12.dp))
-
-        Text(
-            text = student.fullName,
-            fontSize = 22.sp,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        Text(
-            text = strings.gradeAndSection(student.gradeLevel, student.section),
-            fontSize = 14.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
-        Spacer(Modifier.height(32.dp))
-
+        // CARD 1: USER INFO
         Card(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+            shape = RoundedCornerShape(24.dp),
+            colors = CardDefaults.cardColors(containerColor = cardBackground),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(if (isTablet) 32.dp else 24.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(if (isTablet) 100.dp else 72.dp)
+                        .clip(CircleShape)
+                        .background(
+                            Brush.linearGradient(listOf(primaryColor, primaryColor.copy(alpha = 0.7f)))
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    val initials = student.fullName.split(" ")
+                        .filter { it.isNotBlank() }
+                        .take(2)
+                        .joinToString("") { it.take(1).uppercase() }
+                    Text(
+                        text = initials,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = if (isTablet) 36.sp else 24.sp
+                    )
+                }
+
+                Spacer(Modifier.width(if (isTablet) 24.dp else 16.dp))
+
+                Column {
+                    Text(
+                        text = student.fullName,
+                        fontSize = if (isTablet) 28.sp else 20.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = strings.gradeAndSection(student.gradeLevel, student.section),
+                        fontSize = if (isTablet) 18.sp else 14.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        // CARD 2: LANGUAGE SETTINGS
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(containerColor = cardBackground),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable(onClick = onToggleLanguage)
-                    .padding(16.dp),
+                    .padding(if (isTablet) 24.dp else 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    Icons.Default.Language,
-                    contentDescription = null,
-                    tint = primaryColor,
-                    modifier = Modifier.size(24.dp)
-                )
+                Box(
+                    modifier = Modifier
+                        .size(if (isTablet) 56.dp else 40.dp)
+                        .background(primaryColor.copy(alpha = 0.1f), CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Default.Language,
+                        contentDescription = null,
+                        tint = primaryColor,
+                        modifier = Modifier.size(if (isTablet) 32.dp else 24.dp)
+                    )
+                }
                 Spacer(Modifier.width(16.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = strings.languageLabel,
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.SemiBold
+                        fontSize = if (isTablet) 18.sp else 15.sp,
+                        fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = if (languageCode == "en") "English" else "Tagalog",
-                        fontSize = 13.sp,
+                        fontSize = if (isTablet) 15.sp else 13.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 Surface(
-                    shape = RoundedCornerShape(8.dp),
-                    color = primaryColor.copy(alpha = 0.1f)
+                    shape = RoundedCornerShape(12.dp),
+                    color = primaryColor
                 ) {
                     Text(
                         text = if (languageCode == "en") "EN" else "FIL",
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = primaryColor
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        fontSize = if (isTablet) 16.sp else 12.sp,
+                        fontWeight = FontWeight.Black,
+                        color = Color.White
                     )
                 }
             }
         }
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(24.dp))
 
+        // CARD 3: HERO STATS (Strong Color Theme)
+        Text(
+            text = if (languageCode == "fil") "STATISTIKA NG BAYANI" else "HERO STATISTICS",
+            fontSize = if (isTablet) 20.sp else 14.sp,
+            fontWeight = FontWeight.Black,
+            color = primaryColor,
+            modifier = Modifier.fillMaxWidth().padding(start = 8.dp, bottom = 12.dp),
+            letterSpacing = 1.5.sp
+        )
+        
         Card(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+            shape = RoundedCornerShape(32.dp),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E2C)), // Deep dark blue/purple
+            elevation = CardDefaults.cardElevation(defaultElevation = 12.dp)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = onLogout)
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier.padding(if (isTablet) 40.dp else 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.ExitToApp,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.size(24.dp)
+                SkillRadarChart(
+                    stats = skillStats,
+                    modifier = Modifier.size(if (isTablet) 300.dp else 220.dp),
+                    primaryColor = Color(0xFF00D1FF) // Bright cyan for contrast
                 )
-                Spacer(Modifier.width(16.dp))
-                Text(
-                    text = strings.logout,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.error
-                )
+                
+                Spacer(Modifier.height(if (isTablet) 40.dp else 24.dp))
+                
+                // Legend
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    RadarLegendItem("📖", if (languageCode == "fil") "Salita" else "Vocab", skillStats[0], Color(0xFF00D1FF), isTablet)
+                    RadarLegendItem("🧠", if (languageCode == "fil") "Unawa" else "Compre", skillStats[1], Color(0xFF00D1FF), isTablet)
+                }
+                Spacer(Modifier.height(if (isTablet) 24.dp else 16.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    RadarLegendItem("🔥", if (languageCode == "fil") "Tapat" else "Habit", skillStats[2], Color(0xFF00D1FF), isTablet)
+                    RadarLegendItem("✅", if (languageCode == "fil") "Wasto" else "Accuracy", skillStats[3], Color(0xFF00D1FF), isTablet)
+                }
             }
         }
+
+        Spacer(Modifier.height(40.dp))
+
+        // LOGOUT BUTTON
+        Button(
+            onClick = onLogout,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(if (isTablet) 72.dp else 56.dp),
+            shape = RoundedCornerShape(16.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.1f)),
+            elevation = null
+        ) {
+            Icon(
+                Icons.AutoMirrored.Filled.ExitToApp,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.error,
+                modifier = Modifier.size(if (isTablet) 28.dp else 24.dp)
+            )
+            Spacer(Modifier.width(12.dp))
+            Text(
+                text = strings.logout,
+                fontSize = if (isTablet) 20.sp else 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+        
+        Spacer(Modifier.height(48.dp))
     }
 }
 
@@ -1049,6 +1128,93 @@ private fun QuarterStatChip(label: String) {
             fontWeight = FontWeight.Black,
             color = Color.White,
             letterSpacing = 0.5.sp
+        )
+    }
+}
+
+@Composable
+fun SkillRadarChart(
+    stats: List<Float>, // Vocabulary, Comprehension, Consistency, Accuracy
+    modifier: Modifier = Modifier,
+    primaryColor: Color = MaterialTheme.colorScheme.primary
+) {
+    Canvas(modifier = modifier) {
+        val center = Offset(size.width / 2, size.height / 2)
+        val radius = min(size.width, size.height) / 2 * 0.85f
+        
+        // Draw 4 axes and background rings
+        val levels = 4
+        for (i in 1..levels) {
+            val r = radius * (i.toFloat() / levels)
+            val path = androidx.compose.ui.graphics.Path().apply {
+                for (j in 0..3) {
+                    val angle = j * (PI / 2) - (PI / 2)
+                    val x = center.x + r * cos(angle).toFloat()
+                    val y = center.y + r * sin(angle).toFloat()
+                    if (j == 0) moveTo(x, y) else lineTo(x, y)
+                }
+                close()
+            }
+            drawPath(path, Color.White.copy(alpha = 0.15f), style = Stroke(width = 1.dp.toPx()))
+        }
+        
+        // Draw axes lines
+        for (j in 0..3) {
+            val angle = j * (PI / 2) - (PI / 2)
+            val x = center.x + radius * cos(angle).toFloat()
+            val y = center.y + radius * sin(angle).toFloat()
+            drawLine(Color.White.copy(alpha = 0.15f), center, Offset(x, y), strokeWidth = 1.dp.toPx())
+        }
+        
+        // Draw data shape
+        val dataPath = androidx.compose.ui.graphics.Path().apply {
+            for (j in 0..3) {
+                val stat = stats.getOrElse(j) { 0.5f }.coerceIn(0.1f, 1f)
+                val r = radius * stat
+                val angle = j * (PI / 2) - (PI / 2)
+                val x = center.x + r * cos(angle).toFloat()
+                val y = center.y + r * sin(angle).toFloat()
+                if (j == 0) moveTo(x, y) else lineTo(x, y)
+            }
+            close()
+        }
+        drawPath(dataPath, primaryColor.copy(alpha = 0.25f))
+        drawPath(dataPath, primaryColor, style = Stroke(width = 3.dp.toPx(), cap = StrokeCap.Round))
+        
+        // Draw points
+        for (j in 0..3) {
+            val stat = stats.getOrElse(j) { 0.5f }.coerceIn(0.1f, 1f)
+            val r = radius * stat
+            val angle = j * (PI / 2) - (PI / 2)
+            val x = center.x + r * cos(angle).toFloat()
+            val y = center.y + r * sin(angle).toFloat()
+            drawCircle(Color.White, radius = 5.dp.toPx(), center = Offset(x, y))
+            drawCircle(primaryColor, radius = 5.dp.toPx(), center = Offset(x, y), style = Stroke(width = 2.dp.toPx()))
+        }
+    }
+}
+
+@Composable
+private fun RadarLegendItem(icon: String, label: String, value: Float, color: Color, isTablet: Boolean) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(horizontal = 8.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(icon, fontSize = if (isTablet) 24.sp else 18.sp)
+            Spacer(Modifier.width(if (isTablet) 8.dp else 4.dp))
+            Text(
+                text = label, 
+                fontSize = if (isTablet) 18.sp else 13.sp, 
+                fontWeight = FontWeight.Bold, 
+                color = Color.White.copy(alpha = 0.7f)
+            )
+        }
+        Text(
+            text = "${(value * 100).toInt()}%", 
+            fontSize = if (isTablet) 32.sp else 22.sp, 
+            fontWeight = FontWeight.Black, 
+            color = color
         )
     }
 }

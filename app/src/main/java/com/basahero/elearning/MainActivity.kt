@@ -112,7 +112,7 @@ object Routes {
     const val TEACHER_DASHBOARD = "teacher_dashboard"
     const val CLASS_ROSTER = "class_roster/{classId}"
     const val STUDENT_PROGRESS = "student_progress/{studentId}/{studentName}"
-    const val CLASS_ANALYTICS   = "class_analytics/{classId}/{className}"
+    const val CLASS_ANALYTICS   = "class_analytics/{classId}/{className}/{gradeLevel}"
     const val GAME_HOST = "game_host/{classId}/{lessonId}"
 }
 
@@ -130,6 +130,7 @@ fun BasaHeroApp() {
     val pronunciationRepository = remember { com.basahero.elearning.data.repository.PronunciationRepository(database) }
     val teacherAuthRepository = remember { com.basahero.elearning.data.repository.TeacherAuthRepository() }
     val classRepository = remember { com.basahero.elearning.data.repository.ClassRepository() }
+    val progressMonitorRepository = remember { com.basahero.elearning.data.repository.ProgressMonitorRepository() }
 
     // Shared repositories
     val prePostRepository = remember { PrePostRepository(database) }
@@ -264,7 +265,7 @@ fun BasaHeroApp() {
                 factory = object : ViewModelProvider.Factory {
                     @Suppress("UNCHECKED_CAST")
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return StudentHomeViewModel(studentRepository, lessonRepository) as T
+                        return StudentHomeViewModel(studentRepository, lessonRepository, progressRepository) as T
                     }
                 }
             )
@@ -443,7 +444,7 @@ fun BasaHeroApp() {
                 factory = object : ViewModelProvider.Factory {
                     @Suppress("UNCHECKED_CAST")
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return TeacherDashboardViewModel(teacherAuthRepository, classRepository) as T
+                        return TeacherDashboardViewModel(teacherAuthRepository, classRepository, progressMonitorRepository) as T
                     }
                 }
             )
@@ -485,7 +486,7 @@ fun BasaHeroApp() {
                     navController.navigate("student_progress/$studentId/$studentName")
                 },
                 onAnalyticsClick = {
-                    navController.navigate("class_analytics/$classId/$className")
+                    navController.navigate("class_analytics/$classId/$className/$gradeLevel")
                 },
                 onHostGameClick = {
                     val defaultLessonId = java.util.UUID.randomUUID().toString()
@@ -503,8 +504,7 @@ fun BasaHeroApp() {
                 factory = object : ViewModelProvider.Factory {
                     @Suppress("UNCHECKED_CAST")
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        val repo = com.basahero.elearning.data.repository.ProgressMonitorRepository()
-                        return StudentProgressViewModel(repo, lessonRepository) as T
+                        return StudentProgressViewModel(progressMonitorRepository, lessonRepository, studentRepository) as T
                     }
                 }
             )
@@ -520,13 +520,13 @@ fun BasaHeroApp() {
         composable(Routes.CLASS_ANALYTICS) { backStackEntry ->
             val classId   = backStackEntry.arguments?.getString("classId")   ?: ""
             val className = backStackEntry.arguments?.getString("className")  ?: ""
+            val gradeLevel = backStackEntry.arguments?.getString("gradeLevel")?.toIntOrNull() ?: 4
 
             val viewModel: ClassAnalyticsViewModel = viewModel(
                 factory = object : ViewModelProvider.Factory {
                     @Suppress("UNCHECKED_CAST")
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        val repo = com.basahero.elearning.data.repository.ProgressMonitorRepository()
-                        return ClassAnalyticsViewModel(repo, lessonRepository) as T
+                        return ClassAnalyticsViewModel(progressMonitorRepository, lessonRepository, gradeLevel) as T
                     }
                 }
             )
