@@ -165,6 +165,7 @@ fun HighlightedPassageText(
     passageText: String,
     highlightedWords: List<HighlightedWord>,
     highlightColor: Color = MaterialTheme.colorScheme.primary,
+    isTablet: Boolean = false,
     modifier: Modifier = Modifier,
     onPronunciationAttempt: (word: String, heard: String, isCorrect: Boolean, attemptNumber: Int) -> Unit = { _, _, _, _ -> }
 ) {
@@ -195,20 +196,27 @@ fun HighlightedPassageText(
     }
 
     val annotatedText = remember(passageText, highlightedWords) {
+        val baseAnnotated = com.basahero.elearning.util.TextUtil.parseBoldText(passageText)
+        val cleanedText = baseAnnotated.text
+        
         buildAnnotatedString {
-            append(passageText)
+            append(baseAnnotated)
+            
+            // Apply vocabulary highlights (WORD annotations)
             highlightedWords.forEach { hw ->
-                if (hw.start >= 0 && hw.end <= passageText.length) {
+                val startIndex = cleanedText.indexOf(hw.word, ignoreCase = true)
+                if (startIndex >= 0) {
+                    val endIndex = startIndex + hw.word.length
                     addStyle(
                         style = SpanStyle(
                             color = highlightColor,
                             fontWeight = FontWeight.Bold,
                             textDecoration = TextDecoration.Underline
                         ),
-                        start = hw.start,
-                        end = hw.end
+                        start = startIndex,
+                        end = endIndex
                     )
-                    addStringAnnotation(tag = "WORD", annotation = hw.word, start = hw.start, end = hw.end)
+                    addStringAnnotation(tag = "WORD", annotation = hw.word, start = startIndex, end = endIndex)
                 }
             }
         }
@@ -218,10 +226,10 @@ fun HighlightedPassageText(
         text = annotatedText,
         style = TextStyle(
             fontFamily = fredokaFontFamily,
-            fontSize = 16.sp,
-            lineHeight = 26.sp,
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Justify
+            fontSize = if (isTablet) 18.sp else 16.sp,
+            lineHeight = if (isTablet) 30.sp else 26.sp,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
+            textAlign = TextAlign.Start
         ),
         modifier = modifier,
         onClick = { offset ->
@@ -237,6 +245,7 @@ fun HighlightedPassageText(
             word = selectedWord!!,
             tts = tts,               // 👈 Pass the warm engine down to the sheet
             isTtsReady = isTtsReady, // 👈 Pass the ready status down
+            isTablet = isTablet,
             onDismiss = { showSheet = false },
             onPronunciationAttempt = onPronunciationAttempt
         )
@@ -252,6 +261,7 @@ fun WordPronunciationSheet(
     word: String,
     tts: TextToSpeech?,      // 👈 Received from above
     isTtsReady: Boolean,     // 👈 Received from above
+    isTablet: Boolean,
     onDismiss: () -> Unit,
     onPronunciationAttempt: (word: String, heard: String, isCorrect: Boolean, attemptNumber: Int) -> Unit = { _, _, _, _ -> }
 ) {
@@ -406,7 +416,7 @@ fun WordPronunciationSheet(
         ) {
             Text(
                 text = word,
-                fontSize = 36.sp,
+                fontSize = if (isTablet) 36.sp else 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -433,7 +443,7 @@ fun WordPronunciationSheet(
                         // Force the audio to play immediately without queuing
                         tts?.speak(word, TextToSpeech.QUEUE_FLUSH, null, "tts_$word")
                     },
-                    modifier = Modifier.weight(1f).height(52.dp),
+                    modifier = Modifier.weight(1f).height(if (isTablet) 56.dp else 48.dp),
                     shape = RoundedCornerShape(12.dp),
                     enabled = isTtsReady,
                     colors = ButtonDefaults.buttonColors(
@@ -455,7 +465,7 @@ fun WordPronunciationSheet(
                             startListening()
                         }
                     },
-                    modifier = Modifier.weight(1f).height(52.dp),
+                    modifier = Modifier.weight(1f).height(if (isTablet) 56.dp else 48.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (isListening) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.primaryContainer,

@@ -778,7 +778,7 @@ private data class NavigationItem(
 // ─────────────────────────────────────────────────────────────────────────────
 
 @Composable
-fun PlayfulBackground(modifier: Modifier = Modifier) {
+fun PlayfulBackground(modifier: Modifier = Modifier, densityMultiplier: Float = 1f) {
     val infiniteTransition = rememberInfiniteTransition(label = "floating_shapes")
     val config = LocalConfiguration.current
     val screenWidth = config.screenWidthDp
@@ -807,8 +807,8 @@ fun PlayfulBackground(modifier: Modifier = Modifier) {
     // Configuration for floating shapes and letters (Scaled for responsiveness)
     val isTablet = screenWidth >= 600
     val itemScale = if (isTablet) 1f else 0.6f
-    val shapeCount = if (isTablet) 15 else 8
-    val letterCount = if (isTablet) 40 else 20
+    val shapeCount = ((if (isTablet) 15 else 8) * densityMultiplier).toInt()
+    val letterCount = ((if (isTablet) 40 else 20) * densityMultiplier).toInt()
     
     val items = remember(screenWidth, screenHeight) {
         val list = mutableListOf<FloatingItem>()
