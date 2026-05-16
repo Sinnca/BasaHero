@@ -177,6 +177,7 @@ fun GamePlayScreen(
     onGameEnded: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val isTablet = LocalConfiguration.current.screenWidthDp >= 600
 
     LaunchedEffect(Unit) {
         viewModel.startPlaying(sessionId, studentId)
@@ -211,9 +212,9 @@ fun GamePlayScreen(
         ) {
             when (uiState.phase) {
                 GamePhase.LOBBY -> {
-                    Text("You're in!", fontSize = 48.sp, fontWeight = FontWeight.Black, color = Color(0xFFFFEB3B))
+                    Text("You are in,", fontSize = if (isTablet) 56.sp else 40.sp, fontWeight = FontWeight.Black, color = Color(0xFFFFEB3B), textAlign = TextAlign.Center)
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text("See your nickname on the screen", fontSize = 24.sp, color = Color.White, textAlign = TextAlign.Center)
+                    Text("wait for your teacher to start the game", fontSize = if (isTablet) 28.sp else 22.sp, color = Color.White, textAlign = TextAlign.Center)
                     Spacer(modifier = Modifier.height(64.dp))
                     CircularProgressIndicator(color = Color.White, modifier = Modifier.size(64.dp))
                 }

@@ -1667,12 +1667,8 @@
       "lectureText": "Class, when we read, we don't just look at the details. We need to find the <b>main idea</b> \u2014 the <b>big thought</b> that the author wants us to understand. The details are like ingredients in a recipe, but the <b>main idea is the finished dish</b>. Today, we'll learn how to identify the main idea in <b>informational texts</b>.\n\nThe <b>main idea</b> is the most important point of the text. <b>Supporting details</b> give us examples, descriptions, or lists that explain the main idea.",
       "parts": [
         {
-          "passageText": "<b>Filipino food</b> is known for its variety and flavor. One popular dish is <b>Adobo</b>, cooked with soy sauce, vinegar, garlic, and meat. Another favorite is <b>Sinigang</b>, a sour soup made with tamarind, vegetables, and either pork or shrimp. Filipinos also enjoy <b>Lechon</b>, a roasted pig served during fiestas. For snacks, there is <b>Bibingka</b>, a rice cake baked in banana leaves, and <b>Halo-Halo</b>, a cold dessert with ice, milk, fruits, and sweet beans. These dishes show how Filipino food is colorful, flavorful, and enjoyed by families everywhere.\n\nNow that we've learned how to find the main idea in an informational text, we will discuss what is <b>informational text</b>.\n\n<b>What is Informational Text?</b>\nInformational text is <b>non-fiction writing</b>. It gives facts, explanations, or descriptions about real things, people, places, or events. It is not a made-up story; instead, it <b>teaches or informs</b> the reader.\n\n<b>Examples of Informational Texts:</b>\n\n<b>How Plants Grow</b>\nPlants need sunlight, water, and soil to grow. First, the <b>roots</b> take in water and nutrients from the soil. Next, the <b>stem</b> carries these nutrients to the leaves. The leaves use sunlight to make food through <b>photosynthesis</b>. Finally, flowers and fruits appear, showing that the plant is healthy and strong.\n<b>Main Idea:</b> Plants grow by using water, soil, and sunlight to make food.\n\n<b>Philippine Fruits</b>\nThe Philippines has many delicious fruits. One is <b>Mango</b>, which is sweet and yellow when ripe. Another is <b>Banana</b>, soft and filling, often eaten for breakfast. There is also <b>Papaya</b>, orange in color and rich in vitamins. Filipinos enjoy <b>Coconut</b>, which has refreshing water and white meat. Finally, <b>Lanzones</b> are small, round fruits that taste sweet and slightly sour.\n<b>Main Idea:</b> The Philippines has many kinds of tasty fruits.\n\n<b>Types of Informational Text:</b>\n\n<b>1. Enumeration:</b> means listing details one by one. It uses words like <b>first, second, next, also, another</b>. It helps readers see the information clearly in order.\n\n<b>2. Description:</b> means explaining how something looks, tastes, smells, or feels. It uses <b>adjectives</b> (describing words) to give details.",
-          "highlighted_words": [
-            "enumeration",
-            "description",
-            "photosynthesis"
-          ],
+          "passageText": "<b>Filipino food</b> is known for its variety and flavor. One popular dish is <b>Adobo</b>, cooked with soy sauce, vinegar, garlic, and meat. Another favorite is <b>Sinigang</b>, a sour soup made with tamarind, vegetables, and either pork or shrimp. Filipinos also enjoy <b>Lechon</b>, a roasted pig served during fiestas. For snacks, there is <b>Bibingka</b>, a rice cake baked in banana leaves, and <b>Halo-Halo</b>, a cold dessert with ice, milk, fruits, and sweet beans. These dishes show how Filipino food is colorful, flavorful, and enjoyed by families everywhere.",
+          "highlighted_words": [],
           "miniQuestions": [
             {
               "id": "mq-06-01",
@@ -1830,6 +1826,16 @@
               ]
             }
           ],
+          "activityQuestions": []
+        },
+        {
+          "passageText": "Now that we've learned how to find the main idea in an informational text, we will discuss what is <b>informational text</b>.\n\n<b>What is Informational Text?</b>\nInformational text is <b>non-fiction writing</b>. It gives facts, explanations, or descriptions about real things, people, places, or events. It is not a made-up story; instead, it <b>teaches or informs</b> the reader.\n\n<b>Examples of Informational Texts:</b>\n\n<b>How Plants Grow</b>\nPlants need sunlight, water, and soil to grow. First, the <b>roots</b> take in water and nutrients from the soil. Next, the <b>stem</b> carries these nutrients to the leaves. The leaves use sunlight to make food through <b>photosynthesis</b>. Finally, flowers and fruits appear, showing that the plant is healthy and strong.\n<b>Main Idea:</b> Plants grow by using water, soil, and sunlight to make food.\n\n<b>Philippine Fruits</b>\nThe Philippines has many delicious fruits. One is <b>Mango</b>, which is sweet and yellow when ripe. Another is <b>Banana</b>, soft and filling, often eaten for breakfast. There is also <b>Papaya</b>, orange in color and rich in vitamins. Filipinos enjoy <b>Coconut</b>, which has refreshing water and white meat. Finally, <b>Lanzones</b> are small, round fruits that taste sweet and slightly sour.\n<b>Main Idea:</b> The Philippines has many kinds of tasty fruits.\n\n<b>Types of Informational Text:</b>\n\n<b>1. Enumeration:</b> means listing details one by one. It uses words like <b>first, second, next, also, another</b>. It helps readers see the information clearly in order.\n\n<b>2. Description:</b> means explaining how something looks, tastes, smells, or feels. It uses <b>adjectives</b> (describing words) to give details.",
+          "highlighted_words": [
+            "enumeration",
+            "description",
+            "photosynthesis"
+          ],
+          "miniQuestions": [],
           "activityQuestions": []
         },
         {

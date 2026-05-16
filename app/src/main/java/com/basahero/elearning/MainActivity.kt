@@ -264,7 +264,7 @@ fun BasaHeroApp() {
                 factory = object : ViewModelProvider.Factory {
                     @Suppress("UNCHECKED_CAST")
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return StudentHomeViewModel(studentRepository, lessonRepository) as T
+                        return StudentHomeViewModel(studentRepository, lessonRepository, progressRepository) as T
                     }
                 }
             )
