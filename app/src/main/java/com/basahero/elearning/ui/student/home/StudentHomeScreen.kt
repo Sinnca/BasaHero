@@ -701,8 +701,13 @@ fun QuarterCard(
     val primaryColor = MaterialTheme.colorScheme.primary
     val isLocked = !quarter.isActive
     
-    val imageRes = if (studentGradeLevel == 4 && index == 0) {
-        com.basahero.elearning.R.drawable.grade4_q1
+    val imageRes = if (studentGradeLevel == 4) {
+        when (index) {
+            0 -> com.basahero.elearning.R.drawable.grade4_q1
+            1 -> com.basahero.elearning.R.drawable.grade4_q2
+            2 -> com.basahero.elearning.R.drawable.grade4_q3
+            else -> null
+        }
     } else null
 
     val themeGradient = when (index) {
@@ -748,7 +753,8 @@ fun QuarterCard(
                         painter = androidx.compose.ui.res.painterResource(id = imageRes),
                         contentDescription = null,
                         contentScale = androidx.compose.ui.layout.ContentScale.Crop,
-                        alignment = Alignment.TopCenter,
+                        alignment = if (index == 2) androidx.compose.ui.BiasAlignment(0f, -0.75f) 
+                                   else androidx.compose.ui.BiasAlignment(0f, -0.13f),
                         modifier = Modifier.fillMaxSize()
                     )
                 } else {
