@@ -6,25 +6,31 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.TrendingDown
-import androidx.compose.material.icons.automirrored.filled.TrendingFlat
-import androidx.compose.material.icons.automirrored.filled.TrendingUp
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.automirrored.filled.*
+import androidx.compose.animation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.basahero.elearning.data.repository.PrePostComparison
 import com.basahero.elearning.data.repository.StudentProgressSummary
+import com.basahero.elearning.ui.theme.fredokaFontFamily
 import kotlin.math.roundToInt
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -45,62 +51,110 @@ fun StudentProgressScreen(
     }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Column {
-                        Text(
-                            text = studentName,
-                            fontSize = 17.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "Progress Monitor",
-                            fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                )
-            )
-        }
+        containerColor = Color(0xFFF1F5F9)
     ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            // ── Hero Header ──────────────────────────────────────────────────
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xFF1E293B))
+                    .statusBarsPadding()
+                    .padding(horizontal = 24.dp, vertical = 40.dp)
+            ) {
+                // Integrated Back Button
+                IconButton(
+                    onClick = onBack,
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .background(Color.White.copy(alpha = 0.1f), CircleShape)
+                ) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
+                }
 
-        Column(modifier = Modifier.fillMaxSize().padding(padding)) {
+                Column(modifier = Modifier.padding(start = 64.dp)) {
+                    Text(
+                        text = "STUDENT PROFILE",
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Black,
+                        color = Color.White.copy(alpha = 0.5f),
+                        letterSpacing = 1.5.sp
+                    )
+                    Text(
+                        text = studentName,
+                        fontFamily = fredokaFontFamily,
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        lineHeight = 36.sp
+                    )
+                    Text(
+                        text = "Academic Progress Monitoring",
+                        fontSize = 13.sp,
+                        color = Color.White.copy(alpha = 0.55f)
+                    )
+                }
+            }
 
             // ── Tabs ──────────────────────────────────────────────────────────
-            TabRow(selectedTabIndex = uiState.selectedTab) {
+            TabRow(
+                selectedTabIndex = uiState.selectedTab,
+                containerColor = Color.Transparent,
+                divider = { },
+                indicator = { tabPositions ->
+                    TabRowDefaults.SecondaryIndicator(
+                        Modifier.tabIndicatorOffset(tabPositions[uiState.selectedTab]),
+                        color = MaterialTheme.colorScheme.primary,
+                        height = 4.dp
+                    )
+                }
+            ) {
                 Tab(
                     selected = uiState.selectedTab == 0,
                     onClick = { viewModel.selectTab(0) },
-                    text = { Text("📘 Lessons") }
+                    text = { 
+                        Text(
+                            "Lessons", 
+                            fontFamily = fredokaFontFamily, 
+                            fontWeight = if (uiState.selectedTab == 0) FontWeight.Bold else FontWeight.Medium
+                        ) 
+                    }
                 )
                 Tab(
                     selected = uiState.selectedTab == 1,
                     onClick = { viewModel.selectTab(1) },
-                    text = { Text("📝 Pre/Post Tests") }
+                    text = { 
+                        Text(
+                            "Assessments", 
+                            fontFamily = fredokaFontFamily, 
+                            fontWeight = if (uiState.selectedTab == 1) FontWeight.Bold else FontWeight.Medium
+                        ) 
+                    }
                 )
             }
 
             when {
                 uiState.isLoading -> {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(strokeCap = StrokeCap.Round)
                     }
                 }
                 uiState.errorMessage != null -> {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(uiState.errorMessage ?: "", color = MaterialTheme.colorScheme.error)
+                        Text(
+                            text = uiState.errorMessage ?: "", 
+                            color = MaterialTheme.colorScheme.error,
+                            fontFamily = fredokaFontFamily
+                        )
                     }
                 }
-                uiState.selectedTab == 0 -> LessonsTab(uiState.progressList)
+                uiState.selectedTab == 0 -> LessonsTab(
+                    quarterProgressList = uiState.quarterProgressList,
+                    onToggleQuarter = { viewModel.toggleQuarter(it) }
+                )
                 uiState.selectedTab == 1 -> PrePostTab(uiState.prePostList)
             }
         }
@@ -111,172 +165,354 @@ fun StudentProgressScreen(
 // Tab 1 — Lesson progress
 // ─────────────────────────────────────────────────────────────────────────────
 @Composable
-fun LessonsTab(progressList: List<StudentProgressSummary>) {
-    if (progressList.isEmpty()) {
+fun LessonsTab(
+    quarterProgressList: List<QuarterProgressSummary>,
+    onToggleQuarter: (String) -> Unit
+) {
+    if (quarterProgressList.isEmpty()) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("No lesson progress yet.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(
+                    Icons.Default.Analytics, 
+                    contentDescription = null, 
+                    modifier = Modifier.size(64.dp),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f)
+                )
+                Spacer(Modifier.height(16.dp))
+                Text(
+                    "No lesson progress yet.", 
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontFamily = fredokaFontFamily,
+                    fontSize = 18.sp
+                )
+            }
         }
         return
     }
 
-    val atRiskCount = progressList.count { it.isAtRisk }
+    val totalLessons = quarterProgressList.sumOf { it.lessons.size }
+    val atRiskCount = quarterProgressList.sumOf { q -> q.lessons.count { it.isAtRisk } }
+    val completedCount = quarterProgressList.sumOf { q -> q.lessons.count { it.status == "DONE" } }
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Summary chip row
+        // Summary Dashboard
         item {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                SummaryChip("${progressList.size} Lessons", MaterialTheme.colorScheme.primaryContainer)
-                if (atRiskCount > 0) {
-                    SummaryChip("⚠️ $atRiskCount At-Risk", MaterialTheme.colorScheme.errorContainer)
+            Card(
+                modifier = Modifier.fillMaxWidth().shadow(12.dp, RoundedCornerShape(24.dp), spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f))
+            ) {
+                Row(
+                    modifier = Modifier.padding(24.dp).fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    BigStatColumn("Total", "$totalLessons", "Lessons", Icons.AutoMirrored.Filled.MenuBook)
+                    VerticalDivider(modifier = Modifier.height(40.dp), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f))
+                    BigStatColumn("Done", "$completedCount", "Completed", Icons.Default.CheckCircle)
+                    VerticalDivider(modifier = Modifier.height(40.dp), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f))
+                    BigStatColumn("Alerts", "$atRiskCount", "At Risk", Icons.Default.ErrorOutline, isError = atRiskCount > 0)
                 }
             }
         }
 
-        items(progressList) { progress ->
-            LessonProgressCard(progress = progress)
+        items(quarterProgressList) { quarter ->
+            QuarterProgressCard(
+                quarter = quarter,
+                onToggle = { onToggleQuarter(quarter.quarterId) }
+            )
         }
 
-        item { Spacer(Modifier.height(16.dp)) }
+        item { Spacer(Modifier.height(32.dp)) }
+    }
+}
+
+@Composable
+fun BigStatColumn(label: String, value: String, unit: String, icon: androidx.compose.ui.graphics.vector.ImageVector, isError: Boolean = false) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Icon(
+            icon, 
+            contentDescription = null, 
+            modifier = Modifier.size(16.dp),
+            tint = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+        )
+        Spacer(Modifier.height(4.dp))
+        Text(
+            value, 
+            fontSize = 28.sp, 
+            fontFamily = fredokaFontFamily, 
+            color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+        )
+        Text(unit, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+@Composable
+fun QuarterProgressCard(
+    quarter: QuarterProgressSummary,
+    onToggle: () -> Unit
+) {
+    val rotation by animateFloatAsState(
+        targetValue = if (quarter.isExpanded) 180f else 0f,
+        label = "rotation"
+    )
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = if (quarter.isExpanded) 8.dp else 0.dp,
+                shape = RoundedCornerShape(24.dp),
+                spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+            )
+            .clip(RoundedCornerShape(24.dp))
+            .clickable { onToggle() },
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (quarter.isExpanded) 
+                MaterialTheme.colorScheme.surface
+            else 
+                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+        ),
+        border = BorderStroke(
+            width = 1.dp, 
+            color = if (quarter.isExpanded) MaterialTheme.colorScheme.primary.copy(alpha = 0.1f) else Color.Transparent
+        )
+    ) {
+        Column {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(18.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f), CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = quarter.quarterId.takeLast(1), 
+                            fontFamily = fredokaFontFamily,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(Modifier.width(12.dp))
+                    Column {
+                        Text(
+                            text = quarter.quarterTitle,
+                            fontFamily = fredokaFontFamily,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 17.sp
+                        )
+                        Text(
+                            text = "${quarter.lessons.size} Lessons in this period",
+                            fontSize = 11.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+                Icon(
+                    imageVector = Icons.Default.ExpandMore,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.graphicsLayer { rotationZ = rotation }
+                )
+            }
+            
+            AnimatedVisibility(
+                visible = quarter.isExpanded,
+                enter = expandVertically() + fadeIn(),
+                exit = shrinkVertically() + fadeOut()
+            ) {
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp).padding(bottom = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    if (quarter.lessons.isEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                "No progress records found",
+                                fontSize = 13.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                                fontFamily = fredokaFontFamily
+                            )
+                        }
+                    } else {
+                        quarter.lessons.forEach { progress ->
+                            LessonProgressCard(progress = progress)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
 @Composable
 fun LessonProgressCard(progress: StudentProgressSummary) {
     val bestPct = progress.bestPercent
-    val firstPct = progress.firstPercent
     val isAtRisk = progress.isAtRisk
 
     val animatedBest by animateFloatAsState(
         targetValue = bestPct,
-        animationSpec = tween(600),
+        animationSpec = tween(1000),
         label = "best_bar"
     )
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isAtRisk)
-                MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f)
-            else MaterialTheme.colorScheme.surfaceVariant
+                MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.25f)
+            else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
         ),
+        border = if (isAtRisk) BorderStroke(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.2f)) else null,
         elevation = CardDefaults.cardElevation(0.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-
             // Header row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = progress.lessonTitle.ifBlank { progress.lessonId.take(12) },
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 15.sp,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    if (progress.competency.isNotBlank()) {
+                        Text(
+                            text = progress.competency,
+                            fontSize = 11.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            lineHeight = 14.sp
+                        )
+                    }
+                }
+                
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(
+                        text = "${(bestPct * 100).roundToInt()}%",
+                        fontFamily = fredokaFontFamily,
+                        fontSize = 20.sp,
+                        color = if (isAtRisk) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                    )
+                    if (isAtRisk) {
+                        Surface(
+                            shape = RoundedCornerShape(8.dp),
+                            color = MaterialTheme.colorScheme.error
+                        ) {
+                            Text(
+                                "CRITICAL",
+                                color = MaterialTheme.colorScheme.onError,
+                                fontSize = 9.sp,
+                                fontWeight = FontWeight.Black,
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                            )
+                        }
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(14.dp))
+
+            // Premium Progress Bar
+            Box(modifier = Modifier.fillMaxWidth().height(10.dp)) {
+                // Track
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                        .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f), RoundedCornerShape(5.dp))
+                )
+                // Fill
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(animatedBest)
+                        .fillMaxHeight()
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = if (isAtRisk) 
+                                    listOf(MaterialTheme.colorScheme.error.copy(alpha = 0.7f), MaterialTheme.colorScheme.error)
+                                else 
+                                    listOf(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f), MaterialTheme.colorScheme.primary)
+                            ),
+                            shape = RoundedCornerShape(5.dp)
+                        )
+                )
+            }
+
+            Spacer(Modifier.height(14.dp))
+
+            // Score Stat Row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = progress.lessonTitle.ifBlank { progress.lessonId.take(12) },
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp,
-                    modifier = Modifier.weight(1f)
-                )
-                if (isAtRisk) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.error, RoundedCornerShape(12.dp))
-                            .padding(horizontal = 8.dp, vertical = 3.dp)
-                    ) {
-                        Icon(
-                            Icons.Default.Warning,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onError,
-                            modifier = Modifier.size(12.dp)
-                        )
-                        Spacer(Modifier.width(3.dp))
-                        Text(
-                            "AT RISK",
-                            color = MaterialTheme.colorScheme.onError,
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                } else {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    ScoreBadge("First: ${progress.firstScore}/${progress.quizTotal}")
+                    Spacer(Modifier.width(8.dp))
+                    ScoreBadge("Best: ${progress.bestScore}/${progress.quizTotal}", isPrimary = true)
+                }
+                
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.History, null, modifier = Modifier.size(12.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Spacer(Modifier.width(4.dp))
+                    Text("${progress.attemptCount} tries", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+
+            // Improvement Trend
+            if (progress.improvement > 0) {
+                Spacer(Modifier.height(12.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.TrendingUp, 
+                        null, 
+                        tint = Color(0xFF2E7D32), 
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
                     Text(
-                        text = "${(bestPct * 100).roundToInt()}%",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp,
-                        color = MaterialTheme.colorScheme.primary
+                        "Up by ${progress.improvement} points since first try", 
+                        fontSize = 11.sp, 
+                        color = Color(0xFF2E7D32), 
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }
-
-            Spacer(Modifier.height(10.dp))
-
-            // Best score progress bar
-            Text("Best Score", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Spacer(Modifier.height(3.dp))
-            LinearProgressIndicator(
-                progress = { animatedBest },
-                modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp)),
-                color = if (isAtRisk) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
-                trackColor = MaterialTheme.colorScheme.surfaceVariant,
-                strokeCap = StrokeCap.Round
-            )
-
-            Spacer(Modifier.height(12.dp))
-
-            // Three score columns
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                ScoreStatColumn(
-                    label = "First Score",
-                    value = "${progress.firstScore}/${progress.quizTotal}",
-                    pct = firstPct
-                )
-                ScoreStatColumn(
-                    label = "Best Score",
-                    value = "${progress.bestScore}/${progress.quizTotal}",
-                    pct = bestPct,
-                    highlight = true
-                )
-                ScoreStatColumn(
-                    label = "Attempts",
-                    value = "${progress.attemptCount}",
-                    pct = null
-                )
-            }
-
-            // Improvement chip
-            if (progress.improvement > 0) {
-                Spacer(Modifier.height(8.dp))
-                Surface(
-                    shape = RoundedCornerShape(20.dp),
-                    color = MaterialTheme.colorScheme.secondaryContainer
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.TrendingUp,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.secondary,
-                            modifier = Modifier.size(14.dp)
-                        )
-                        Spacer(Modifier.width(4.dp))
-                        Text(
-                            "+${progress.improvement} pts improvement",
-                            fontSize = 11.sp,
-                            color = MaterialTheme.colorScheme.secondary,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
-                }
-            }
         }
+    }
+}
+
+@Composable
+fun ScoreBadge(text: String, isPrimary: Boolean = false) {
+    Surface(
+        shape = RoundedCornerShape(8.dp),
+        color = if (isPrimary) MaterialTheme.colorScheme.primary.copy(alpha = 0.1f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
+    ) {
+        Text(
+            text = text,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Bold,
+            color = if (isPrimary) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 

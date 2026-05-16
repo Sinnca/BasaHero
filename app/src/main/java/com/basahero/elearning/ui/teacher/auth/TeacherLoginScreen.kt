@@ -1,8 +1,7 @@
 package com.basahero.elearning.ui.teacher.auth
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.background
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -16,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.basahero.elearning.data.repository.TeacherProfile
 import com.basahero.elearning.data.remote.SupabaseClient
+import com.basahero.elearning.ui.theme.fredokaFontFamily
 import io.github.jan.supabase.compose.auth.composeAuth
 import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
 import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
@@ -40,6 +41,7 @@ fun TeacherLoginScreen(
     var fullName by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
+    val scrollState = rememberScrollState()
 
     // ── Google Sign-In action ────────────────────────────────────────────────
     val googleSignInAction = SupabaseClient.client.composeAuth.rememberSignInWithGoogle(
@@ -74,6 +76,9 @@ fun TeacherLoginScreen(
         }
     }
 
+    val configuration = LocalConfiguration.current
+    val isTablet = configuration.screenWidthDp >= 600
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -100,81 +105,233 @@ fun TeacherLoginScreen(
 
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .imePadding()
+                .padding(horizontal = if (isTablet) 24.dp else 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
         ) {
+            Spacer(Modifier.height(if (isTablet) 100.dp else 12.dp))
             // Branding
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Box(
                     modifier = Modifier
-                        .size(64.dp)
-                        .background(Color(0xFF1E293B), RoundedCornerShape(16.dp)),
+                        .size(if (isTablet) 120.dp else 56.dp)
+                        .background(
+                            androidx.compose.ui.graphics.Brush.linearGradient(
+                                listOf(Color(0xFF1E293B), Color(0xFF334155))
+                            ), 
+                            RoundedCornerShape(if (isTablet) 28.dp else 14.dp)
+                        ),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Default.School,
                         contentDescription = null,
                         tint = Color.White,
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(if (isTablet) 60.dp else 28.dp)
                     )
                 }
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(if (isTablet) 28.dp else 8.dp))
                 Text(
                     text = "BASAhero",
-                    fontSize = 32.sp,
+                    fontSize = if (isTablet) 56.sp else 28.sp,
+                    fontFamily = fredokaFontFamily,
                     fontWeight = FontWeight.Black,
                     color = Color(0xFF1E293B),
-                    letterSpacing = 1.sp
+                    letterSpacing = if (isTablet) (-1.5).sp else (-0.5).sp
                 )
                 Text(
                     text = "TEACHER PORTAL",
-                    fontSize = 12.sp,
+                    fontSize = if (isTablet) 15.sp else 10.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF64748B),
-                    letterSpacing = 2.sp
+                    letterSpacing = if (isTablet) 4.sp else 1.sp
                 )
             }
 
-            Spacer(Modifier.height(40.dp))
+            Spacer(Modifier.height(if (isTablet) 40.dp else 12.dp))
 
             // Login Card
             Card(
                 modifier = Modifier
+                    .widthIn(max = if (isTablet) 500.dp else 380.dp)
                     .fillMaxWidth()
                     .wrapContentHeight(),
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(if (isTablet) 48.dp else 20.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                elevation = CardDefaults.cardElevation(defaultElevation = if (isTablet) 16.dp else 4.dp)
             ) {
                 Column(
-                    modifier = Modifier.padding(24.dp),
+                    modifier = Modifier.padding(if (isTablet) 48.dp else 16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = if (viewModel.isSignUpMode) "Create Account" else "Welcome Back",
-                        fontSize = 22.sp,
+                        text = if (viewModel.isSignUpMode) "Create Account" else "Welcome",
+                        fontSize = if (isTablet) 36.sp else 22.sp,
+                        fontFamily = fredokaFontFamily,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF1E293B)
                     )
                     Text(
-                        text = if (viewModel.isSignUpMode) "Join the MATATAG learning community" else "Sign in to manage your students",
-                        fontSize = 14.sp,
+                        text = if (viewModel.isSignUpMode) "Create your teacher account" else "Sign in to manage your students",
+                        fontSize = if (isTablet) 17.sp else 13.sp,
                         color = Color(0xFF64748B),
                         textAlign = TextAlign.Center
                     )
 
+                    Spacer(Modifier.height(if (isTablet) 48.dp else 14.dp))
+
+                    // Fields
+                    AnimatedVisibility(visible = viewModel.isSignUpMode) {
+                        Column {
+                            OutlinedTextField(
+                                value = fullName,
+                                onValueChange = { fullName = it; viewModel.resetState() },
+                                label = { Text("Full Name") },
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(16.dp),
+                                singleLine = true,
+                                leadingIcon = { Icon(Icons.Default.Person, null, tint = Color(0xFF64748B)) },
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = Color(0xFF1E293B),
+                                    focusedLabelColor = Color(0xFF1E293B),
+                                    unfocusedBorderColor = Color(0xFFE2E8F0)
+                                ),
+                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+                            )
+                            Spacer(Modifier.height(if (isTablet) 16.dp else 6.dp))
+                        }
+                    }
+
+                    OutlinedTextField(
+                        value = email,
+                        onValueChange = { email = it; viewModel.resetState() },
+                        label = { Text("Email Address") },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(16.dp),
+                        singleLine = true,
+                        leadingIcon = { Icon(Icons.Default.Email, null, tint = Color(0xFF64748B)) },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Email,
+                            imeAction = ImeAction.Next
+                        ),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFF1E293B),
+                            focusedLabelColor = Color(0xFF1E293B),
+                            unfocusedBorderColor = Color(0xFFE2E8F0)
+                        )
+                    )
+
+                    Spacer(Modifier.height(if (isTablet) 16.dp else 6.dp))
+
+                    OutlinedTextField(
+                        value = password,
+                        onValueChange = { password = it; viewModel.resetState() },
+                        label = { Text("Password") },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(16.dp),
+                        singleLine = true,
+                        leadingIcon = { Icon(Icons.Default.Lock, null, tint = Color(0xFF64748B)) },
+                        trailingIcon = {
+                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                Icon(
+                                    if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                                    contentDescription = null,
+                                    tint = Color(0xFF94A3B8)
+                                )
+                            }
+                        },
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(onDone = { 
+                            if (viewModel.isSignUpMode) viewModel.signUp(email, password, fullName)
+                            else viewModel.signIn(email, password)
+                        }),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFF1E293B),
+                            focusedLabelColor = Color(0xFF1E293B),
+                            unfocusedBorderColor = Color(0xFFE2E8F0)
+                        )
+                    )
+
+                    // Error message
+                    AnimatedVisibility(visible = authState is TeacherLoginViewModel.AuthState.Error) {
+                        val msg = (authState as? TeacherLoginViewModel.AuthState.Error)?.message ?: ""
+                        Text(
+                            text = msg,
+                            color = MaterialTheme.colorScheme.error,
+                            fontSize = 12.sp,
+                            modifier = Modifier.padding(top = 12.dp),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
                     Spacer(Modifier.height(24.dp))
+
+                    // Action Button
+                    Button(
+                        onClick = {
+                            if (viewModel.isSignUpMode) viewModel.signUp(email, password, fullName)
+                            else viewModel.signIn(email, password)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(if (isTablet) 72.dp else 44.dp),
+                        shape = RoundedCornerShape(if (isTablet) 20.dp else 10.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E293B)),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = if (isTablet) 6.dp else 2.dp),
+                        enabled = authState !is TeacherLoginViewModel.AuthState.Loading
+                    ) {
+                        if (authState is TeacherLoginViewModel.AuthState.Loading) {
+                            CircularProgressIndicator(modifier = Modifier.size(if (isTablet) 28.dp else 20.dp), color = Color.White, strokeWidth = if (isTablet) 4.dp else 2.dp)
+                        } else {
+                            Text(
+                                text = if (viewModel.isSignUpMode) "Create Account" else "Sign In",
+                                fontSize = if (isTablet) 20.sp else 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+
+                    Spacer(Modifier.height(if (isTablet) 24.dp else 16.dp))
+
+                    // ── Divider ──────────────────────────────────────────────
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        HorizontalDivider(
+                            modifier = Modifier.weight(1f),
+                            color = Color(0xFFE2E8F0)
+                        )
+                        Text(
+                            text = "  or continue with  ",
+                            fontSize = 12.sp,
+                            color = Color(0xFF94A3B8),
+                            fontWeight = FontWeight.Medium
+                        )
+                        HorizontalDivider(
+                            modifier = Modifier.weight(1f),
+                            color = Color(0xFFE2E8F0)
+                        )
+                    }
+
+                    Spacer(Modifier.height(if (isTablet) 24.dp else 16.dp))
 
                     // ── Google Sign-In Button ────────────────────────────────
                     OutlinedButton(
                         onClick = { googleSignInAction.startFlow() },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(52.dp),
-                        shape = RoundedCornerShape(14.dp),
+                            .height(if (isTablet) 68.dp else 44.dp),
+                        shape = RoundedCornerShape(if (isTablet) 20.dp else 10.dp),
                         border = androidx.compose.foundation.BorderStroke(
-                            1.5.dp, Color(0xFFE2E8F0)
+                            if (isTablet) 2.5.dp else 1.5.dp, Color(0xFFE2E8F0)
                         ),
                         colors = ButtonDefaults.outlinedButtonColors(
                             containerColor = Color.White
@@ -186,7 +343,7 @@ fun TeacherLoginScreen(
                             horizontalArrangement = Arrangement.Center
                         ) {
                             // Google "G" logo drawn with Canvas
-                            Canvas(modifier = Modifier.size(20.dp)) {
+                            Canvas(modifier = Modifier.size(if (isTablet) 24.dp else 18.dp)) {
                                 // Red arc (top-right)
                                 drawArc(
                                     color = Color(0xFFEA4335),
@@ -231,144 +388,19 @@ fun TeacherLoginScreen(
                                     )
                                 )
                             }
-                            Spacer(Modifier.width(12.dp))
+                            Spacer(Modifier.width(if (isTablet) 16.dp else 12.dp))
                             Text(
                                 text = "Continue with Google",
-                                fontSize = 15.sp,
+                                fontSize = if (isTablet) 18.sp else 15.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = Color(0xFF1E293B)
-                            )
-                        }
-                    }
-
-                    Spacer(Modifier.height(20.dp))
-
-                    // ── Divider ──────────────────────────────────────────────
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        HorizontalDivider(
-                            modifier = Modifier.weight(1f),
-                            color = Color(0xFFE2E8F0)
-                        )
-                        Text(
-                            text = "  or sign in with email  ",
-                            fontSize = 12.sp,
-                            color = Color(0xFF94A3B8),
-                            fontWeight = FontWeight.Medium
-                        )
-                        HorizontalDivider(
-                            modifier = Modifier.weight(1f),
-                            color = Color(0xFFE2E8F0)
-                        )
-                    }
-
-                    Spacer(Modifier.height(20.dp))
-
-                    // Fields
-                    AnimatedVisibility(visible = viewModel.isSignUpMode) {
-                        Column {
-                            OutlinedTextField(
-                                value = fullName,
-                                onValueChange = { fullName = it; viewModel.resetState() },
-                                label = { Text("Full Name") },
-                                modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(12.dp),
-                                singleLine = true,
-                                leadingIcon = { Icon(Icons.Default.Person, null, tint = Color(0xFF64748B)) },
-                                colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = Color(0xFF1E293B),
-                                    focusedLabelColor = Color(0xFF1E293B)
-                                )
-                            )
-                            Spacer(Modifier.height(16.dp))
-                        }
-                    }
-
-                    OutlinedTextField(
-                        value = email,
-                        onValueChange = { email = it; viewModel.resetState() },
-                        label = { Text("Email Address") },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
-                        singleLine = true,
-                        leadingIcon = { Icon(Icons.Default.Email, null, tint = Color(0xFF64748B)) },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Color(0xFF1E293B),
-                            focusedLabelColor = Color(0xFF1E293B)
-                        )
-                    )
-
-                    Spacer(Modifier.height(16.dp))
-
-                    OutlinedTextField(
-                        value = password,
-                        onValueChange = { password = it; viewModel.resetState() },
-                        label = { Text("Password") },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
-                        singleLine = true,
-                        leadingIcon = { Icon(Icons.Default.Lock, null, tint = Color(0xFF64748B)) },
-                        trailingIcon = {
-                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                                Icon(
-                                    if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                                    contentDescription = null,
-                                    tint = Color(0xFF94A3B8)
-                                )
-                            }
-                        },
-                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Color(0xFF1E293B),
-                            focusedLabelColor = Color(0xFF1E293B)
-                        )
-                    )
-
-                    // Error message
-                    AnimatedVisibility(visible = authState is TeacherLoginViewModel.AuthState.Error) {
-                        val msg = (authState as? TeacherLoginViewModel.AuthState.Error)?.message ?: ""
-                        Text(
-                            text = msg,
-                            color = MaterialTheme.colorScheme.error,
-                            fontSize = 12.sp,
-                            modifier = Modifier.padding(top = 12.dp),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-
-                    Spacer(Modifier.height(32.dp))
-
-                    // Action Button
-                    Button(
-                        onClick = {
-                            if (viewModel.isSignUpMode) viewModel.signUp(email, password, fullName)
-                            else viewModel.signIn(email, password)
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp),
-                        shape = RoundedCornerShape(14.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E293B)),
-                        enabled = authState !is TeacherLoginViewModel.AuthState.Loading
-                    ) {
-                        if (authState is TeacherLoginViewModel.AuthState.Loading) {
-                            CircularProgressIndicator(modifier = Modifier.size(20.dp), color = Color.White, strokeWidth = 2.dp)
-                        } else {
-                            Text(
-                                text = if (viewModel.isSignUpMode) "Create Account" else "Sign In",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold
                             )
                         }
                     }
                 }
             }
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(if (isTablet) 40.dp else 12.dp))
 
             // Secondary Actions
             TextButton(onClick = { viewModel.toggleMode() }) {
