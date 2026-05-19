@@ -31,6 +31,18 @@ import com.basahero.elearning.data.model.MiniQuestion
 import com.basahero.elearning.ui.common.AnimatedScrollIndicator
 import com.basahero.elearning.ui.common.LocalAppStrings
 
+// 🚀 SplashLearn Mascot & Animation imports
+import com.basahero.elearning.ui.student.lessons.components.MascotGuidanceView
+import com.basahero.elearning.ui.student.lessons.components.MascotState
+import com.basahero.elearning.ui.student.lessons.components.SparkleParticleSystem
+import com.basahero.elearning.ui.student.lessons.components.SparkleParticleState
+import com.basahero.elearning.ui.student.lessons.components.rememberSparkleParticleState
+import com.basahero.elearning.ui.common.squishClickable
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.ui.graphics.graphicsLayer
+import kotlin.math.absoluteValue
+
 // ─────────────────────────────────────────────────────────────────────────────
 // ReadingScreen — Multi-step lesson wizard
 // Steps: [Lecture] → [Reading+MiniActivity 1] → [Reading+MiniActivity 2] → Quiz
@@ -148,8 +160,51 @@ fun ReadingScreen(
         return
     }
 
+    // 🚀 Sparkle Particle & Mascot State Machine setup
+    val particleState = rememberSparkleParticleState()
+    var mascotState by remember { mutableStateOf(MascotState.GREETING) }
+    var mascotCustomMessage by remember { mutableStateOf<String?>(null) }
+
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        pageCount = { steps.size }
+    )
+
+    // Sync Pager state changes (Lag-free instant switch!)
+    LaunchedEffect(currentStepIndex) {
+        if (pagerState.currentPage != currentStepIndex) {
+            pagerState.scrollToPage(currentStepIndex)
+        }
+    }
+
+    LaunchedEffect(pagerState.currentPage) {
+        currentStepIndex = pagerState.currentPage
+        val newStep = steps.getOrNull(currentStepIndex)
+        mascotCustomMessage = when (newStep) {
+            is LessonStep.Lecture -> "Welcome, Hero! Let's read this exciting lesson together. Read the card to get started! 🌟"
+            is LessonStep.ReadingPart -> {
+                if (newStep.part.miniQuestions.isNotEmpty()) {
+                    "Read the passage carefully, Hero! Tap the blue underlined words to hear them, then conquer the mini activities at the bottom! 📚💪"
+                } else {
+                    "Read this reading passage carefully, Hero! Tap the blue underlined words to hear them and practice! 📚"
+                }
+            }
+            is LessonStep.Activity -> "Let's test your super powers! You are doing amazing—read each question carefully and conquer this activity! 🌟💪"
+            else -> null
+        }
+        mascotState = when (newStep) {
+            is LessonStep.Lecture -> MascotState.GREETING
+            is LessonStep.ReadingPart -> MascotState.FOCUS_READING
+            is LessonStep.Activity -> MascotState.GREETING // Wave/cheer to motivate the student!
+            else -> MascotState.GREETING
+        }
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         com.basahero.elearning.ui.common.PlayfulBackground(densityMultiplier = 2f)
+
+        // 🚀 Particles Burst Layer overlaps everything
+        SparkleParticleSystem(state = particleState)
 
         Scaffold(
             containerColor = Color.Transparent,
@@ -186,7 +241,6 @@ fun ReadingScreen(
         },
         bottomBar = {
             // Hide bottom bar on Activity steps UNLESS in review mode
-            // In review mode, we allow the "Next" button to show so they can skip activities
             if (currentStep !is LessonStep.Activity || isReviewMode) {
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
@@ -199,7 +253,6 @@ fun ReadingScreen(
                         val isNextEnabled = remember(currentStep, answeredMiniQuestions.size, isReviewMode) {
                             if (isReviewMode) true
                             else if (currentStep is LessonStep.ReadingPart) {
-                                // All mini questions in this part must be answered
                                 currentStep.part.miniQuestions.all { answeredMiniQuestions.containsKey(it.id) }
                             } else {
                                 true
@@ -218,7 +271,8 @@ fun ReadingScreen(
                             modifier = Modifier
                                 .then(if (isTablet) Modifier.width(480.dp) else Modifier.fillMaxWidth())
                                 .padding(16.dp)
-                                .height(56.dp),
+                                .height(56.dp)
+                                .squishClickable(enabled = isNextEnabled) {}, // Reusable tactile squish button
                             shape = RoundedCornerShape(12.dp)
                         ) {
                             val buttonText = when {
@@ -247,64 +301,90 @@ fun ReadingScreen(
         ) {
             val contentPadding = if (isTablet) 32.dp else 16.dp
 
-            Card(
-                modifier = Modifier
-                    .then(
-                        if (isTablet) Modifier.widthIn(max = 720.dp).padding(vertical = 24.dp)
-                        else Modifier.fillMaxWidth().padding(16.dp)
-                    ),
-                shape = if (isTablet) RoundedCornerShape(24.dp) else RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)),
-                elevation = CardDefaults.cardElevation(defaultElevation = if (isTablet) 4.dp else 4.dp)
+            Column(
+                modifier = if (isTablet) Modifier.widthIn(max = 720.dp).padding(vertical = 12.dp)
+                           else Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(scrollState)
-                        .padding(contentPadding)
+                // 🚀 Mascot peeks nicely above story card, responding to active actions
+                MascotGuidanceView(
+                    state = mascotState,
+                    customMessage = mascotCustomMessage,
+                    isTablet = isTablet
+                )
+
+                Spacer(Modifier.height(4.dp))
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(24.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.94f)),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                 ) {
-                    when (val step = currentStep) {
-                        is LessonStep.Lecture -> LectureStepContent(step.text, step.imagePath, isTablet)
-                        is LessonStep.ReadingPart -> ReadingPartStepContent(
-                            partNumber = step.partNumber,
-                            part = step.part,
-                            isTablet = isTablet,
-                            isReviewMode = isReviewMode,
-                            onQuestionAnswered = { qId -> answeredMiniQuestions[qId] = true },
-                            onPronunciationAttempt = { word, heard, isCorrect, _ ->
-                                if (!isReviewMode) {
-                                    val score = if (isCorrect) 100 else 0
-                                    viewModel.savePronunciationAttempt(word, heard, isCorrect, score)
-                                }
-                            }
-                        )
-                        is LessonStep.Activity -> {
-                            key(activityRetryKey) {
-                                ActivityStepContent(
+                    // Pager enabling book flip page transitions between wizard components
+                    HorizontalPager(
+                        state = pagerState,
+                        userScrollEnabled = false,
+                        modifier = Modifier.fillMaxWidth()
+                    ) { page ->
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(rememberScrollState())
+                                .padding(contentPadding)
+                        ) {
+                            when (val step = steps.getOrNull(page)) {
+                                is LessonStep.Lecture -> LectureStepContent(step.text, step.imagePath, isTablet)
+                                is LessonStep.ReadingPart -> ReadingPartStepContent(
                                     partNumber = step.partNumber,
-                                    questions = step.questions,
-                                    introText = step.introText,
+                                    part = step.part,
                                     isTablet = isTablet,
                                     isReviewMode = isReviewMode,
-                                    onSubmit = { correct, total ->
+                                    onQuestionAnswered = { qId -> answeredMiniQuestions[qId] = true },
+                                    onPronunciationAttempt = { word, heard, isCorrect, _ ->
                                         if (!isReviewMode) {
-                                            activityScores[currentStepIndex] = correct
-                                            activityScore = correct
-                                            activityTotal = total
-                                            
-                                            // Calculate current cumulative score
-                                            val currentTotalCorrect = activityScores.values.sum()
-                                            val safeTotal = if (lessonTotalQuestions > 0) lessonTotalQuestions else total
-                                            
-                                            // Save IMMEDIATELY so the attempt is registered in Supabase
-                                            viewModel.saveLessonProgress(context, currentTotalCorrect, safeTotal)
+                                            val score = if (isCorrect) 100 else 0
+                                            viewModel.savePronunciationAttempt(word, heard, isCorrect, score)
                                         }
-                                        showActivityResult = true
-                                    }
+                                    },
+                                    onMascotStateChanged = { state, msg ->
+                                        mascotState = state
+                                        mascotCustomMessage = msg
+                                    },
+                                    particleState = particleState
                                 )
+                                is LessonStep.Activity -> {
+                                    key(activityRetryKey) {
+                                        ActivityStepContent(
+                                            partNumber = step.partNumber,
+                                            questions = step.questions,
+                                            introText = step.introText,
+                                            isTablet = isTablet,
+                                            isReviewMode = isReviewMode,
+                                            onSubmit = { correct, total ->
+                                                if (!isReviewMode) {
+                                                    activityScores[currentStepIndex] = correct
+                                                    activityScore = correct
+                                                    activityTotal = total
+                                                    val currentTotalCorrect = activityScores.values.sum()
+                                                    val safeTotal = if (lessonTotalQuestions > 0) lessonTotalQuestions else total
+                                                    viewModel.saveLessonProgress(context, currentTotalCorrect, safeTotal)
+                                                }
+                                                
+                                                // Trigger particle celebratory explosion on successful submit
+                                                val passed = (correct.toFloat() / total) >= 0.6f
+                                                if (passed) {
+                                                    particleState.emitConfetti(500f, 400f)
+                                                }
+                                                
+                                                showActivityResult = true
+                                            }
+                                        )
+                                    }
+                                }
+                                null -> {}
                             }
                         }
-                        null -> {}
                     }
                 }
             }
@@ -416,7 +496,9 @@ private fun ReadingPartStepContent(
     isTablet: Boolean,
     isReviewMode: Boolean,
     onQuestionAnswered: (String) -> Unit,
-    onPronunciationAttempt: (String, String, Boolean, Int) -> Unit
+    onPronunciationAttempt: (String, String, Boolean, Int) -> Unit,
+    onMascotStateChanged: (MascotState, String?) -> Unit = { _, _ -> },
+    particleState: SparkleParticleState? = null
 ) {
     // Playful Reading Holder
     Box(
@@ -500,13 +582,15 @@ private fun ReadingPartStepContent(
         }
     }
 
-    // Passage text with highlighted words
+    // Passage text with highlighted words and mascot progress triggers
     HighlightedPassageText(
         passageText = part.passageText,
         highlightedWords = highlightedWordObjects,
         modifier = Modifier.fillMaxWidth(),
         isTablet = isTablet,
-        onPronunciationAttempt = onPronunciationAttempt
+        onPronunciationAttempt = onPronunciationAttempt,
+        onMascotStateChanged = onMascotStateChanged,
+        particleState = particleState
     )
 
     // Mini Activity Section
@@ -528,7 +612,8 @@ private fun ReadingPartStepContent(
                 question = question,
                 isTablet = isTablet,
                 isReviewMode = isReviewMode,
-                onAnswered = { onQuestionAnswered(question.id) }
+                onAnswered = { onQuestionAnswered(question.id) },
+                onMascotStateChanged = onMascotStateChanged
             )
             if (index < part.miniQuestions.lastIndex) {
                 Spacer(Modifier.height(12.dp))
@@ -547,13 +632,67 @@ private fun MiniQuestionCard(
     question: MiniQuestion,
     isTablet: Boolean,
     isReviewMode: Boolean,
-    onAnswered: () -> Unit
+    onAnswered: () -> Unit,
+    onMascotStateChanged: (MascotState, String?) -> Unit = { _, _ -> }
 ) {
     var selectedChoiceId by remember(question.id) { mutableStateOf<String?>(null) }
     var showFeedback by remember(question.id) { mutableStateOf(false) }
+    var textValue by remember(question.id) { mutableStateOf("") }
+    var currentChoices by remember(question.id) {
+        mutableStateOf(if (isReviewMode) question.choices.sortedBy { it.orderIndex } else question.choices.shuffled())
+    }
+    var currentMatches by remember(question.id) { mutableStateOf(mapOf<String, String>()) }
+    val selectedIds = remember(question.id) { mutableStateListOf<String>() }
+    val correctIds = remember(question.id) { question.choices.filter { it.isCorrect }.map { it.id }.toSet() }
 
     LaunchedEffect(showFeedback) {
-        if (showFeedback) onAnswered()
+        if (showFeedback) {
+            onAnswered()
+            
+            // Determine correctness of this mini activity
+            val isCorrect = when (question.questionType) {
+                "SEQUENCING" -> {
+                    val correctOrder = question.choices.sortedBy { it.orderIndex }.map { it.id }
+                    val currentOrder = currentChoices.map { it.id }
+                    correctOrder == currentOrder
+                }
+                "FILL_IN" -> {
+                    val correctText = question.choices.firstOrNull { it.isCorrect }?.choiceText ?: ""
+                    textValue.trim().equals(correctText.trim(), ignoreCase = true)
+                }
+                "OPEN_ENDED", "REFLECTION" -> true
+                "MATCHING" -> {
+                    val half = question.choices.size / 2
+                    val leftSide = question.choices.take(half)
+                    val rightSide = question.choices.drop(half)
+                    var allCorrect = true
+                    leftSide.forEachIndexed { i, leftItem ->
+                        if (currentMatches[leftItem.id] != rightSide[i].id) allCorrect = false
+                    }
+                    allCorrect
+                }
+                "IDENTIFICATION" -> {
+                    val correctAnswer = question.choices.find { it.isCorrect }?.choiceText ?: ""
+                    textValue.trim().equals(correctAnswer.trim(), ignoreCase = true)
+                }
+                "HIGHLIGHT" -> {
+                    val currentSelectedSet = selectedIds.toSet()
+                    currentSelectedSet == correctIds
+                }
+                else -> {
+                    // MCQ
+                    question.choices.find { it.id == selectedChoiceId }?.isCorrect == true
+                }
+            }
+
+            if (question.questionType == "REFLECTION" || question.questionType == "OPEN_ENDED") {
+                onMascotStateChanged(MascotState.SUCCESS_CHEER, "Fantastic reflection, Hero! That is a very thoughtful response! 🌟")
+            } else if (isCorrect) {
+                onMascotStateChanged(MascotState.SUCCESS_CHEER, "Spectacular job! That is 100% correct! You are a genius! ⭐")
+            } else {
+                onMascotStateChanged(MascotState.TRY_AGAIN, "Super close! Give it another look, you can definitely solve this! 💪")
+            }
+        }
     }
 
     Card(
@@ -578,10 +717,6 @@ private fun MiniQuestionCard(
             Spacer(Modifier.height(if (isTablet) 8.dp else 4.dp))
 
             if (question.questionType == "SEQUENCING") {
-                // Drag to reorder for MiniQuestionCard
-                var currentChoices by remember(question.id) {
-                    mutableStateOf(if (isReviewMode) question.choices.sortedBy { it.orderIndex } else question.choices.shuffled())
-                }
                 val state = rememberReorderableLazyListState(onMove = { from, to ->
                     currentChoices = currentChoices.toMutableList().apply {
                         add(to.index, removeAt(from.index))
@@ -680,7 +815,6 @@ private fun MiniQuestionCard(
             } else if (question.questionType == "FILL_IN") {
                 // 🚀 NEW: FILL_IN UI for MiniQuestionCard
                 val correctText = question.choices.firstOrNull { it.isCorrect }?.choiceText ?: ""
-                var textValue by remember(question.id) { mutableStateOf("") }
 
                 Column {
                     Text(
@@ -720,7 +854,6 @@ private fun MiniQuestionCard(
                 }
             } else if (question.questionType == "OPEN_ENDED" || question.questionType == "REFLECTION") {
                 // 🚀 NEW: REFLECTION UI for MiniQuestionCard
-                var textValue by remember(question.id) { mutableStateOf("") }
 
                 Column {
                     Text(
@@ -768,7 +901,7 @@ private fun MiniQuestionCard(
                     Spacer(Modifier.height(8.dp))
                 }
 
-                var currentMatches by remember { mutableStateOf(mapOf<String, String>()) }
+
 
                 MatchingDragAndDropUI(
                     question = question,
@@ -836,7 +969,6 @@ private fun MiniQuestionCard(
                 }
             } else if (question.questionType == "IDENTIFICATION") {
                 // 🚀 NEW: IDENTIFICATION UI for MiniQuestionCard
-                var textValue by remember(question.id) { mutableStateOf("") }
                 val correctAnswer = question.choices.find { it.isCorrect }?.choiceText ?: ""
 
                 Column {
@@ -877,8 +1009,6 @@ private fun MiniQuestionCard(
                 }
             } else if (question.questionType == "HIGHLIGHT") {
                 // HIGHLIGHT logic for MiniQuestionCard
-                val selectedIds = remember(question.id) { mutableStateListOf<String>() }
-                val correctIds = remember(question.id) { question.choices.filter { it.isCorrect }.map { it.id }.toSet() }
 
                 if (!isReviewMode) {
                     Text(
@@ -910,7 +1040,7 @@ private fun MiniQuestionCard(
                         Surface(
                             modifier = Modifier
                                 .then(if (question.id.contains("-04-")) Modifier.fillMaxWidth() else Modifier)
-                                .clickable(enabled = !showFeedback && !isReviewMode) {
+                                .squishClickable(enabled = !showFeedback && !isReviewMode) {
                                     if (selectedIds.contains(choice.id)) {
                                         selectedIds.remove(choice.id)
                                     } else {
@@ -976,7 +1106,7 @@ private fun MiniQuestionCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 3.dp)
-                            .clickable(enabled = !showFeedback && !isReviewMode) {
+                            .squishClickable(enabled = !showFeedback && !isReviewMode) {
                                 selectedChoiceId = choice.id
                                 showFeedback = true
                             },
@@ -1562,7 +1692,7 @@ private fun ActivityQuestionCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = if (isTablet) 4.dp else 2.dp)
-                            .clickable(enabled = enabled) {
+                            .squishClickable(enabled = enabled) {
                                 selectedChoiceId = choice.id
                                 onAnswered(choice.isCorrect)
                             },

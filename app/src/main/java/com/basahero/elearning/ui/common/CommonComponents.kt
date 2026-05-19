@@ -13,11 +13,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
@@ -915,3 +918,48 @@ private data class FloatingItem(
     val duration: Int,
     val text: String? = null
 )
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Reusable Physical 'Squishy' Tap Modifier
+// ─────────────────────────────────────────────────────────────────────────────
+fun Modifier.squishClickable(
+    enabled: Boolean = true,
+    onClick: () -> Unit
+): Modifier = composed {
+    if (!enabled) return@composed this
+    
+    var isPressed by remember { mutableStateOf(false) }
+    val clickScale by animateFloatAsState(
+        targetValue = if (isPressed) 0.94f else 1.0f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        ),
+        label = "squish_scale"
+    )
+    val clickOffsetY by animateDpAsState(
+        targetValue = if (isPressed) 4.dp else 0.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioNoBouncy,
+            stiffness = Spring.StiffnessMedium
+        ),
+        label = "squish_offset"
+    )
+
+    this
+        .graphicsLayer {
+            scaleX = clickScale
+            scaleY = clickScale
+            translationY = clickOffsetY.toPx()
+        }
+        .pointerInput(Unit) {
+            detectTapGestures(
+                onPress = {
+                    isPressed = true
+                    tryAwaitRelease()
+                    isPressed = false
+                },
+                onTap = { onClick() }
+            )
+        }
+}
